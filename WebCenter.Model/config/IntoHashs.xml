@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<HashLib>
+  <!--每个Hash节点代表一笔哈希记录-->
+  <Hash>
+    <!--必填-->
+    <HashKey>哈希值</HashKey>
+    <!--选填-->
+    <Origin>样本文件</Origin>
+    <!--选填，样本文件的来源信息-->
+    <Source>样本来源</Source>
+    <!--必填,哈希类型为服务端提供，客户端定时获取更新-->
+    <HashType>哈希类型</HashType>
+    <!--选填,客户端采集到改样本的时间,格式：yyyy-MM-DD -->
+    <CollectTime>采集时间</CollectTime>
+    <!--选填-->
+    <IdCard>上报者身份证号</IdCard>
+    <!--选填-->
+    <Remark>文件描述或其他备注</Remark>
+  </Hash>
+</HashLib>

@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--数据交换映射信息-->
+<!--每个Table节点表示一组表的映射,key(表示键,不可随意改变),exchange(表示交换的表)，local(表示本地表名),remark(备注说明)-->
+<!--每个Column节点表示一对列的映射,key(表示统一代号),gettype(取值方式0-通过交换获取,1-默认值,2-通过外键获取关联对象，3-通过关联表的某个非主键字段获取关联对象，4-交换的值通过算法获得) exchange(交换字段名称),reltable(关联表）,relentity(关联的实体),local(本地表中字段名称)-->
+<Tables>
+  <!--采集包采集日志解析-->
+  <Table key="Collect_Package_Collect_Info" exchange="Hash_Collect_Info" local="Hash_Collect_Record">
+    <Columns>
+      <Column key="" gettype="0" exchange="Collect_Set_Key" local="Collect_Set_Key"></Column>
+      <Column key="" gettype="0" exchange="DBVersion" local="DB_Version"></Column>
+      <Column key="" gettype="0" exchange="Collect_Type" local="Collect_Set_Type"></Column>
+      <Column key="" gettype="0" exchange="Collect_Time" local="Collect_Time"></Column>
+      <Column key="" gettype="1" exchange="" local="Upload_Time"></Column>
+      <Column key="" gettype="0" exchange="Source_Type" local="Source_Type"></Column>
+      <Column key="" gettype="0" exchange="Collect_ID" local="Collect_Record_ID"></Column>
+      <Column key="" gettype="3" exchange="Collector_IDCard" reltable="Sys_User" relentity="sys_user" local="IDCard"></Column>
+      <Column key="" gettype="0" exchange="Collector_IDCard" local="ExceptionIDCardNO"></Column>
+      <Column key="" gettype="0" exchange="Source_Mark" local="Source_Mark"></Column>
+    </Columns>
+  </Table>
+  <!--采集包样本文件解析-->
+  <Table key="Collect_Package_File_Info" exchange="Hash_File_Info" local="Hash_File_Info">
+      <Columns>
+        <Column key="" gettype="0" exchange="HashKey" local="MD5" remark=""></Column>
+        <Column key="" gettype="0" exchange="SwatchName" local="Swatch_Name" remark=""></Column>
+        <Column key="" gettype="0" exchange="SwatchPath" local="Swatch_Path" remark=""></Column>
+        <Column key="" gettype="0" exchange="Source" local="Source" remark=""></Column>
+        <Column key="" gettype="0" exchange="Remark" local="Remark" remark=""></Column>
+        <Column key="" gettype="0" exchange="FileSize" local="File_Size" remark=""></Column>
+       </Columns>
+  </Table>
+  <!--采集包安装程序解析-->
+  <Table key="Collect_Package_Install_Info" exchange="Hash_Install_Info" local="Hash_Install_Info">
+    <Columns>
+      <Column key="" gettype="0" exchange="Install_Size" local="Size"></Column>
+      <Column key="" gettype="0" exchange="Install_Name" local="Name"></Column>
+      <Column key="" gettype="0" exchange="Install_Path" local="Path"></Column>
+      <Column key="" gettype="0" exchange="Install_Type" local="Type"></Column>
+      <Column key="" gettype="0" exchange="Install_PackageName" local="Package_Name"></Column>
+      <Column key="" gettype="0" exchange="Install_Date" local="Install_Time"></Column>
+      <Column key="" gettype="0" exchange="Install_Version" local="Version"></Column>
+      <Column key="" gettype="0" exchange="Collect_ID" local="Collect_ID"></Column>
+    </Columns>
+  </Table>
+  
+</Tables>

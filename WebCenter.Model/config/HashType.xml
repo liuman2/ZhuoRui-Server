@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<HashTypes>
+  <!--每个HashType节点代表一个哈希类型-->
+  <HashType>
+    <!--必填-->
+    <HashTypeName>哈希类型</HashTypeName>
+    <!--哈希类型对应的文件夹的层级列表,列表间用“|”分割；如“哈希库|报恐|视频|新上报”-->
+    <Folder>文件夹层级列表</Folder>
+  </HashType>
+</HashTypes>

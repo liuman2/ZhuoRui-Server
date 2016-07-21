@@ -1,0 +1,49 @@
+﻿<#@ template language="C#" debug="false" hostspecific="true"#>
+<#@ include file="EF.Utility.CS.ttinclude"#><#@
+ output extension=".cs"#>
+ 
+<#
+
+CodeGenerationTools code = new CodeGenerationTools(this);
+MetadataLoader loader = new MetadataLoader(this);
+CodeRegion region = new CodeRegion(this, 1);
+MetadataTools ef = new MetadataTools(this);
+
+string inputFile = @"..\\WebCenter.Entities\\DataCenter.edmx";
+
+EdmItemCollection ItemCollection = loader.CreateEdmItemCollection(inputFile);
+string namespaceName = code.VsNamespaceSuggestion();
+
+EntityFrameworkTemplateFileManager fileManager = EntityFrameworkTemplateFileManager.Create(this);
+
+#>
+
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
+using WebCenter.Entities;
+using Ninject;
+using Ninject.Web.Common;
+using WebCenter.IServices;
+using WebCenter.Services;
+namespace WebCenter.Web.Infrastructure
+{
+
+public partial class  NinjectDependencyResolver:IDependencyResolver
+{
+ 
+private void AutoAddBinds()
+{
+<#
+foreach (EntityType entity in ItemCollection.GetItems<EntityType>().OrderBy(e => e.Name))
+{      
+#>	
+	   kernel.Bind<I<#=entity.Name #>Service>().To<<#=entity.Name #>Service>().InRequestScope();
+<#}#>
+  kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InRequestScope();
+
+}
+  
+
+}
+}

@@ -1,0 +1,89 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{8F750527-74CB-4B4C-A0EC-BF224FF71481}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		packages\repositories.config = packages\repositories.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCenter.Web", "WebCenter.Web\WebCenter.Web.csproj", "{4BA9CEFF-EC95-4979-93F9-DC7107FC697D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataLayer", "DataLayer", "{D2876F72-FC71-4A1A-8C90-5C5938ED7D56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCenter.DAL", "WebCenter.Dal\WebCenter.DAL.csproj", "{057FF7FA-A49D-440D-8263-751990AF8ADF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCenter.IDAL", "WebCenter.IDal\WebCenter.IDAL.csproj", "{280F7285-9043-4D28-B713-6CE0CA719AF1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LogicLayer", "LogicLayer", "{7FADB0BF-2115-4B03-95FB-2CDD7C902356}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebLayer", "WebLayer", "{7DA1CA80-D794-49E2-B3A7-7A156D6706B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCenter.IServices", "WebCenter.IServices\WebCenter.IServices.csproj", "{71568A82-D403-47F5-8928-AC80AA5EA642}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCenter.Services", "WebCenter.Services\WebCenter.Services.csproj", "{97A2D3BC-C3C7-443C-92F9-5C89A3166082}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{B4517E9A-2557-4C55-A034-704EF8E0E213}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "WebCenter.Common\Common.csproj", "{55DEC9F4-CAC0-4408-B6DD-E0EF47FDCB18}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1WeXinSdk", "1WeXinSdk", "{2FBE5F19-E7F7-4B76-9163-CC34761197CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCenter.Entities", "WebCenter.Entities\WebCenter.Entities.csproj", "{8B64AF1D-0F93-40F7-921B-59B2DD8228AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4BA9CEFF-EC95-4979-93F9-DC7107FC697D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BA9CEFF-EC95-4979-93F9-DC7107FC697D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BA9CEFF-EC95-4979-93F9-DC7107FC697D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BA9CEFF-EC95-4979-93F9-DC7107FC697D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{057FF7FA-A49D-440D-8263-751990AF8ADF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{057FF7FA-A49D-440D-8263-751990AF8ADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{057FF7FA-A49D-440D-8263-751990AF8ADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{057FF7FA-A49D-440D-8263-751990AF8ADF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{280F7285-9043-4D28-B713-6CE0CA719AF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{280F7285-9043-4D28-B713-6CE0CA719AF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{280F7285-9043-4D28-B713-6CE0CA719AF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{280F7285-9043-4D28-B713-6CE0CA719AF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71568A82-D403-47F5-8928-AC80AA5EA642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71568A82-D403-47F5-8928-AC80AA5EA642}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71568A82-D403-47F5-8928-AC80AA5EA642}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71568A82-D403-47F5-8928-AC80AA5EA642}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97A2D3BC-C3C7-443C-92F9-5C89A3166082}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97A2D3BC-C3C7-443C-92F9-5C89A3166082}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97A2D3BC-C3C7-443C-92F9-5C89A3166082}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97A2D3BC-C3C7-443C-92F9-5C89A3166082}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55DEC9F4-CAC0-4408-B6DD-E0EF47FDCB18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55DEC9F4-CAC0-4408-B6DD-E0EF47FDCB18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55DEC9F4-CAC0-4408-B6DD-E0EF47FDCB18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55DEC9F4-CAC0-4408-B6DD-E0EF47FDCB18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B64AF1D-0F93-40F7-921B-59B2DD8228AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B64AF1D-0F93-40F7-921B-59B2DD8228AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B64AF1D-0F93-40F7-921B-59B2DD8228AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B64AF1D-0F93-40F7-921B-59B2DD8228AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{55DEC9F4-CAC0-4408-B6DD-E0EF47FDCB18} = {B4517E9A-2557-4C55-A034-704EF8E0E213}
+		{8B64AF1D-0F93-40F7-921B-59B2DD8228AB} = {B4517E9A-2557-4C55-A034-704EF8E0E213}
+		{4BA9CEFF-EC95-4979-93F9-DC7107FC697D} = {7DA1CA80-D794-49E2-B3A7-7A156D6706B9}
+		{057FF7FA-A49D-440D-8263-751990AF8ADF} = {D2876F72-FC71-4A1A-8C90-5C5938ED7D56}
+		{280F7285-9043-4D28-B713-6CE0CA719AF1} = {D2876F72-FC71-4A1A-8C90-5C5938ED7D56}
+		{71568A82-D403-47F5-8928-AC80AA5EA642} = {7FADB0BF-2115-4B03-95FB-2CDD7C902356}
+		{97A2D3BC-C3C7-443C-92F9-5C89A3166082} = {7FADB0BF-2115-4B03-95FB-2CDD7C902356}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\EnterpriseLibrary.Caching.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Security.Cryptography.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Caching.Cryptography.5.0.505.0\lib\NET35
+	EndGlobalSection
+EndGlobal
