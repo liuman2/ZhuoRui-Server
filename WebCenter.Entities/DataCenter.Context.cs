@@ -13,10 +13,10 @@ namespace WebCenter.Entities
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ZhuoRuiOAEntities : DbContext
+    public partial class Entities : DbContext
     {
-        public ZhuoRuiOAEntities()
-            : base("name=ZhuoRuiOAEntities")
+        public Entities()
+            : base("name=Entities")
         {
         }
     
@@ -25,6 +25,5 @@ namespace WebCenter.Entities
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Customer> Customer { get; set; }
     }
 }
