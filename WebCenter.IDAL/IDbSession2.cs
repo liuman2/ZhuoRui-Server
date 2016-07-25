@@ -13,6 +13,18 @@ namespace WebCenter.IDAL
    
 	  
 
-		IDAL.ICustomerRepository CustomerRepository { get; }
+		IDAL.ImemberRepository memberRepository { get; }
+	  
+
+		IDAL.IorganizationRepository organizationRepository { get; }
+	  
+
+		IDAL.IpositionRepository positionRepository { get; }
+	  
+
+		IDAL.IroleRepository roleRepository { get; }
+	  
+
+		IDAL.IsequenceRepository sequenceRepository { get; }
 	}
 }

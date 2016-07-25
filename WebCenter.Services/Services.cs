@@ -13,13 +13,53 @@ namespace WebCenter.Services
 {
    
 	
-	public partial class CustomerService:BaseService<Customer>,ICustomerService
+	public partial class memberService:BaseService<member>,ImemberService
     {   
-        public CustomerService()
+        public memberService()
         {}
         public override void SetCurrentRepository()
         {
-            CurrentRepository = _dbSession.CustomerRepository;
+            CurrentRepository = _dbSession.memberRepository;
+        }  
+    }
+	
+	public partial class organizationService:BaseService<organization>,IorganizationService
+    {   
+        public organizationService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.organizationRepository;
+        }  
+    }
+	
+	public partial class positionService:BaseService<position>,IpositionService
+    {   
+        public positionService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.positionRepository;
+        }  
+    }
+	
+	public partial class roleService:BaseService<role>,IroleService
+    {   
+        public roleService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.roleRepository;
+        }  
+    }
+	
+	public partial class sequenceService:BaseService<sequence>,IsequenceService
+    {   
+        public sequenceService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.sequenceRepository;
         }  
     }
 	

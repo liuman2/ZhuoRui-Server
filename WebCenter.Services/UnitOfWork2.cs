@@ -9,7 +9,35 @@ namespace WebCenter.Services
 {  
 	
   [Ninject.Inject]
-	 public  ICustomerService ICustomerService
+	 public  ImemberService ImemberService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  IorganizationService IorganizationService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  IpositionService IpositionService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  IroleService IroleService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  IsequenceService IsequenceService
     {
         get;
         set;

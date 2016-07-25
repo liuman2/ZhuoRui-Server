@@ -17,7 +17,15 @@ public partial class  NinjectDependencyResolver:IDependencyResolver
 private void AutoAddBinds()
 {
 	
-	   kernel.Bind<ICustomerService>().To<CustomerService>().InRequestScope();
+	   kernel.Bind<ImemberService>().To<memberService>().InRequestScope();
+	
+	   kernel.Bind<IorganizationService>().To<organizationService>().InRequestScope();
+	
+	   kernel.Bind<IpositionService>().To<positionService>().InRequestScope();
+	
+	   kernel.Bind<IroleService>().To<roleService>().InRequestScope();
+	
+	   kernel.Bind<IsequenceService>().To<sequenceService>().InRequestScope();
   kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InRequestScope();
 
 }
