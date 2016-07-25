@@ -29,6 +29,7 @@
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="parent_id" Type="int" />
           <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
@@ -49,7 +50,7 @@
           <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="code" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="is_system" Type="tinyint" />
-          <Property Name="description" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
@@ -148,6 +149,7 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
           <NavigationProperty Name="members" Relationship="DataCenter.Entities.member_ibfk_1" FromRole="organization" ToRole="member" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="position">
           <Key>
@@ -244,6 +246,7 @@
           <EntitySetMapping Name="organizations">
             <EntityTypeMapping TypeName="DataCenter.Entities.organization">
               <MappingFragment StoreEntitySet="organization">
+                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="name" ColumnName="name" />

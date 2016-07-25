@@ -66,6 +66,7 @@ WebCenter.Services/bin
 WebCenter.Services/obj
 WebCenter.Web/bin
 WebCenter.Web/obj
+WebCenter.Web/log
 Project.sln.ide
 *.suo
 *.user

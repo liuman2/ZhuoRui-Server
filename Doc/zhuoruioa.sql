@@ -4,6 +4,7 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for sequence
 -- ----------------------------
+DROP TABLE IF EXISTS `sequence`;
 CREATE TABLE `sequence` (
   `name` varchar(50) NOT NULL,
   `id` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -20,10 +21,12 @@ INSERT INTO `sequence` VALUES ('member', '1');
 -- ----------------------------
 -- Table structure for organization
 -- ----------------------------
+DROP TABLE IF EXISTS `organization`;
 CREATE TABLE `organization` (
   `id` int(11) NOT NULL,
   `parent_id` int(11) NULL,
   `name` varchar(20) NOT NULL,
+  `description` varchar(100) NULL,
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -47,6 +50,7 @@ INSERT INTO `organization` (id, parent_id, name) VALUES ('12', '4', '青岛营�
 -- ----------------------------
 -- Table structure for position
 -- ----------------------------
+DROP TABLE IF EXISTS `position`;
 CREATE TABLE `position` (
   `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL,
@@ -71,12 +75,13 @@ INSERT INTO `position` (id, name) VALUES ('10', '出纳');
 -- ----------------------------
 -- Table structure for role
 -- ----------------------------
+DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
   `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL,
   `code` varchar(20) NOT NULL,
   `is_system` tinyint(4) DEFAULT NULL,
-  `description` varchar(100) NOT NULL,
+  `description` varchar(100) NULL,
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -93,6 +98,7 @@ INSERT INTO `role` (id, name, code, is_system, description) VALUES ('5', '财务
 -- ----------------------------
 -- Table structure for member
 -- ----------------------------
+DROP TABLE IF EXISTS `member`;
 CREATE TABLE `member` (
   `id` int(11) NOT NULL,
   `username` varchar(20) NOT NULL,
