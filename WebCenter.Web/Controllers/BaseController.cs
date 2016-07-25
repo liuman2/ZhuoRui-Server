@@ -33,12 +33,12 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult ErrorResult
         {
-            get { return Json(new { result = false }, JsonRequestBehavior.AllowGet); }
+            get { return Json(new { success = false }, JsonRequestBehavior.AllowGet); }
         }
 
         public ActionResult SuccessResult
         {
-            get { return Json(new { result = true }, JsonRequestBehavior.AllowGet); }
+            get { return Json(new { success = true }, JsonRequestBehavior.AllowGet); }
         }
 
         public void AddLog(string name, string descipt, string result)

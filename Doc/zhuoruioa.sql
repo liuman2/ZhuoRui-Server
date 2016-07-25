@@ -13,9 +13,9 @@ CREATE TABLE `sequence` (
 -- ----------------------------
 -- Records of sequence
 -- ----------------------------
-INSERT INTO `sequence` VALUES ('organization', '1');
-INSERT INTO `sequence` VALUES ('position', '1');
-INSERT INTO `sequence` VALUES ('role', '1');
+INSERT INTO `sequence` VALUES ('organization', '13');
+INSERT INTO `sequence` VALUES ('position', '11');
+INSERT INTO `sequence` VALUES ('role', '6');
 INSERT INTO `sequence` VALUES ('member', '1');
 
 -- ----------------------------
