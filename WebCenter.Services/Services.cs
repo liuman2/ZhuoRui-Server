@@ -13,6 +13,16 @@ namespace WebCenter.Services
 {
    
 	
+	public partial class areaService:BaseService<area>,IareaService
+    {   
+        public areaService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.areaRepository;
+        }  
+    }
+	
 	public partial class memberService:BaseService<member>,ImemberService
     {   
         public memberService()

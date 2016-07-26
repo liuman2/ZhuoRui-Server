@@ -30,5 +30,6 @@ namespace WebCenter.Entities
         public virtual DbSet<role> roles { get; set; }
         public virtual DbSet<member> members { get; set; }
         public virtual DbSet<sequence> sequences { get; set; }
+        public virtual DbSet<area> areas { get; set; }
     }
 }

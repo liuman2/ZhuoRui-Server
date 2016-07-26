@@ -13,6 +13,9 @@ namespace WebCenter.IDAL
    
 	  
 
+		IDAL.IareaRepository areaRepository { get; }
+	  
+
 		IDAL.ImemberRepository memberRepository { get; }
 	  
 

@@ -7,6 +7,11 @@ namespace WebCenter.DAL
 {
    
 	
+	public partial class areaRepository :BaseRepository<area>,IareaRepository
+    {
+         
+    }
+	
 	public partial class memberRepository :BaseRepository<member>,ImemberRepository
     {
          

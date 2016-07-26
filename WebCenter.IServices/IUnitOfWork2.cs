@@ -8,6 +8,8 @@ namespace WebCenter.IServices
     public partial interface IUnitOfWork
 {  
 	
+	  IareaService IareaService{get;set;} 
+	
 	  ImemberService ImemberService{get;set;} 
 	
 	  IorganizationService IorganizationService{get;set;} 

@@ -9,6 +9,13 @@ namespace WebCenter.Services
 {  
 	
   [Ninject.Inject]
+	 public  IareaService IareaService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  ImemberService ImemberService
     {
         get;

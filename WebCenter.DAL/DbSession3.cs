@@ -7,6 +7,8 @@ namespace WebCenter.DAL
     public partial class DbSession:IDbSession  
     {   
 	
+	public IDAL.IareaRepository areaRepository { get { return new areaRepository(); } }
+	
 	public IDAL.ImemberRepository memberRepository { get { return new memberRepository(); } }
 	
 	public IDAL.IorganizationRepository organizationRepository { get { return new organizationRepository(); } }

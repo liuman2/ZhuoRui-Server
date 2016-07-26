@@ -204,6 +204,7 @@
     <Compile Include="Code\CacheKeys.cs" />
     <Compile Include="Code\Enums.cs" />
     <Compile Include="Code\JsonNetResult.cs" />
+    <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Filters\JsonAttribute.cs" />
@@ -286,6 +287,7 @@
     <Folder Include="Models\" />
     <Folder Include="Photo\" />
     <Folder Include="Views\Account\" />
+    <Folder Include="Views\Area\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Company\" />
     <Folder Include="Views\Dictionary\" />

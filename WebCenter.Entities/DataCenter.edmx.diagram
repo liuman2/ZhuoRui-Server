@@ -13,6 +13,7 @@
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_1" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_2" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_3" />
+        <EntityTypeShape EntityType="DataCenter.Entities.area" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

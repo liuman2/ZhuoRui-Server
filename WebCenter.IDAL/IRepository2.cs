@@ -6,6 +6,10 @@ namespace WebCenter.IDAL
 {
    
 	
+    public partial interface IareaRepository :IBaseRepository<area>
+    {         
+    }
+	
     public partial interface ImemberRepository :IBaseRepository<member>
     {         
     }

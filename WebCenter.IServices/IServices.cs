@@ -10,6 +10,10 @@ namespace WebCenter.IServices
 {
    
 	
+	public partial interface IareaService:IBaseService<area>
+    {   
+    }
+	
 	public partial interface ImemberService:IBaseService<member>
     {   
     }

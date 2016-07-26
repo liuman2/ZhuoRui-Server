@@ -73,6 +73,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="area.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="Attribute\EntityPrimKey.cs" />
     <Compile Include="BaseModel.cs" />
     <Compile Include="DataCenter.Context.cs">

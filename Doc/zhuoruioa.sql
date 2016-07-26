@@ -17,6 +17,7 @@ INSERT INTO `sequence` VALUES ('organization', '13');
 INSERT INTO `sequence` VALUES ('position', '11');
 INSERT INTO `sequence` VALUES ('role', '6');
 INSERT INTO `sequence` VALUES ('member', '1');
+INSERT INTO `sequence` VALUES ('area', '4');
 
 -- ----------------------------
 -- Table structure for organization
@@ -120,3 +121,21 @@ CREATE TABLE `member` (
   CONSTRAINT `member_ibfk_2` FOREIGN KEY (`position_id`) REFERENCES `position` (`id`),
   CONSTRAINT `member_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='员工管理表';
+
+
+-- ----------------------------
+-- Table structure for area
+-- ----------------------------
+DROP TABLE IF EXISTS `area`;
+CREATE TABLE `area` (
+  `id` int(11) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `description` varchar(100) NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='区域管理';
+-- ----------------------------
+-- Records of role
+-- ----------------------------
+INSERT INTO `area` (id, name) VALUES ('1', '厦门');
+INSERT INTO `area` (id, name) VALUES ('2', '泉州');
+INSERT INTO `area` (id, name) VALUES ('3', '青岛');
