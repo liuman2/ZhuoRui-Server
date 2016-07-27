@@ -103,6 +103,9 @@ INSERT INTO `role` (id, name, code, is_system, description) VALUES ('5', '财务
 DROP TABLE IF EXISTS `member`;
 CREATE TABLE `member` (
   `id` int(11) NOT NULL,
+  `organization_id` int(11) DEFAULT NULL,
+  `area_id` int(11) DEFAULT NULL,
+  `position_id` int(11) DEFAULT NULL,
   `username` varchar(20) NOT NULL,
   `name` varchar(20) NOT NULL,
   `english_name` varchar(20) NOT NULL,
@@ -110,9 +113,7 @@ CREATE TABLE `member` (
   `mobile` varchar(20) DEFAULT NULL,
   `hiredate` datetime DEFAULT NULL,
   `birthday` datetime DEFAULT NULL,
-  `organization_id` int(11) DEFAULT NULL,
-  `area_id` int(11) DEFAULT NULL,
-  `position_id` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL COMMENT '在职：1；离职：0；停薪留职：2',
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),

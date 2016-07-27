@@ -18,6 +18,9 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="organization_id" Type="int" />
+          <Property Name="area_id" Type="int" />
+          <Property Name="position_id" Type="int" />
           <Property Name="username" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="english_name" Type="varchar" MaxLength="20" Nullable="false" />
@@ -25,9 +28,7 @@
           <Property Name="mobile" Type="varchar" MaxLength="20" />
           <Property Name="hiredate" Type="datetime" Precision="0" />
           <Property Name="birthday" Type="datetime" Precision="0" />
-          <Property Name="organization_id" Type="int" />
-          <Property Name="area_id" Type="int" />
-          <Property Name="position_id" Type="int" />
+          <Property Name="status" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
@@ -210,6 +211,7 @@
           <NavigationProperty Name="area" Relationship="DataCenter.Entities.member_ibfk_3" FromRole="member" ToRole="area" />
           <NavigationProperty Name="organization" Relationship="DataCenter.Entities.member_ibfk_1" FromRole="member" ToRole="organization" />
           <NavigationProperty Name="position" Relationship="DataCenter.Entities.member_ibfk_2" FromRole="member" ToRole="position" />
+          <Property Name="status" Type="Int32" />
         </EntityType>
         <EntityType Name="role">
           <Key>
@@ -308,6 +310,7 @@
           <EntitySetMapping Name="members">
             <EntityTypeMapping TypeName="DataCenter.Entities.member">
               <MappingFragment StoreEntitySet="member">
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="position_id" ColumnName="position_id" />

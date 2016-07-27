@@ -68,6 +68,10 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
+    
+    
+        public Nullable<int> status { get; set; }
+    
         public virtual area area { get; set; }
         public virtual organization organization { get; set; }
         public virtual position position { get; set; }
