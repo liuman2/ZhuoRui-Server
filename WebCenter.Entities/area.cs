@@ -14,6 +14,11 @@ namespace WebCenter.Entities
     
     public partial class area:BaseModel
     {
+        public area()
+        {
+            this.members = new HashSet<member>();
+        }
+    
     
     
     
@@ -27,5 +32,7 @@ namespace WebCenter.Entities
     
     
         public string description { get; set; }
+    
+        public virtual ICollection<member> members { get; set; }
     }
 }

@@ -6,16 +6,16 @@ using Common;
 
 namespace WebCenter.Web.Controllers
 {
-    public class AreaController : BaseController
+    public class PositionController : BaseController
     {
-        public AreaController(IUnitOfWork UOF)
+        public PositionController(IUnitOfWork UOF)
             : base(UOF)
         {
         }
 
         public ActionResult List()
         {
-            var list = Uof.IareaService.GetAll().Select(a => new
+            var list = Uof.IpositionService.GetAll().Select(a => new
             {
                 id = a.id,
                 name = a.name,
@@ -27,7 +27,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
-            var _area = Uof.IareaService.GetAll(a => a.id == id).FirstOrDefault();
+            var _area = Uof.IpositionService.GetAll(a => a.id == id).FirstOrDefault();
             if (_area == null)
             {
                 return ErrorResult;
@@ -39,7 +39,7 @@ namespace WebCenter.Web.Controllers
         [HttpPost]
         public ActionResult Add(string name, string description)
         {
-            var r = Uof.IareaService.AddEntity(new area()
+            var r = Uof.IpositionService.AddEntity(new position()
             {
                 name = name,
                 description = description
@@ -51,31 +51,31 @@ namespace WebCenter.Web.Controllers
         [HttpPost]
         public ActionResult Update(int id, string name, string description)
         {
-            var _area = Uof.IareaService.GetAll(a=>a.id == id).FirstOrDefault();
-            if (_area == null)
+            var _position = Uof.IpositionService.GetAll(a=>a.id == id).FirstOrDefault();
+            if (_position == null)
             {
                 return ErrorResult;
             }
-            if (_area.name == name && _area.description == description)
+            if (_position.name == name && _position.description == description)
             {
                 return SuccessResult;
             }
-            _area.name = name;
-            _area.description = description;
+            _position.name = name;
+            _position.description = description;
 
-            var r = Uof.IareaService.UpdateEntity(_area);
+            var r = Uof.IpositionService.UpdateEntity(_position);
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Delete(int id)
         {
-            var _area = Uof.IareaService.GetAll(a => a.id == id).FirstOrDefault();
-            if (_area == null)
+            var _position = Uof.IpositionService.GetAll(a => a.id == id).FirstOrDefault();
+            if (_position == null)
             {
                 return ErrorResult;
             }
 
-            var r = Uof.IareaService.DeleteEntity(_area);
+            var r = Uof.IpositionService.DeleteEntity(_position);
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }
     }

@@ -14,11 +14,6 @@ namespace WebCenter.Entities
     
     public partial class role:BaseModel
     {
-        public role()
-        {
-            this.members = new HashSet<member>();
-        }
-    
     
     
     
@@ -48,7 +43,5 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
-    
-        public virtual ICollection<member> members { get; set; }
     }
 }

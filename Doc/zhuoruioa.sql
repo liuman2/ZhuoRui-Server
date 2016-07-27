@@ -55,6 +55,7 @@ DROP TABLE IF EXISTS `position`;
 CREATE TABLE `position` (
   `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL,
+  `description` varchar(100) NULL,
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -107,19 +108,20 @@ CREATE TABLE `member` (
   `english_name` varchar(20) NOT NULL,
   `password` varchar(100) DEFAULT NULL,
   `mobile` varchar(20) DEFAULT NULL,
+  `hiredate` datetime DEFAULT NULL,
   `birthday` datetime DEFAULT NULL,
   `organization_id` int(11) DEFAULT NULL,
+  `area_id` int(11) DEFAULT NULL,
   `position_id` int(11) DEFAULT NULL,
-  `role_id` int(11) DEFAULT NULL,
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `organization_id` (`organization_id`),
   KEY `position_id` (`position_id`),
-  KEY `role_id` (`role_id`),
+  KEY `area_id` (`area_id`),
   CONSTRAINT `member_ibfk_1` FOREIGN KEY (`organization_id`) REFERENCES `organization` (`id`),
   CONSTRAINT `member_ibfk_2` FOREIGN KEY (`position_id`) REFERENCES `position` (`id`),
-  CONSTRAINT `member_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
+  CONSTRAINT `member_ibfk_3` FOREIGN KEY (`area_id`) REFERENCES `area` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='员工管理表';
 
 

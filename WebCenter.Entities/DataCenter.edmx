@@ -23,10 +23,11 @@
           <Property Name="english_name" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="100" />
           <Property Name="mobile" Type="varchar" MaxLength="20" />
+          <Property Name="hiredate" Type="datetime" Precision="0" />
           <Property Name="birthday" Type="datetime" Precision="0" />
           <Property Name="organization_id" Type="int" />
+          <Property Name="area_id" Type="int" />
           <Property Name="position_id" Type="int" />
-          <Property Name="role_id" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
@@ -47,6 +48,7 @@
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
@@ -94,14 +96,14 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="member_ibfk_3">
-          <End Role="role" Type="Self.role" Multiplicity="0..1" />
+          <End Role="area" Type="Self.area" Multiplicity="0..1" />
           <End Role="member" Type="Self.member" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="role">
+            <Principal Role="area">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="member">
-              <PropertyRef Name="role_id" />
+              <PropertyRef Name="area_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -121,7 +123,7 @@
             <End Role="member" EntitySet="member" />
           </AssociationSet>
           <AssociationSet Name="member_ibfk_3" Association="Self.member_ibfk_3">
-            <End Role="role" EntitySet="role" />
+            <End Role="area" EntitySet="area" />
             <End Role="member" EntitySet="member" />
           </AssociationSet>
         </EntityContainer>
@@ -132,9 +134,14 @@
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="organizations" EntityType="DataCenter.Entities.organization" />
           <EntitySet Name="positions" EntityType="DataCenter.Entities.position" />
-          <EntitySet Name="roles" EntityType="DataCenter.Entities.role" />
-          <EntitySet Name="members" EntityType="DataCenter.Entities.member" />
           <EntitySet Name="sequences" EntityType="DataCenter.Entities.sequence" />
+          <EntitySet Name="areas" EntityType="DataCenter.Entities.area" />
+          <EntitySet Name="members" EntityType="DataCenter.Entities.member" />
+          <EntitySet Name="roles" EntityType="DataCenter.Entities.role" />
+          <AssociationSet Name="member_ibfk_3" Association="DataCenter.Entities.member_ibfk_3">
+            <End Role="area" EntitySet="areas" />
+            <End Role="member" EntitySet="members" />
+          </AssociationSet>
           <AssociationSet Name="member_ibfk_1" Association="DataCenter.Entities.member_ibfk_1">
             <End Role="organization" EntitySet="organizations" />
             <End Role="member" EntitySet="members" />
@@ -143,11 +150,6 @@
             <End Role="position" EntitySet="positions" />
             <End Role="member" EntitySet="members" />
           </AssociationSet>
-          <AssociationSet Name="member_ibfk_3" Association="DataCenter.Entities.member_ibfk_3">
-            <End Role="role" EntitySet="roles" />
-            <End Role="member" EntitySet="members" />
-          </AssociationSet>
-          <EntitySet Name="areas" EntityType="DataCenter.Entities.area" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -158,8 +160,8 @@
           <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
-          <NavigationProperty Name="members" Relationship="DataCenter.Entities.member_ibfk_1" FromRole="organization" ToRole="member" />
           <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="members" Relationship="DataCenter.Entities.member_ibfk_1" FromRole="organization" ToRole="member" />
         </EntityType>
         <EntityType Name="position">
           <Key>
@@ -169,20 +171,24 @@
           <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="members" Relationship="DataCenter.Entities.member_ibfk_2" FromRole="position" ToRole="member" />
         </EntityType>
-        <EntityType Name="role">
+        <EntityType Name="sequence">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id" Type="Decimal" Nullable="false" />
+        </EntityType>
+        <EntityType Name="area">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="code" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="is_system" Type="SByte" />
-          <Property Name="description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-          <NavigationProperty Name="members" Relationship="DataCenter.Entities.member_ibfk_3" FromRole="role" ToRole="member" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="members" Relationship="DataCenter.Entities.member_ibfk_3" FromRole="area" ToRole="member" />
         </EntityType>
         <EntityType Name="member">
           <Key>
@@ -194,23 +200,41 @@
           <Property Name="english_name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="hiredate" Type="DateTime" />
           <Property Name="birthday" Type="DateTime" />
           <Property Name="organization_id" Type="Int32" />
+          <Property Name="area_id" Type="Int32" />
           <Property Name="position_id" Type="Int32" />
-          <Property Name="role_id" Type="Int32" />
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
+          <NavigationProperty Name="area" Relationship="DataCenter.Entities.member_ibfk_3" FromRole="member" ToRole="area" />
           <NavigationProperty Name="organization" Relationship="DataCenter.Entities.member_ibfk_1" FromRole="member" ToRole="organization" />
           <NavigationProperty Name="position" Relationship="DataCenter.Entities.member_ibfk_2" FromRole="member" ToRole="position" />
-          <NavigationProperty Name="role" Relationship="DataCenter.Entities.member_ibfk_3" FromRole="member" ToRole="role" />
         </EntityType>
-        <EntityType Name="sequence">
+        <EntityType Name="role">
           <Key>
-            <PropertyRef Name="name" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="id" Type="Decimal" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="code" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="is_system" Type="SByte" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
         </EntityType>
+        <Association Name="member_ibfk_3">
+          <End Type="DataCenter.Entities.area" Role="area" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="area">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="member">
+              <PropertyRef Name="area_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="member_ibfk_1">
           <End Type="DataCenter.Entities.organization" Role="organization" Multiplicity="0..1" />
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="*" />
@@ -235,26 +259,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="member_ibfk_3">
-          <End Type="DataCenter.Entities.role" Role="role" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="role">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="member">
-              <PropertyRef Name="role_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="area">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -276,40 +280,10 @@
           <EntitySetMapping Name="positions">
             <EntityTypeMapping TypeName="DataCenter.Entities.position">
               <MappingFragment StoreEntitySet="position">
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="roles">
-            <EntityTypeMapping TypeName="DataCenter.Entities.role">
-              <MappingFragment StoreEntitySet="role">
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="is_system" ColumnName="is_system" />
-                <ScalarProperty Name="code" ColumnName="code" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="members">
-            <EntityTypeMapping TypeName="DataCenter.Entities.member">
-              <MappingFragment StoreEntitySet="member">
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="role_id" ColumnName="role_id" />
-                <ScalarProperty Name="position_id" ColumnName="position_id" />
-                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
-                <ScalarProperty Name="birthday" ColumnName="birthday" />
-                <ScalarProperty Name="mobile" ColumnName="mobile" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="english_name" ColumnName="english_name" />
                 <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -326,6 +300,38 @@
             <EntityTypeMapping TypeName="DataCenter.Entities.area">
               <MappingFragment StoreEntitySet="area">
                 <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="members">
+            <EntityTypeMapping TypeName="DataCenter.Entities.member">
+              <MappingFragment StoreEntitySet="member">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="position_id" ColumnName="position_id" />
+                <ScalarProperty Name="area_id" ColumnName="area_id" />
+                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
+                <ScalarProperty Name="birthday" ColumnName="birthday" />
+                <ScalarProperty Name="hiredate" ColumnName="hiredate" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="english_name" ColumnName="english_name" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="roles">
+            <EntityTypeMapping TypeName="DataCenter.Entities.role">
+              <MappingFragment StoreEntitySet="role">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="is_system" ColumnName="is_system" />
+                <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>

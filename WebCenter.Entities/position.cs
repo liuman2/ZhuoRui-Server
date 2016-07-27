@@ -37,6 +37,10 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
+    
+    
+        public string description { get; set; }
+    
         public virtual ICollection<member> members { get; set; }
     }
 }

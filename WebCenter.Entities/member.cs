@@ -42,6 +42,10 @@ namespace WebCenter.Entities
     
     
     
+        public Nullable<System.DateTime> hiredate { get; set; }
+    
+    
+    
         public Nullable<System.DateTime> birthday { get; set; }
     
     
@@ -50,11 +54,11 @@ namespace WebCenter.Entities
     
     
     
+        public Nullable<int> area_id { get; set; }
+    
+    
+    
         public Nullable<int> position_id { get; set; }
-    
-    
-    
-        public Nullable<int> role_id { get; set; }
     
     
     
@@ -64,8 +68,8 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
+        public virtual area area { get; set; }
         public virtual organization organization { get; set; }
         public virtual position position { get; set; }
-        public virtual role role { get; set; }
     }
 }
