@@ -16,7 +16,7 @@ namespace WebCenter.Web.Controllers
         {
         }
 
-        public ActionResult List(int pageIndex = 1, int pageSize = 10, string name = "")
+        public ActionResult List(int index = 1, int size = 10, string name = "")
         {
             Expression<Func<member, bool>> condition = m => true;
             if (!string.IsNullOrEmpty(name))
@@ -33,21 +33,21 @@ namespace WebCenter.Web.Controllers
                 username = m.username,
                 department = m.organization.name,
                 area = m.area.name,
-                position = m.position.name,
-                status = m.status
-            }).ToPagedList(pageIndex, pageSize).ToList();
+                position = m.position.name
+                //status = m.status
+            }).ToPagedList(index, size).ToList();
 
             var totalRecord = Uof.ImemberService.GetAll(condition).Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
             {
-                totalPages = (totalRecord + pageSize - 1) / pageSize;
+                totalPages = (totalRecord + size - 1) / size;
             }
             var page = new
             {
-                current_index = pageIndex,
-                current_size = pageSize,
+                current_index = index,
+                current_size = size,
                 total_size = totalRecord,
                 total_page = totalPages
             };
@@ -113,6 +113,29 @@ namespace WebCenter.Web.Controllers
 
             var r = Uof.IareaService.DeleteEntity(_area);
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ExistUsername(string username, int? id)
+        {
+            Expression<Func<member, bool>> condition = m => (m.username == username);
+            if (id != null)
+            {
+                Expression<Func<member, bool>> tmp = m => (m.id == id.Value);
+                condition = tmp;
+            }
+
+            var _member = Uof.ImemberService.GetAll(condition).Select(m => new {
+                id = m.id,
+                name = m.name,
+                username = m.username
+            }).FirstOrDefault();
+
+            if (_member == null)
+            {
+                return Json(new { ok = "验证成功" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { error = "用户名已存在" }, JsonRequestBehavior.AllowGet);
         }
     }
 }

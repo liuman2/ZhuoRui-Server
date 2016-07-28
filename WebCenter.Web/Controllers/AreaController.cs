@@ -3,6 +3,8 @@ using System.Web.Mvc;
 using WebCenter.IServices;
 using WebCenter.Entities;
 using Common;
+using System.Linq.Expressions;
+using System;
 
 namespace WebCenter.Web.Controllers
 {
@@ -23,6 +25,45 @@ namespace WebCenter.Web.Controllers
             }).ToList();
 
             return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Search(int index = 1, int size = 10, string name = "")
+        {
+            Expression<Func<area, bool>> condition = m => true;
+            if (!string.IsNullOrEmpty(name))
+            {
+                Expression<Func<area, bool>> tmp = m => (m.name.IndexOf(name) > -1);
+                condition = tmp;
+            }
+
+            var list = Uof.IareaService.GetAll(condition).OrderBy(item => item.id).Select(m => new
+            {
+                id = m.id,
+                name = m.name
+            }).ToPagedList(index, size).ToList();
+
+            var totalRecord = Uof.IareaService.GetAll(condition).Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + size - 1) / size;
+            }
+            var page = new
+            {
+                current_index = index,
+                current_size = size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+
+            var result = new
+            {
+                page = page,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Get(int id)
