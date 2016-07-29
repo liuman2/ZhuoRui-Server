@@ -33,8 +33,8 @@ namespace WebCenter.Web.Controllers
                 username = m.username,
                 department = m.organization.name,
                 area = m.area.name,
-                position = m.position.name
-                //status = m.status
+                position = m.position.name,
+                status = m.status
             }).ToPagedList(index, size).ToList();
 
             var totalRecord = Uof.ImemberService.GetAll(condition).Count();
@@ -63,25 +63,50 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
-            var _area = Uof.IareaService.GetAll(a => a.id == id).FirstOrDefault();
-            if (_area == null)
+            var _member = Uof.ImemberService.GetAll(a => a.id == id).FirstOrDefault();
+            if (_member == null)
             {
                 return ErrorResult;
             }
 
-            return Json(_area, JsonRequestBehavior.AllowGet);
+            return Json(_member, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult Add(string name, string description)
+        public ActionResult Add(member _member)
         {
-            var r = Uof.IareaService.AddEntity(new area()
+            if (string.IsNullOrEmpty(_member.name))
             {
-                name = name,
-                description = description
+                return Json(new { success = false, message = "姓名不能为空" }, JsonRequestBehavior.AllowGet);
+            }
+            if (string.IsNullOrEmpty(_member.username))
+            {
+                return Json(new { success = false, message = "用户名不能为空" }, JsonRequestBehavior.AllowGet);
+            }
+            if (_member.organization_id == null)
+            {
+                return Json(new { success = false, message = "部门不能为空" }, JsonRequestBehavior.AllowGet);
+            }
+            if (_member.area_id == null)
+            {
+                return Json(new { success = false, message = "区域不能为空" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var r = Uof.ImemberService.AddEntity(new member
+            {
+                name = _member.name,
+                username = _member.username,
+                english_name = _member.english_name,
+                area_id = _member.area_id,
+                birthday = _member.birthday,
+                hiredate = _member.hiredate,
+                mobile = _member.mobile,
+                organization_id = _member.organization_id,
+                position_id = _member.position_id,
+                status = _member.status
             });
 
-            return SuccessResult;
+            return Json(r, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
