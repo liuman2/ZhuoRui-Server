@@ -16,6 +16,12 @@ namespace WebCenter.IDAL
 		IDAL.IareaRepository areaRepository { get; }
 	  
 
+		IDAL.IdictionaryRepository dictionaryRepository { get; }
+	  
+
+		IDAL.Idictionary_groupRepository dictionary_groupRepository { get; }
+	  
+
 		IDAL.ImemberRepository memberRepository { get; }
 	  
 

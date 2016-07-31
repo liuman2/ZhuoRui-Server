@@ -18,6 +18,8 @@ INSERT INTO `sequence` VALUES ('position', '11');
 INSERT INTO `sequence` VALUES ('role', '6');
 INSERT INTO `sequence` VALUES ('member', '1');
 INSERT INTO `sequence` VALUES ('area', '4');
+INSERT INTO `sequence` VALUES ('dictionary_group', '7');
+INSERT INTO `sequence` VALUES ('dictionary', '1');
 
 -- ----------------------------
 -- Table structure for organization
@@ -142,3 +144,38 @@ CREATE TABLE `area` (
 INSERT INTO `area` (id, name) VALUES ('1', '厦门');
 INSERT INTO `area` (id, name) VALUES ('2', '泉州');
 INSERT INTO `area` (id, name) VALUES ('3', '青岛');
+
+-- ----------------------------
+-- Table structure for area
+-- ----------------------------
+DROP TABLE IF EXISTS `dictionary_group`;
+CREATE TABLE `dictionary_group` (
+  `id` int(11) NOT NULL,
+  `group` varchar(20) NULL,
+  `name` varchar(20) NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据类别';
+-- ----------------------------
+-- Records of dictionary_type
+-- ----------------------------
+INSERT INTO `dictionary_group` VALUES ('1', '行业类别', '行业类别');
+INSERT INTO `dictionary_group` VALUES ('2', '客户来源',  '客户来源');
+INSERT INTO `dictionary_group` VALUES ('3', '贸易方式', '贸易方式');
+INSERT INTO `dictionary_group` VALUES ('4', '注册方式', '注册方式');
+INSERT INTO `dictionary_group` VALUES ('5', '专利类型', '专利类型');
+INSERT INTO `dictionary_group` VALUES ('6', '专利用途', '专利用途');
+
+-- ----------------------------
+-- Table structure for dictionary
+-- ----------------------------
+DROP TABLE IF EXISTS `dictionary`;
+CREATE TABLE `dictionary` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `group` varchar(20) DEFAULT NULL,
+  `date_created` datetime DEFAULT NULL,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+

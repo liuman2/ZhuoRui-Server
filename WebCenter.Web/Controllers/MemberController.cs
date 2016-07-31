@@ -92,10 +92,13 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "区域不能为空" }, JsonRequestBehavior.AllowGet);
             }
 
+            string hashPassword = HashPassword.GetHashPassword("1"); // 默认密码1
+            
             var r = Uof.ImemberService.AddEntity(new member
             {
                 name = _member.name,
                 username = _member.username,
+                password = hashPassword,
                 english_name = _member.english_name,
                 area_id = _member.area_id,
                 birthday = _member.birthday,

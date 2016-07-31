@@ -16,6 +16,20 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IdictionaryService IdictionaryService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  Idictionary_groupService Idictionary_groupService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  ImemberService ImemberService
     {
         get;

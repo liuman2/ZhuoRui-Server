@@ -14,6 +14,14 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IdictionaryService:IBaseService<dictionary>
+    {   
+    }
+	
+	public partial interface Idictionary_groupService:IBaseService<dictionary_group>
+    {   
+    }
+	
 	public partial interface ImemberService:IBaseService<member>
     {   
     }

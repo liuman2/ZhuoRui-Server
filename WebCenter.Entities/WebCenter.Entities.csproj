@@ -94,6 +94,12 @@
       <DependentUpon>DataCenter.edmx</DependentUpon>
     </Compile>
     <Compile Include="DataCenterDb.cs" />
+    <Compile Include="dictionary.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dictionary_group.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="member.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

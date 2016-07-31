@@ -23,6 +23,26 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class dictionaryService:BaseService<dictionary>,IdictionaryService
+    {   
+        public dictionaryService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.dictionaryRepository;
+        }  
+    }
+	
+	public partial class dictionary_groupService:BaseService<dictionary_group>,Idictionary_groupService
+    {   
+        public dictionary_groupService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.dictionary_groupRepository;
+        }  
+    }
+	
 	public partial class memberService:BaseService<member>,ImemberService
     {   
         public memberService()

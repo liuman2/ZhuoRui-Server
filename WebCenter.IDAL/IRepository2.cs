@@ -10,6 +10,14 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IdictionaryRepository :IBaseRepository<dictionary>
+    {         
+    }
+	
+    public partial interface Idictionary_groupRepository :IBaseRepository<dictionary_group>
+    {         
+    }
+	
     public partial interface ImemberRepository :IBaseRepository<member>
     {         
     }

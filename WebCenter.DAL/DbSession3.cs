@@ -9,6 +9,10 @@ namespace WebCenter.DAL
 	
 	public IDAL.IareaRepository areaRepository { get { return new areaRepository(); } }
 	
+	public IDAL.IdictionaryRepository dictionaryRepository { get { return new dictionaryRepository(); } }
+	
+	public IDAL.Idictionary_groupRepository dictionary_groupRepository { get { return new dictionary_groupRepository(); } }
+	
 	public IDAL.ImemberRepository memberRepository { get { return new memberRepository(); } }
 	
 	public IDAL.IorganizationRepository organizationRepository { get { return new organizationRepository(); } }

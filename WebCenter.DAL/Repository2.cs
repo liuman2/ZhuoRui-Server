@@ -12,6 +12,16 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class dictionaryRepository :BaseRepository<dictionary>,IdictionaryRepository
+    {
+         
+    }
+	
+	public partial class dictionary_groupRepository :BaseRepository<dictionary_group>,Idictionary_groupRepository
+    {
+         
+    }
+	
 	public partial class memberRepository :BaseRepository<member>,ImemberRepository
     {
          

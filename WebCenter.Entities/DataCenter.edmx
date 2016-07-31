@@ -13,6 +13,24 @@
           <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="dictionary">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="group" Type="varchar" MaxLength="20" />
+          <Property Name="date_created" Type="datetime" Precision="0" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="dictionary_group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="group" Type="varchar" MaxLength="20" />
+          <Property Name="name" Type="varchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="member">
           <Key>
             <PropertyRef Name="id" />
@@ -110,6 +128,8 @@
         </Association>
         <EntityContainer Name="DataCenterEntitiesStoreContainer">
           <EntitySet Name="area" EntityType="Self.area" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="dictionary" EntityType="Self.dictionary" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="dictionary_group" EntityType="Self.dictionary_group" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="member" EntityType="Self.member" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="organization" EntityType="Self.organization" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="position" EntityType="Self.position" Schema="zhuoruioa" store:Type="Tables" />
@@ -151,6 +171,8 @@
             <End Role="position" EntitySet="positions" />
             <End Role="member" EntitySet="members" />
           </AssociationSet>
+          <EntitySet Name="dictionary_group" EntityType="DataCenter.Entities.dictionary_group" />
+          <EntitySet Name="dictionaries" EntityType="DataCenter.Entities.dictionary" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -261,6 +283,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="dictionary_group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="group" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="dictionary">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="group" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -335,6 +375,26 @@
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="is_system" ColumnName="is_system" />
                 <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="dictionary_group">
+            <EntityTypeMapping TypeName="DataCenter.Entities.dictionary_group">
+              <MappingFragment StoreEntitySet="dictionary_group">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="group" ColumnName="group" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="dictionaries">
+            <EntityTypeMapping TypeName="DataCenter.Entities.dictionary">
+              <MappingFragment StoreEntitySet="dictionary">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="group" ColumnName="group" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
