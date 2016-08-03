@@ -41,7 +41,7 @@
           <Property Name="position_id" Type="int" />
           <Property Name="username" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="english_name" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="english_name" Type="varchar" MaxLength="20" />
           <Property Name="password" Type="varchar" MaxLength="100" />
           <Property Name="mobile" Type="varchar" MaxLength="20" />
           <Property Name="hiredate" Type="datetime" Precision="0" />
@@ -157,8 +157,10 @@
           <EntitySet Name="positions" EntityType="DataCenter.Entities.position" />
           <EntitySet Name="sequences" EntityType="DataCenter.Entities.sequence" />
           <EntitySet Name="areas" EntityType="DataCenter.Entities.area" />
-          <EntitySet Name="members" EntityType="DataCenter.Entities.member" />
           <EntitySet Name="roles" EntityType="DataCenter.Entities.role" />
+          <EntitySet Name="dictionary_group" EntityType="DataCenter.Entities.dictionary_group" />
+          <EntitySet Name="dictionaries" EntityType="DataCenter.Entities.dictionary" />
+          <EntitySet Name="members" EntityType="DataCenter.Entities.member" />
           <AssociationSet Name="member_ibfk_3" Association="DataCenter.Entities.member_ibfk_3">
             <End Role="area" EntitySet="areas" />
             <End Role="member" EntitySet="members" />
@@ -171,8 +173,6 @@
             <End Role="position" EntitySet="positions" />
             <End Role="member" EntitySet="members" />
           </AssociationSet>
-          <EntitySet Name="dictionary_group" EntityType="DataCenter.Entities.dictionary_group" />
-          <EntitySet Name="dictionaries" EntityType="DataCenter.Entities.dictionary" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -213,28 +213,6 @@
           <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="members" Relationship="DataCenter.Entities.member_ibfk_3" FromRole="area" ToRole="member" />
         </EntityType>
-        <EntityType Name="member">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="english_name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="hiredate" Type="DateTime" />
-          <Property Name="birthday" Type="DateTime" />
-          <Property Name="organization_id" Type="Int32" />
-          <Property Name="area_id" Type="Int32" />
-          <Property Name="position_id" Type="Int32" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-          <NavigationProperty Name="area" Relationship="DataCenter.Entities.member_ibfk_3" FromRole="member" ToRole="area" />
-          <NavigationProperty Name="organization" Relationship="DataCenter.Entities.member_ibfk_1" FromRole="member" ToRole="organization" />
-          <NavigationProperty Name="position" Relationship="DataCenter.Entities.member_ibfk_2" FromRole="member" ToRole="position" />
-          <Property Name="status" Type="Int32" />
-        </EntityType>
         <EntityType Name="role">
           <Key>
             <PropertyRef Name="id" />
@@ -246,6 +224,46 @@
           <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="dictionary_group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="group" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="dictionary">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="group" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="member">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="organization_id" Type="Int32" />
+          <Property Name="area_id" Type="Int32" />
+          <Property Name="position_id" Type="Int32" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="english_name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="hiredate" Type="DateTime" />
+          <Property Name="birthday" Type="DateTime" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <NavigationProperty Name="area" Relationship="DataCenter.Entities.member_ibfk_3" FromRole="member" ToRole="area" />
+          <NavigationProperty Name="organization" Relationship="DataCenter.Entities.member_ibfk_1" FromRole="member" ToRole="organization" />
+          <NavigationProperty Name="position" Relationship="DataCenter.Entities.member_ibfk_2" FromRole="member" ToRole="position" />
         </EntityType>
         <Association Name="member_ibfk_3">
           <End Type="DataCenter.Entities.area" Role="area" Multiplicity="0..1" />
@@ -283,24 +301,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="dictionary_group">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="group" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="dictionary">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="group" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="date_created" Type="DateTime" />
-          <Property Name="date_updated" Type="DateTime" />
-        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -347,26 +347,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="members">
-            <EntityTypeMapping TypeName="DataCenter.Entities.member">
-              <MappingFragment StoreEntitySet="member">
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="position_id" ColumnName="position_id" />
-                <ScalarProperty Name="area_id" ColumnName="area_id" />
-                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
-                <ScalarProperty Name="birthday" ColumnName="birthday" />
-                <ScalarProperty Name="hiredate" ColumnName="hiredate" />
-                <ScalarProperty Name="mobile" ColumnName="mobile" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="english_name" ColumnName="english_name" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="username" ColumnName="username" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="roles">
             <EntityTypeMapping TypeName="DataCenter.Entities.role">
               <MappingFragment StoreEntitySet="role">
@@ -396,6 +376,26 @@
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="group" ColumnName="group" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="members">
+            <EntityTypeMapping TypeName="DataCenter.Entities.member">
+              <MappingFragment StoreEntitySet="member">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="birthday" ColumnName="birthday" />
+                <ScalarProperty Name="hiredate" ColumnName="hiredate" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="english_name" ColumnName="english_name" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="position_id" ColumnName="position_id" />
+                <ScalarProperty Name="area_id" ColumnName="area_id" />
+                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

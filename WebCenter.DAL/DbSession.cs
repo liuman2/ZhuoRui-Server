@@ -51,9 +51,6 @@ namespace WebCenter.DAL
             {
                 throw ex;
             }
-
-
-
         }
 
         //如何执行SQL语句

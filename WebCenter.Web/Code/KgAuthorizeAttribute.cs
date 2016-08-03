@@ -162,19 +162,13 @@ namespace WebCenter.Web
                 return false;
             }
 
-            var _mobile = userTokens[0];
-            BaseRepository<user> repository = new BaseRepository<user>();
-            var _user = repository.GetAll(a => a.id == _id && a.mobile == _mobile).Select(u => new LoginResponse
+            var _username = userTokens[0];
+            BaseRepository<member> repository = new BaseRepository<member>();
+            var _user = repository.GetAll(a => a.id == _id && a.username == _username).Select(u => new LoginResponse
             {
                 id = u.id,
                 name = u.name,
-                mobile = u.mobile,
-                company_id = u.company_id,
-                picture_url = u.picture_url,
-                status = u.status,
-                date_created = u.date_created,
-                date_updated = u.date_updated,
-                is_admin = u.is_admin
+                username = u.username
             }).FirstOrDefault();
 
             if (_user == null)

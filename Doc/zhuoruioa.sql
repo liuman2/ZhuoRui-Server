@@ -16,7 +16,7 @@ CREATE TABLE `sequence` (
 INSERT INTO `sequence` VALUES ('organization', '13');
 INSERT INTO `sequence` VALUES ('position', '11');
 INSERT INTO `sequence` VALUES ('role', '6');
-INSERT INTO `sequence` VALUES ('member', '1');
+INSERT INTO `sequence` VALUES ('member', '2');
 INSERT INTO `sequence` VALUES ('area', '4');
 INSERT INTO `sequence` VALUES ('dictionary_group', '7');
 INSERT INTO `sequence` VALUES ('dictionary', '1');
@@ -110,7 +110,7 @@ CREATE TABLE `member` (
   `position_id` int(11) DEFAULT NULL,
   `username` varchar(20) NOT NULL,
   `name` varchar(20) NOT NULL,
-  `english_name` varchar(20) NOT NULL,
+  `english_name` varchar(20) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `mobile` varchar(20) DEFAULT NULL,
   `hiredate` datetime DEFAULT NULL,
@@ -126,7 +126,7 @@ CREATE TABLE `member` (
   CONSTRAINT `member_ibfk_2` FOREIGN KEY (`position_id`) REFERENCES `position` (`id`),
   CONSTRAINT `member_ibfk_3` FOREIGN KEY (`area_id`) REFERENCES `area` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='员工管理表';
-
+INSERT INTO `member` VALUES ('1', '1', '1', null, 'admin', '系统管理员', 'admin', 'M835cqqAkhHw/dbOtLYjyKjnKfo=', null, null, null, null, '2016-08-03 14:08:18', null);
 
 -- ----------------------------
 -- Table structure for area
@@ -176,6 +176,51 @@ CREATE TABLE `dictionary` (
   `date_created` datetime DEFAULT NULL,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for customer
+-- ----------------------------
+DROP TABLE IF EXISTS `customer`;
+CREATE TABLE `customer` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL COMMENT '客户名称',
+  `industry` varchar(50) DEFAULT NULL COMMENT '所属行业',
+  `province` varchar(20) DEFAULT NULL,
+  `city` varchar(20) DEFAULT NULL,
+  `county` varchar(20) DEFAULT NULL,
+  `address` varchar(200) DEFAULT NULL,
+
+  `contact` varchar(30) DEFAULT NULL COMMENT '联系人',
+  `mobile` varchar(20) DEFAULT NULL,
+  `tel` varchar(20) DEFAULT NULL,
+  `fax` varchar(20) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `QQ` varchar(50) DEFAULT NULL,
+  `wechat` varchar(50) DEFAULT NULL,
+  `source` varchar(50) DEFAULT NULL,
+
+  `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
+  `salesman_id` int(11) DEFAULT NULL COMMENT '业务员',
+  `waiter_id` int(11) DEFAULT NULL COMMENT '年检客服',
+  `manager_id` int(11) DEFAULT NULL COMMENT '经理',
+  `outworker_id` int(11) DEFAULT NULL COMMENT '外勤',
+
+  `date_created` datetime DEFAULT NULL,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+
+  KEY `creator_id` (`creator_id`),
+  KEY `salesman_id` (`salesman_id`),
+  KEY `waiter_id` (`waiter_id`),
+  KEY `manager_id` (`manager_id`),
+  KEY `outworker_id` (`outworker_id`),
+  CONSTRAINT `member_ibfk_creator` FOREIGN KEY (`creator_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `member_ibfk_salesman` FOREIGN KEY (`salesman_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `member_ibfk_waiter` FOREIGN KEY (`waiter_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `member_ibfk_manager` FOREIGN KEY (`manager_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `member_ibfk_outworker` FOREIGN KEY (`outworker_id`) REFERENCES `member` (`id`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

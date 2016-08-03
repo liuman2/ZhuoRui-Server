@@ -24,13 +24,6 @@ namespace WebCenter.Web
             get { return "Basic"; }
         }
 
-        public int? company_id
-        {
-            get
-            {
-                return SignInResponse.company_id;
-            }
-        }
 
         public int id
         {
@@ -45,19 +38,12 @@ namespace WebCenter.Web
             get { return SignInResponse != null; }
         }
 
-        public int? is_admin
-        {
-            get
-            {
-                return SignInResponse.is_admin;
-            }
-        }
 
-        public string mobile
+        public string username
         {
             get
             {
-                return SignInResponse.mobile;
+                return SignInResponse.username;
             }
         }
 
@@ -71,22 +57,6 @@ namespace WebCenter.Web
             get
             {
                 return SignInResponse.name;
-            }
-        }
-
-        public string picture_url
-        {
-            get
-            {
-                return SignInResponse.picture_url;
-            }
-        }
-
-        public int? status
-        {
-            get
-            {
-                return SignInResponse.status;
             }
         }
     }

@@ -204,12 +204,14 @@
     <Compile Include="Code\CacheKeys.cs" />
     <Compile Include="Code\Enums.cs" />
     <Compile Include="Code\JsonNetResult.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Controllers\PositionController.cs" />
+    <Compile Include="Controllers\ReserveController.cs" />
     <Compile Include="Filters\JsonAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -301,6 +303,7 @@
     <Folder Include="Views\Permission\" />
     <Folder Include="Views\Project\" />
     <Folder Include="Views\Register\" />
+    <Folder Include="Views\Reserve\" />
     <Folder Include="Views\User\" />
     <Folder Include="Views\Waitdeal\" />
   </ItemGroup>

@@ -165,5 +165,6 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { error = "用户名已存在" }, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

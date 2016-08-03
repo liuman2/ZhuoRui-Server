@@ -10,10 +10,6 @@ namespace WebCenter.Web
     {
         int id { get; }
         string name { get; }
-        string mobile { get; }
-        int? company_id { get; }
-        string picture_url { get; }
-        int? status { get; }
-        int? is_admin { get; }
+        string username { get; }
     }
 }

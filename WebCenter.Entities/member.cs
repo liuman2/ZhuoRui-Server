@@ -22,6 +22,18 @@ namespace WebCenter.Entities
     
     
     
+        public Nullable<int> organization_id { get; set; }
+    
+    
+    
+        public Nullable<int> area_id { get; set; }
+    
+    
+    
+        public Nullable<int> position_id { get; set; }
+    
+    
+    
         public string username { get; set; }
     
     
@@ -50,15 +62,7 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<int> organization_id { get; set; }
-    
-    
-    
-        public Nullable<int> area_id { get; set; }
-    
-    
-    
-        public Nullable<int> position_id { get; set; }
+        public Nullable<int> status { get; set; }
     
     
     
@@ -67,10 +71,6 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
-    
-    
-    
-        public Nullable<int> status { get; set; }
     
         public virtual area area { get; set; }
         public virtual organization organization { get; set; }
