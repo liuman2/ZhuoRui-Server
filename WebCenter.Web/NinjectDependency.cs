@@ -19,6 +19,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<IareaService>().To<areaService>().InRequestScope();
 	
+	   kernel.Bind<IcustomerService>().To<customerService>().InRequestScope();
+	
 	   kernel.Bind<IdictionaryService>().To<dictionaryService>().InRequestScope();
 	
 	   kernel.Bind<Idictionary_groupService>().To<dictionary_groupService>().InRequestScope();

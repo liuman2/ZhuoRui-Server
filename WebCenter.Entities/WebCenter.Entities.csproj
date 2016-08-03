@@ -78,6 +78,9 @@
     </Compile>
     <Compile Include="Attribute\EntityPrimKey.cs" />
     <Compile Include="BaseModel.cs" />
+    <Compile Include="customer.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataCenter.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

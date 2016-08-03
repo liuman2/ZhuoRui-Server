@@ -14,6 +14,15 @@ namespace WebCenter.Entities
     
     public partial class member:BaseModel
     {
+        public member()
+        {
+            this.customers = new HashSet<customer>();
+            this.customers1 = new HashSet<customer>();
+            this.customers2 = new HashSet<customer>();
+            this.customers3 = new HashSet<customer>();
+            this.customers4 = new HashSet<customer>();
+        }
+    
     
     
     
@@ -75,5 +84,10 @@ namespace WebCenter.Entities
         public virtual area area { get; set; }
         public virtual organization organization { get; set; }
         public virtual position position { get; set; }
+        public virtual ICollection<customer> customers { get; set; }
+        public virtual ICollection<customer> customers1 { get; set; }
+        public virtual ICollection<customer> customers2 { get; set; }
+        public virtual ICollection<customer> customers3 { get; set; }
+        public virtual ICollection<customer> customers4 { get; set; }
     }
 }

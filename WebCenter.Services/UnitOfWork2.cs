@@ -16,6 +16,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IcustomerService IcustomerService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IdictionaryService IdictionaryService
     {
         get;

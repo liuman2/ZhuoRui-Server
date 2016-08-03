@@ -190,7 +190,6 @@ CREATE TABLE `customer` (
   `city` varchar(20) DEFAULT NULL,
   `county` varchar(20) DEFAULT NULL,
   `address` varchar(200) DEFAULT NULL,
-
   `contact` varchar(30) DEFAULT NULL COMMENT '联系人',
   `mobile` varchar(20) DEFAULT NULL,
   `tel` varchar(20) DEFAULT NULL,
@@ -199,13 +198,13 @@ CREATE TABLE `customer` (
   `QQ` varchar(50) DEFAULT NULL,
   `wechat` varchar(50) DEFAULT NULL,
   `source` varchar(50) DEFAULT NULL,
-
   `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
   `salesman_id` int(11) DEFAULT NULL COMMENT '业务员',
   `waiter_id` int(11) DEFAULT NULL COMMENT '年检客服',
   `manager_id` int(11) DEFAULT NULL COMMENT '经理',
   `outworker_id` int(11) DEFAULT NULL COMMENT '外勤',
-
+  `organization_id` int(11) DEFAULT NULL COMMENT '业务员部门',
+  `status` tinyint(3) DEFAULT NULL COMMENT '状态，0-预备，1-正式',
   `date_created` datetime DEFAULT NULL,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),

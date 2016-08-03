@@ -12,6 +12,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class customerRepository :BaseRepository<customer>,IcustomerRepository
+    {
+         
+    }
+	
 	public partial class dictionaryRepository :BaseRepository<dictionary>,IdictionaryRepository
     {
          

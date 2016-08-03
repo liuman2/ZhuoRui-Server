@@ -10,6 +10,8 @@ namespace WebCenter.IServices
 	
 	  IareaService IareaService{get;set;} 
 	
+	  IcustomerService IcustomerService{get;set;} 
+	
 	  IdictionaryService IdictionaryService{get;set;} 
 	
 	  Idictionary_groupService Idictionary_groupService{get;set;} 

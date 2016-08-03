@@ -23,6 +23,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class customerService:BaseService<customer>,IcustomerService
+    {   
+        public customerService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.customerRepository;
+        }  
+    }
+	
 	public partial class dictionaryService:BaseService<dictionary>,IdictionaryService
     {   
         public dictionaryService()

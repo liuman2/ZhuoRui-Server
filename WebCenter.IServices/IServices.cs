@@ -14,6 +14,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IcustomerService:IBaseService<customer>
+    {   
+    }
+	
 	public partial interface IdictionaryService:IBaseService<dictionary>
     {   
     }

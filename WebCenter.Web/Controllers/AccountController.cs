@@ -25,7 +25,7 @@ namespace WebCenter.Web.Controllers
         {
             string pwd = HashPassword.GetHashPassword(password);
 
-            var _user = Uof.ImemberService.GetAll(a => a.username == username && a.password == pwd).Select(u=> new
+            var _user = Uof.ImemberService.GetAll(a => a.username == username && a.password == pwd).Select(u => new
             {
                 id = u.id,
                 name = u.name,
@@ -37,7 +37,7 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false }, JsonRequestBehavior.AllowGet);
             }
 
-            FormsAuthentication.SetAuthCookie(_user.username, true);
+            FormsAuthentication.SetAuthCookie(string.Format("{0}|{1}", _user.id, _user.username), true);
             Session["UserName"] = username;
 
             return Json(new { success = true, user = _user }, JsonRequestBehavior.AllowGet);
@@ -49,14 +49,23 @@ namespace WebCenter.Web.Controllers
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
             {
-                Response.StatusCode = 401;
-                Response.End();               
+                return new HttpUnauthorizedResult();
             }
 
-            var username = HttpContext.User.Identity.Name;
-            var user = Uof.ImemberService.GetAll(m => m.username == username).FirstOrDefault();
-            user.password = "";
-            return Json(new { success = true, user = user }, JsonRequestBehavior.AllowGet);
+            try
+            {
+                var identityName = HttpContext.User.Identity.Name;
+                var username = identityName.Split('|')[1];
+                var user = Uof.ImemberService.GetAll(m => m.username == username).FirstOrDefault();
+                user.password = "";
+                return Json(new { success = true, user = user }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
         }
     }
 }

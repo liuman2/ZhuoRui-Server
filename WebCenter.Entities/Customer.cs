@@ -12,10 +12,110 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class Customer
+    public partial class customer:BaseModel
     {
-        public int ID { get; set; }
-        public string Code { get; set; }
-        public string Name { get; set; }
+    
+    
+    
+    [EntityPrimKey("customer")]
+        public int id { get; set; }
+    
+    
+    
+        public string name { get; set; }
+    
+    
+    
+        public string industry { get; set; }
+    
+    
+    
+        public string province { get; set; }
+    
+    
+    
+        public string city { get; set; }
+    
+    
+    
+        public string county { get; set; }
+    
+    
+    
+        public string address { get; set; }
+    
+    
+    
+        public string contact { get; set; }
+    
+    
+    
+        public string mobile { get; set; }
+    
+    
+    
+        public string tel { get; set; }
+    
+    
+    
+        public string fax { get; set; }
+    
+    
+    
+        public string email { get; set; }
+    
+    
+    
+        public string QQ { get; set; }
+    
+    
+    
+        public string wechat { get; set; }
+    
+    
+    
+        public string source { get; set; }
+    
+    
+    
+        public Nullable<int> creator_id { get; set; }
+    
+    
+    
+        public Nullable<int> salesman_id { get; set; }
+    
+    
+    
+        public Nullable<int> waiter_id { get; set; }
+    
+    
+    
+        public Nullable<int> manager_id { get; set; }
+    
+    
+    
+        public Nullable<int> outworker_id { get; set; }
+    
+    
+    
+        public Nullable<int> organization_id { get; set; }
+    
+    
+    
+        public Nullable<sbyte> status { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> date_created { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> date_updated { get; set; }
+    
+        public virtual member member { get; set; }
+        public virtual member member1 { get; set; }
+        public virtual member member2 { get; set; }
+        public virtual member member3 { get; set; }
+        public virtual member member4 { get; set; }
     }
 }

@@ -33,5 +33,6 @@ namespace WebCenter.Entities
         public virtual DbSet<dictionary_group> dictionary_group { get; set; }
         public virtual DbSet<dictionary> dictionaries { get; set; }
         public virtual DbSet<member> members { get; set; }
+        public virtual DbSet<customer> customers { get; set; }
     }
 }
