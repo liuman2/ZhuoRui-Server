@@ -102,6 +102,10 @@ namespace WebCenter.Entities
     
     
     
+        public Nullable<int> source_id { get; set; }
+    
+    
+    
         public Nullable<sbyte> status { get; set; }
     
     
@@ -111,6 +115,10 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
+    
+    
+    
+        public string description { get; set; }
     
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }

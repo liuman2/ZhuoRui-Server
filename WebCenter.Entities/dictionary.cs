@@ -22,11 +22,15 @@ namespace WebCenter.Entities
     
     
     
+        public string group { get; set; }
+    
+    
+    
         public string name { get; set; }
     
     
     
-        public string group { get; set; }
+        public Nullable<sbyte> is_system { get; set; }
     
     
     

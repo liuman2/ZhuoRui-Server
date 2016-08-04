@@ -7,16 +7,16 @@
       <Diagram DiagramId="625d74e1092944a886cf389a97db8259" Name="Diagram1" ZoomLevel="93">
         <EntityTypeShape EntityType="DataCenter.Entities.organization" Width="1.5" PointX="9.125" PointY="0.5" />
         <EntityTypeShape EntityType="DataCenter.Entities.position" Width="1.5" PointX="8.625" PointY="3.625" />
-        <EntityTypeShape EntityType="DataCenter.Entities.sequence" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.area" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.role" Width="1.5" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.dictionary_group" Width="1.5" PointX="5.375" PointY="0.75" />
-        <EntityTypeShape EntityType="DataCenter.Entities.dictionary" Width="1.5" PointX="3.375" PointY="3.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.member" Width="1.5" PointX="13.5" PointY="0.75" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_3" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_1" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_2" />
-        <EntityTypeShape EntityType="DataCenter.Entities.customer" Width="1.5" PointX="15.75" PointY="10.375" />
+        <EntityTypeShape EntityType="DataCenter.Entities.customer" Width="1.5" PointX="16.125" PointY="10.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.dictionary" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.sequence" Width="1.5" PointX="3.75" PointY="3.75" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_manager" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_outworker" />

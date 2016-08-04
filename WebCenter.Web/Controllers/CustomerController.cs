@@ -8,12 +8,51 @@ using System;
 
 namespace WebCenter.Web.Controllers
 {
-    public class ReserveController : BaseController
+    public class CustomerController : BaseController
     {
-        public ReserveController(IUnitOfWork UOF)
+        public CustomerController(IUnitOfWork UOF)
             : base(UOF)
         {
 
+        }
+
+        public ActionResult Introducers(int index = 1, int size = 10, string name = "")
+        {
+            Expression<Func<customer, bool>> condition = c => true;
+            if (!string.IsNullOrEmpty(name))
+            {
+                Expression<Func<customer, bool>> tmp = c => (c.name.IndexOf(name) > -1);
+                condition = tmp;
+            }
+
+            var list = Uof.IcustomerService.GetAll(condition).OrderBy(item => item.id).Select(c => new
+            {
+                id = c.id,
+                name = c.name
+            }).ToPagedList(index, size).ToList();
+
+            var totalRecord = Uof.IcustomerService.GetAll(condition).Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + size - 1) / size;
+            }
+            var page = new
+            {
+                current_index = index,
+                current_size = size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+
+            var result = new
+            {
+                page = page,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Search(int index = 1, int size = 10, string name = "")
@@ -97,11 +136,11 @@ namespace WebCenter.Web.Controllers
 
             c.salesman_id = userId;
             c.organization_id = organization_id;
-            c.status = 0;
+            c.status = 1;
 
             var _c = Uof.IcustomerService.AddEntity(c);
 
-            if (_c != null)
+            if (_c !=null)
             {
                 return SuccessResult;
             }
@@ -126,7 +165,6 @@ namespace WebCenter.Web.Controllers
                 _c.province == c.province &&
                 _c.QQ == c.QQ &&
                 _c.source == c.source &&
-                _c.source_id == c.source_id &&
                 _c.tel == c.tel &&
                 _c.wechat == c.wechat
                 )
@@ -147,21 +185,11 @@ namespace WebCenter.Web.Controllers
             _c.province = c.province;
             _c.QQ = c.QQ;
             _c.source = c.source;
-
-            if (c.source != "客户介绍")
-            {
-                _c.source_id = null;
-            }
-            else
-            {
-                _c.source_id = c.source_id;
-            }
-
             _c.tel = c.tel;
             _c.wechat = c.wechat;
             _c.date_updated = DateTime.Now;
 
-            var r = Uof.IcustomerService.UpdateEntity(_c);
+            var r = Uof.IcustomerService.UpdateEntity(c);
 
             if (!r)
             {
@@ -173,72 +201,9 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
-            var _customer = Uof.IcustomerService.GetById(id);
+            var reserve = Uof.IcustomerService.GetById(id);
 
-            var source_name = "";
-            if (_customer != null && _customer.source_id != null)
-            {
-                source_name = Uof.IcustomerService.GetAll(c => c.id == _customer.id).Select(c => c.name).FirstOrDefault();
-
-            }
-
-            return Json(new
-            {
-                id = _customer.id,
-                name = _customer.name,
-                industry = _customer.industry,
-                province = _customer.province,
-                city = _customer.city,
-                county = _customer.county,
-                address = _customer.address,
-                contact = _customer.contact,
-                mobile = _customer.mobile,
-                tel = _customer.tel,
-                fax = _customer.fax,
-                email = _customer.email,
-                QQ = _customer.QQ,
-                wechat = _customer.wechat,
-                source = _customer.source,
-                creator_id = _customer.creator_id,
-                salesman_id = _customer.salesman_id,
-                waiter_id = _customer.waiter_id,
-                manager_id = _customer.manager_id,
-                outworker_id = _customer.outworker_id,
-                organization_id = _customer.organization_id,
-                source_id = _customer.source_id,
-                source_name = source_name,
-                description = _customer.description
-
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult Delete(int id)
-        {
-            var c = Uof.IcustomerService.GetById(id);
-            if (c == null)
-            {
-                return ErrorResult;
-            }
-
-            var r = Uof.IcustomerService.DeleteEntity(c);
-
-            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult Transfer(int id)
-        {
-            var c = Uof.IcustomerService.GetById(id);
-            if (c == null)
-            {
-                return ErrorResult;
-            }
-
-            c.status = 1;
-            c.date_updated = DateTime.Now;
-
-            var r = Uof.IcustomerService.UpdateEntity(c);
-
-            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+            return Json(reserve, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -19,7 +19,8 @@ INSERT INTO `sequence` VALUES ('role', '6');
 INSERT INTO `sequence` VALUES ('member', '2');
 INSERT INTO `sequence` VALUES ('area', '4');
 INSERT INTO `sequence` VALUES ('dictionary_group', '7');
-INSERT INTO `sequence` VALUES ('dictionary', '1');
+INSERT INTO `sequence` VALUES ('dictionary', '6');
+INSERT INTO `sequence` VALUES ('customer', '1');
 
 -- ----------------------------
 -- Table structure for organization
@@ -171,12 +172,20 @@ INSERT INTO `dictionary_group` VALUES ('6', '专利用途', '专利用途');
 DROP TABLE IF EXISTS `dictionary`;
 CREATE TABLE `dictionary` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
   `group` varchar(20) DEFAULT NULL,
-  `date_created` datetime DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `is_system` tinyint(3) NULL,
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `dictionary` VALUES ('1', '客户来源', '网上搜索', 1, null, null);
+INSERT INTO `dictionary` VALUES ('2', '客户来源', '现场开发', 1, null, null);
+INSERT INTO `dictionary` VALUES ('3', '客户来源', '电话开发', 1, null, null);
+INSERT INTO `dictionary` VALUES ('4', '客户来源', '视频开发', 1, null, null);
+INSERT INTO `dictionary` VALUES ('5', '客户来源', '客户介绍', 1, null, null);
+
 
 -- ----------------------------
 -- Table structure for customer
@@ -184,7 +193,7 @@ CREATE TABLE `dictionary` (
 DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
   `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL COMMENT '客户名称',
+  `name` varchar(100) DEFAULT NULL COMMENT '客户名称',
   `industry` varchar(50) DEFAULT NULL COMMENT '所属行业',
   `province` varchar(20) DEFAULT NULL,
   `city` varchar(20) DEFAULT NULL,
@@ -197,18 +206,19 @@ CREATE TABLE `customer` (
   `email` varchar(100) DEFAULT NULL,
   `QQ` varchar(50) DEFAULT NULL,
   `wechat` varchar(50) DEFAULT NULL,
-  `source` varchar(50) DEFAULT NULL,
+  `source` varchar(50) DEFAULT NULL COMMENT '客户来源',
   `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
   `salesman_id` int(11) DEFAULT NULL COMMENT '业务员',
   `waiter_id` int(11) DEFAULT NULL COMMENT '年检客服',
   `manager_id` int(11) DEFAULT NULL COMMENT '经理',
   `outworker_id` int(11) DEFAULT NULL COMMENT '外勤',
   `organization_id` int(11) DEFAULT NULL COMMENT '业务员部门',
+  `source_id` int(11) DEFAULT NULL COMMENT '介绍人',
   `status` tinyint(3) DEFAULT NULL COMMENT '状态，0-预备，1-正式',
-  `date_created` datetime DEFAULT NULL,
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
+  `description` varchar(100) NULL,
   PRIMARY KEY (`id`),
-
   KEY `creator_id` (`creator_id`),
   KEY `salesman_id` (`salesman_id`),
   KEY `waiter_id` (`waiter_id`),
@@ -220,6 +230,21 @@ CREATE TABLE `customer` (
   CONSTRAINT `member_ibfk_manager` FOREIGN KEY (`manager_id`) REFERENCES `member` (`id`),
   CONSTRAINT `member_ibfk_outworker` FOREIGN KEY (`outworker_id`) REFERENCES `member` (`id`)
 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `customer_timeline`;
+CREATE TABLE `customer_timeline` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `content` varchar(500) DEFAULT NULL,
+  `is_system` tinyint(3) DEFAULT NULL,
+  `date_business` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `customer_id` (`customer_id`),
+  CONSTRAINT `timeline_ibfk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

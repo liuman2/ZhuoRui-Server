@@ -27,12 +27,12 @@ namespace WebCenter.Entities
     
         public virtual DbSet<organization> organizations { get; set; }
         public virtual DbSet<position> positions { get; set; }
-        public virtual DbSet<sequence> sequences { get; set; }
         public virtual DbSet<area> areas { get; set; }
         public virtual DbSet<role> roles { get; set; }
         public virtual DbSet<dictionary_group> dictionary_group { get; set; }
-        public virtual DbSet<dictionary> dictionaries { get; set; }
         public virtual DbSet<member> members { get; set; }
         public virtual DbSet<customer> customers { get; set; }
+        public virtual DbSet<dictionary> dictionaries { get; set; }
+        public virtual DbSet<sequence> sequences { get; set; }
     }
 }

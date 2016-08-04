@@ -29,7 +29,8 @@ namespace WebCenter.Web.Controllers
             {
                 id = u.id,
                 name = u.name,
-                username = u.username
+                username = u.username,
+                organization_id = u.organization_id
             }).FirstOrDefault();
 
             if (_user == null)
@@ -37,7 +38,7 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false }, JsonRequestBehavior.AllowGet);
             }
 
-            FormsAuthentication.SetAuthCookie(string.Format("{0}|{1}", _user.id, _user.username), true);
+            FormsAuthentication.SetAuthCookie(string.Format("{0}|{1}|{2}", _user.id, _user.username, _user.organization_id), true);
             Session["UserName"] = username;
 
             return Json(new { success = true, user = _user }, JsonRequestBehavior.AllowGet);
@@ -55,7 +56,16 @@ namespace WebCenter.Web.Controllers
             try
             {
                 var identityName = HttpContext.User.Identity.Name;
-                var username = identityName.Split('|')[1];
+                var arrs = identityName.Split('|');
+                if (arrs.Length == 0)
+                {
+                    return new HttpUnauthorizedResult();
+                }
+                if (arrs.Length < 3)
+                {
+                    return new HttpUnauthorizedResult();
+                }
+                var username = arrs[1];
                 var user = Uof.ImemberService.GetAll(m => m.username == username).FirstOrDefault();
                 user.password = "";
                 return Json(new { success = true, user = user }, JsonRequestBehavior.AllowGet);

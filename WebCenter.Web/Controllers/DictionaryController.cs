@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using WebCenter.IServices;
 using WebCenter.Entities;
+using System.Linq.Expressions;
 
 namespace WebCenter.Web.Controllers
 {
@@ -24,6 +25,32 @@ namespace WebCenter.Web.Controllers
         {
             var list = Uof.IdictionaryService.GetAll(d=>d.group == group).Select(d => new { id = d.id, name = d.name, value = d.name }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// 下拉选择
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ActionResult DroplistByGroup(string group, string name)
+        {
+            Expression<Func<dictionary, bool>> condition = m => m.group == group;
+            if (!string.IsNullOrEmpty(name))
+            {
+                Expression<Func<dictionary, bool>> tmp = m => (m.name.IndexOf(name) > -1);
+                condition = tmp;
+            }
+
+            var list = Uof.IdictionaryService.GetAll(condition).Select(d => new { id = d.name, name = d.name, value = d.name }).ToList();
+
+            var result = new
+            {
+                page = 1,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
