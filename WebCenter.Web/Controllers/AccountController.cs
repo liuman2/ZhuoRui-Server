@@ -38,7 +38,7 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false }, JsonRequestBehavior.AllowGet);
             }
 
-            FormsAuthentication.SetAuthCookie(string.Format("{0}|{1}|{2}", _user.id, _user.username, _user.organization_id), true);
+            FormsAuthentication.SetAuthCookie(string.Format("{0}|{1}|{2}|{3}", _user.id, _user.username, _user.organization_id, _user.name), true);
             Session["UserName"] = username;
 
             return Json(new { success = true, user = _user }, JsonRequestBehavior.AllowGet);

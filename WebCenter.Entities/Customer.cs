@@ -14,6 +14,11 @@ namespace WebCenter.Entities
     
     public partial class customer:BaseModel
     {
+        public customer()
+        {
+            this.customer_timeline = new HashSet<customer_timeline>();
+        }
+    
     
     
     
@@ -125,5 +130,6 @@ namespace WebCenter.Entities
         public virtual member member2 { get; set; }
         public virtual member member3 { get; set; }
         public virtual member member4 { get; set; }
+        public virtual ICollection<customer_timeline> customer_timeline { get; set; }
     }
 }

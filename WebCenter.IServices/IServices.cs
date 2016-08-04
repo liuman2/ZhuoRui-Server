@@ -18,6 +18,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface Icustomer_timelineService:IBaseService<customer_timeline>
+    {   
+    }
+	
 	public partial interface IdictionaryService:IBaseService<dictionary>
     {   
     }

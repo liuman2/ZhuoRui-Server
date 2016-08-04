@@ -21,6 +21,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<IcustomerService>().To<customerService>().InRequestScope();
 	
+	   kernel.Bind<Icustomer_timelineService>().To<customer_timelineService>().InRequestScope();
+	
 	   kernel.Bind<IdictionaryService>().To<dictionaryService>().InRequestScope();
 	
 	   kernel.Bind<Idictionary_groupService>().To<dictionary_groupService>().InRequestScope();

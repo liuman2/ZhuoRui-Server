@@ -208,6 +208,7 @@
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\CustomerTimelineController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
@@ -296,6 +297,7 @@
     <Folder Include="Views\Area\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Company\" />
+    <Folder Include="Views\CustomerTimeline\" />
     <Folder Include="Views\Dictionary\" />
     <Folder Include="Views\Feedback\" />
     <Folder Include="Views\Message\" />

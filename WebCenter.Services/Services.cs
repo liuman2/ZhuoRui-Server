@@ -33,6 +33,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class customer_timelineService:BaseService<customer_timeline>,Icustomer_timelineService
+    {   
+        public customer_timelineService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.customer_timelineRepository;
+        }  
+    }
+	
 	public partial class dictionaryService:BaseService<dictionary>,IdictionaryService
     {   
         public dictionaryService()

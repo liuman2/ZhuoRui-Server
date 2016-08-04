@@ -12,6 +12,8 @@ namespace WebCenter.IServices
 	
 	  IcustomerService IcustomerService{get;set;} 
 	
+	  Icustomer_timelineService Icustomer_timelineService{get;set;} 
+	
 	  IdictionaryService IdictionaryService{get;set;} 
 	
 	  Idictionary_groupService Idictionary_groupService{get;set;} 

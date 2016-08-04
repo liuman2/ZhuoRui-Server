@@ -23,6 +23,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  Icustomer_timelineService Icustomer_timelineService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IdictionaryService IdictionaryService
     {
         get;

@@ -17,6 +17,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class customer_timelineRepository :BaseRepository<customer_timeline>,Icustomer_timelineRepository
+    {
+         
+    }
+	
 	public partial class dictionaryRepository :BaseRepository<dictionary>,IdictionaryRepository
     {
          

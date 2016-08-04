@@ -19,6 +19,9 @@ namespace WebCenter.IDAL
 		IDAL.IcustomerRepository customerRepository { get; }
 	  
 
+		IDAL.Icustomer_timelineRepository customer_timelineRepository { get; }
+	  
+
 		IDAL.IdictionaryRepository dictionaryRepository { get; }
 	  
 

@@ -34,5 +34,6 @@ namespace WebCenter.Entities
         public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<dictionary> dictionaries { get; set; }
         public virtual DbSet<sequence> sequences { get; set; }
+        public virtual DbSet<customer_timeline> customer_timeline { get; set; }
     }
 }

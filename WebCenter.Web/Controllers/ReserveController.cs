@@ -103,6 +103,16 @@ namespace WebCenter.Web.Controllers
 
             if (_c != null)
             {
+                Uof.Icustomer_timelineService.AddEntity(new customer_timeline
+                {
+                    title = "建立客户资料",
+                    customer_id = _c.id,
+                    content = string.Format("{0}建立了客户资料, 客户来源{1}", arrs[3], _c.source),
+                    date_business = DateTime.Now,
+                    date_created = DateTime.Now,
+                    is_system = 1
+                });
+
                 return SuccessResult;
             }
 
@@ -111,6 +121,19 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Update(customer c)
         {
+            var isAuth = HttpContext.User.Identity.IsAuthenticated;
+            if (!isAuth)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var _c = Uof.IcustomerService.GetById(c.id);
 
             if (_c.name == c.name &&
@@ -163,8 +186,18 @@ namespace WebCenter.Web.Controllers
 
             var r = Uof.IcustomerService.UpdateEntity(_c);
 
-            if (!r)
+            if (r)
             {
+                Uof.Icustomer_timelineService.AddEntity(new customer_timeline
+                {
+                    title = "修改客户资料",
+                    customer_id = _c.id,
+                    content = string.Format("{0}修改了客户资料", arrs[3], _c.source),
+                    date_business = DateTime.Now,
+                    date_created = DateTime.Now,
+                    is_system = 1
+                });
+
                 return SuccessResult;
             }
 
@@ -211,7 +244,7 @@ namespace WebCenter.Web.Controllers
 
             }, JsonRequestBehavior.AllowGet);
         }
-
+                
         public ActionResult Delete(int id)
         {
             var c = Uof.IcustomerService.GetById(id);

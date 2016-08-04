@@ -81,6 +81,9 @@
     <Compile Include="customer.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="customer_timeline.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataCenter.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

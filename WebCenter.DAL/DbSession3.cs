@@ -11,6 +11,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.IcustomerRepository customerRepository { get { return new customerRepository(); } }
 	
+	public IDAL.Icustomer_timelineRepository customer_timelineRepository { get { return new customer_timelineRepository(); } }
+	
 	public IDAL.IdictionaryRepository dictionaryRepository { get { return new dictionaryRepository(); } }
 	
 	public IDAL.Idictionary_groupRepository dictionary_groupRepository { get { return new dictionary_groupRepository(); } }

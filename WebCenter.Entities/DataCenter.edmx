@@ -44,6 +44,19 @@
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="description" Type="varchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="customer_timeline">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="customer_id" Type="int" />
+          <Property Name="title" Type="varchar" MaxLength="100" />
+          <Property Name="content" Type="varchar" MaxLength="500" />
+          <Property Name="is_system" Type="tinyint" />
+          <Property Name="date_business" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
         <EntityType Name="dictionary">
           <Key>
             <PropertyRef Name="id" />
@@ -218,9 +231,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="timeline_ibfk_customer">
+          <End Role="customer" Type="Self.customer" Multiplicity="0..1" />
+          <End Role="customer_timeline" Type="Self.customer_timeline" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="customer_timeline">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DataCenterEntitiesStoreContainer">
           <EntitySet Name="area" EntityType="Self.area" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="customer" EntityType="Self.customer" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="customer_timeline" EntityType="Self.customer_timeline" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="dictionary" EntityType="Self.dictionary" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="dictionary_group" EntityType="Self.dictionary_group" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="member" EntityType="Self.member" Schema="zhuoruioa" store:Type="Tables" />
@@ -259,6 +285,10 @@
           <AssociationSet Name="member_ibfk_waiter" Association="Self.member_ibfk_waiter">
             <End Role="member" EntitySet="member" />
             <End Role="customer" EntitySet="customer" />
+          </AssociationSet>
+          <AssociationSet Name="timeline_ibfk_customer" Association="Self.timeline_ibfk_customer">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="customer_timeline" EntitySet="customer_timeline" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -306,6 +336,11 @@
           <AssociationSet Name="member_ibfk_waiter" Association="DataCenter.Entities.member_ibfk_waiter">
             <End Role="member" EntitySet="members" />
             <End Role="customer" EntitySet="customers" />
+          </AssociationSet>
+          <EntitySet Name="customer_timeline" EntityType="DataCenter.Entities.customer_timeline" />
+          <AssociationSet Name="timeline_ibfk_customer" Association="DataCenter.Entities.timeline_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="customer_timeline" EntitySet="customer_timeline" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
@@ -458,6 +493,7 @@
           <NavigationProperty Name="member2" Relationship="DataCenter.Entities.member_ibfk_outworker" FromRole="customer" ToRole="member" />
           <NavigationProperty Name="member3" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="customer" ToRole="member" />
           <NavigationProperty Name="member4" Relationship="DataCenter.Entities.member_ibfk_waiter" FromRole="customer" ToRole="member" />
+          <NavigationProperty Name="customer_timeline" Relationship="DataCenter.Entities.timeline_ibfk_customer" FromRole="customer" ToRole="customer_timeline" />
         </EntityType>
         <EntityType Name="dictionary">
           <Key>
@@ -534,6 +570,32 @@
             </Principal>
             <Dependent Role="customer">
               <PropertyRef Name="waiter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="customer_timeline">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="customer_id" Type="Int32" />
+          <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="content" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="is_system" Type="SByte" />
+          <Property Name="date_business" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.timeline_ibfk_customer" FromRole="customer_timeline" ToRole="customer" />
+        </EntityType>
+        <Association Name="timeline_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.customer_timeline" Role="customer_timeline" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="customer_timeline">
+              <PropertyRef Name="customer_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -666,6 +728,20 @@
               <MappingFragment StoreEntitySet="sequence">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="customer_timeline">
+            <EntityTypeMapping TypeName="DataCenter.Entities.customer_timeline">
+              <MappingFragment StoreEntitySet="customer_timeline">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="date_business" ColumnName="date_business" />
+                <ScalarProperty Name="is_system" ColumnName="is_system" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

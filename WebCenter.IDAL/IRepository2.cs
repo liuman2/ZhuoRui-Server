@@ -14,6 +14,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface Icustomer_timelineRepository :IBaseRepository<customer_timeline>
+    {         
+    }
+	
     public partial interface IdictionaryRepository :IBaseRepository<dictionary>
     {         
     }
