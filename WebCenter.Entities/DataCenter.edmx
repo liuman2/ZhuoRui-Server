@@ -18,6 +18,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="code" Type="varchar" MaxLength="20" />
           <Property Name="name" Type="varchar" MaxLength="100" />
           <Property Name="industry" Type="varchar" MaxLength="50" />
           <Property Name="province" Type="varchar" MaxLength="20" />
@@ -53,7 +54,7 @@
           <Property Name="title" Type="varchar" MaxLength="100" />
           <Property Name="content" Type="varchar" MaxLength="500" />
           <Property Name="is_system" Type="tinyint" />
-          <Property Name="date_business" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_business" Type="datetime" Precision="0" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
@@ -314,9 +315,10 @@
             <End Role="position" EntitySet="positions" />
             <End Role="member" EntitySet="members" />
           </AssociationSet>
-          <EntitySet Name="customers" EntityType="DataCenter.Entities.customer" />
           <EntitySet Name="dictionaries" EntityType="DataCenter.Entities.dictionary" />
           <EntitySet Name="sequences" EntityType="DataCenter.Entities.sequence" />
+          <EntitySet Name="customer_timeline" EntityType="DataCenter.Entities.customer_timeline" />
+          <EntitySet Name="customers" EntityType="DataCenter.Entities.customer" />
           <AssociationSet Name="member_ibfk_creator" Association="DataCenter.Entities.member_ibfk_creator">
             <End Role="member" EntitySet="members" />
             <End Role="customer" EntitySet="customers" />
@@ -337,7 +339,6 @@
             <End Role="member" EntitySet="members" />
             <End Role="customer" EntitySet="customers" />
           </AssociationSet>
-          <EntitySet Name="customer_timeline" EntityType="DataCenter.Entities.customer_timeline" />
           <AssociationSet Name="timeline_ibfk_customer" Association="DataCenter.Entities.timeline_ibfk_customer">
             <End Role="customer" EntitySet="customers" />
             <End Role="customer_timeline" EntitySet="customer_timeline" />
@@ -458,11 +459,44 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="dictionary">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="group" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="is_system" Type="SByte" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="sequence">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id" Type="Decimal" Nullable="false" />
+        </EntityType>
+        <EntityType Name="customer_timeline">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="customer_id" Type="Int32" />
+          <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="content" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="is_system" Type="SByte" />
+          <Property Name="date_business" Type="DateTime" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.timeline_ibfk_customer" FromRole="customer_timeline" ToRole="customer" />
+        </EntityType>
         <EntityType Name="customer">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="industry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="province" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
@@ -494,24 +528,6 @@
           <NavigationProperty Name="member3" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="customer" ToRole="member" />
           <NavigationProperty Name="member4" Relationship="DataCenter.Entities.member_ibfk_waiter" FromRole="customer" ToRole="member" />
           <NavigationProperty Name="customer_timeline" Relationship="DataCenter.Entities.timeline_ibfk_customer" FromRole="customer" ToRole="customer_timeline" />
-        </EntityType>
-        <EntityType Name="dictionary">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="group" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="is_system" Type="SByte" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-        </EntityType>
-        <EntityType Name="sequence">
-          <Key>
-            <PropertyRef Name="name" />
-          </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="id" Type="Decimal" Nullable="false" />
         </EntityType>
         <Association Name="member_ibfk_creator">
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
@@ -573,20 +589,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="customer_timeline">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="customer_id" Type="Int32" />
-          <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="content" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="is_system" Type="SByte" />
-          <Property Name="date_business" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.timeline_ibfk_customer" FromRole="customer_timeline" ToRole="customer" />
-        </EntityType>
         <Association Name="timeline_ibfk_customer">
           <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
           <End Type="DataCenter.Entities.customer_timeline" Role="customer_timeline" Multiplicity="*" />
@@ -679,38 +681,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="customers">
-            <EntityTypeMapping TypeName="DataCenter.Entities.customer">
-              <MappingFragment StoreEntitySet="customer">
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="source_id" ColumnName="source_id" />
-                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
-                <ScalarProperty Name="outworker_id" ColumnName="outworker_id" />
-                <ScalarProperty Name="manager_id" ColumnName="manager_id" />
-                <ScalarProperty Name="waiter_id" ColumnName="waiter_id" />
-                <ScalarProperty Name="salesman_id" ColumnName="salesman_id" />
-                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
-                <ScalarProperty Name="source" ColumnName="source" />
-                <ScalarProperty Name="wechat" ColumnName="wechat" />
-                <ScalarProperty Name="QQ" ColumnName="QQ" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="fax" ColumnName="fax" />
-                <ScalarProperty Name="tel" ColumnName="tel" />
-                <ScalarProperty Name="mobile" ColumnName="mobile" />
-                <ScalarProperty Name="contact" ColumnName="contact" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="county" ColumnName="county" />
-                <ScalarProperty Name="city" ColumnName="city" />
-                <ScalarProperty Name="province" ColumnName="province" />
-                <ScalarProperty Name="industry" ColumnName="industry" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="dictionaries">
             <EntityTypeMapping TypeName="DataCenter.Entities.dictionary">
               <MappingFragment StoreEntitySet="dictionary">
@@ -741,6 +711,39 @@
                 <ScalarProperty Name="content" ColumnName="content" />
                 <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="customers">
+            <EntityTypeMapping TypeName="DataCenter.Entities.customer">
+              <MappingFragment StoreEntitySet="customer">
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="source_id" ColumnName="source_id" />
+                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
+                <ScalarProperty Name="outworker_id" ColumnName="outworker_id" />
+                <ScalarProperty Name="manager_id" ColumnName="manager_id" />
+                <ScalarProperty Name="waiter_id" ColumnName="waiter_id" />
+                <ScalarProperty Name="salesman_id" ColumnName="salesman_id" />
+                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
+                <ScalarProperty Name="source" ColumnName="source" />
+                <ScalarProperty Name="wechat" ColumnName="wechat" />
+                <ScalarProperty Name="QQ" ColumnName="QQ" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="fax" ColumnName="fax" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="contact" ColumnName="contact" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="county" ColumnName="county" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="industry" ColumnName="industry" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

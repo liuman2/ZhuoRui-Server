@@ -74,7 +74,7 @@ namespace WebCenter.Web.Controllers
             var userId = 0;
             int.TryParse(arrs[0], out userId);
 
-            Expression<Func<customer, bool>> condition = c => c.status == 0 && c.salesman_id == userId;
+            Expression<Func<customer, bool>> condition = c => c.status == 1 && c.salesman_id == userId;
             if (!string.IsNullOrEmpty(name))
             {
                 Expression<Func<customer, bool>> tmp = c => (c.name.IndexOf(name) > -1);
@@ -134,14 +134,25 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
 
+            c.code = ""; // TODO: 自动编码
             c.salesman_id = userId;
             c.organization_id = organization_id;
             c.status = 1;
 
             var _c = Uof.IcustomerService.AddEntity(c);
 
-            if (_c !=null)
+            if (_c != null)
             {
+                Uof.Icustomer_timelineService.AddEntity(new customer_timeline
+                {
+                    title = "建立客户资料",
+                    customer_id = _c.id,
+                    content = string.Format("建立了客户资料, 操作人：{0}", arrs[3]),
+                    date_business = DateTime.Now,
+                    date_created = DateTime.Now,
+                    is_system = 1
+                });
+
                 return SuccessResult;
             }
 
@@ -150,6 +161,19 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Update(customer c)
         {
+            var isAuth = HttpContext.User.Identity.IsAuthenticated;
+            if (!isAuth)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var _c = Uof.IcustomerService.GetById(c.id);
 
             if (_c.name == c.name &&
@@ -165,6 +189,7 @@ namespace WebCenter.Web.Controllers
                 _c.province == c.province &&
                 _c.QQ == c.QQ &&
                 _c.source == c.source &&
+                _c.source_id == c.source_id &&
                 _c.tel == c.tel &&
                 _c.wechat == c.wechat
                 )
@@ -185,14 +210,34 @@ namespace WebCenter.Web.Controllers
             _c.province = c.province;
             _c.QQ = c.QQ;
             _c.source = c.source;
+
+            if (c.source != "客户介绍")
+            {
+                _c.source_id = null;
+            }
+            else
+            {
+                _c.source_id = c.source_id;
+            }
+
             _c.tel = c.tel;
             _c.wechat = c.wechat;
             _c.date_updated = DateTime.Now;
 
-            var r = Uof.IcustomerService.UpdateEntity(c);
+            var r = Uof.IcustomerService.UpdateEntity(_c);
 
-            if (!r)
+            if (r)
             {
+                Uof.Icustomer_timelineService.AddEntity(new customer_timeline
+                {
+                    title = "修改客户资料",
+                    customer_id = _c.id,
+                    content = string.Format("{0}修改了客户资料", arrs[3], _c.source),
+                    date_business = DateTime.Now,
+                    date_created = DateTime.Now,
+                    is_system = 1
+                });
+
                 return SuccessResult;
             }
 
@@ -201,9 +246,56 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
-            var reserve = Uof.IcustomerService.GetById(id);
+            var _customer = Uof.IcustomerService.GetById(id);
 
-            return Json(reserve, JsonRequestBehavior.AllowGet);
+            var source_name = "";
+            if (_customer != null && _customer.source_id != null)
+            {
+                source_name = Uof.IcustomerService.GetAll(c => c.id == _customer.id).Select(c => c.name).FirstOrDefault();
+
+            }
+
+            return Json(new
+            {
+                id = _customer.id,
+                name = _customer.name,
+                industry = _customer.industry,
+                province = _customer.province,
+                city = _customer.city,
+                county = _customer.county,
+                address = _customer.address,
+                contact = _customer.contact,
+                mobile = _customer.mobile,
+                tel = _customer.tel,
+                fax = _customer.fax,
+                email = _customer.email,
+                QQ = _customer.QQ,
+                wechat = _customer.wechat,
+                source = _customer.source,
+                creator_id = _customer.creator_id,
+                salesman_id = _customer.salesman_id,
+                waiter_id = _customer.waiter_id,
+                manager_id = _customer.manager_id,
+                outworker_id = _customer.outworker_id,
+                organization_id = _customer.organization_id,
+                source_id = _customer.source_id,
+                source_name = source_name,
+                description = _customer.description
+
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var c = Uof.IcustomerService.GetById(id);
+            if (c == null)
+            {
+                return ErrorResult;
+            }
+
+            var r = Uof.IcustomerService.DeleteEntity(c);
+
+            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }
     }
 }

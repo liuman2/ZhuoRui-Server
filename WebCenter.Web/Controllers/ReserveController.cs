@@ -107,7 +107,7 @@ namespace WebCenter.Web.Controllers
                 {
                     title = "建立客户资料",
                     customer_id = _c.id,
-                    content = string.Format("{0}建立了客户资料, 客户来源{1}", arrs[3], _c.source),
+                    content = string.Format("建立了客户资料, 操作人：{0}", arrs[3]),
                     date_business = DateTime.Now,
                     date_created = DateTime.Now,
                     is_system = 1
@@ -260,16 +260,44 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Transfer(int id)
         {
+            var IsAuth = HttpContext.User.Identity.IsAuthenticated;
+            if (!IsAuth)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var c = Uof.IcustomerService.GetById(id);
             if (c == null)
             {
                 return ErrorResult;
             }
 
+            // TODO: 生成客户编码
+
             c.status = 1;
             c.date_updated = DateTime.Now;
 
             var r = Uof.IcustomerService.UpdateEntity(c);
+
+            if (r)
+            {
+                Uof.Icustomer_timelineService.AddEntity(new customer_timeline
+                {
+                    title = "转为正式客户",
+                    customer_id = c.id,
+                    content = string.Format("转为正式客户, 操作人：{0}", arrs[3]),
+                    date_business = DateTime.Now,
+                    date_created = DateTime.Now,
+                    is_system = 1
+                });
+            }
 
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }

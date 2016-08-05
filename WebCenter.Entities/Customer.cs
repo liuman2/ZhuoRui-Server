@@ -27,6 +27,10 @@ namespace WebCenter.Entities
     
     
     
+        public string code { get; set; }
+    
+    
+    
         public string name { get; set; }
     
     

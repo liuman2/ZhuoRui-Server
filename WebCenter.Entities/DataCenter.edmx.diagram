@@ -14,15 +14,15 @@
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_3" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_1" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_2" />
-        <EntityTypeShape EntityType="DataCenter.Entities.customer" Width="1.5" PointX="16.125" PointY="10.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.dictionary" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.sequence" Width="1.5" PointX="3.75" PointY="3.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.customer_timeline" Width="1.5" PointX="18" PointY="13.125" />
+        <EntityTypeShape EntityType="DataCenter.Entities.customer" Width="1.5" PointX="15.75" PointY="11.125" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_manager" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_outworker" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_waiter" />
-        <EntityTypeShape EntityType="DataCenter.Entities.customer_timeline" Width="1.5" PointX="18.375" PointY="12.875" />
         <AssociationConnector Association="DataCenter.Entities.timeline_ibfk_customer" />
       </Diagram>
     </edmx:Diagrams>

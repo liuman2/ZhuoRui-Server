@@ -193,6 +193,7 @@ INSERT INTO `dictionary` VALUES ('5', '客户来源', '客户介绍', 1, null, n
 DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
   `id` int(11) NOT NULL,
+  `code` varchar(20) DEFAULT NULL COMMENT '客户编码',
   `name` varchar(100) DEFAULT NULL COMMENT '客户名称',
   `industry` varchar(50) DEFAULT NULL COMMENT '所属行业',
   `province` varchar(20) DEFAULT NULL,
@@ -239,7 +240,7 @@ CREATE TABLE `customer_timeline` (
   `title` varchar(100) DEFAULT NULL,
   `content` varchar(500) DEFAULT NULL,
   `is_system` tinyint(3) DEFAULT NULL,
-  `date_business` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_business` datetime NULL NULL,
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),

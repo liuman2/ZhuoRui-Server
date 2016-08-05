@@ -17,7 +17,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetTimelines(int id)
         {
-            var list = Uof.Icustomer_timelineService.GetAll(t => t.customer_id == id).OrderByDescending(c => c.date_business).ToList();
+            var list = Uof.Icustomer_timelineService.GetAll(t => t.customer_id == id).OrderByDescending(c => c.date_created).ToList();
 
             var _customer = Uof.IcustomerService.GetAll(c => c.id == id).Select(c => new {
                 id = c.id,
@@ -67,6 +67,30 @@ namespace WebCenter.Web.Controllers
             var r = Uof.Icustomer_timelineService.UpdateEntity(timeline);
 
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var timeline = Uof.Icustomer_timelineService.GetById(id);
+
+            if (timeline == null)
+            {
+                return ErrorResult;
+            }
+
+            var r = Uof.Icustomer_timelineService.DeleteEntity(timeline);
+            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Get(int id)
+        {
+            var c = Uof.Icustomer_timelineService.GetById(id);
+            if (c == null)
+            {
+                return ErrorResult;
+            }
+
+            return Json(c, JsonRequestBehavior.AllowGet);
         }
     }
 }
