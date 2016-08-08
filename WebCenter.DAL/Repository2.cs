@@ -12,6 +12,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class bank_accountRepository :BaseRepository<bank_account>,Ibank_accountRepository
+    {
+         
+    }
+	
 	public partial class customerRepository :BaseRepository<customer>,IcustomerRepository
     {
          

@@ -10,6 +10,8 @@ namespace WebCenter.IServices
 	
 	  IareaService IareaService{get;set;} 
 	
+	  Ibank_accountService Ibank_accountService{get;set;} 
+	
 	  IcustomerService IcustomerService{get;set;} 
 	
 	  Icustomer_timelineService Icustomer_timelineService{get;set;} 

@@ -143,7 +143,7 @@ namespace WebCenter.Web.Controllers
 
             if (_c != null)
             {
-                Uof.Icustomer_timelineService.AddEntity(new customer_timeline
+                var newCustomer = Uof.Icustomer_timelineService.AddEntity(new customer_timeline
                 {
                     title = "建立客户资料",
                     customer_id = _c.id,
@@ -153,7 +153,7 @@ namespace WebCenter.Web.Controllers
                     is_system = 1
                 });
 
-                return SuccessResult;
+                return Json(new { id = newCustomer.id }, JsonRequestBehavior.AllowGet);
             }
 
             return ErrorResult;
@@ -194,7 +194,7 @@ namespace WebCenter.Web.Controllers
                 _c.wechat == c.wechat
                 )
             {
-                return ErrorResult;
+                return Json(new { id = _c.id }, JsonRequestBehavior.AllowGet);
             }
 
             _c.name = c.name;
@@ -238,7 +238,7 @@ namespace WebCenter.Web.Controllers
                     is_system = 1
                 });
 
-                return SuccessResult;
+                return Json(new { id = _c.id }, JsonRequestBehavior.AllowGet);
             }
 
             return ErrorResult;
@@ -274,13 +274,15 @@ namespace WebCenter.Web.Controllers
                 source = _customer.source,
                 creator_id = _customer.creator_id,
                 salesman_id = _customer.salesman_id,
+                salesman = _customer.member3.name,
                 waiter_id = _customer.waiter_id,
                 manager_id = _customer.manager_id,
                 outworker_id = _customer.outworker_id,
                 organization_id = _customer.organization_id,
                 source_id = _customer.source_id,
                 source_name = source_name,
-                description = _customer.description
+                description = _customer.description,
+                banks = _customer.bank_account
 
             }, JsonRequestBehavior.AllowGet);
         }
@@ -294,6 +296,63 @@ namespace WebCenter.Web.Controllers
             }
 
             var r = Uof.IcustomerService.DeleteEntity(c);
+
+            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Bank(int id)
+        {
+            var bank = Uof.Ibank_accountService.GetAll(b => b.id == id).Select(b => new
+            {
+                id = b.id,
+                customer_id = b.customer_id,
+                bank = b.bank,
+                holder = b.holder,
+                account = b.account
+            }).FirstOrDefault();
+
+            return Json(bank, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeleteBank(int id)
+        {
+            var bank = Uof.Ibank_accountService.GetAll(b => b.id == id).FirstOrDefault();
+
+            var r = Uof.Ibank_accountService.DeleteEntity(bank);
+
+            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult AddBank(int customer_id, string bank, string holder, string account)
+        {
+            var _bank = new bank_account
+            {
+                customer_id = customer_id,
+                bank = bank,
+                holder = holder,
+                account = account
+            };
+
+            Uof.Ibank_accountService.AddEntity(_bank);
+
+            return SuccessResult;
+        }
+
+        [HttpPost]
+        public ActionResult UpdateBank(int id, string bank, string holder, string account)
+        {
+            var _bank = Uof.Ibank_accountService.GetById(id);
+            if (_bank.bank == bank &&_bank.holder == holder && _bank.account == account)
+            {
+                return SuccessResult;
+            }
+
+            _bank.bank = bank;
+            _bank.holder = holder;
+            _bank.account = account;
+
+            var r = Uof.Ibank_accountService.UpdateEntity(_bank);
 
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }

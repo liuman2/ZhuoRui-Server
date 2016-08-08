@@ -14,6 +14,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface Ibank_accountService:IBaseService<bank_account>
+    {   
+    }
+	
 	public partial interface IcustomerService:IBaseService<customer>
     {   
     }

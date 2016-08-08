@@ -17,6 +17,7 @@ namespace WebCenter.Entities
         public customer()
         {
             this.customer_timeline = new HashSet<customer_timeline>();
+            this.bank_account = new HashSet<bank_account>();
         }
     
     
@@ -135,5 +136,6 @@ namespace WebCenter.Entities
         public virtual member member3 { get; set; }
         public virtual member member4 { get; set; }
         public virtual ICollection<customer_timeline> customer_timeline { get; set; }
+        public virtual ICollection<bank_account> bank_account { get; set; }
     }
 }

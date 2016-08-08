@@ -19,6 +19,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<IareaService>().To<areaService>().InRequestScope();
 	
+	   kernel.Bind<Ibank_accountService>().To<bank_accountService>().InRequestScope();
+	
 	   kernel.Bind<IcustomerService>().To<customerService>().InRequestScope();
 	
 	   kernel.Bind<Icustomer_timelineService>().To<customer_timelineService>().InRequestScope();

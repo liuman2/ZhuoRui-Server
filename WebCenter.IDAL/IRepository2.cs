@@ -10,6 +10,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface Ibank_accountRepository :IBaseRepository<bank_account>
+    {         
+    }
+	
     public partial interface IcustomerRepository :IBaseRepository<customer>
     {         
     }

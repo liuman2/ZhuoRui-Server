@@ -23,6 +23,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class bank_accountService:BaseService<bank_account>,Ibank_accountService
+    {   
+        public bank_accountService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.bank_accountRepository;
+        }  
+    }
+	
 	public partial class customerService:BaseService<customer>,IcustomerService
     {   
         public customerService()

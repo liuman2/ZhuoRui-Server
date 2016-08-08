@@ -9,6 +9,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.IareaRepository areaRepository { get { return new areaRepository(); } }
 	
+	public IDAL.Ibank_accountRepository bank_accountRepository { get { return new bank_accountRepository(); } }
+	
 	public IDAL.IcustomerRepository customerRepository { get { return new customerRepository(); } }
 	
 	public IDAL.Icustomer_timelineRepository customer_timelineRepository { get { return new customer_timelineRepository(); } }

@@ -24,6 +24,8 @@
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_waiter" />
         <AssociationConnector Association="DataCenter.Entities.timeline_ibfk_customer" />
+        <EntityTypeShape EntityType="DataCenter.Entities.bank_account" Width="1.5" PointX="18" PointY="17.5" />
+        <AssociationConnector Association="DataCenter.Entities.bank_account_customer" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

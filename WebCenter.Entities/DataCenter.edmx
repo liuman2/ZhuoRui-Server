@@ -13,6 +13,18 @@
           <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="description" Type="varchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="bank_account">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="customer_id" Type="int" />
+          <Property Name="bank" Type="varchar" MaxLength="100" />
+          <Property Name="holder" Type="varchar" MaxLength="30" />
+          <Property Name="account" Type="varchar" MaxLength="100" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
         <EntityType Name="customer">
           <Key>
             <PropertyRef Name="id" />
@@ -136,6 +148,18 @@
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="id" Type="ubigint" Nullable="false" />
         </EntityType>
+        <Association Name="bank_account_customer">
+          <End Role="customer" Type="Self.customer" Multiplicity="0..1" />
+          <End Role="bank_account" Type="Self.bank_account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="bank_account">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="member_ibfk_1">
           <End Role="organization" Type="Self.organization" Multiplicity="0..1" />
           <End Role="member" Type="Self.member" Multiplicity="*" />
@@ -246,6 +270,7 @@
         </Association>
         <EntityContainer Name="DataCenterEntitiesStoreContainer">
           <EntitySet Name="area" EntityType="Self.area" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="bank_account" EntityType="Self.bank_account" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="customer" EntityType="Self.customer" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="customer_timeline" EntityType="Self.customer_timeline" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="dictionary" EntityType="Self.dictionary" Schema="zhuoruioa" store:Type="Tables" />
@@ -255,6 +280,10 @@
           <EntitySet Name="position" EntityType="Self.position" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="role" EntityType="Self.role" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="sequence" EntityType="Self.sequence" Schema="zhuoruioa" store:Type="Tables" />
+          <AssociationSet Name="bank_account_customer" Association="Self.bank_account_customer">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="bank_account" EntitySet="bank_account" />
+          </AssociationSet>
           <AssociationSet Name="member_ibfk_1" Association="Self.member_ibfk_1">
             <End Role="organization" EntitySet="organization" />
             <End Role="member" EntitySet="member" />
@@ -342,6 +371,11 @@
           <AssociationSet Name="timeline_ibfk_customer" Association="DataCenter.Entities.timeline_ibfk_customer">
             <End Role="customer" EntitySet="customers" />
             <End Role="customer_timeline" EntitySet="customer_timeline" />
+          </AssociationSet>
+          <EntitySet Name="bank_account" EntityType="DataCenter.Entities.bank_account" />
+          <AssociationSet Name="bank_account_customer" Association="DataCenter.Entities.bank_account_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="bank_account" EntitySet="bank_account" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
@@ -528,6 +562,7 @@
           <NavigationProperty Name="member3" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="customer" ToRole="member" />
           <NavigationProperty Name="member4" Relationship="DataCenter.Entities.member_ibfk_waiter" FromRole="customer" ToRole="member" />
           <NavigationProperty Name="customer_timeline" Relationship="DataCenter.Entities.timeline_ibfk_customer" FromRole="customer" ToRole="customer_timeline" />
+          <NavigationProperty Name="bank_account" Relationship="DataCenter.Entities.bank_account_customer" FromRole="customer" ToRole="bank_account" />
         </EntityType>
         <Association Name="member_ibfk_creator">
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
@@ -597,6 +632,31 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="customer_timeline">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="bank_account">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="customer_id" Type="Int32" />
+          <Property Name="bank" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="holder" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="account" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.bank_account_customer" FromRole="bank_account" ToRole="customer" />
+        </EntityType>
+        <Association Name="bank_account_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="bank_account">
               <PropertyRef Name="customer_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -744,6 +804,19 @@
                 <ScalarProperty Name="industry" ColumnName="industry" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="bank_account">
+            <EntityTypeMapping TypeName="DataCenter.Entities.bank_account">
+              <MappingFragment StoreEntitySet="bank_account">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="account" ColumnName="account" />
+                <ScalarProperty Name="holder" ColumnName="holder" />
+                <ScalarProperty Name="bank" ColumnName="bank" />
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
