@@ -24,6 +24,7 @@ INSERT INTO `sequence` VALUES ('customer', '1');
 INSERT INTO `sequence` VALUES ('bank_account', '1');
 INSERT INTO `sequence` VALUES ('reg_abroad', '1');
 INSERT INTO `sequence` VALUES ('customer_timeline', '1');
+INSERT INTO `sequence` VALUES ('income', '1');
 
 -- ----------------------------
 -- Table structure for organization
@@ -320,8 +321,8 @@ CREATE TABLE `reg_abroad` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `invome`;
-CREATE TABLE `invome` (
+DROP TABLE IF EXISTS `income`;
+CREATE TABLE `income` (
   `id` int(11) NOT NULL,
   `customer_id` int(11) NULL,
   `source_id` int(11) NULL,
@@ -330,14 +331,14 @@ CREATE TABLE `invome` (
   `account` varchar(100) DEFAULT NULL COMMENT '付款账号',
   `amount` float(255,0) DEFAULT NULL COMMENT '付款金额',
   `date_pay` datetime DEFAULT NULL COMMENT '付款时间',
-  `attachment_url` varchar DEFAULT NULL COMMENT '附件地址',
+  `attachment_url` varchar(100) DEFAULT NULL COMMENT '附件地址',
   `description` varchar(100) NULL,
 
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `customer_id` (`customer_id`),
-  CONSTRAINT `invome_ibfk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`)
+  CONSTRAINT `income_ibfk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

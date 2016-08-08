@@ -51,6 +51,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IincomeService IincomeService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  ImemberService ImemberService
     {
         get;
@@ -66,6 +73,13 @@ namespace WebCenter.Services
 	
   [Ninject.Inject]
 	 public  IpositionService IpositionService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  Ireg_abroadService Ireg_abroadService
     {
         get;
         set;

@@ -30,6 +30,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IincomeRepository :IBaseRepository<income>
+    {         
+    }
+	
     public partial interface ImemberRepository :IBaseRepository<member>
     {         
     }
@@ -39,6 +43,10 @@ namespace WebCenter.IDAL
     }
 	
     public partial interface IpositionRepository :IBaseRepository<position>
+    {         
+    }
+	
+    public partial interface Ireg_abroadRepository :IBaseRepository<reg_abroad>
     {         
     }
 	

@@ -73,6 +73,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class incomeService:BaseService<income>,IincomeService
+    {   
+        public incomeService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.incomeRepository;
+        }  
+    }
+	
 	public partial class memberService:BaseService<member>,ImemberService
     {   
         public memberService()
@@ -100,6 +110,16 @@ namespace WebCenter.Services
         public override void SetCurrentRepository()
         {
             CurrentRepository = _dbSession.positionRepository;
+        }  
+    }
+	
+	public partial class reg_abroadService:BaseService<reg_abroad>,Ireg_abroadService
+    {   
+        public reg_abroadService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.reg_abroadRepository;
         }  
     }
 	

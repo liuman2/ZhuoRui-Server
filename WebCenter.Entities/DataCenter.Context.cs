@@ -30,11 +30,13 @@ namespace WebCenter.Entities
         public virtual DbSet<area> areas { get; set; }
         public virtual DbSet<role> roles { get; set; }
         public virtual DbSet<dictionary_group> dictionary_group { get; set; }
-        public virtual DbSet<member> members { get; set; }
         public virtual DbSet<dictionary> dictionaries { get; set; }
         public virtual DbSet<sequence> sequences { get; set; }
-        public virtual DbSet<customer_timeline> customer_timeline { get; set; }
-        public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<bank_account> bank_account { get; set; }
+        public virtual DbSet<customer> customers { get; set; }
+        public virtual DbSet<customer_timeline> customer_timeline { get; set; }
+        public virtual DbSet<member> members { get; set; }
+        public virtual DbSet<reg_abroad> reg_abroad { get; set; }
+        public virtual DbSet<income> incomes { get; set; }
     }
 }

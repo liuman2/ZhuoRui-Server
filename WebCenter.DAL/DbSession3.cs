@@ -19,11 +19,15 @@ namespace WebCenter.DAL
 	
 	public IDAL.Idictionary_groupRepository dictionary_groupRepository { get { return new dictionary_groupRepository(); } }
 	
+	public IDAL.IincomeRepository incomeRepository { get { return new incomeRepository(); } }
+	
 	public IDAL.ImemberRepository memberRepository { get { return new memberRepository(); } }
 	
 	public IDAL.IorganizationRepository organizationRepository { get { return new organizationRepository(); } }
 	
 	public IDAL.IpositionRepository positionRepository { get { return new positionRepository(); } }
+	
+	public IDAL.Ireg_abroadRepository reg_abroadRepository { get { return new reg_abroadRepository(); } }
 	
 	public IDAL.IroleRepository roleRepository { get { return new roleRepository(); } }
 	

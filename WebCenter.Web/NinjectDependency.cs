@@ -29,11 +29,15 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<Idictionary_groupService>().To<dictionary_groupService>().InRequestScope();
 	
+	   kernel.Bind<IincomeService>().To<incomeService>().InRequestScope();
+	
 	   kernel.Bind<ImemberService>().To<memberService>().InRequestScope();
 	
 	   kernel.Bind<IorganizationService>().To<organizationService>().InRequestScope();
 	
 	   kernel.Bind<IpositionService>().To<positionService>().InRequestScope();
+	
+	   kernel.Bind<Ireg_abroadService>().To<reg_abroadService>().InRequestScope();
 	
 	   kernel.Bind<IroleService>().To<roleService>().InRequestScope();
 	

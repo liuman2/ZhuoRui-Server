@@ -37,6 +37,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class incomeRepository :BaseRepository<income>,IincomeRepository
+    {
+         
+    }
+	
 	public partial class memberRepository :BaseRepository<member>,ImemberRepository
     {
          
@@ -48,6 +53,11 @@ namespace WebCenter.DAL
     }
 	
 	public partial class positionRepository :BaseRepository<position>,IpositionRepository
+    {
+         
+    }
+	
+	public partial class reg_abroadRepository :BaseRepository<reg_abroad>,Ireg_abroadRepository
     {
          
     }

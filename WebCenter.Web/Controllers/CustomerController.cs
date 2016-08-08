@@ -274,10 +274,8 @@ namespace WebCenter.Web.Controllers
                 source = _customer.source,
                 creator_id = _customer.creator_id,
                 salesman_id = _customer.salesman_id,
-                salesman = _customer.member3.name,
-                waiter_id = _customer.waiter_id,
-                manager_id = _customer.manager_id,
-                outworker_id = _customer.outworker_id,
+                salesman = _customer.member1.name,
+                
                 organization_id = _customer.organization_id,
                 source_id = _customer.source_id,
                 source_name = source_name,

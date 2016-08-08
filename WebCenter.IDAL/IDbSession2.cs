@@ -31,6 +31,9 @@ namespace WebCenter.IDAL
 		IDAL.Idictionary_groupRepository dictionary_groupRepository { get; }
 	  
 
+		IDAL.IincomeRepository incomeRepository { get; }
+	  
+
 		IDAL.ImemberRepository memberRepository { get; }
 	  
 
@@ -38,6 +41,9 @@ namespace WebCenter.IDAL
 	  
 
 		IDAL.IpositionRepository positionRepository { get; }
+	  
+
+		IDAL.Ireg_abroadRepository reg_abroadRepository { get; }
 	  
 
 		IDAL.IroleRepository roleRepository { get; }

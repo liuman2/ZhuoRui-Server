@@ -34,6 +34,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IincomeService:IBaseService<income>
+    {   
+    }
+	
 	public partial interface ImemberService:IBaseService<member>
     {   
     }
@@ -43,6 +47,10 @@ namespace WebCenter.IServices
     }
 	
 	public partial interface IpositionService:IBaseService<position>
+    {   
+    }
+	
+	public partial interface Ireg_abroadService:IBaseService<reg_abroad>
     {   
     }
 	
