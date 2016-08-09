@@ -88,6 +88,8 @@ namespace WebCenter.Entities
         public virtual area area { get; set; }
         public virtual ICollection<customer> customers { get; set; }
         public virtual ICollection<customer> customers1 { get; set; }
+        public virtual organization organization { get; set; }
+        public virtual position position { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad1 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad2 { get; set; }
@@ -95,7 +97,5 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad4 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad5 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad6 { get; set; }
-        public virtual organization organization { get; set; }
-        public virtual position position { get; set; }
     }
 }

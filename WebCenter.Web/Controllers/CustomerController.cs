@@ -87,7 +87,12 @@ namespace WebCenter.Web.Controllers
                 name = c.name,
                 contact = c.contact,
                 mobile = c.mobile,
-                tel = c.tel
+                tel = c.tel,
+                industry = c.industry,
+                province = c.province,
+                city = c.city,
+                county = c.county,
+                address = c.address
             }).ToPagedList(index, size).ToList();
 
             var totalRecord = Uof.IcustomerService.GetAll(condition).Count();
@@ -353,6 +358,31 @@ namespace WebCenter.Web.Controllers
             var r = Uof.Ibank_accountService.UpdateEntity(_bank);
 
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Banks(int customer_id, string name = "")
+        {
+            Expression<Func<bank_account, bool>> condition = c => c.customer_id == customer_id;
+            if (!string.IsNullOrEmpty(name))
+            {
+                Expression<Func<bank_account, bool>> tmp = c => (c.bank.IndexOf(name) > -1);
+                condition = tmp;
+            }
+
+            var list = Uof.Ibank_accountService.GetAll(condition).OrderBy(item => item.id).Select(c => new
+            {
+                id = c.id,
+                name = c.bank,
+                holder = c.holder,
+                account = c.account
+            }).ToList();
+
+            var result = new
+            {
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -126,6 +126,14 @@ namespace WebCenter.Entities
     
     
     
+        public Nullable<int> review_status { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> date_finish { get; set; }
+    
+    
+    
         public Nullable<int> creator_id { get; set; }
     
     

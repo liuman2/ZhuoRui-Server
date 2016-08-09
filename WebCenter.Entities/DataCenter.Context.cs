@@ -36,7 +36,7 @@ namespace WebCenter.Entities
         public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<customer_timeline> customer_timeline { get; set; }
         public virtual DbSet<member> members { get; set; }
-        public virtual DbSet<reg_abroad> reg_abroad { get; set; }
         public virtual DbSet<income> incomes { get; set; }
+        public virtual DbSet<reg_abroad> reg_abroad { get; set; }
     }
 }

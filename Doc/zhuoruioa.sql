@@ -282,7 +282,7 @@ CREATE TABLE `reg_abroad` (
   `invoice_bank` varchar(100) DEFAULT NULL COMMENT '开票信息开户行',
   `invoice_account` varchar(100) DEFAULT NULL COMMENT '开票信息开户行账号',
 
-  `status` tinyint(3) NULL COMMENT '状态:0-未提交, 1-未审核, 2-财务已审核, 3-提交人已审核',
+  `status` tinyint(3) NULL COMMENT '订单状态 状态:0-未提交, 1-已提交, 2-财务已审核, 3-提交人已审核, 4-完成',
   `finance_reviewer_id` int(11) DEFAULT NULL COMMENT '财务审核人员ID',
   `finance_review_date` datetime DEFAULT NULL COMMENT '财务审核日期',
   `finance_review_moment` varchar(100) DEFAULT NULL COMMENT '财务审核意见',
@@ -290,6 +290,9 @@ CREATE TABLE `reg_abroad` (
   `submit_reviewer_id` int(11) DEFAULT NULL COMMENT '提交审核人员ID',
   `submit_review_date` datetime DEFAULT NULL COMMENT '提交审核日期',
   `submit_review_moment` varchar(100) DEFAULT NULL COMMENT '提交审核意见',
+
+  `review_status` int(11) DEFAULT NULL COMMENT '审核状体 未审核：-1；未通过：0；已通过：1',
+  `date_finish` datetime DEFAULT NULL COMMENT '完成时间',
 
   `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
   `salesman_id` int(11) DEFAULT NULL COMMENT '业务员',

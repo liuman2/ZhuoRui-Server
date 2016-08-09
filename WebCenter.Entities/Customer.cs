@@ -17,9 +17,9 @@ namespace WebCenter.Entities
         public customer()
         {
             this.bank_account = new HashSet<bank_account>();
-            this.reg_abroad = new HashSet<reg_abroad>();
             this.customer_timeline = new HashSet<customer_timeline>();
             this.incomes = new HashSet<income>();
+            this.reg_abroad = new HashSet<reg_abroad>();
         }
     
     
@@ -121,10 +121,10 @@ namespace WebCenter.Entities
         public string description { get; set; }
     
         public virtual ICollection<bank_account> bank_account { get; set; }
-        public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual ICollection<customer_timeline> customer_timeline { get; set; }
         public virtual ICollection<income> incomes { get; set; }
+        public virtual ICollection<reg_abroad> reg_abroad { get; set; }
     }
 }
