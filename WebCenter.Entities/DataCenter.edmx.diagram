@@ -25,7 +25,8 @@
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_2" />
         <EntityTypeShape EntityType="DataCenter.Entities.income" Width="1.5" PointX="15.875" PointY="16.25" />
         <AssociationConnector Association="DataCenter.Entities.income_ibfk_customer" />
-        <EntityTypeShape EntityType="DataCenter.Entities.reg_abroad" Width="1.5" PointX="15.875" PointY="5.25" />
+        <EntityTypeShape EntityType="DataCenter.Entities.reg_abroad" Width="1.5" PointX="18.125" PointY="9.375" />
+        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_bank" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_finance_reviewer" />

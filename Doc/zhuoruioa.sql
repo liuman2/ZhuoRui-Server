@@ -18,7 +18,7 @@ INSERT INTO `sequence` VALUES ('position', '11');
 INSERT INTO `sequence` VALUES ('role', '6');
 INSERT INTO `sequence` VALUES ('member', '2');
 INSERT INTO `sequence` VALUES ('area', '4');
-INSERT INTO `sequence` VALUES ('dictionary_group', '7');
+INSERT INTO `sequence` VALUES ('dictionary_group', '8');
 INSERT INTO `sequence` VALUES ('dictionary', '6');
 INSERT INTO `sequence` VALUES ('customer', '1');
 INSERT INTO `sequence` VALUES ('bank_account', '1');
@@ -169,6 +169,7 @@ INSERT INTO `dictionary_group` VALUES ('3', '贸易方式', '贸易方式');
 INSERT INTO `dictionary_group` VALUES ('4', '注册方式', '注册方式');
 INSERT INTO `dictionary_group` VALUES ('5', '专利类型', '专利类型');
 INSERT INTO `dictionary_group` VALUES ('6', '专利用途', '专利用途');
+INSERT INTO `dictionary_group` VALUES ('7', '注册地区', '注册地区');
 
 -- ----------------------------
 -- Table structure for dictionary
@@ -273,7 +274,7 @@ CREATE TABLE `reg_abroad` (
   `is_open_bank` tinyint(3) NULL COMMENT '是否开户',
   `bank_id` int(11) NULL COMMENT '开户行ID',
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
-  `amount_transaction` float(255,0) DEFAULT NULL COMMENT '成交金额',
+  `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
 
   `invoice_name` varchar(200) DEFAULT NULL COMMENT '开票信息名称',
   `invoice_tax` varchar(200) DEFAULT NULL COMMENT '开票信息纳税人识别号',
@@ -313,6 +314,8 @@ CREATE TABLE `reg_abroad` (
   KEY `outworker_id` (`outworker_id`),
   KEY `finance_reviewer_id` (`finance_reviewer_id`),
   KEY `submit_reviewer_id` (`submit_reviewer_id`),
+  KEY `bank_id` (`bank_id`),
+
   CONSTRAINT `abroad_ibfk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
   CONSTRAINT `abroad_ibfk_creator` FOREIGN KEY (`creator_id`) REFERENCES `member` (`id`),
   CONSTRAINT `abroad_ibfk_salesman` FOREIGN KEY (`salesman_id`) REFERENCES `member` (`id`),
@@ -320,7 +323,8 @@ CREATE TABLE `reg_abroad` (
   CONSTRAINT `abroad_ibfk_manager` FOREIGN KEY (`manager_id`) REFERENCES `member` (`id`),
   CONSTRAINT `abroad_ibfk_outworker` FOREIGN KEY (`outworker_id`) REFERENCES `member` (`id`),
   CONSTRAINT `abroad_ibfk_finance_reviewer` FOREIGN KEY (`finance_reviewer_id`) REFERENCES `member` (`id`),
-  CONSTRAINT `abroad_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`)
+  CONSTRAINT `abroad_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `abroad_ibfk_bank` FOREIGN KEY (`bank_id`) REFERENCES `bank_account` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -332,7 +336,7 @@ CREATE TABLE `income` (
   `source_name` varchar(10) DEFAULT NULL,
   `payer` varchar(100) DEFAULT NULL COMMENT '付款人',
   `account` varchar(100) DEFAULT NULL COMMENT '付款账号',
-  `amount` float(255,0) DEFAULT NULL COMMENT '付款金额',
+  `amount` float(255,2) DEFAULT NULL COMMENT '付款金额',
   `date_pay` datetime DEFAULT NULL COMMENT '付款时间',
   `attachment_url` varchar(100) DEFAULT NULL COMMENT '附件地址',
   `description` varchar(100) NULL,

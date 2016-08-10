@@ -14,6 +14,11 @@ namespace WebCenter.Entities
     
     public partial class bank_account:BaseModel
     {
+        public bank_account()
+        {
+            this.reg_abroad = new HashSet<reg_abroad>();
+        }
+    
     
     
     
@@ -45,5 +50,6 @@ namespace WebCenter.Entities
         public Nullable<System.DateTime> date_updated { get; set; }
     
         public virtual customer customer { get; set; }
+        public virtual ICollection<reg_abroad> reg_abroad { get; set; }
     }
 }
