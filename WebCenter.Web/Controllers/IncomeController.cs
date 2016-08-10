@@ -46,7 +46,7 @@ namespace WebCenter.Web.Controllers
             {
                 return Json(new { success = false, message = "source_name不能为空" }, JsonRequestBehavior.AllowGet);
             }
-
+                        
             var dbInc = Uof.IincomeService.AddEntity(_inc);
             if (dbInc == null)
             {
@@ -55,6 +55,48 @@ namespace WebCenter.Web.Controllers
 
             return SuccessResult;
 
+        }
+
+        public ActionResult Get(int id)
+        {
+           var dbIncome = Uof.IincomeService.GetAll(i => i.id == id).Select(i=> new
+           {
+               id = i.id,
+               payer = i.payer,
+               account = i.account,
+               amount = i.amount,
+               date_pay = i.date_pay,
+               attachment_url = i.attachment_url,
+               description = i.description
+           });
+
+            return Json(dbIncome, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Update(income _income)
+        {
+            var dbIncome = Uof.IincomeService.GetAll(i => i.id == _income.id).FirstOrDefault();
+
+            if (dbIncome.payer == _income.payer &&
+                dbIncome.account == _income.account &&
+                dbIncome.amount == _income.amount &&
+                dbIncome.date_pay == _income.date_pay &&
+                dbIncome.attachment_url == _income.attachment_url)
+            {
+                return SuccessResult;
+            }
+
+            dbIncome.payer = _income.payer;
+            dbIncome.account = _income.account;
+            dbIncome.amount = _income.amount;
+            dbIncome.date_pay = _income.date_pay;
+            dbIncome.attachment_url = _income.attachment_url;
+
+            dbIncome.date_updated = DateTime.Now;
+
+            var r = Uof.IincomeService.UpdateEntity(dbIncome);
+
+            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }
     }
 }
