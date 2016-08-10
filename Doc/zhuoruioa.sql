@@ -340,7 +340,6 @@ CREATE TABLE `income` (
   `date_pay` datetime DEFAULT NULL COMMENT '付款时间',
   `attachment_url` varchar(100) DEFAULT NULL COMMENT '附件地址',
   `description` varchar(100) NULL,
-
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),

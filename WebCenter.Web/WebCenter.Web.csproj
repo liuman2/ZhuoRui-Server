@@ -211,6 +211,7 @@
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\CustomerTimelineController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
+    <Compile Include="Controllers\IncomeController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Controllers\PositionController.cs" />
@@ -302,6 +303,7 @@
     <Folder Include="Views\CustomerTimeline\" />
     <Folder Include="Views\Dictionary\" />
     <Folder Include="Views\Feedback\" />
+    <Folder Include="Views\Income\" />
     <Folder Include="Views\Message\" />
     <Folder Include="Views\Notice\" />
     <Folder Include="Views\Organization\" />

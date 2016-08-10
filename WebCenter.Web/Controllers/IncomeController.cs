@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using WebCenter.IServices;
 using WebCenter.Entities;
-using System.IO;
 using Common;
-using System.Collections;
+using System.Linq.Expressions;
+using System;
 
 namespace WebCenter.Web.Controllers
 {
@@ -19,36 +16,45 @@ namespace WebCenter.Web.Controllers
 
         }
 
-        [HttpGet]
-        public ActionResult GetIncomeList(int projectId)
+        public ActionResult Add(income _inc)
         {
-            var list = Uof.IincomeService.GetAll(p => p.project_id == projectId && p.status == (sbyte)LineStatus.OK && p.review == (sbyte)ReviewStatus.Accept).
-                OrderByDescending(p => p.id).Select(p => new
-                {
-                    amount = p.amount,
-                    date_income = p.date_income,
-                    creator = p.creator,
-                    date_created = p.date_created
-                }).ToList();
-            var ids = list.Select(p=>p.creator).ToList();
-            var users = Uof.IuserService.GetAll(p => ids.Contains(p.id)).Select(p => new { 
-             id=p.id,
-             name=p.name
-            }).ToList();
-            ArrayList al = new ArrayList();
-            foreach(var item in list)
+            if (string.IsNullOrEmpty(_inc.payer))
             {
-                var obj = new
-                {
-                    amount = item.amount,
-                    date_income = item.date_income.GetValueOrDefault().ToString("yyyy年MM月dd日"),
-                    date_created = item.date_created.GetValueOrDefault().ToString("yyyy年MM月dd日"),
-                    user_name = users.Where(p => p.id == item.creator).FirstOrDefault().name
-                };
-                al.Add(obj);
-            }           
+                return Json(new { success = false, message = "付款人不能为空" }, JsonRequestBehavior.AllowGet);
+            }            
+            if (string.IsNullOrEmpty(_inc.account))
+            {
+                return Json(new { success = false, message = "付款账号不能为空" }, JsonRequestBehavior.AllowGet);
+            }
+            if (_inc.amount == null)
+            {
+                return Json(new { success = false, message = "付款金额不能为空" }, JsonRequestBehavior.AllowGet);
+            }
+            if (_inc.date_pay == null)
+            {
+                return Json(new { success = false, message = "付款日期额不能为空" }, JsonRequestBehavior.AllowGet);
+            }
+            if (_inc.source_id == null)
+            {
+                return Json(new { success = false, message = "source_id不能为空" }, JsonRequestBehavior.AllowGet);
+            }
+            if (_inc.customer_id == null)
+            {
+                return Json(new { success = false, message = "customer_id不能为空" }, JsonRequestBehavior.AllowGet);
+            }
+            if (string.IsNullOrEmpty(_inc.source_name))
+            {
+                return Json(new { success = false, message = "source_name不能为空" }, JsonRequestBehavior.AllowGet);
+            }
 
-            return Json(al, JsonRequestBehavior.AllowGet);
-        } 
+            var dbInc = Uof.IincomeService.AddEntity(_inc);
+            if (dbInc == null)
+            {
+                return Json(new { success = false, message = "保存失败" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return SuccessResult;
+
+        }
     }
 }
