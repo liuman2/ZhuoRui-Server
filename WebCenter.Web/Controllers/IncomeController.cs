@@ -5,6 +5,7 @@ using WebCenter.Entities;
 using Common;
 using System.Linq.Expressions;
 using System;
+using System.Collections.Generic;
 
 namespace WebCenter.Web.Controllers
 {
@@ -46,12 +47,28 @@ namespace WebCenter.Web.Controllers
             {
                 return Json(new { success = false, message = "source_name不能为空" }, JsonRequestBehavior.AllowGet);
             }
-                        
+
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var dbInc = Uof.IincomeService.AddEntity(_inc);
             if (dbInc == null)
             {
                 return Json(new { success = false, message = "保存失败" }, JsonRequestBehavior.AllowGet);
             }
+
+            Uof.ItimelineService.AddEntity(new timeline()
+            {
+                source_id = _inc.source_id,
+                source_name = _inc.source_name,
+                title = "新增收款",
+                content = string.Format("{0}新增了收款, 金额{1}", arrs[3], dbInc.amount)
+            });
 
             return SuccessResult;
 
@@ -86,6 +103,14 @@ namespace WebCenter.Web.Controllers
                 return SuccessResult;
             }
 
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             dbIncome.payer = _income.payer;
             dbIncome.account = _income.account;
             dbIncome.amount = _income.amount;
@@ -96,14 +121,61 @@ namespace WebCenter.Web.Controllers
 
             var r = Uof.IincomeService.UpdateEntity(dbIncome);
 
+            if (r)
+            {
+                var msg = new List<string>();
+                if (dbIncome.payer != _income.payer)
+                {
+                    msg.Add(string.Format("付款人{0}->{1}", dbIncome.payer, _income.payer));
+                }
+                if (dbIncome.account != _income.account)
+                {
+                    msg.Add(string.Format("账号{0}->{1}", dbIncome.account, _income.account));
+                }
+                if (dbIncome.amount != _income.amount)
+                {
+                    msg.Add(string.Format("金额{0}->{1}", dbIncome.amount, _income.amount));
+                }
+                if (dbIncome.date_pay != _income.date_pay)
+                {
+                    msg.Add(string.Format("付款日期{0}->{1}", dbIncome.date_pay.Value.ToString("YYYY-MM-DD"), _income.date_pay.Value.ToString("YYYY-MM-DD")));
+                }
+
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbIncome.source_id,
+                    source_name = dbIncome.source_name,
+                    title = "修改收款",
+                    content = string.Format("{0}修改了收款, {1}", arrs[3], string.Join(",", msg))
+                });
+            }
+
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Delete(int id)
         {
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var dbIncome = Uof.IincomeService.GetById(id);
 
             var r = Uof.IincomeService.DeleteEntity(dbIncome);
+
+            if (r)
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbIncome.source_id,
+                    source_name = dbIncome.source_name,
+                    title = "删除收款",
+                    content = string.Format("{0}删除了收款, 金额{1}", arrs[3], dbIncome.amount)
+                });
+            }
 
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }
