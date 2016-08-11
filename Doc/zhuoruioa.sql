@@ -25,6 +25,7 @@ INSERT INTO `sequence` VALUES ('bank_account', '1');
 INSERT INTO `sequence` VALUES ('reg_abroad', '1');
 INSERT INTO `sequence` VALUES ('customer_timeline', '1');
 INSERT INTO `sequence` VALUES ('income', '1');
+INSERT INTO `sequence` VALUES ('timeline', '1');
 
 -- ----------------------------
 -- Table structure for organization
@@ -345,6 +346,18 @@ CREATE TABLE `income` (
   PRIMARY KEY (`id`),
   KEY `customer_id` (`customer_id`),
   CONSTRAINT `income_ibfk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `timeline`;
+CREATE TABLE `timeline` (
+  `id` int(11) NOT NULL,
+  `source_id` int(11) NULL,
+  `source_name` varchar(10) DEFAULT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `content` varchar(500) DEFAULT NULL,
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

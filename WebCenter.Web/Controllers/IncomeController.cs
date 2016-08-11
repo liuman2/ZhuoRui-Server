@@ -68,7 +68,7 @@ namespace WebCenter.Web.Controllers
                date_pay = i.date_pay,
                attachment_url = i.attachment_url,
                description = i.description
-           });
+           }).FirstOrDefault();
 
             return Json(dbIncome, JsonRequestBehavior.AllowGet);
         }
@@ -95,6 +95,15 @@ namespace WebCenter.Web.Controllers
             dbIncome.date_updated = DateTime.Now;
 
             var r = Uof.IincomeService.UpdateEntity(dbIncome);
+
+            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var dbIncome = Uof.IincomeService.GetById(id);
+
+            var r = Uof.IincomeService.DeleteEntity(dbIncome);
 
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }

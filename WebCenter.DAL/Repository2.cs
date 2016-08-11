@@ -72,4 +72,9 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class timelineRepository :BaseRepository<timeline>,ItimelineRepository
+    {
+         
+    }
+	
 }

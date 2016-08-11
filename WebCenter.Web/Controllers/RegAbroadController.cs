@@ -342,6 +342,85 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Submit(int id)
+        {
+            var dbReg = Uof.Ireg_abroadService.GetById(id);
+            if (dbReg == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbReg.status = 1;
+            dbReg.date_updated = DateTime.Now;
+
+            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PassAudit(int id)
+        {
+            //          `finance_reviewer_id` int(11) DEFAULT NULL COMMENT '财务审核人员ID',
+            //`finance_review_date` datetime DEFAULT NULL COMMENT '财务审核日期',
+            //`finance_review_moment` varchar(100) DEFAULT NULL COMMENT '财务审核意见',
+
+            //`submit_reviewer_id` int(11) DEFAULT NULL COMMENT '提交审核人员ID',
+            //`submit_review_date` datetime DEFAULT NULL COMMENT '提交审核日期',
+            //`submit_review_moment` varchar(100) DEFAULT NULL COMMENT '提交审核意见',
+
+            //`review_status` int(11) DEFAULT NULL COMMENT '审核状体 未审核：-1；未通过：0；已通过：1',
+
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var dbReg = Uof.Ireg_abroadService.GetById(id);
+            if (dbReg == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+            if (dbReg.status == 1)
+            {
+                dbReg.status = 2;
+                dbReg.review_status = 1;
+                dbReg.finance_reviewer_id = userId;
+                dbReg.finance_review_date = DateTime.Now;
+                dbReg.finance_review_moment = "";
+
+                // TODO
+            }
+            else
+            {
+                dbReg.status = 3;
+                dbReg.review_status = 1;
+                dbReg.submit_reviewer_id = userId;
+                dbReg.submit_review_date = DateTime.Now;
+                dbReg.submit_review_moment = "";
+            }
+
+            dbReg.date_updated = DateTime.Now;
+
+            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult RefuseAudit(int id, string moment)
+        {
+            return ErrorResult;
+        }
+
         private object GetById(int id)
         {
             var reg = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new

@@ -42,6 +42,8 @@ private void AutoAddBinds()
 	   kernel.Bind<IroleService>().To<roleService>().InRequestScope();
 	
 	   kernel.Bind<IsequenceService>().To<sequenceService>().InRequestScope();
+	
+	   kernel.Bind<ItimelineService>().To<timelineService>().InRequestScope();
   kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InRequestScope();
 
 }

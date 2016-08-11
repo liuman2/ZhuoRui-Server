@@ -208,6 +208,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\CustomerTimelineController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
@@ -217,6 +218,7 @@
     <Compile Include="Controllers\PositionController.cs" />
     <Compile Include="Controllers\RegAbroadController.cs" />
     <Compile Include="Controllers\ReserveController.cs" />
+    <Compile Include="Controllers\TimelineController.cs" />
     <Compile Include="Filters\JsonAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -312,6 +314,7 @@
     <Folder Include="Views\RegAbroad\" />
     <Folder Include="Views\Register\" />
     <Folder Include="Views\Reserve\" />
+    <Folder Include="Views\Timeline\" />
     <Folder Include="Views\User\" />
     <Folder Include="Views\Waitdeal\" />
   </ItemGroup>

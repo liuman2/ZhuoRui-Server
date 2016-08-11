@@ -35,6 +35,7 @@
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_waiter" />
+        <EntityTypeShape EntityType="DataCenter.Entities.timeline" Width="1.5" PointX="3.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

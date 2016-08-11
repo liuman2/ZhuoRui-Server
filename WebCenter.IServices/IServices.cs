@@ -62,4 +62,8 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface ItimelineService:IBaseService<timeline>
+    {   
+    }
+	
 }

@@ -58,4 +58,8 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface ItimelineRepository :IBaseRepository<timeline>
+    {         
+    }
+	
 }

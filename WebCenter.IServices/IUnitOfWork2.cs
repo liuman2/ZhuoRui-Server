@@ -34,5 +34,7 @@ namespace WebCenter.IServices
 	
 	  IsequenceService IsequenceService{get;set;} 
 	
+	  ItimelineService ItimelineService{get;set;} 
+	
 }
 }

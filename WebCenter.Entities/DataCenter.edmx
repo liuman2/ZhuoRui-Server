@@ -205,6 +205,18 @@
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="id" Type="ubigint" Nullable="false" />
         </EntityType>
+        <EntityType Name="timeline">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="source_id" Type="int" />
+          <Property Name="source_name" Type="varchar" MaxLength="10" />
+          <Property Name="title" Type="varchar" MaxLength="100" />
+          <Property Name="content" Type="varchar" MaxLength="500" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
         <Association Name="abroad_ibfk_bank">
           <End Role="bank_account" Type="Self.bank_account" Multiplicity="0..1" />
           <End Role="reg_abroad" Type="Self.reg_abroad" Multiplicity="*" />
@@ -423,6 +435,7 @@
           <EntitySet Name="reg_abroad" EntityType="Self.reg_abroad" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="role" EntityType="Self.role" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="sequence" EntityType="Self.sequence" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="timeline" EntityType="Self.timeline" Schema="zhuoruioa" store:Type="Tables" />
           <AssociationSet Name="abroad_ibfk_bank" Association="Self.abroad_ibfk_bank">
             <End Role="bank_account" EntitySet="bank_account" />
             <End Role="reg_abroad" EntitySet="reg_abroad" />
@@ -578,6 +591,7 @@
             <End Role="member" EntitySet="members" />
             <End Role="reg_abroad" EntitySet="reg_abroad" />
           </AssociationSet>
+          <EntitySet Name="timelines" EntityType="DataCenter.Entities.timeline" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -1017,6 +1031,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="timeline">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="source_id" Type="Int32" />
+          <Property Name="source_name" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="content" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1232,6 +1258,19 @@
                 <ScalarProperty Name="name_cn" ColumnName="name_cn" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="timelines">
+            <EntityTypeMapping TypeName="DataCenter.Entities.timeline">
+              <MappingFragment StoreEntitySet="timeline">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="source_name" ColumnName="source_name" />
+                <ScalarProperty Name="source_id" ColumnName="source_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

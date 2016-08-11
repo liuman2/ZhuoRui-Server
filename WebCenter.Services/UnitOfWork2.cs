@@ -99,5 +99,12 @@ namespace WebCenter.Services
         set;
     } 
 	
+  [Ninject.Inject]
+	 public  ItimelineService ItimelineService
+    {
+        get;
+        set;
+    } 
+	
 }
 }

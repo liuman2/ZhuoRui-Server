@@ -143,4 +143,14 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class timelineService:BaseService<timeline>,ItimelineService
+    {   
+        public timelineService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.timelineRepository;
+        }  
+    }
+	
 }

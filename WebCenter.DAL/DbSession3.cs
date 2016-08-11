@@ -32,5 +32,7 @@ namespace WebCenter.DAL
 	public IDAL.IroleRepository roleRepository { get { return new roleRepository(); } }
 	
 	public IDAL.IsequenceRepository sequenceRepository { get { return new sequenceRepository(); } }
+	
+	public IDAL.ItimelineRepository timelineRepository { get { return new timelineRepository(); } }
 	}
 }
