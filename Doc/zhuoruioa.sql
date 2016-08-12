@@ -354,15 +354,17 @@ CREATE TABLE `reg_abroad` (
   `date_setup` datetime DEFAULT NULL COMMENT '公司成立日期',
   `reg_no` varchar(100) DEFAULT NULL COMMENT '公司统一信用编号',
   `address` varchar(300) DEFAULT NULL COMMENT '公司注册地址',
-
-
-
-
+  `legal` varchar(20) DEFAULT NULL COMMENT '公司法人',
   `director` varchar(20) DEFAULT NULL COMMENT '公司监事',
-  `is_open_bank` tinyint(3) NULL COMMENT '是否开户',
   `bank_id` int(11) NULL COMMENT '开户行ID',
+  `taxpayer` varchar(10) DEFAULT NULL COMMENT '纳税人资格',
+  `is_customs` tinyint(3) NULL COMMENT '是否是否海关备案',
+  `customs_name` varchar(300) DEFAULT NULL COMMENT '海关备案英文名称',
+  `customs_address` varchar(300) DEFAULT NULL COMMENT '海关备案英文地址',
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
   `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
+  `is_bookkeeping` tinyint(3) NULL COMMENT '是否在我司代理记账',
+  `amount_bookkeeping` float(255,2) DEFAULT NULL COMMENT '代理记账费用',
 
   `invoice_name` varchar(200) DEFAULT NULL COMMENT '开票信息名称',
   `invoice_tax` varchar(200) DEFAULT NULL COMMENT '开票信息纳税人识别号',
@@ -382,6 +384,8 @@ CREATE TABLE `reg_abroad` (
 
   `review_status` int(11) DEFAULT NULL COMMENT '审核状体 未审核：-1；未通过：0；已通过：1',
   `date_finish` datetime DEFAULT NULL COMMENT '完成时间',
+
+  `progress` varchar(50) DEFAULT NULL COMMENT '注册进度',
 
   `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
   `salesman_id` int(11) DEFAULT NULL COMMENT '业务员',
@@ -404,15 +408,15 @@ CREATE TABLE `reg_abroad` (
   KEY `submit_reviewer_id` (`submit_reviewer_id`),
   KEY `bank_id` (`bank_id`),
 
-  CONSTRAINT `abroad_ibfk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
-  CONSTRAINT `abroad_ibfk_creator` FOREIGN KEY (`creator_id`) REFERENCES `member` (`id`),
-  CONSTRAINT `abroad_ibfk_salesman` FOREIGN KEY (`salesman_id`) REFERENCES `member` (`id`),
-  CONSTRAINT `abroad_ibfk_waiter` FOREIGN KEY (`waiter_id`) REFERENCES `member` (`id`),
-  CONSTRAINT `abroad_ibfk_manager` FOREIGN KEY (`manager_id`) REFERENCES `member` (`id`),
-  CONSTRAINT `abroad_ibfk_outworker` FOREIGN KEY (`outworker_id`) REFERENCES `member` (`id`),
-  CONSTRAINT `abroad_ibfk_finance_reviewer` FOREIGN KEY (`finance_reviewer_id`) REFERENCES `member` (`id`),
-  CONSTRAINT `abroad_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`),
-  CONSTRAINT `abroad_ibfk_bank` FOREIGN KEY (`bank_id`) REFERENCES `bank_account` (`id`)
+  CONSTRAINT `reg_internal_ibfk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
+  CONSTRAINT `reg_internal_ibfk_creator` FOREIGN KEY (`creator_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `reg_internal_ibfk_salesman` FOREIGN KEY (`salesman_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `reg_internal_ibfk_waiter` FOREIGN KEY (`waiter_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `reg_internal_ibfk_manager` FOREIGN KEY (`manager_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `reg_internal_ibfk_outworker` FOREIGN KEY (`outworker_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `reg_internal_ibfk_finance_reviewer` FOREIGN KEY (`finance_reviewer_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `reg_internal_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `reg_internal_ibfk_bank` FOREIGN KEY (`bank_id`) REFERENCES `bank_account` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
