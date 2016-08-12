@@ -26,6 +26,7 @@ INSERT INTO `sequence` VALUES ('reg_abroad', '1');
 INSERT INTO `sequence` VALUES ('customer_timeline', '1');
 INSERT INTO `sequence` VALUES ('income', '1');
 INSERT INTO `sequence` VALUES ('timeline', '1');
+INSERT INTO `sequence` VALUES ('reg_history', '1');
 
 -- ----------------------------
 -- Table structure for organization
@@ -271,7 +272,7 @@ CREATE TABLE `reg_abroad` (
   `reg_no` varchar(100) DEFAULT NULL COMMENT '公司注册编号',
   `region` varchar(50) DEFAULT NULL COMMENT '公司注册地区',
   `address` varchar(300) DEFAULT NULL COMMENT '公司注册地址',
-  `director` varchar(20) DEFAULT NULL COMMENT '公司懂事',
+  `director` varchar(20) DEFAULT NULL COMMENT '公司董事',
   `is_open_bank` tinyint(3) NULL COMMENT '是否开户',
   `bank_id` int(11) NULL COMMENT '开户行ID',
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
@@ -327,6 +328,93 @@ CREATE TABLE `reg_abroad` (
   CONSTRAINT `abroad_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`),
   CONSTRAINT `abroad_ibfk_bank` FOREIGN KEY (`bank_id`) REFERENCES `bank_account` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `reg_history`;
+CREATE TABLE `reg_history` (
+  `id` int(11) NOT NULL,
+  `reg_id` int(11) NULL,
+  `name_cn` varchar(100) DEFAULT NULL COMMENT '公司中文名称',
+  `name_en` varchar(100) DEFAULT NULL COMMENT '公司英文名称',
+  `date_setup` datetime DEFAULT NULL COMMENT '公司成立日期',
+  `reg_no` varchar(100) DEFAULT NULL COMMENT '公司注册编号',
+  `region` varchar(50) DEFAULT NULL COMMENT '公司注册地区',
+  `address` varchar(300) DEFAULT NULL COMMENT '公司注册地址',
+  `director` varchar(20) DEFAULT NULL COMMENT '公司董事',
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `reg_internal`;
+CREATE TABLE `reg_abroad` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NULL,
+  `code` varchar(20) DEFAULT NULL COMMENT '档案号',
+  `name_cn` varchar(100) DEFAULT NULL COMMENT '公司中文名称',
+  `date_setup` datetime DEFAULT NULL COMMENT '公司成立日期',
+  `reg_no` varchar(100) DEFAULT NULL COMMENT '公司统一信用编号',
+  `address` varchar(300) DEFAULT NULL COMMENT '公司注册地址',
+
+
+
+
+  `director` varchar(20) DEFAULT NULL COMMENT '公司监事',
+  `is_open_bank` tinyint(3) NULL COMMENT '是否开户',
+  `bank_id` int(11) NULL COMMENT '开户行ID',
+  `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
+  `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
+
+  `invoice_name` varchar(200) DEFAULT NULL COMMENT '开票信息名称',
+  `invoice_tax` varchar(200) DEFAULT NULL COMMENT '开票信息纳税人识别号',
+  `invoice_address` varchar(200) DEFAULT NULL COMMENT '开票信息地址',
+  `invoice_tel` varchar(20) DEFAULT NULL COMMENT '开票信息电话',
+  `invoice_bank` varchar(100) DEFAULT NULL COMMENT '开票信息开户行',
+  `invoice_account` varchar(100) DEFAULT NULL COMMENT '开票信息开户行账号',
+
+  `status` tinyint(3) NULL COMMENT '订单状态 状态:0-未提交, 1-已提交, 2-财务已审核, 3-提交人已审核, 4-完成',
+  `finance_reviewer_id` int(11) DEFAULT NULL COMMENT '财务审核人员ID',
+  `finance_review_date` datetime DEFAULT NULL COMMENT '财务审核日期',
+  `finance_review_moment` varchar(100) DEFAULT NULL COMMENT '财务审核意见',
+
+  `submit_reviewer_id` int(11) DEFAULT NULL COMMENT '提交审核人员ID',
+  `submit_review_date` datetime DEFAULT NULL COMMENT '提交审核日期',
+  `submit_review_moment` varchar(100) DEFAULT NULL COMMENT '提交审核意见',
+
+  `review_status` int(11) DEFAULT NULL COMMENT '审核状体 未审核：-1；未通过：0；已通过：1',
+  `date_finish` datetime DEFAULT NULL COMMENT '完成时间',
+
+  `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
+  `salesman_id` int(11) DEFAULT NULL COMMENT '业务员',
+  `waiter_id` int(11) DEFAULT NULL COMMENT '年检客服',
+  `manager_id` int(11) DEFAULT NULL COMMENT '经理',
+  `outworker_id` int(11) DEFAULT NULL COMMENT '外勤',
+  `organization_id` int(11) DEFAULT NULL COMMENT '业务员部门',
+  `description` varchar(100) NULL,
+
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `customer_id` (`customer_id`),
+  KEY `creator_id` (`creator_id`),
+  KEY `salesman_id` (`salesman_id`),
+  KEY `waiter_id` (`waiter_id`),
+  KEY `manager_id` (`manager_id`),
+  KEY `outworker_id` (`outworker_id`),
+  KEY `finance_reviewer_id` (`finance_reviewer_id`),
+  KEY `submit_reviewer_id` (`submit_reviewer_id`),
+  KEY `bank_id` (`bank_id`),
+
+  CONSTRAINT `abroad_ibfk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
+  CONSTRAINT `abroad_ibfk_creator` FOREIGN KEY (`creator_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `abroad_ibfk_salesman` FOREIGN KEY (`salesman_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `abroad_ibfk_waiter` FOREIGN KEY (`waiter_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `abroad_ibfk_manager` FOREIGN KEY (`manager_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `abroad_ibfk_outworker` FOREIGN KEY (`outworker_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `abroad_ibfk_finance_reviewer` FOREIGN KEY (`finance_reviewer_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `abroad_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `abroad_ibfk_bank` FOREIGN KEY (`bank_id`) REFERENCES `bank_account` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 DROP TABLE IF EXISTS `income`;

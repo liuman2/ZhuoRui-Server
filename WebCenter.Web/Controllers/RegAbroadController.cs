@@ -5,6 +5,7 @@ using WebCenter.Entities;
 using Common;
 using System.Linq.Expressions;
 using System;
+using System.Collections.Generic;
 
 namespace WebCenter.Web.Controllers
 {
@@ -69,9 +70,8 @@ namespace WebCenter.Web.Controllers
                 Expression<Func<reg_abroad, bool>> tmp = c => (c.date_transaction < endTime);
                 condition = tmp;
             }
-
-
-            var list = Uof.Ireg_abroadService.GetAll(condition).OrderBy(item => item.id).Select(c => new
+            
+            var list = Uof.Ireg_abroadService.GetAll(condition).OrderByDescending(item => item.id).Select(c => new
             {
                 id = c.id,
                 customer_id = c.customer_id,
@@ -207,7 +207,55 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
-            var reg = GetById(id);
+            var reg = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new
+            {
+                id = a.id,
+                customer_id = a.customer_id,
+                customer_name = a.customer.name,
+                industry = a.customer.industry,
+                province = a.customer.province,
+                city = a.customer.city,
+                county = a.customer.county,
+                customer_address = a.customer.address,
+                contact = a.customer.contact,
+                mobile = a.customer.mobile,
+                tel = a.customer.tel,
+
+                code = a.code,
+                name_cn = a.name_cn,
+                name_en = a.name_en,
+                date_setup = a.date_setup,
+                reg_no = a.reg_no,
+                region = a.region,
+                address = a.address,
+                date_transaction = a.date_transaction,
+                amount_transaction = a.amount_transaction,
+                director = a.director,
+                is_open_bank = a.is_open_bank,
+                bank_id = a.bank_id,
+                bank_name = a.bank_account.bank,
+                holder = a.bank_account.holder,
+                account = a.bank_account.account,
+                date_finish = a.date_finish,
+
+                invoice_name = a.invoice_name,
+                invoice_tax = a.invoice_tax,
+                invoice_address = a.invoice_address,
+                invoice_tel = a.invoice_tel,
+                invoice_bank = a.invoice_bank,
+                invoice_account = a.invoice_account,
+
+                salesman_id = a.salesman_id,
+                salesman = a.member4.name,
+                waiter_id = a.waiter_id,
+                waiter_name = a.member6.name,
+                manager_id = a.manager_id,
+                manager_name = a.member2.name,
+
+                status = a.status,
+                review_status = a.review_status
+
+            }).FirstOrDefault();
 
             return Json(reg, JsonRequestBehavior.AllowGet);
         }
@@ -258,6 +306,7 @@ namespace WebCenter.Web.Controllers
                 waiter_name = a.member6.name,
                 manager_id = a.manager_id,
                 manager_name = a.member2.name,
+                
 
                 status = a.status,
                 review_status = a.review_status
@@ -389,6 +438,8 @@ namespace WebCenter.Web.Controllers
                     title = "提交审核",
                     content = string.Format("提交给财务审核")
                 });
+
+                // TODO 通知 财务人员
             }
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
@@ -426,7 +477,7 @@ namespace WebCenter.Web.Controllers
                 dbReg.finance_review_moment = "";
 
                 t = "财务审核";
-                // TODO
+                // TODO 通知 提交人，业务员
             }
             else
             {
@@ -437,6 +488,7 @@ namespace WebCenter.Web.Controllers
                 dbReg.submit_review_moment = "";
 
                 t = "提交的审核";
+                // TODO 通知 业务员
             }
 
             dbReg.date_updated = DateTime.Now;
@@ -450,7 +502,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbReg.id,
                     source_name = "reg_abroad",
                     title = "通过审核",
-                    content = string.Format("{0}通过了{1}审核", arrs[3], t)
+                    content = string.Format("{0}通过了{1}", arrs[3], t)
                 });
             }
             return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
@@ -490,7 +542,7 @@ namespace WebCenter.Web.Controllers
                 dbReg.finance_review_moment = description;
 
                 t = "驳回了财务审核";
-                // TODO
+                // TODO 通知 业务员
             }
             else
             {
@@ -501,6 +553,7 @@ namespace WebCenter.Web.Controllers
                 dbReg.submit_review_moment = description;
 
                 t = "驳回了提交的审核";
+                // TODO 通知 业务员
             }
 
             dbReg.date_updated = DateTime.Now;
@@ -521,59 +574,150 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
         }
 
-        private object GetById(int id)
+        [HttpPost]
+        public ActionResult Finish(int id, DateTime date_finish)
         {
-            var reg = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
             {
-                id = a.id,
-                customer_id = a.customer_id,
-                customer_name = a.customer.name,
-                industry = a.customer.industry,
-                province = a.customer.province,
-                city = a.customer.city,
-                county = a.customer.county,
-                customer_address = a.customer.address,
-                contact = a.customer.contact,
-                mobile = a.customer.mobile,
-                tel = a.customer.tel,
+                return new HttpUnauthorizedResult();
+            }
 
-                code = a.code,
-                name_cn = a.name_cn,
-                name_en = a.name_en,
-                date_setup = a.date_setup,
-                reg_no = a.reg_no,
-                region = a.region,
-                address = a.address,
-                date_transaction = a.date_transaction,
-                amount_transaction = a.amount_transaction,
-                director = a.director,
-                is_open_bank = a.is_open_bank,
-                bank_id = a.bank_id,
-                bank_name = a.bank_account.bank,
-                holder = a.bank_account.holder,
-                account = a.bank_account.account,
-                date_finish = a.date_finish,
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
 
-                invoice_name = a.invoice_name,
-                invoice_tax = a.invoice_tax,
-                invoice_address = a.invoice_address,
-                invoice_tel = a.invoice_tel,
-                invoice_bank = a.invoice_bank,
-                invoice_account = a.invoice_account,
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
 
-                salesman_id = a.salesman_id,
-                salesman = a.member4.name,
-                waiter_id = a.waiter_id,
-                waiter_name = a.member6.name,
-                manager_id = a.manager_id,
-                manager_name = a.member2.name,
+            var dbReg = Uof.Ireg_abroadService.GetById(id);
+            if (dbReg == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+            dbReg.status = 4;
+            dbReg.date_updated = DateTime.Now;
+            dbReg.date_finish = date_finish;
+            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
 
-                status = a.status,
-                review_status = a.review_status
+            if (r)
+            {
+                var h = new reg_history()
+                {
+                    reg_id = dbReg.id,
+                    name_cn = dbReg.name_cn,
+                    name_en = dbReg.name_en,
+                    address = dbReg.address,
+                    date_setup = dbReg.date_setup,
+                    director = dbReg.director,
+                    region = dbReg.region,
+                    reg_no = dbReg.reg_no
+                };
 
-            }).FirstOrDefault();
+                Uof.Ireg_historyService.AddEntity(h);
 
-            return reg;
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbReg.id,
+                    source_name = "reg_abroad",
+                    title = "完成订单",
+                    content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
+                });
+
+                // TODO 通知 业务员
+            }
+
+            return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult History(int id, int index = 1, int size = 10)
+        {
+            var totalRecord = Uof.Ireg_historyService.GetAll(h => h.reg_id == id).Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + size - 1) / size;
+            }
+            var page = new
+            {
+                current_index = index,
+                current_size = size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+
+            if (totalRecord <= 1)
+            {
+                return Json(new { page = page, items = new List<reg_history>() }, JsonRequestBehavior.AllowGet);
+            }
+
+            var list = Uof.Ireg_historyService.GetAll(h => h.reg_id == id).OrderByDescending(item => item.date_created).ToPagedList(index, size).ToList();
+            
+            var result = new
+            {
+                page = page,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetHistoryTop(int id)
+        {
+            var last = Uof.Ireg_historyService.GetAll(h => h.reg_id == id).OrderByDescending(h => h.id).FirstOrDefault();
+
+            return Json(last, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult AddHistory(reg_history history)
+        {
+            if (history.reg_id == null)
+            {
+                return Json(new { success = false, message = "参数reg_id不可为空" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var dbReg = Uof.Ireg_abroadService.GetAll(a=>a.id == history.reg_id).FirstOrDefault();
+            if (dbReg == null)
+            {
+                return Json(new { success = false, message = "找不到订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (history.address == dbReg.address && 
+                history.date_setup == dbReg.date_setup && 
+                history.director == dbReg.director &&
+                history.name_cn == dbReg.name_cn &&
+                history.name_en == dbReg.name_en && 
+                history.region == dbReg.region &&
+                history.reg_no == dbReg.reg_no)
+            {
+                return Json(new { success = false, message = "您没做任何修改" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbReg.address = history.address ?? dbReg.address;
+            dbReg.date_setup = history.date_setup ?? dbReg.date_setup;
+            dbReg.director = history.director ?? dbReg.director;
+            dbReg.name_cn = history.name_cn ?? dbReg.name_cn;
+            dbReg.name_en = history.name_en ?? dbReg.name_en;
+            dbReg.region = history.region ?? dbReg.region;
+            dbReg.reg_no = history.reg_no ?? dbReg.reg_no;
+
+            dbReg.date_updated = DateTime.Now;
+
+            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+
+            if (r)
+            {
+                Uof.Ireg_historyService.AddEntity(history);
+
+                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
         }
     }
 }

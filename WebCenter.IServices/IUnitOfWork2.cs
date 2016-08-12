@@ -30,6 +30,8 @@ namespace WebCenter.IServices
 	
 	  Ireg_abroadService Ireg_abroadService{get;set;} 
 	
+	  Ireg_historyService Ireg_historyService{get;set;} 
+	
 	  IroleService IroleService{get;set;} 
 	
 	  IsequenceService IsequenceService{get;set;} 

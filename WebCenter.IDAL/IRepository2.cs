@@ -50,6 +50,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface Ireg_historyRepository :IBaseRepository<reg_history>
+    {         
+    }
+	
     public partial interface IroleRepository :IBaseRepository<role>
     {         
     }

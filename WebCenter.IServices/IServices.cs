@@ -54,6 +54,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface Ireg_historyService:IBaseService<reg_history>
+    {   
+    }
+	
 	public partial interface IroleService:IBaseService<role>
     {   
     }

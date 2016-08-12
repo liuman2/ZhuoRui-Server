@@ -125,6 +125,9 @@
     <Compile Include="reg_abroad.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="reg_history.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="role.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

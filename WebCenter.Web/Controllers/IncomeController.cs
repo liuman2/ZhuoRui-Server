@@ -138,7 +138,7 @@ namespace WebCenter.Web.Controllers
                 }
                 if (dbIncome.date_pay != _income.date_pay)
                 {
-                    msg.Add(string.Format("付款日期{0}->{1}", dbIncome.date_pay.Value.ToString("YYYY-MM-DD"), _income.date_pay.Value.ToString("YYYY-MM-DD")));
+                    msg.Add(string.Format("付款日期{0}->{1}", dbIncome.date_pay.Value.ToString("yyyy-MM-dd"), _income.date_pay.Value.ToString("yyyy-MM-dd")));
                 }
 
                 Uof.ItimelineService.AddEntity(new timeline()

@@ -86,6 +86,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  Ireg_historyService Ireg_historyService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IroleService IroleService
     {
         get;

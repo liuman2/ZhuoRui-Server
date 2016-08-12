@@ -62,6 +62,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class reg_historyRepository :BaseRepository<reg_history>,Ireg_historyRepository
+    {
+         
+    }
+	
 	public partial class roleRepository :BaseRepository<role>,IroleRepository
     {
          

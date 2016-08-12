@@ -39,6 +39,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<Ireg_abroadService>().To<reg_abroadService>().InRequestScope();
 	
+	   kernel.Bind<Ireg_historyService>().To<reg_historyService>().InRequestScope();
+	
 	   kernel.Bind<IroleService>().To<roleService>().InRequestScope();
 	
 	   kernel.Bind<IsequenceService>().To<sequenceService>().InRequestScope();

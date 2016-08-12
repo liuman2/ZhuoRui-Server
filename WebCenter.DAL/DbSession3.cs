@@ -29,6 +29,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.Ireg_abroadRepository reg_abroadRepository { get { return new reg_abroadRepository(); } }
 	
+	public IDAL.Ireg_historyRepository reg_historyRepository { get { return new reg_historyRepository(); } }
+	
 	public IDAL.IroleRepository roleRepository { get { return new roleRepository(); } }
 	
 	public IDAL.IsequenceRepository sequenceRepository { get { return new sequenceRepository(); } }

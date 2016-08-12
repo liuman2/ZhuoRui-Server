@@ -39,5 +39,6 @@ namespace WebCenter.Entities
         public virtual DbSet<income> incomes { get; set; }
         public virtual DbSet<reg_abroad> reg_abroad { get; set; }
         public virtual DbSet<timeline> timelines { get; set; }
+        public virtual DbSet<reg_history> reg_history { get; set; }
     }
 }

@@ -46,6 +46,9 @@ namespace WebCenter.IDAL
 		IDAL.Ireg_abroadRepository reg_abroadRepository { get; }
 	  
 
+		IDAL.Ireg_historyRepository reg_historyRepository { get; }
+	  
+
 		IDAL.IroleRepository roleRepository { get; }
 	  
 

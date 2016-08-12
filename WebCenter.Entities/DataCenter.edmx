@@ -186,6 +186,22 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
+        <EntityType Name="reg_history">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="reg_id" Type="int" />
+          <Property Name="name_cn" Type="varchar" MaxLength="100" />
+          <Property Name="name_en" Type="varchar" MaxLength="100" />
+          <Property Name="date_setup" Type="datetime" Precision="0" />
+          <Property Name="reg_no" Type="varchar" MaxLength="100" />
+          <Property Name="region" Type="varchar" MaxLength="50" />
+          <Property Name="address" Type="varchar" MaxLength="300" />
+          <Property Name="director" Type="varchar" MaxLength="20" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
         <EntityType Name="role">
           <Key>
             <PropertyRef Name="id" />
@@ -433,6 +449,7 @@
           <EntitySet Name="organization" EntityType="Self.organization" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="position" EntityType="Self.position" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="reg_abroad" EntityType="Self.reg_abroad" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="reg_history" EntityType="Self.reg_history" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="role" EntityType="Self.role" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="sequence" EntityType="Self.sequence" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="timeline" EntityType="Self.timeline" Schema="zhuoruioa" store:Type="Tables" />
@@ -592,6 +609,7 @@
             <End Role="reg_abroad" EntitySet="reg_abroad" />
           </AssociationSet>
           <EntitySet Name="timelines" EntityType="DataCenter.Entities.timeline" />
+          <EntitySet Name="reg_history" EntityType="DataCenter.Entities.reg_history" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -1043,6 +1061,22 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
         </EntityType>
+        <EntityType Name="reg_history">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="reg_id" Type="Int32" />
+          <Property Name="name_cn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="name_en" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="date_setup" Type="DateTime" />
+          <Property Name="reg_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="region" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="director" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1271,6 +1305,23 @@
                 <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="source_name" ColumnName="source_name" />
                 <ScalarProperty Name="source_id" ColumnName="source_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reg_history">
+            <EntityTypeMapping TypeName="DataCenter.Entities.reg_history">
+              <MappingFragment StoreEntitySet="reg_history">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="director" ColumnName="director" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="region" ColumnName="region" />
+                <ScalarProperty Name="reg_no" ColumnName="reg_no" />
+                <ScalarProperty Name="date_setup" ColumnName="date_setup" />
+                <ScalarProperty Name="name_en" ColumnName="name_en" />
+                <ScalarProperty Name="name_cn" ColumnName="name_cn" />
+                <ScalarProperty Name="reg_id" ColumnName="reg_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

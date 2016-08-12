@@ -123,6 +123,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class reg_historyService:BaseService<reg_history>,Ireg_historyService
+    {   
+        public reg_historyService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.reg_historyRepository;
+        }  
+    }
+	
 	public partial class roleService:BaseService<role>,IroleService
     {   
         public roleService()
