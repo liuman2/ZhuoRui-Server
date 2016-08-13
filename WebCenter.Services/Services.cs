@@ -23,6 +23,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class auditService:BaseService<audit>,IauditService
+    {   
+        public auditService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.auditRepository;
+        }  
+    }
+	
 	public partial class bank_accountService:BaseService<bank_account>,Ibank_accountService
     {   
         public bank_accountService()
@@ -130,6 +140,26 @@ namespace WebCenter.Services
         public override void SetCurrentRepository()
         {
             CurrentRepository = _dbSession.reg_historyRepository;
+        }  
+    }
+	
+	public partial class reg_internalService:BaseService<reg_internal>,Ireg_internalService
+    {   
+        public reg_internalService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.reg_internalRepository;
+        }  
+    }
+	
+	public partial class reg_internal_historyService:BaseService<reg_internal_history>,Ireg_internal_historyService
+    {   
+        public reg_internal_historyService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.reg_internal_historyRepository;
         }  
     }
 	

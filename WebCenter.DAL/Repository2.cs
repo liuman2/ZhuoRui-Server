@@ -12,6 +12,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class auditRepository :BaseRepository<audit>,IauditRepository
+    {
+         
+    }
+	
 	public partial class bank_accountRepository :BaseRepository<bank_account>,Ibank_accountRepository
     {
          
@@ -63,6 +68,16 @@ namespace WebCenter.DAL
     }
 	
 	public partial class reg_historyRepository :BaseRepository<reg_history>,Ireg_historyRepository
+    {
+         
+    }
+	
+	public partial class reg_internalRepository :BaseRepository<reg_internal>,Ireg_internalRepository
+    {
+         
+    }
+	
+	public partial class reg_internal_historyRepository :BaseRepository<reg_internal_history>,Ireg_internal_historyRepository
     {
          
     }

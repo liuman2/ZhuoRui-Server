@@ -12,12 +12,12 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class reg_abroad:BaseModel
+    public partial class audit:BaseModel
     {
     
     
     
-    [EntityPrimKey("reg_abroad")]
+    [EntityPrimKey("audit")]
         public int id { get; set; }
     
     
@@ -27,6 +27,10 @@ namespace WebCenter.Entities
     
     
         public string code { get; set; }
+    
+    
+    
+        public string type { get; set; }
     
     
     
@@ -42,27 +46,55 @@ namespace WebCenter.Entities
     
     
     
-        public string reg_no { get; set; }
-    
-    
-    
-        public string region { get; set; }
-    
-    
-    
         public string address { get; set; }
     
     
     
-        public string director { get; set; }
+        public string business_area { get; set; }
     
     
     
-        public Nullable<sbyte> is_open_bank { get; set; }
+        public string trade_mode { get; set; }
     
     
     
-        public Nullable<int> bank_id { get; set; }
+        public Nullable<sbyte> has_parent { get; set; }
+    
+    
+    
+        public Nullable<int> account_number { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> account_period_start { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> account_period_end { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> date_year_end { get; set; }
+    
+    
+    
+        public Nullable<float> turnover { get; set; }
+    
+    
+    
+        public Nullable<float> amount_bank { get; set; }
+    
+    
+    
+        public Nullable<int> bill_number { get; set; }
+    
+    
+    
+        public string accounting_standard { get; set; }
+    
+    
+    
+        public Nullable<float> cost_accounting { get; set; }
     
     
     
@@ -74,27 +106,11 @@ namespace WebCenter.Entities
     
     
     
-        public string invoice_name { get; set; }
+        public string currency { get; set; }
     
     
     
-        public string invoice_tax { get; set; }
-    
-    
-    
-        public string invoice_address { get; set; }
-    
-    
-    
-        public string invoice_tel { get; set; }
-    
-    
-    
-        public string invoice_bank { get; set; }
-    
-    
-    
-        public string invoice_account { get; set; }
+        public string progress { get; set; }
     
     
     
@@ -138,19 +154,15 @@ namespace WebCenter.Entities
     
     
     
+        public Nullable<int> accountant_id { get; set; }
+    
+    
+    
         public Nullable<int> salesman_id { get; set; }
     
     
     
-        public Nullable<int> waiter_id { get; set; }
-    
-    
-    
         public Nullable<int> manager_id { get; set; }
-    
-    
-    
-        public Nullable<int> outworker_id { get; set; }
     
     
     
@@ -168,18 +180,12 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
-    
-    
-        public string currency { get; set; }
-    
-        public virtual bank_account bank_account { get; set; }
-        public virtual customer customer { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
+        public virtual customer customer { get; set; }
         public virtual member member2 { get; set; }
         public virtual member member3 { get; set; }
         public virtual member member4 { get; set; }
         public virtual member member5 { get; set; }
-        public virtual member member6 { get; set; }
     }
 }

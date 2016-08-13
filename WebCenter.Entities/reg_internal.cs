@@ -12,12 +12,12 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class reg_abroad:BaseModel
+    public partial class reg_internal:BaseModel
     {
     
     
     
-    [EntityPrimKey("reg_abroad")]
+    [EntityPrimKey("reg_internal")]
         public int id { get; set; }
     
     
@@ -34,10 +34,6 @@ namespace WebCenter.Entities
     
     
     
-        public string name_en { get; set; }
-    
-    
-    
         public Nullable<System.DateTime> date_setup { get; set; }
     
     
@@ -46,11 +42,11 @@ namespace WebCenter.Entities
     
     
     
-        public string region { get; set; }
-    
-    
-    
         public string address { get; set; }
+    
+    
+    
+        public string legal { get; set; }
     
     
     
@@ -58,11 +54,23 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<sbyte> is_open_bank { get; set; }
-    
-    
-    
         public Nullable<int> bank_id { get; set; }
+    
+    
+    
+        public string taxpayer { get; set; }
+    
+    
+    
+        public Nullable<sbyte> is_customs { get; set; }
+    
+    
+    
+        public string customs_name { get; set; }
+    
+    
+    
+        public string customs_address { get; set; }
     
     
     
@@ -71,6 +79,14 @@ namespace WebCenter.Entities
     
     
         public Nullable<float> amount_transaction { get; set; }
+    
+    
+    
+        public Nullable<sbyte> is_bookkeeping { get; set; }
+    
+    
+    
+        public Nullable<float> amount_bookkeeping { get; set; }
     
     
     
@@ -131,6 +147,10 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_finish { get; set; }
+    
+    
+    
+        public string progress { get; set; }
     
     
     

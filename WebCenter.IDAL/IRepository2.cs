@@ -10,6 +10,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IauditRepository :IBaseRepository<audit>
+    {         
+    }
+	
     public partial interface Ibank_accountRepository :IBaseRepository<bank_account>
     {         
     }
@@ -51,6 +55,14 @@ namespace WebCenter.IDAL
     }
 	
     public partial interface Ireg_historyRepository :IBaseRepository<reg_history>
+    {         
+    }
+	
+    public partial interface Ireg_internalRepository :IBaseRepository<reg_internal>
+    {         
+    }
+	
+    public partial interface Ireg_internal_historyRepository :IBaseRepository<reg_internal_history>
     {         
     }
 	

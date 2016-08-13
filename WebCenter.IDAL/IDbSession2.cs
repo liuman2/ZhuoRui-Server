@@ -16,6 +16,9 @@ namespace WebCenter.IDAL
 		IDAL.IareaRepository areaRepository { get; }
 	  
 
+		IDAL.IauditRepository auditRepository { get; }
+	  
+
 		IDAL.Ibank_accountRepository bank_accountRepository { get; }
 	  
 
@@ -47,6 +50,12 @@ namespace WebCenter.IDAL
 	  
 
 		IDAL.Ireg_historyRepository reg_historyRepository { get; }
+	  
+
+		IDAL.Ireg_internalRepository reg_internalRepository { get; }
+	  
+
+		IDAL.Ireg_internal_historyRepository reg_internal_historyRepository { get; }
 	  
 
 		IDAL.IroleRepository roleRepository { get; }

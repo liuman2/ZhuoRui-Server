@@ -9,6 +9,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.IareaRepository areaRepository { get { return new areaRepository(); } }
 	
+	public IDAL.IauditRepository auditRepository { get { return new auditRepository(); } }
+	
 	public IDAL.Ibank_accountRepository bank_accountRepository { get { return new bank_accountRepository(); } }
 	
 	public IDAL.IcustomerRepository customerRepository { get { return new customerRepository(); } }
@@ -30,6 +32,10 @@ namespace WebCenter.DAL
 	public IDAL.Ireg_abroadRepository reg_abroadRepository { get { return new reg_abroadRepository(); } }
 	
 	public IDAL.Ireg_historyRepository reg_historyRepository { get { return new reg_historyRepository(); } }
+	
+	public IDAL.Ireg_internalRepository reg_internalRepository { get { return new reg_internalRepository(); } }
+	
+	public IDAL.Ireg_internal_historyRepository reg_internal_historyRepository { get { return new reg_internal_historyRepository(); } }
 	
 	public IDAL.IroleRepository roleRepository { get { return new roleRepository(); } }
 	

@@ -19,6 +19,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<IareaService>().To<areaService>().InRequestScope();
 	
+	   kernel.Bind<IauditService>().To<auditService>().InRequestScope();
+	
 	   kernel.Bind<Ibank_accountService>().To<bank_accountService>().InRequestScope();
 	
 	   kernel.Bind<IcustomerService>().To<customerService>().InRequestScope();
@@ -40,6 +42,10 @@ private void AutoAddBinds()
 	   kernel.Bind<Ireg_abroadService>().To<reg_abroadService>().InRequestScope();
 	
 	   kernel.Bind<Ireg_historyService>().To<reg_historyService>().InRequestScope();
+	
+	   kernel.Bind<Ireg_internalService>().To<reg_internalService>().InRequestScope();
+	
+	   kernel.Bind<Ireg_internal_historyService>().To<reg_internal_historyService>().InRequestScope();
 	
 	   kernel.Bind<IroleService>().To<roleService>().InRequestScope();
 	

@@ -20,6 +20,8 @@ namespace WebCenter.Entities
             this.customer_timeline = new HashSet<customer_timeline>();
             this.incomes = new HashSet<income>();
             this.reg_abroad = new HashSet<reg_abroad>();
+            this.reg_internal = new HashSet<reg_internal>();
+            this.audits = new HashSet<audit>();
         }
     
     
@@ -126,5 +128,7 @@ namespace WebCenter.Entities
         public virtual ICollection<customer_timeline> customer_timeline { get; set; }
         public virtual ICollection<income> incomes { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
+        public virtual ICollection<reg_internal> reg_internal { get; set; }
+        public virtual ICollection<audit> audits { get; set; }
     }
 }

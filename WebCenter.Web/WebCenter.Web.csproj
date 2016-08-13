@@ -217,6 +217,7 @@
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Controllers\PositionController.cs" />
     <Compile Include="Controllers\RegAbroadController.cs" />
+    <Compile Include="Controllers\RegInternalController.cs" />
     <Compile Include="Controllers\ReserveController.cs" />
     <Compile Include="Controllers\TimelineController.cs" />
     <Compile Include="Filters\JsonAttribute.cs" />

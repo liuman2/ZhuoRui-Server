@@ -27,7 +27,8 @@ INSERT INTO `sequence` VALUES ('customer_timeline', '1');
 INSERT INTO `sequence` VALUES ('income', '1');
 INSERT INTO `sequence` VALUES ('timeline', '1');
 INSERT INTO `sequence` VALUES ('reg_history', '1');
-
+INSERT INTO `sequence` VALUES ('reg_internal_history', '1');
+INSERT INTO `sequence` VALUES ('reg_internal', '1');
 -- ----------------------------
 -- Table structure for organization
 -- ----------------------------
@@ -166,13 +167,16 @@ CREATE TABLE `dictionary_group` (
 -- Records of dictionary_type
 -- ----------------------------
 INSERT INTO `dictionary_group` VALUES ('1', '行业类别', '行业类别');
-INSERT INTO `dictionary_group` VALUES ('2', '客户来源',  '客户来源');
-INSERT INTO `dictionary_group` VALUES ('3', '贸易方式', '贸易方式');
-INSERT INTO `dictionary_group` VALUES ('4', '注册方式', '注册方式');
-INSERT INTO `dictionary_group` VALUES ('5', '专利类型', '专利类型');
-INSERT INTO `dictionary_group` VALUES ('6', '专利用途', '专利用途');
-INSERT INTO `dictionary_group` VALUES ('7', '注册地区', '注册地区');
-
+INSERT INTO `dictionary_group` VALUES ('2', '业务性质', '业务性质');
+INSERT INTO `dictionary_group` VALUES ('3', '业务范围', '业务范围');
+INSERT INTO `dictionary_group` VALUES ('4', '客户来源',  '客户来源');
+INSERT INTO `dictionary_group` VALUES ('5', '贸易方式', '贸易方式');
+INSERT INTO `dictionary_group` VALUES ('6', '注册方式', '注册方式');
+INSERT INTO `dictionary_group` VALUES ('7', '专利类型', '专利类型');
+INSERT INTO `dictionary_group` VALUES ('8', '专利用途', '专利用途');
+INSERT INTO `dictionary_group` VALUES ('9', '注册地区', '注册地区');
+INSERT INTO `dictionary_group` VALUES ('10', '纳税人资格', '纳税人资格');
+INSERT INTO `dictionary_group` VALUES ('11', '币别', '币别');
 -- ----------------------------
 -- Table structure for dictionary
 -- ----------------------------
@@ -192,7 +196,11 @@ INSERT INTO `dictionary` VALUES ('2', '客户来源', '现场开发', 1, null, n
 INSERT INTO `dictionary` VALUES ('3', '客户来源', '电话开发', 1, null, null);
 INSERT INTO `dictionary` VALUES ('4', '客户来源', '视频开发', 1, null, null);
 INSERT INTO `dictionary` VALUES ('5', '客户来源', '客户介绍', 1, null, null);
-
+INSERT INTO `dictionary` VALUES ('6', '纳税人资格', '一般纳税人', 1, null, null);
+INSERT INTO `dictionary` VALUES ('7', '纳税人资格', '小规模纳税人', 1, null, null);
+INSERT INTO `dictionary` VALUES ('8', '币别', '人民币', 1, null, null);
+INSERT INTO `dictionary` VALUES ('9', '币别', '港币', 1, null, null);
+INSERT INTO `dictionary` VALUES ('10', '币别', '美元', 1, null, null);
 
 -- ----------------------------
 -- Table structure for customer
@@ -260,7 +268,6 @@ CREATE TABLE `bank_account` (
   CONSTRAINT `bank_account_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 DROP TABLE IF EXISTS `reg_abroad`;
 CREATE TABLE `reg_abroad` (
   `id` int(11) NOT NULL,
@@ -277,6 +284,7 @@ CREATE TABLE `reg_abroad` (
   `bank_id` int(11) NULL COMMENT '开户行ID',
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
   `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
+  `currency` varchar(10) DEFAULT NULL COMMENT '币别',
 
   `invoice_name` varchar(200) DEFAULT NULL COMMENT '开票信息名称',
   `invoice_tax` varchar(200) DEFAULT NULL COMMENT '开票信息纳税人识别号',
@@ -346,7 +354,7 @@ CREATE TABLE `reg_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `reg_internal`;
-CREATE TABLE `reg_abroad` (
+CREATE TABLE `reg_internal` (
   `id` int(11) NOT NULL,
   `customer_id` int(11) NULL,
   `code` varchar(20) DEFAULT NULL COMMENT '档案号',
@@ -358,11 +366,12 @@ CREATE TABLE `reg_abroad` (
   `director` varchar(20) DEFAULT NULL COMMENT '公司监事',
   `bank_id` int(11) NULL COMMENT '开户行ID',
   `taxpayer` varchar(10) DEFAULT NULL COMMENT '纳税人资格',
-  `is_customs` tinyint(3) NULL COMMENT '是否是否海关备案',
+  `is_customs` tinyint(3) NULL COMMENT '是否海关备案',
   `customs_name` varchar(300) DEFAULT NULL COMMENT '海关备案英文名称',
   `customs_address` varchar(300) DEFAULT NULL COMMENT '海关备案英文地址',
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
   `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
+  `currency` varchar(10) DEFAULT NULL COMMENT '币别',
   `is_bookkeeping` tinyint(3) NULL COMMENT '是否在我司代理记账',
   `amount_bookkeeping` float(255,2) DEFAULT NULL COMMENT '代理记账费用',
 
@@ -419,14 +428,27 @@ CREATE TABLE `reg_abroad` (
   CONSTRAINT `reg_internal_ibfk_bank` FOREIGN KEY (`bank_id`) REFERENCES `bank_account` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
+DROP TABLE IF EXISTS `reg_internal_history`;
+CREATE TABLE `reg_internal_history` (
+  `id` int(11) NOT NULL,
+  `reg_id` int(11) NULL,
+  `name_cn` varchar(100) DEFAULT NULL COMMENT '公司中文名称',
+  `date_setup` datetime DEFAULT NULL COMMENT '公司成立日期',
+  `reg_no` varchar(100) DEFAULT NULL COMMENT '公司注册编号',
+  `address` varchar(300) DEFAULT NULL COMMENT '公司注册地址',
+  `legal` varchar(20) DEFAULT NULL COMMENT '公司法人',
+  `director` varchar(20) DEFAULT NULL COMMENT '公司董事',
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `income`;
 CREATE TABLE `income` (
   `id` int(11) NOT NULL,
   `customer_id` int(11) NULL,
   `source_id` int(11) NULL,
-  `source_name` varchar(10) DEFAULT NULL,
+  `source_name` varchar(20) DEFAULT NULL,
   `payer` varchar(100) DEFAULT NULL COMMENT '付款人',
   `account` varchar(100) DEFAULT NULL COMMENT '付款账号',
   `amount` float(255,2) DEFAULT NULL COMMENT '付款金额',
@@ -444,12 +466,76 @@ DROP TABLE IF EXISTS `timeline`;
 CREATE TABLE `timeline` (
   `id` int(11) NOT NULL,
   `source_id` int(11) NULL,
-  `source_name` varchar(10) DEFAULT NULL,
+  `source_name` varchar(20) DEFAULT NULL,
   `title` varchar(100) DEFAULT NULL,
   `content` varchar(500) DEFAULT NULL,
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `audit`;
+CREATE TABLE `audit` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NULL,
+  `code` varchar(20) DEFAULT NULL COMMENT '档案号',
+  `type` varchar(10) DEFAULT NULL COMMENT '单据类别境内外',
+  `name_cn` varchar(100) DEFAULT NULL COMMENT '公司中文名称',
+  `name_en` varchar(100) DEFAULT NULL COMMENT '公司英文名称',
+  `date_setup` datetime DEFAULT NULL COMMENT '公司成立日期',
+  `address` varchar(300) DEFAULT NULL COMMENT '公司注册地址',
+  `business_area` varchar(60) DEFAULT NULL COMMENT '业务范围',
+  `trade_mode` varchar(60) DEFAULT NULL COMMENT '贸易方式',
+  `has_parent` tinyint(3) NULL COMMENT '有无子母公司',
+  `account_number` int(11) NULL COMMENT '做账次数',
+  `account_period_start` datetime DEFAULT NULL COMMENT '起始账期',
+  `account_period_end` datetime DEFAULT NULL COMMENT '结束账期',
+  `date_year_end` datetime DEFAULT NULL COMMENT '年结日',
+  `turnover` float(255,2) DEFAULT NULL COMMENT '营业额',
+  `amount_bank` float(255,2) DEFAULT NULL COMMENT '银行入账金额',
+  `bill_number` int(11) NULL COMMENT '单据量',
+  `accounting_standard` varchar(50) DEFAULT NULL COMMENT '会计准则',
+  `cost_accounting` float(255,2) DEFAULT NULL COMMENT '做账费用',
+  `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
+  `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
+  `currency` varchar(10) DEFAULT NULL COMMENT '币别',
+  `progress` varchar(50) DEFAULT NULL COMMENT '审计进度',
+
+  `status` tinyint(3) NULL COMMENT '订单状态 状态:0-未提交, 1-已提交, 2-财务已审核, 3-提交人已审核, 4-完成',
+  `finance_reviewer_id` int(11) DEFAULT NULL COMMENT '财务审核人员ID',
+  `finance_review_date` datetime DEFAULT NULL COMMENT '财务审核日期',
+  `finance_review_moment` varchar(100) DEFAULT NULL COMMENT '财务审核意见',
+
+  `submit_reviewer_id` int(11) DEFAULT NULL COMMENT '提交审核人员ID',
+  `submit_review_date` datetime DEFAULT NULL COMMENT '提交审核日期',
+  `submit_review_moment` varchar(100) DEFAULT NULL COMMENT '提交审核意见',
+  `review_status` int(11) DEFAULT NULL COMMENT '审核状体 未审核：-1；未通过：0；已通过：1',
+  `date_finish` datetime DEFAULT NULL COMMENT '完成时间',
+
+  `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
+  `accountant_id` int(11) DEFAULT NULL COMMENT '会计',
+  `salesman_id` int(11) DEFAULT NULL COMMENT '业务员',
+  `manager_id` int(11) DEFAULT NULL COMMENT '经理',
+  `organization_id` int(11) DEFAULT NULL COMMENT '业务员部门',
+  `description` varchar(100) NULL,
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `customer_id` (`customer_id`),
+  KEY `creator_id` (`creator_id`),
+  KEY `salesman_id` (`salesman_id`),
+  KEY `accountant_id` (`accountant_id`),
+  KEY `manager_id` (`manager_id`),
+  KEY `finance_reviewer_id` (`finance_reviewer_id`),
+  KEY `submit_reviewer_id` (`submit_reviewer_id`),
+
+  CONSTRAINT `audit_ibfk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
+  CONSTRAINT `audit_ibfk_creator` FOREIGN KEY (`creator_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `audit_ibfk_salesman` FOREIGN KEY (`salesman_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `audit_ibfk_accountant` FOREIGN KEY (`accountant_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `audit_ibfk_manager` FOREIGN KEY (`manager_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `audit_ibfk_finance_reviewer` FOREIGN KEY (`finance_reviewer_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `audit_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

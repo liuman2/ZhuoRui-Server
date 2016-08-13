@@ -12,35 +12,41 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class bank_account:BaseModel
+    public partial class reg_internal_history:BaseModel
     {
-        public bank_account()
-        {
-            this.reg_abroad = new HashSet<reg_abroad>();
-            this.reg_internal = new HashSet<reg_internal>();
-        }
     
     
     
-    
-    [EntityPrimKey("bank_account")]
+    [EntityPrimKey("reg_internal_history")]
         public int id { get; set; }
     
     
     
-        public Nullable<int> customer_id { get; set; }
+        public Nullable<int> reg_id { get; set; }
     
     
     
-        public string bank { get; set; }
+        public string name_cn { get; set; }
     
     
     
-        public string holder { get; set; }
+        public Nullable<System.DateTime> date_setup { get; set; }
     
     
     
-        public string account { get; set; }
+        public string reg_no { get; set; }
+    
+    
+    
+        public string address { get; set; }
+    
+    
+    
+        public string legal { get; set; }
+    
+    
+    
+        public string director { get; set; }
     
     
     
@@ -49,9 +55,5 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
-    
-        public virtual customer customer { get; set; }
-        public virtual ICollection<reg_abroad> reg_abroad { get; set; }
-        public virtual ICollection<reg_internal> reg_internal { get; set; }
     }
 }

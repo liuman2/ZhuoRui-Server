@@ -10,6 +10,8 @@ namespace WebCenter.IServices
 	
 	  IareaService IareaService{get;set;} 
 	
+	  IauditService IauditService{get;set;} 
+	
 	  Ibank_accountService Ibank_accountService{get;set;} 
 	
 	  IcustomerService IcustomerService{get;set;} 
@@ -31,6 +33,10 @@ namespace WebCenter.IServices
 	  Ireg_abroadService Ireg_abroadService{get;set;} 
 	
 	  Ireg_historyService Ireg_historyService{get;set;} 
+	
+	  Ireg_internalService Ireg_internalService{get;set;} 
+	
+	  Ireg_internal_historyService Ireg_internal_historyService{get;set;} 
 	
 	  IroleService IroleService{get;set;} 
 	

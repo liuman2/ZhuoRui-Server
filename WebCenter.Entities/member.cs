@@ -25,6 +25,19 @@ namespace WebCenter.Entities
             this.reg_abroad4 = new HashSet<reg_abroad>();
             this.reg_abroad5 = new HashSet<reg_abroad>();
             this.reg_abroad6 = new HashSet<reg_abroad>();
+            this.reg_internal = new HashSet<reg_internal>();
+            this.reg_internal1 = new HashSet<reg_internal>();
+            this.reg_internal2 = new HashSet<reg_internal>();
+            this.reg_internal3 = new HashSet<reg_internal>();
+            this.reg_internal4 = new HashSet<reg_internal>();
+            this.reg_internal5 = new HashSet<reg_internal>();
+            this.reg_internal6 = new HashSet<reg_internal>();
+            this.audits = new HashSet<audit>();
+            this.audits1 = new HashSet<audit>();
+            this.audits2 = new HashSet<audit>();
+            this.audits3 = new HashSet<audit>();
+            this.audits4 = new HashSet<audit>();
+            this.audits5 = new HashSet<audit>();
         }
     
     
@@ -97,5 +110,18 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad4 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad5 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad6 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal { get; set; }
+        public virtual ICollection<reg_internal> reg_internal1 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal2 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal3 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal4 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal5 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal6 { get; set; }
+        public virtual ICollection<audit> audits { get; set; }
+        public virtual ICollection<audit> audits1 { get; set; }
+        public virtual ICollection<audit> audits2 { get; set; }
+        public virtual ICollection<audit> audits3 { get; set; }
+        public virtual ICollection<audit> audits4 { get; set; }
+        public virtual ICollection<audit> audits5 { get; set; }
     }
 }

@@ -16,6 +16,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IauditService IauditService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  Ibank_accountService Ibank_accountService
     {
         get;
@@ -87,6 +94,20 @@ namespace WebCenter.Services
 	
   [Ninject.Inject]
 	 public  Ireg_historyService Ireg_historyService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  Ireg_internalService Ireg_internalService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  Ireg_internal_historyService Ireg_internal_historyService
     {
         get;
         set;

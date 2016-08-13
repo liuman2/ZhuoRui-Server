@@ -9,9 +9,9 @@ using System.Collections.Generic;
 
 namespace WebCenter.Web.Controllers
 {
-    public class RegAbroadController : BaseController
+    public class RegInternalController : BaseController
     {
-        public RegAbroadController(IUnitOfWork UOF)
+        public RegInternalController(IUnitOfWork UOF)
             : base(UOF)
         {
 
@@ -36,11 +36,11 @@ namespace WebCenter.Web.Controllers
             var userId = 0;
             int.TryParse(arrs[0], out userId);
 
-            Expression<Func<reg_abroad, bool>> condition = c => c.salesman_id == userId;
+            Expression<Func<reg_internal, bool>> condition = c => c.salesman_id == userId;
             // 客户id
             if (request.customer_id != null && request.customer_id.Value > 0)
             {
-                Expression<Func<reg_abroad, bool>> tmp = c => (c.customer_id == request.customer_id);
+                Expression<Func<reg_internal, bool>> tmp = c => (c.customer_id == request.customer_id);
                 condition = tmp;
             }
             // 订单状态
@@ -48,36 +48,37 @@ namespace WebCenter.Web.Controllers
             {
                 if (request.status == 2)
                 {
-                    Expression<Func<reg_abroad, bool>> tmp = c => (c.status == 2 || c.status == 3);
+                    Expression<Func<reg_internal, bool>> tmp = c => (c.status == 2 || c.status == 3);
                     condition = tmp;
                 }
                 else
                 {
-                    Expression<Func<reg_abroad, bool>> tmp = c => (c.status == request.status.Value);
+                    Expression<Func<reg_internal, bool>> tmp = c => (c.status == request.status.Value);
                     condition = tmp;
                 }                
             }
             // 成交开始日期
             if (request.start_time != null)
             {
-                Expression<Func<reg_abroad, bool>> tmp = c => (c.date_transaction >= request.start_time.Value);
+                Expression<Func<reg_internal, bool>> tmp = c => (c.date_transaction >= request.start_time.Value);
                 condition = tmp;
             }
             // 成交结束日期
             if (request.end_time != null)
             {
                 var endTime = request.end_time.Value.AddDays(1);
-                Expression<Func<reg_abroad, bool>> tmp = c => (c.date_transaction < endTime);
+                Expression<Func<reg_internal, bool>> tmp = c => (c.date_transaction < endTime);
                 condition = tmp;
             }
             
-            var list = Uof.Ireg_abroadService.GetAll(condition).OrderByDescending(item => item.id).Select(c => new
+            var list = Uof.Ireg_internalService.GetAll(condition).OrderByDescending(item => item.id).Select(c => new
             {
                 id = c.id,
                 customer_id = c.customer_id,
                 customer_name = c.customer.name,
                 name_cn = c.name_cn,
-                name_en = c.name_en,
+                address = c.address,
+                legal = c.legal,
                 status = c.status,
                 review_status = c.review_status,
                 date_transaction = c.date_transaction,
@@ -89,7 +90,7 @@ namespace WebCenter.Web.Controllers
 
             }).ToPagedList(request.index, request.size).ToList();
 
-            var totalRecord = Uof.Ireg_abroadService.GetAll(condition).Count();
+            var totalRecord = Uof.Ireg_internalService.GetAll(condition).Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
@@ -113,45 +114,37 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(reg_abroad aboad)
+        public ActionResult Add(reg_internal reginternal)
         {
-            if (aboad.customer_id == null)
+            if (reginternal.customer_id == null)
             {
                 return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
             }
-            if (string.IsNullOrEmpty(aboad.name_cn))
+            if (string.IsNullOrEmpty(reginternal.name_cn))
             {
                 return Json(new { success = false, message = "请填写公司中文名称" }, JsonRequestBehavior.AllowGet);
             }
-            if (string.IsNullOrEmpty(aboad.name_en))
-            {
-                return Json(new { success = false, message = "请填写公司英文名称" }, JsonRequestBehavior.AllowGet);
-            }
-            if (aboad.date_setup == null)
+            if (reginternal.date_setup == null)
             {
                 return Json(new { success = false, message = "请填写公司成立日期" }, JsonRequestBehavior.AllowGet);
             }
-            if (string.IsNullOrEmpty(aboad.reg_no))
+            if (string.IsNullOrEmpty(reginternal.reg_no))
             {
-                return Json(new { success = false, message = "请填写公司注册编号" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "请填写统一信用编号" }, JsonRequestBehavior.AllowGet);
             }
-            if (string.IsNullOrEmpty(aboad.region))
-            {
-                return Json(new { success = false, message = "请填写公司注册地区" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(aboad.address))
+            if (string.IsNullOrEmpty(reginternal.address))
             {
                 return Json(new { success = false, message = "请填写公司注册地址" }, JsonRequestBehavior.AllowGet);
             }
-            if (aboad.date_transaction == null)
+            if (reginternal.date_transaction == null)
             {
                 return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
             }
-            if (aboad.amount_transaction == null)
+            if (reginternal.amount_transaction == null)
             {
                 return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
             }
-            if (aboad.waiter_id == null)
+            if (reginternal.waiter_id == null)
             {
                 return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
             }
@@ -175,39 +168,45 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[2], out organization_id);
 
             // TODO: 自动编码
-            aboad.code = "";
+            reginternal.code = "";
 
-            aboad.status = 0;
-            aboad.review_status = -1;
-            aboad.creator_id = userId;
-            aboad.salesman_id = userId;
-            aboad.organization_id = organization_id;
+            reginternal.status = 0;
+            reginternal.review_status = -1;
+            reginternal.creator_id = userId;
+            reginternal.salesman_id = userId;
+            reginternal.organization_id = organization_id;
 
-            if (aboad.is_open_bank == 0)
+            if (reginternal.is_customs == 0)
             {
-                aboad.bank_id = null;
+                reginternal.customs_name = null;
+                reginternal.customs_address = null;
             }
 
-            var newAbroad = Uof.Ireg_abroadService.AddEntity(aboad);
-            if (newAbroad == null)
+            if (reginternal.is_bookkeeping == 0)
+            {
+                reginternal.amount_bookkeeping = null;
+            }
+
+            var newInternal = Uof.Ireg_internalService.AddEntity(reginternal);
+            if (newInternal == null)
             {
                 return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
             }
 
             Uof.ItimelineService.AddEntity(new timeline()
             {
-                source_id = newAbroad.id,
-                source_name = "reg_abroad",
+                source_id = newInternal.id,
+                source_name = "reg_internal",
                 title = "新建订单",
-                content = string.Format("{0}新建了订单, 单号{1}", arrs[3], aboad.code)
+                content = string.Format("{0}新建了订单, 单号{1}", arrs[3], newInternal.code)
             });
 
-            return Json(new { id = newAbroad.id }, JsonRequestBehavior.AllowGet);
+            return Json(new { id = newInternal.id }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Get(int id)
         {
-            var reg = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new
+            var reg = Uof.Ireg_internalService.GetAll(a => a.id == id).Select(a => new
             {
                 id = a.id,
                 customer_id = a.customer_id,
@@ -223,19 +222,23 @@ namespace WebCenter.Web.Controllers
 
                 code = a.code,
                 name_cn = a.name_cn,
-                name_en = a.name_en,
                 date_setup = a.date_setup,
                 reg_no = a.reg_no,
-                region = a.region,
                 address = a.address,
+                legal = a.legal,
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
                 director = a.director,
-                is_open_bank = a.is_open_bank,
                 bank_id = a.bank_id,
                 bank_name = a.bank_account.bank,
                 holder = a.bank_account.holder,
                 account = a.bank_account.account,
+                taxpayer = a.taxpayer,
+                is_customs = a.is_customs,
+                customs_name = a.customs_name,
+                customs_address = a.customs_address,
+                is_bookkeeping = a.is_bookkeeping,
+                amount_bookkeeping = a.amount_bookkeeping,
                 date_finish = a.date_finish,
                 currency = a.currency,
 
@@ -252,6 +255,8 @@ namespace WebCenter.Web.Controllers
                 waiter_name = a.member6.name,
                 manager_id = a.manager_id,
                 manager_name = a.member2.name,
+                outworker_id = a.outworker_id,
+                outworker_name = a.member3.name,
 
                 status = a.status,
                 review_status = a.review_status
@@ -263,7 +268,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetView(int id)
         {
-            var reg = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new
+            var reg = Uof.Ireg_internalService.GetAll(a => a.id == id).Select(a => new
             {
                 id = a.id,
                 customer_id = a.customer_id,
@@ -279,19 +284,23 @@ namespace WebCenter.Web.Controllers
 
                 code = a.code,
                 name_cn = a.name_cn,
-                name_en = a.name_en,
                 date_setup = a.date_setup,
                 reg_no = a.reg_no,
-                region = a.region,
                 address = a.address,
+                legal = a.legal,
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
                 director = a.director,
-                is_open_bank = a.is_open_bank,
                 bank_id = a.bank_id,
                 bank_name = a.bank_account.bank,
                 holder = a.bank_account.holder,
                 account = a.bank_account.account,
+                taxpayer = a.taxpayer,
+                is_customs = a.is_customs,
+                customs_name = a.customs_name,
+                customs_address = a.customs_address,
+                is_bookkeeping = a.is_bookkeeping,
+                amount_bookkeeping = a.amount_bookkeeping,
                 date_finish = a.date_finish,
                 currency = a.currency,
 
@@ -308,14 +317,15 @@ namespace WebCenter.Web.Controllers
                 waiter_name = a.member6.name,
                 manager_id = a.manager_id,
                 manager_name = a.member2.name,
-                
+                outworker_id = a.outworker_id,
+                outworker_name = a.member3.name,
 
                 status = a.status,
                 review_status = a.review_status
 
             }).FirstOrDefault();
 
-            var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.customer_id == i.customer_id && i.source_name == "reg_abroad").ToList();
+            var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.customer_id == i.customer_id && i.source_name == "reg_internal").ToList();
 
             var total = 0f;
             if (list.Count > 0)
@@ -336,19 +346,23 @@ namespace WebCenter.Web.Controllers
             return Json(new { order = reg, incomes = incomes }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Update(reg_abroad reg)
+        public ActionResult Update(reg_internal reg)
         {
-            var dbReg = Uof.Ireg_abroadService.GetById(reg.id);
+            var dbReg = Uof.Ireg_internalService.GetById(reg.id);
 
-            if (reg.customer_id == dbReg.customer_id && 
-                reg.name_cn == dbReg.name_cn && 
-                reg.name_en == dbReg.name_en &&
+            if (reg.customer_id == dbReg.customer_id &&
+                reg.name_cn == dbReg.name_cn &&
                 reg.date_setup == dbReg.date_setup &&
                 reg.reg_no == dbReg.reg_no &&
-                reg.region == dbReg.region &&
                 reg.address == dbReg.address &&
+                reg.amount_bookkeeping == dbReg.amount_bookkeeping &&
+                reg.is_bookkeeping == dbReg.is_bookkeeping &&
+                reg.is_customs == dbReg.is_customs &&
+                reg.taxpayer == dbReg.taxpayer &&
+                reg.customs_address == dbReg.customs_address && 
+                reg.customs_name == dbReg.customs_name &&
+                reg.legal == dbReg.legal &&
                 reg.director == dbReg.director &&
-                reg.is_open_bank == dbReg.is_open_bank &&
                 reg.bank_id == dbReg.bank_id &&
                 reg.date_transaction == dbReg.date_transaction &&
                 reg.amount_transaction == dbReg.amount_transaction &&
@@ -359,12 +373,13 @@ namespace WebCenter.Web.Controllers
                 reg.invoice_bank == dbReg.invoice_bank &&
                 reg.invoice_account == dbReg.invoice_account &&
                 reg.waiter_id == dbReg.waiter_id &&
-                reg.manager_id == dbReg.manager_id && 
+                reg.manager_id == dbReg.manager_id &&
+                reg.outworker_id == dbReg.outworker_id &&
                 reg.description == dbReg.description &&
                 reg.currency == dbReg.currency
                 )
             {
-                return Json(new { id = reg.id }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, id = reg.id }, JsonRequestBehavior.AllowGet);
             }
 
             var identityName = HttpContext.User.Identity.Name;
@@ -376,13 +391,20 @@ namespace WebCenter.Web.Controllers
 
             dbReg.customer_id = reg.customer_id;
             dbReg.name_cn = reg.name_cn;
-            dbReg.name_en = reg.name_en;
+            dbReg.amount_bookkeeping = reg.amount_bookkeeping;
+            dbReg.customs_address = reg.customs_address;
+            dbReg.customs_name = reg.customs_name;
+            dbReg.is_bookkeeping = reg.is_bookkeeping;
+            dbReg.is_customs = reg.is_customs;
+            dbReg.legal = reg.legal;
+            dbReg.outworker_id = reg.outworker_id;
+            dbReg.taxpayer = reg.taxpayer;
             dbReg.date_setup = reg.date_setup;
             dbReg.reg_no = reg.reg_no;
-            dbReg.region = reg.region;
+            
             dbReg.address = reg.address;
             dbReg.director = reg.director;
-            dbReg.is_open_bank = reg.is_open_bank;
+           
             dbReg.bank_id = reg.bank_id;
             dbReg.date_transaction = reg.date_transaction;
             dbReg.amount_transaction = reg.amount_transaction;
@@ -395,33 +417,28 @@ namespace WebCenter.Web.Controllers
             dbReg.waiter_id = reg.waiter_id;
             dbReg.manager_id = reg.manager_id;
             dbReg.description = reg.description;
-            dbReg.currency = reg.currency;
-
-            if (reg.is_open_bank == 0)
-            {
-                dbReg.bank_id = null;
-            }
 
             dbReg.date_updated = DateTime.Now;
 
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
             if (r)
             {
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbReg.id,
-                    source_name = "reg_abroad",
+                    source_name = "reg_internal",
                     title = "修改订单资料",
                     content = string.Format("{0}修改了订单资料", arrs[3])
                 });
             }
+            
             return Json(new { success = r, id = reg.id }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Submit(int id)
         {
-            var dbReg = Uof.Ireg_abroadService.GetById(id);
+            var dbReg = Uof.Ireg_internalService.GetById(id);
             if (dbReg == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
@@ -430,14 +447,14 @@ namespace WebCenter.Web.Controllers
             dbReg.status = 1;
             dbReg.date_updated = DateTime.Now;
 
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
             if (r)
             {
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbReg.id,
-                    source_name = "reg_abroad",
+                    source_name = "reg_internal",
                     title = "提交审核",
                     content = string.Format("提交给财务审核")
                 });
@@ -465,7 +482,7 @@ namespace WebCenter.Web.Controllers
             var userId = 0;
             int.TryParse(arrs[0], out userId);
 
-            var dbReg = Uof.Ireg_abroadService.GetById(id);
+            var dbReg = Uof.Ireg_internalService.GetById(id);
             if (dbReg == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
@@ -496,14 +513,14 @@ namespace WebCenter.Web.Controllers
 
             dbReg.date_updated = DateTime.Now;
 
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
             if (r)
             {
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbReg.id,
-                    source_name = "reg_abroad",
+                    source_name = "reg_internal",
                     title = "通过审核",
                     content = string.Format("{0}通过了{1}", arrs[3], t)
                 });
@@ -530,7 +547,7 @@ namespace WebCenter.Web.Controllers
             var userId = 0;
             int.TryParse(arrs[0], out userId);
 
-            var dbReg = Uof.Ireg_abroadService.GetById(id);
+            var dbReg = Uof.Ireg_internalService.GetById(id);
             if (dbReg == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
@@ -561,14 +578,14 @@ namespace WebCenter.Web.Controllers
 
             dbReg.date_updated = DateTime.Now;
 
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
             if (r)
             {
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbReg.id,
-                    source_name = "reg_abroad",
+                    source_name = "reg_internal",
                     title = "驳回审核",
                     content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
                 });
@@ -596,7 +613,7 @@ namespace WebCenter.Web.Controllers
             var userId = 0;
             int.TryParse(arrs[0], out userId);
 
-            var dbReg = Uof.Ireg_abroadService.GetById(id);
+            var dbReg = Uof.Ireg_internalService.GetById(id);
             if (dbReg == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
@@ -604,28 +621,27 @@ namespace WebCenter.Web.Controllers
             dbReg.status = 4;
             dbReg.date_updated = DateTime.Now;
             dbReg.date_finish = date_finish;
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
             if (r)
             {
-                var h = new reg_history()
+                var h = new reg_internal_history()
                 {
                     reg_id = dbReg.id,
                     name_cn = dbReg.name_cn,
-                    name_en = dbReg.name_en,
                     address = dbReg.address,
                     date_setup = dbReg.date_setup,
                     director = dbReg.director,
-                    region = dbReg.region,
-                    reg_no = dbReg.reg_no
+                    reg_no = dbReg.reg_no,
+                    legal = dbReg.legal
                 };
 
-                Uof.Ireg_historyService.AddEntity(h);
+                Uof.Ireg_internal_historyService.AddEntity(h);
 
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbReg.id,
-                    source_name = "reg_abroad",
+                    source_name = "reg_internal",
                     title = "完成订单",
                     content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
                 });
@@ -638,7 +654,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult History(int id, int index = 1, int size = 10)
         {
-            var totalRecord = Uof.Ireg_historyService.GetAll(h => h.reg_id == id).Count();
+            var totalRecord = Uof.Ireg_internal_historyService.GetAll(h => h.reg_id == id).Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
@@ -655,10 +671,10 @@ namespace WebCenter.Web.Controllers
 
             if (totalRecord <= 1)
             {
-                return Json(new { page = page, items = new List<reg_history>() }, JsonRequestBehavior.AllowGet);
+                return Json(new { page = page, items = new List<reg_internal_history>() }, JsonRequestBehavior.AllowGet);
             }
 
-            var list = Uof.Ireg_historyService.GetAll(h => h.reg_id == id).OrderByDescending(item => item.date_created).ToPagedList(index, size).ToList();
+            var list = Uof.Ireg_internal_historyService.GetAll(h => h.reg_id == id).OrderByDescending(item => item.date_created).ToPagedList(index, size).ToList();
             
             var result = new
             {
@@ -671,20 +687,20 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetHistoryTop(int id)
         {
-            var last = Uof.Ireg_historyService.GetAll(h => h.reg_id == id).OrderByDescending(h => h.id).FirstOrDefault();
+            var last = Uof.Ireg_internal_historyService.GetAll(h => h.reg_id == id).OrderByDescending(h => h.id).FirstOrDefault();
 
             return Json(last, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult AddHistory(reg_history history)
+        public ActionResult AddHistory(reg_internal_history history)
         {
             if (history.reg_id == null)
             {
                 return Json(new { success = false, message = "参数reg_id不可为空" }, JsonRequestBehavior.AllowGet);
             }
 
-            var dbReg = Uof.Ireg_abroadService.GetAll(a=>a.id == history.reg_id).FirstOrDefault();
+            var dbReg = Uof.Ireg_internalService.GetAll(a=>a.id == history.reg_id).FirstOrDefault();
             if (dbReg == null)
             {
                 return Json(new { success = false, message = "找不到订单" }, JsonRequestBehavior.AllowGet);
@@ -694,8 +710,7 @@ namespace WebCenter.Web.Controllers
                 history.date_setup == dbReg.date_setup && 
                 history.director == dbReg.director &&
                 history.name_cn == dbReg.name_cn &&
-                history.name_en == dbReg.name_en && 
-                history.region == dbReg.region &&
+                history.legal == dbReg.legal &&        
                 history.reg_no == dbReg.reg_no)
             {
                 return Json(new { success = false, message = "您没做任何修改" }, JsonRequestBehavior.AllowGet);
@@ -705,17 +720,16 @@ namespace WebCenter.Web.Controllers
             dbReg.date_setup = history.date_setup ?? dbReg.date_setup;
             dbReg.director = history.director ?? dbReg.director;
             dbReg.name_cn = history.name_cn ?? dbReg.name_cn;
-            dbReg.name_en = history.name_en ?? dbReg.name_en;
-            dbReg.region = history.region ?? dbReg.region;
+            dbReg.legal = history.legal ?? dbReg.legal;
             dbReg.reg_no = history.reg_no ?? dbReg.reg_no;
 
             dbReg.date_updated = DateTime.Now;
 
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
             if (r)
             {
-                Uof.Ireg_historyService.AddEntity(history);
+                Uof.Ireg_internal_historyService.AddEntity(history);
 
                 return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
             }

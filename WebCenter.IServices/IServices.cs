@@ -14,6 +14,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IauditService:IBaseService<audit>
+    {   
+    }
+	
 	public partial interface Ibank_accountService:IBaseService<bank_account>
     {   
     }
@@ -55,6 +59,14 @@ namespace WebCenter.IServices
     }
 	
 	public partial interface Ireg_historyService:IBaseService<reg_history>
+    {   
+    }
+	
+	public partial interface Ireg_internalService:IBaseService<reg_internal>
+    {   
+    }
+	
+	public partial interface Ireg_internal_historyService:IBaseService<reg_internal_history>
     {   
     }
 	
