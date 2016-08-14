@@ -50,8 +50,8 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
-        public virtual customer customer { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual ICollection<reg_internal> reg_internal { get; set; }
+        public virtual customer customer { get; set; }
     }
 }

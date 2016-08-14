@@ -33,7 +33,6 @@ namespace WebCenter.Entities
         public virtual DbSet<dictionary> dictionaries { get; set; }
         public virtual DbSet<sequence> sequences { get; set; }
         public virtual DbSet<bank_account> bank_account { get; set; }
-        public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<customer_timeline> customer_timeline { get; set; }
         public virtual DbSet<member> members { get; set; }
         public virtual DbSet<reg_history> reg_history { get; set; }
@@ -42,6 +41,7 @@ namespace WebCenter.Entities
         public virtual DbSet<reg_abroad> reg_abroad { get; set; }
         public virtual DbSet<reg_internal> reg_internal { get; set; }
         public virtual DbSet<reg_internal_history> reg_internal_history { get; set; }
+        public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<audit> audits { get; set; }
     }
 }

@@ -16,8 +16,6 @@ namespace WebCenter.Entities
     {
         public member()
         {
-            this.customers = new HashSet<customer>();
-            this.customers1 = new HashSet<customer>();
             this.reg_abroad = new HashSet<reg_abroad>();
             this.reg_abroad1 = new HashSet<reg_abroad>();
             this.reg_abroad2 = new HashSet<reg_abroad>();
@@ -32,6 +30,8 @@ namespace WebCenter.Entities
             this.reg_internal4 = new HashSet<reg_internal>();
             this.reg_internal5 = new HashSet<reg_internal>();
             this.reg_internal6 = new HashSet<reg_internal>();
+            this.customers = new HashSet<customer>();
+            this.customers1 = new HashSet<customer>();
             this.audits = new HashSet<audit>();
             this.audits1 = new HashSet<audit>();
             this.audits2 = new HashSet<audit>();
@@ -99,8 +99,6 @@ namespace WebCenter.Entities
         public Nullable<System.DateTime> date_updated { get; set; }
     
         public virtual area area { get; set; }
-        public virtual ICollection<customer> customers { get; set; }
-        public virtual ICollection<customer> customers1 { get; set; }
         public virtual organization organization { get; set; }
         public virtual position position { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
@@ -117,6 +115,8 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_internal> reg_internal4 { get; set; }
         public virtual ICollection<reg_internal> reg_internal5 { get; set; }
         public virtual ICollection<reg_internal> reg_internal6 { get; set; }
+        public virtual ICollection<customer> customers { get; set; }
+        public virtual ICollection<customer> customers1 { get; set; }
         public virtual ICollection<audit> audits { get; set; }
         public virtual ICollection<audit> audits1 { get; set; }
         public virtual ICollection<audit> audits2 { get; set; }

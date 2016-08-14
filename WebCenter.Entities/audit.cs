@@ -66,11 +66,7 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<System.DateTime> account_period_start { get; set; }
-    
-    
-    
-        public Nullable<System.DateTime> account_period_end { get; set; }
+        public Nullable<System.DateTime> account_period { get; set; }
     
     
     

@@ -489,7 +489,7 @@ CREATE TABLE `audit` (
   `trade_mode` varchar(60) DEFAULT NULL COMMENT '贸易方式',
   `has_parent` tinyint(3) NULL COMMENT '有无子母公司',
   `account_number` int(11) NULL COMMENT '做账次数',
-  `account_period` datetime DEFAULT NULL COMMENT '起始账期',
+  `account_period` datetime DEFAULT NULL COMMENT '账期',
   -- `account_period_end` datetime DEFAULT NULL COMMENT '结束账期',
   `date_year_end` datetime DEFAULT NULL COMMENT '年结日',
   `turnover` float(255,2) DEFAULT NULL COMMENT '营业额',
