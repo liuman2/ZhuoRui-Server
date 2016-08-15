@@ -55,7 +55,7 @@ namespace WebCenter.Web.Controllers
                 {
                     Expression<Func<audit, bool>> tmp = c => (c.status == request.status.Value);
                     condition = tmp;
-                }                
+                }
             }
             // 成交开始日期
             if (request.start_time != null)
@@ -70,7 +70,7 @@ namespace WebCenter.Web.Controllers
                 Expression<Func<audit, bool>> tmp = c => (c.date_transaction < endTime);
                 condition = tmp;
             }
-            
+
             var list = Uof.IauditService.GetAll(condition).OrderByDescending(item => item.id).Select(c => new
             {
                 id = c.id,
@@ -196,7 +196,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
-            var reg = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new
+            var reg = Uof.IauditService.GetAll(a => a.id == id).Select(a => new
             {
                 id = a.id,
                 customer_id = a.customer_id,
@@ -211,34 +211,34 @@ namespace WebCenter.Web.Controllers
                 tel = a.customer.tel,
 
                 code = a.code,
+                type = a.type,
                 name_cn = a.name_cn,
                 name_en = a.name_en,
                 date_setup = a.date_setup,
-                reg_no = a.reg_no,
-                region = a.region,
+                business_area = a.business_area,
+                trade_mode = a.trade_mode,
+                has_parent = a.has_parent,
+                account_number = a.account_number,
+                account_period = a.account_period,
+                date_year_end = a.date_year_end,
+                turnover = a.turnover,
+                amount_bank = a.amount_bank,
+                bill_number = a.bill_number,
+                accounting_standard = a.accounting_standard,
+                cost_accounting = a.cost_accounting,
+                progress = a.progress,
+
+
                 address = a.address,
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
-                director = a.director,
-                is_open_bank = a.is_open_bank,
-                bank_id = a.bank_id,
-                bank_name = a.bank_account.bank,
-                holder = a.bank_account.holder,
-                account = a.bank_account.account,
                 date_finish = a.date_finish,
                 currency = a.currency,
 
-                invoice_name = a.invoice_name,
-                invoice_tax = a.invoice_tax,
-                invoice_address = a.invoice_address,
-                invoice_tel = a.invoice_tel,
-                invoice_bank = a.invoice_bank,
-                invoice_account = a.invoice_account,
-
                 salesman_id = a.salesman_id,
                 salesman = a.member4.name,
-                waiter_id = a.waiter_id,
-                waiter_name = a.member6.name,
+                accountant_id = a.accountant_id,
+                accountant_name = a.member.name,
                 manager_id = a.manager_id,
                 manager_name = a.member2.name,
 
@@ -252,7 +252,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetView(int id)
         {
-            var reg = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new
+            var reg = Uof.IauditService.GetAll(a => a.id == id).Select(a => new
             {
                 id = a.id,
                 customer_id = a.customer_id,
@@ -267,44 +267,43 @@ namespace WebCenter.Web.Controllers
                 tel = a.customer.tel,
 
                 code = a.code,
+                type = a.type,
                 name_cn = a.name_cn,
                 name_en = a.name_en,
                 date_setup = a.date_setup,
-                reg_no = a.reg_no,
-                region = a.region,
+                business_area = a.business_area,
+                trade_mode = a.trade_mode,
+                has_parent = a.has_parent,
+                account_number = a.account_number,
+                account_period = a.account_period,
+                date_year_end = a.date_year_end,
+                turnover = a.turnover,
+                amount_bank = a.amount_bank,
+                bill_number = a.bill_number,
+                accounting_standard = a.accounting_standard,
+                cost_accounting = a.cost_accounting,
+                progress = a.progress,
+
+
                 address = a.address,
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
-                director = a.director,
-                is_open_bank = a.is_open_bank,
-                bank_id = a.bank_id,
-                bank_name = a.bank_account.bank,
-                holder = a.bank_account.holder,
-                account = a.bank_account.account,
                 date_finish = a.date_finish,
                 currency = a.currency,
 
-                invoice_name = a.invoice_name,
-                invoice_tax = a.invoice_tax,
-                invoice_address = a.invoice_address,
-                invoice_tel = a.invoice_tel,
-                invoice_bank = a.invoice_bank,
-                invoice_account = a.invoice_account,
-
                 salesman_id = a.salesman_id,
                 salesman = a.member4.name,
-                waiter_id = a.waiter_id,
-                waiter_name = a.member6.name,
+                accountant_id = a.accountant_id,
+                accountant_name = a.member.name,
                 manager_id = a.manager_id,
                 manager_name = a.member2.name,
-                
 
                 status = a.status,
                 review_status = a.review_status
 
             }).FirstOrDefault();
 
-            var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.customer_id == i.customer_id && i.source_name == "reg_abroad").ToList();
+            var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.customer_id == i.customer_id && i.source_name == "audit").ToList();
 
             var total = 0f;
             if (list.Count > 0)
@@ -325,35 +324,37 @@ namespace WebCenter.Web.Controllers
             return Json(new { order = reg, incomes = incomes }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Update(reg_abroad reg)
+        public ActionResult Update(audit _audit)
         {
-            var dbReg = Uof.Ireg_abroadService.GetById(reg.id);
+            var dbAudit = Uof.IauditService.GetById(_audit.id);
 
-            if (reg.customer_id == dbReg.customer_id && 
-                reg.name_cn == dbReg.name_cn && 
-                reg.name_en == dbReg.name_en &&
-                reg.date_setup == dbReg.date_setup &&
-                reg.reg_no == dbReg.reg_no &&
-                reg.region == dbReg.region &&
-                reg.address == dbReg.address &&
-                reg.director == dbReg.director &&
-                reg.is_open_bank == dbReg.is_open_bank &&
-                reg.bank_id == dbReg.bank_id &&
-                reg.date_transaction == dbReg.date_transaction &&
-                reg.amount_transaction == dbReg.amount_transaction &&
-                reg.invoice_name == dbReg.invoice_name &&
-                reg.invoice_tax == dbReg.invoice_tax &&
-                reg.invoice_address == dbReg.invoice_address &&
-                reg.invoice_tel == dbReg.invoice_tel &&
-                reg.invoice_bank == dbReg.invoice_bank &&
-                reg.invoice_account == dbReg.invoice_account &&
-                reg.waiter_id == dbReg.waiter_id &&
-                reg.manager_id == dbReg.manager_id && 
-                reg.description == dbReg.description &&
-                reg.currency == dbReg.currency
+            if (_audit.customer_id == dbAudit.customer_id &&
+                _audit.name_cn == dbAudit.name_cn &&
+                _audit.name_en == dbAudit.name_en &&
+                _audit.date_setup == dbAudit.date_setup &&
+                _audit.type == dbAudit.type &&
+                _audit.address == dbAudit.address &&
+                _audit.business_area == dbAudit.business_area &&
+                _audit.trade_mode == dbAudit.trade_mode &&
+                _audit.has_parent == dbAudit.has_parent &&
+                _audit.account_number == dbAudit.account_number &&
+                _audit.account_period == dbAudit.account_period &&
+                _audit.date_year_end == dbAudit.date_year_end &&
+                _audit.turnover == dbAudit.turnover &&
+                _audit.amount_bank == dbAudit.amount_bank &&
+                _audit.bill_number == dbAudit.bill_number &&
+                _audit.accounting_standard == dbAudit.accounting_standard &&
+                _audit.cost_accounting == dbAudit.cost_accounting &&
+                _audit.progress == dbAudit.progress &&
+                _audit.date_transaction == dbAudit.date_transaction &&
+                _audit.amount_transaction == dbAudit.amount_transaction &&
+                _audit.accountant_id == dbAudit.accountant_id &&
+                _audit.manager_id == dbAudit.manager_id &&
+                _audit.description == dbAudit.description &&
+                _audit.currency == dbAudit.currency
                 )
             {
-                return Json(new { id = reg.id }, JsonRequestBehavior.AllowGet);
+                return Json(new { id = _audit.id }, JsonRequestBehavior.AllowGet);
             }
 
             var identityName = HttpContext.User.Identity.Name;
@@ -363,70 +364,66 @@ namespace WebCenter.Web.Controllers
                 return new HttpUnauthorizedResult();
             }
 
-            dbReg.customer_id = reg.customer_id;
-            dbReg.name_cn = reg.name_cn;
-            dbReg.name_en = reg.name_en;
-            dbReg.date_setup = reg.date_setup;
-            dbReg.reg_no = reg.reg_no;
-            dbReg.region = reg.region;
-            dbReg.address = reg.address;
-            dbReg.director = reg.director;
-            dbReg.is_open_bank = reg.is_open_bank;
-            dbReg.bank_id = reg.bank_id;
-            dbReg.date_transaction = reg.date_transaction;
-            dbReg.amount_transaction = reg.amount_transaction;
-            dbReg.invoice_name = reg.invoice_name;
-            dbReg.invoice_tax = reg.invoice_tax;
-            dbReg.invoice_address = reg.invoice_address;
-            dbReg.invoice_tel = reg.invoice_tel;
-            dbReg.invoice_bank = reg.invoice_bank;
-            dbReg.invoice_account = reg.invoice_account;
-            dbReg.waiter_id = reg.waiter_id;
-            dbReg.manager_id = reg.manager_id;
-            dbReg.description = reg.description;
-            dbReg.currency = reg.currency;
+            dbAudit.customer_id = _audit.customer_id;
+            dbAudit.name_cn = _audit.name_cn;
+            dbAudit.name_en = _audit.name_en;
+            dbAudit.date_setup = _audit.date_setup;
+            dbAudit.address = _audit.address;
+            dbAudit.type = _audit.type;
+            dbAudit.business_area = _audit.business_area;
+            dbAudit.trade_mode = _audit.trade_mode;
+            dbAudit.has_parent = _audit.has_parent;
+            dbAudit.account_number = _audit.account_number;
+            dbAudit.account_period = _audit.account_period;
+            dbAudit.date_year_end = _audit.date_year_end;
+            dbAudit.turnover = _audit.turnover;
+            dbAudit.amount_bank = _audit.amount_bank;
+            dbAudit.bill_number = _audit.bill_number;
+            dbAudit.accounting_standard = _audit.accounting_standard;
+            dbAudit.cost_accounting = _audit.cost_accounting;
+            dbAudit.progress = _audit.progress;
+            dbAudit.date_transaction = _audit.date_transaction;
+            dbAudit.amount_transaction = _audit.amount_transaction;
+            dbAudit.accountant_id = _audit.accountant_id;
+            dbAudit.manager_id = _audit.manager_id;
+            dbAudit.description = _audit.description;
+            dbAudit.currency = _audit.currency;
+            dbAudit.date_updated = DateTime.Now;
 
-            if (reg.is_open_bank == 0)
-            {
-                dbReg.bank_id = null;
-            }
-
-            dbReg.date_updated = DateTime.Now;
-
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            var r = Uof.IauditService.UpdateEntity(dbAudit);
 
             if (r)
             {
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
-                    source_id = dbReg.id,
-                    source_name = "reg_abroad",
+                    source_id = dbAudit.id,
+                    source_name = "audit",
                     title = "修改订单资料",
                     content = string.Format("{0}修改了订单资料", arrs[3])
                 });
             }
-            return Json(new { success = r, id = reg.id }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = r, id = _audit.id }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Submit(int id)
         {
-            var dbReg = Uof.Ireg_abroadService.GetById(id);
-            if (dbReg == null)
+            var dbAudit = Uof.IauditService.GetById(id);
+            if (dbAudit == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            dbReg.status = 1;
-            dbReg.date_updated = DateTime.Now;
+            dbAudit.status = 1;
+            dbAudit.date_updated = DateTime.Now;
 
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            var r = Uof.IauditService.UpdateEntity(dbAudit);
 
             if (r)
             {
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
-                    source_id = dbReg.id,
-                    source_name = "reg_abroad",
+                    source_id = dbAudit.id,
+                    source_name = "audit",
                     title = "提交审核",
                     content = string.Format("提交给财务审核")
                 });
@@ -454,45 +451,45 @@ namespace WebCenter.Web.Controllers
             var userId = 0;
             int.TryParse(arrs[0], out userId);
 
-            var dbReg = Uof.Ireg_abroadService.GetById(id);
-            if (dbReg == null)
+            var dbAudit = Uof.IauditService.GetById(id);
+            if (dbAudit == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
             var t = "";
-            if (dbReg.status == 1)
+            if (dbAudit.status == 1)
             {
-                dbReg.status = 2;
-                dbReg.review_status = 1;
-                dbReg.finance_reviewer_id = userId;
-                dbReg.finance_review_date = DateTime.Now;
-                dbReg.finance_review_moment = "";
+                dbAudit.status = 2;
+                dbAudit.review_status = 1;
+                dbAudit.finance_reviewer_id = userId;
+                dbAudit.finance_review_date = DateTime.Now;
+                dbAudit.finance_review_moment = "";
 
                 t = "财务审核";
                 // TODO 通知 提交人，业务员
             }
             else
             {
-                dbReg.status = 3;
-                dbReg.review_status = 1;
-                dbReg.submit_reviewer_id = userId;
-                dbReg.submit_review_date = DateTime.Now;
-                dbReg.submit_review_moment = "";
+                dbAudit.status = 3;
+                dbAudit.review_status = 1;
+                dbAudit.submit_reviewer_id = userId;
+                dbAudit.submit_review_date = DateTime.Now;
+                dbAudit.submit_review_moment = "";
 
                 t = "提交的审核";
                 // TODO 通知 业务员
             }
 
-            dbReg.date_updated = DateTime.Now;
+            dbAudit.date_updated = DateTime.Now;
 
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            var r = Uof.IauditService.UpdateEntity(dbAudit);
 
             if (r)
             {
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
-                    source_id = dbReg.id,
-                    source_name = "reg_abroad",
+                    source_id = dbAudit.id,
+                    source_name = "audit",
                     title = "通过审核",
                     content = string.Format("{0}通过了{1}", arrs[3], t)
                 });
@@ -519,44 +516,44 @@ namespace WebCenter.Web.Controllers
             var userId = 0;
             int.TryParse(arrs[0], out userId);
 
-            var dbReg = Uof.Ireg_abroadService.GetById(id);
-            if (dbReg == null)
+            var dbAudit = Uof.IauditService.GetById(id);
+            if (dbAudit == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
             var t = "";
-            if (dbReg.status == 1)
+            if (dbAudit.status == 1)
             {
-                dbReg.status = 2;
-                dbReg.review_status = 0;
-                dbReg.finance_reviewer_id = userId;
-                dbReg.finance_review_date = DateTime.Now;
-                dbReg.finance_review_moment = description;
+                dbAudit.status = 2;
+                dbAudit.review_status = 0;
+                dbAudit.finance_reviewer_id = userId;
+                dbAudit.finance_review_date = DateTime.Now;
+                dbAudit.finance_review_moment = description;
 
                 t = "驳回了财务审核";
                 // TODO 通知 业务员
             }
             else
             {
-                dbReg.status = 3;
-                dbReg.review_status = 0;
-                dbReg.submit_reviewer_id = userId;
-                dbReg.submit_review_date = DateTime.Now;
-                dbReg.submit_review_moment = description;
+                dbAudit.status = 3;
+                dbAudit.review_status = 0;
+                dbAudit.submit_reviewer_id = userId;
+                dbAudit.submit_review_date = DateTime.Now;
+                dbAudit.submit_review_moment = description;
 
                 t = "驳回了提交的审核";
                 // TODO 通知 业务员
             }
 
-            dbReg.date_updated = DateTime.Now;
+            dbAudit.date_updated = DateTime.Now;
 
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            var r = Uof.IauditService.UpdateEntity(dbAudit);
 
             if (r)
             {
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
-                    source_id = dbReg.id,
+                    source_id = dbAudit.id,
                     source_name = "reg_abroad",
                     title = "驳回审核",
                     content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
@@ -585,36 +582,22 @@ namespace WebCenter.Web.Controllers
             var userId = 0;
             int.TryParse(arrs[0], out userId);
 
-            var dbReg = Uof.Ireg_abroadService.GetById(id);
-            if (dbReg == null)
+            var dbAudit = Uof.IauditService.GetById(id);
+            if (dbAudit == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
-            dbReg.status = 4;
-            dbReg.date_updated = DateTime.Now;
-            dbReg.date_finish = date_finish;
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+            dbAudit.status = 4;
+            dbAudit.date_updated = DateTime.Now;
+            dbAudit.date_finish = date_finish;
+            var r = Uof.IauditService.UpdateEntity(dbAudit);
 
             if (r)
             {
-                var h = new reg_history()
-                {
-                    reg_id = dbReg.id,
-                    name_cn = dbReg.name_cn,
-                    name_en = dbReg.name_en,
-                    address = dbReg.address,
-                    date_setup = dbReg.date_setup,
-                    director = dbReg.director,
-                    region = dbReg.region,
-                    reg_no = dbReg.reg_no
-                };
-
-                Uof.Ireg_historyService.AddEntity(h);
-
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
-                    source_id = dbReg.id,
-                    source_name = "reg_abroad",
+                    source_id = dbAudit.id,
+                    source_name = "audit",
                     title = "完成订单",
                     content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
                 });
@@ -623,93 +606,6 @@ namespace WebCenter.Web.Controllers
             }
 
             return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult History(int id, int index = 1, int size = 10)
-        {
-            var totalRecord = Uof.Ireg_historyService.GetAll(h => h.reg_id == id).Count();
-
-            var totalPages = 0;
-            if (totalRecord > 0)
-            {
-                totalPages = (totalRecord + size - 1) / size;
-            }
-            var page = new
-            {
-                current_index = index,
-                current_size = size,
-                total_size = totalRecord,
-                total_page = totalPages
-            };
-
-            if (totalRecord <= 1)
-            {
-                return Json(new { page = page, items = new List<reg_history>() }, JsonRequestBehavior.AllowGet);
-            }
-
-            var list = Uof.Ireg_historyService.GetAll(h => h.reg_id == id).OrderByDescending(item => item.date_created).ToPagedList(index, size).ToList();
-            
-            var result = new
-            {
-                page = page,
-                items = list
-            };
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult GetHistoryTop(int id)
-        {
-            var last = Uof.Ireg_historyService.GetAll(h => h.reg_id == id).OrderByDescending(h => h.id).FirstOrDefault();
-
-            return Json(last, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult AddHistory(reg_history history)
-        {
-            if (history.reg_id == null)
-            {
-                return Json(new { success = false, message = "参数reg_id不可为空" }, JsonRequestBehavior.AllowGet);
-            }
-
-            var dbReg = Uof.Ireg_abroadService.GetAll(a=>a.id == history.reg_id).FirstOrDefault();
-            if (dbReg == null)
-            {
-                return Json(new { success = false, message = "找不到订单" }, JsonRequestBehavior.AllowGet);
-            }
-
-            if (history.address == dbReg.address && 
-                history.date_setup == dbReg.date_setup && 
-                history.director == dbReg.director &&
-                history.name_cn == dbReg.name_cn &&
-                history.name_en == dbReg.name_en && 
-                history.region == dbReg.region &&
-                history.reg_no == dbReg.reg_no)
-            {
-                return Json(new { success = false, message = "您没做任何修改" }, JsonRequestBehavior.AllowGet);
-            }
-
-            dbReg.address = history.address ?? dbReg.address;
-            dbReg.date_setup = history.date_setup ?? dbReg.date_setup;
-            dbReg.director = history.director ?? dbReg.director;
-            dbReg.name_cn = history.name_cn ?? dbReg.name_cn;
-            dbReg.name_en = history.name_en ?? dbReg.name_en;
-            dbReg.region = history.region ?? dbReg.region;
-            dbReg.reg_no = history.reg_no ?? dbReg.reg_no;
-
-            dbReg.date_updated = DateTime.Now;
-
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
-
-            if (r)
-            {
-                Uof.Ireg_historyService.AddEntity(history);
-
-                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
-            }
-
-            return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
         }
     }
 }

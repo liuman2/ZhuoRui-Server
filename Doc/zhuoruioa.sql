@@ -171,12 +171,14 @@ INSERT INTO `dictionary_group` VALUES ('2', '业务性质', '业务性质');
 INSERT INTO `dictionary_group` VALUES ('3', '业务范围', '业务范围');
 INSERT INTO `dictionary_group` VALUES ('4', '客户来源',  '客户来源');
 INSERT INTO `dictionary_group` VALUES ('5', '贸易方式', '贸易方式');
-INSERT INTO `dictionary_group` VALUES ('6', '注册方式', '注册方式');
-INSERT INTO `dictionary_group` VALUES ('7', '专利类型', '专利类型');
-INSERT INTO `dictionary_group` VALUES ('8', '专利用途', '专利用途');
-INSERT INTO `dictionary_group` VALUES ('9', '注册地区', '注册地区');
-INSERT INTO `dictionary_group` VALUES ('10', '纳税人资格', '纳税人资格');
-INSERT INTO `dictionary_group` VALUES ('11', '币别', '币别');
+INSERT INTO `dictionary_group` VALUES ('6', '商标类别', '商标类别');
+INSERT INTO `dictionary_group` VALUES ('7', '商标注册方式', '商标注册方式');
+INSERT INTO `dictionary_group` VALUES ('8', '专利注册方式', '专利注册方式');
+INSERT INTO `dictionary_group` VALUES ('9', '专利类型', '专利类型');
+INSERT INTO `dictionary_group` VALUES ('10', '专利用途', '专利用途');
+INSERT INTO `dictionary_group` VALUES ('11', '注册地区', '注册地区');
+INSERT INTO `dictionary_group` VALUES ('12', '纳税人资格', '纳税人资格');
+INSERT INTO `dictionary_group` VALUES ('13', '币别', '币别');
 -- ----------------------------
 -- Table structure for dictionary
 -- ----------------------------
@@ -539,6 +541,120 @@ CREATE TABLE `audit` (
   CONSTRAINT `audit_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+DROP TABLE IF EXISTS `trademark`;
+CREATE TABLE `trademark` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NULL,
+  `code` varchar(20) DEFAULT NULL COMMENT '档案号',
+  `type` varchar(10) DEFAULT NULL COMMENT '单据类别境内外',
+  `name` varchar(100) DEFAULT NULL COMMENT '商标名称',
+  `applicant` varchar(50) DEFAULT NULL COMMENT '申请人',
+  `address` varchar(300) DEFAULT NULL COMMENT '申请人地址',
+  `trademark_type` varchar(20) DEFAULT NULL COMMENT '商标类别',
+  `region` varchar(50) DEFAULT NULL COMMENT '商标地区',
+  `reg_mode` varchar(50) DEFAULT NULL COMMENT '注册方式',
+  `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
+  `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
+  `currency` varchar(10) DEFAULT NULL COMMENT '币别',
+
+  `date_receipt` datetime DEFAULT NULL COMMENT '回执时间',
+  `date_accept` datetime DEFAULT NULL COMMENT '受理时间',
+  `date_trial` datetime DEFAULT NULL COMMENT '初审时间',
+  `date_regit` datetime DEFAULT NULL COMMENT '注册时间',
+  `date_exten` datetime DEFAULT NULL COMMENT '续展时间',
+
+  `progress` varchar(50) DEFAULT NULL COMMENT '商标进度',
+  `status` tinyint(3) NULL COMMENT '订单状态 状态:0-未提交, 1-已提交, 2-财务已审核, 3-提交人已审核, 4-完成',
+  `finance_reviewer_id` int(11) DEFAULT NULL COMMENT '财务审核人员ID',
+  `finance_review_date` datetime DEFAULT NULL COMMENT '财务审核日期',
+  `finance_review_moment` varchar(100) DEFAULT NULL COMMENT '财务审核意见',
+
+  `submit_reviewer_id` int(11) DEFAULT NULL COMMENT '提交审核人员ID',
+  `submit_review_date` datetime DEFAULT NULL COMMENT '提交审核日期',
+  `submit_review_moment` varchar(100) DEFAULT NULL COMMENT '提交审核意见',
+  `review_status` int(11) DEFAULT NULL COMMENT '审核状体 未审核：-1；未通过：0；已通过：1',
+  `date_finish` datetime DEFAULT NULL COMMENT '完成时间',
+
+  `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
+  `salesman_id` int(11) DEFAULT NULL COMMENT '业务员',
+  `waiter_id` int(11) DEFAULT NULL COMMENT '年检客服',
+  `manager_id` int(11) DEFAULT NULL COMMENT '经理',
+  `organization_id` int(11) DEFAULT NULL COMMENT '业务员部门',
+  `description` varchar(100) NULL,
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `customer_id` (`customer_id`),
+  KEY `creator_id` (`creator_id`),
+  KEY `salesman_id` (`salesman_id`),
+  KEY `waiter_id` (`waiter_id`),
+  KEY `manager_id` (`manager_id`),
+  KEY `finance_reviewer_id` (`finance_reviewer_id`),
+  KEY `submit_reviewer_id` (`submit_reviewer_id`),
+  CONSTRAINT `trademark_ibfk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
+  CONSTRAINT `trademark_ibfk_creator` FOREIGN KEY (`creator_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `trademark_ibfk_salesman` FOREIGN KEY (`salesman_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `trademark_ibfk_waiter` FOREIGN KEY (`waiter_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `trademark_ibfk_manager` FOREIGN KEY (`manager_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `trademark_ibfk_finance_reviewer` FOREIGN KEY (`finance_reviewer_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `trademark_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `patent`;
+CREATE TABLE `patent` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NULL,
+  `code` varchar(20) DEFAULT NULL COMMENT '档案号',
+  `type` varchar(10) DEFAULT NULL COMMENT '单据类别境内外',
+  `name` varchar(100) DEFAULT NULL COMMENT '专利名称',
+  `applicant` varchar(50) DEFAULT NULL COMMENT '申请人',
+  `address` varchar(300) DEFAULT NULL COMMENT '申请人地址',
+  `card_no` varchar(300) DEFAULT NULL COMMENT '申请人证件号码',
+  `designer` varchar(50) DEFAULT NULL COMMENT '专利设计人',
+  `patent_type` varchar(20) DEFAULT NULL COMMENT '专利类型',
+  `patent_purpose` varchar(20) DEFAULT NULL COMMENT '专利用途',
+  `reg_mode` varchar(50) DEFAULT NULL COMMENT '注册方式',
+  `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
+  `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
+  `currency` varchar(10) DEFAULT NULL COMMENT '币别',
+  `date_accept` datetime DEFAULT NULL COMMENT '受理时间',
+  `date_empower` datetime DEFAULT NULL COMMENT '授权时间',
+  `date_inspection` datetime DEFAULT NULL COMMENT '年检时间',
+  `progress` varchar(50) DEFAULT NULL COMMENT '商标进度',
+  `status` tinyint(3) NULL COMMENT '订单状态 状态:0-未提交, 1-已提交, 2-财务已审核, 3-提交人已审核, 4-完成',
+  `finance_reviewer_id` int(11) DEFAULT NULL COMMENT '财务审核人员ID',
+  `finance_review_date` datetime DEFAULT NULL COMMENT '财务审核日期',
+  `finance_review_moment` varchar(100) DEFAULT NULL COMMENT '财务审核意见',
+  `submit_reviewer_id` int(11) DEFAULT NULL COMMENT '提交审核人员ID',
+  `submit_review_date` datetime DEFAULT NULL COMMENT '提交审核日期',
+  `submit_review_moment` varchar(100) DEFAULT NULL COMMENT '提交审核意见',
+  `review_status` int(11) DEFAULT NULL COMMENT '审核状体 未审核：-1；未通过：0；已通过：1',
+  `date_finish` datetime DEFAULT NULL COMMENT '完成时间',
+  `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
+  `salesman_id` int(11) DEFAULT NULL COMMENT '业务员',
+  `waiter_id` int(11) DEFAULT NULL COMMENT '年检客服',
+  `manager_id` int(11) DEFAULT NULL COMMENT '经理',
+  `organization_id` int(11) DEFAULT NULL COMMENT '业务员部门',
+  `description` varchar(100) NULL,
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `customer_id` (`customer_id`),
+  KEY `creator_id` (`creator_id`),
+  KEY `salesman_id` (`salesman_id`),
+  KEY `waiter_id` (`waiter_id`),
+  KEY `manager_id` (`manager_id`),
+  KEY `finance_reviewer_id` (`finance_reviewer_id`),
+  KEY `submit_reviewer_id` (`submit_reviewer_id`),
+  CONSTRAINT `patent_ibfk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
+  CONSTRAINT `patent_ibfk_creator` FOREIGN KEY (`creator_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `patent_ibfk_salesman` FOREIGN KEY (`salesman_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `patent_ibfk_waiter` FOREIGN KEY (`waiter_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `patent_ibfk_manager` FOREIGN KEY (`manager_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `patent_ibfk_finance_reviewer` FOREIGN KEY (`finance_reviewer_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `patent_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 
