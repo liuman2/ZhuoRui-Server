@@ -29,6 +29,8 @@ INSERT INTO `sequence` VALUES ('timeline', '1');
 INSERT INTO `sequence` VALUES ('reg_history', '1');
 INSERT INTO `sequence` VALUES ('reg_internal_history', '1');
 INSERT INTO `sequence` VALUES ('reg_internal', '1');
+INSERT INTO `sequence` VALUES ('audit', '1');
+
 -- ----------------------------
 -- Table structure for organization
 -- ----------------------------
