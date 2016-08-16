@@ -14,4 +14,10 @@ namespace WebCenter.Web
         public DateTime? start_time { get; set; }
         public DateTime? end_time { get; set; }
     }
+
+    public class TrademarkRequest : OrderSearchRequest
+    {
+        public string name { get; set; }
+        public string applicant { get; set; }
+    }
 }

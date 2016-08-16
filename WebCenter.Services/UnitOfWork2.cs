@@ -79,6 +79,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IpatentService IpatentService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IpositionService IpositionService
     {
         get;
@@ -129,6 +136,13 @@ namespace WebCenter.Services
 	
   [Ninject.Inject]
 	 public  ItimelineService ItimelineService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  ItrademarkService ItrademarkService
     {
         get;
         set;

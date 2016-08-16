@@ -57,6 +57,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class patentRepository :BaseRepository<patent>,IpatentRepository
+    {
+         
+    }
+	
 	public partial class positionRepository :BaseRepository<position>,IpositionRepository
     {
          
@@ -93,6 +98,11 @@ namespace WebCenter.DAL
     }
 	
 	public partial class timelineRepository :BaseRepository<timeline>,ItimelineRepository
+    {
+         
+    }
+	
+	public partial class trademarkRepository :BaseRepository<trademark>,ItrademarkRepository
     {
          
     }

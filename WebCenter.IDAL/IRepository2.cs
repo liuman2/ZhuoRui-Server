@@ -46,6 +46,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IpatentRepository :IBaseRepository<patent>
+    {         
+    }
+	
     public partial interface IpositionRepository :IBaseRepository<position>
     {         
     }
@@ -75,6 +79,10 @@ namespace WebCenter.IDAL
     }
 	
     public partial interface ItimelineRepository :IBaseRepository<timeline>
+    {         
+    }
+	
+    public partial interface ItrademarkRepository :IBaseRepository<trademark>
     {         
     }
 	

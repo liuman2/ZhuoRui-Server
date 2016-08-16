@@ -50,6 +50,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IpatentService:IBaseService<patent>
+    {   
+    }
+	
 	public partial interface IpositionService:IBaseService<position>
     {   
     }
@@ -79,6 +83,10 @@ namespace WebCenter.IServices
     }
 	
 	public partial interface ItimelineService:IBaseService<timeline>
+    {   
+    }
+	
+	public partial interface ItrademarkService:IBaseService<trademark>
     {   
     }
 	

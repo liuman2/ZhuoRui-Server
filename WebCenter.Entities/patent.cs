@@ -12,12 +12,12 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class reg_abroad:BaseModel
+    public partial class patent:BaseModel
     {
     
     
     
-    [EntityPrimKey("reg_abroad")]
+    [EntityPrimKey("patent")]
         public int id { get; set; }
     
     
@@ -30,23 +30,15 @@ namespace WebCenter.Entities
     
     
     
-        public string name_cn { get; set; }
+        public string type { get; set; }
     
     
     
-        public string name_en { get; set; }
+        public string name { get; set; }
     
     
     
-        public Nullable<System.DateTime> date_setup { get; set; }
-    
-    
-    
-        public string reg_no { get; set; }
-    
-    
-    
-        public string region { get; set; }
+        public string applicant { get; set; }
     
     
     
@@ -54,15 +46,23 @@ namespace WebCenter.Entities
     
     
     
-        public string director { get; set; }
+        public string card_no { get; set; }
     
     
     
-        public Nullable<sbyte> is_open_bank { get; set; }
+        public string designer { get; set; }
     
     
     
-        public Nullable<int> bank_id { get; set; }
+        public string patent_type { get; set; }
+    
+    
+    
+        public string patent_purpose { get; set; }
+    
+    
+    
+        public string reg_mode { get; set; }
     
     
     
@@ -78,27 +78,19 @@ namespace WebCenter.Entities
     
     
     
-        public string invoice_name { get; set; }
+        public Nullable<System.DateTime> date_accept { get; set; }
     
     
     
-        public string invoice_tax { get; set; }
+        public Nullable<System.DateTime> date_empower { get; set; }
     
     
     
-        public string invoice_address { get; set; }
+        public Nullable<System.DateTime> date_inspection { get; set; }
     
     
     
-        public string invoice_tel { get; set; }
-    
-    
-    
-        public string invoice_bank { get; set; }
-    
-    
-    
-        public string invoice_account { get; set; }
+        public string progress { get; set; }
     
     
     
@@ -154,10 +146,6 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<int> outworker_id { get; set; }
-    
-    
-    
         public Nullable<int> organization_id { get; set; }
     
     
@@ -172,11 +160,6 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
-    
-    
-        public string progress { get; set; }
-    
-        public virtual bank_account bank_account { get; set; }
         public virtual customer customer { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
@@ -184,6 +167,5 @@ namespace WebCenter.Entities
         public virtual member member3 { get; set; }
         public virtual member member4 { get; set; }
         public virtual member member5 { get; set; }
-        public virtual member member6 { get; set; }
     }
 }

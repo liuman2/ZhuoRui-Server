@@ -17,11 +17,13 @@ namespace WebCenter.Entities
         public customer()
         {
             this.bank_account = new HashSet<bank_account>();
-            this.reg_abroad = new HashSet<reg_abroad>();
             this.incomes = new HashSet<income>();
             this.reg_internal = new HashSet<reg_internal>();
             this.customer_timeline = new HashSet<customer_timeline>();
             this.audits = new HashSet<audit>();
+            this.patents = new HashSet<patent>();
+            this.trademarks = new HashSet<trademark>();
+            this.reg_abroad = new HashSet<reg_abroad>();
         }
     
     
@@ -127,12 +129,14 @@ namespace WebCenter.Entities
         public string business_nature { get; set; }
     
         public virtual ICollection<bank_account> bank_account { get; set; }
-        public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual ICollection<income> incomes { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual ICollection<customer_timeline> customer_timeline { get; set; }
         public virtual ICollection<audit> audits { get; set; }
+        public virtual ICollection<patent> patents { get; set; }
+        public virtual ICollection<trademark> trademarks { get; set; }
+        public virtual ICollection<reg_abroad> reg_abroad { get; set; }
     }
 }

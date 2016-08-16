@@ -216,11 +216,13 @@
     <Compile Include="Controllers\IncomeController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
+    <Compile Include="Controllers\PatentController.cs" />
     <Compile Include="Controllers\PositionController.cs" />
     <Compile Include="Controllers\RegAbroadController.cs" />
     <Compile Include="Controllers\RegInternalController.cs" />
     <Compile Include="Controllers\ReserveController.cs" />
     <Compile Include="Controllers\TimelineController.cs" />
+    <Compile Include="Controllers\TrademarkController.cs" />
     <Compile Include="Filters\JsonAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

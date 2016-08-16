@@ -28,6 +28,8 @@ namespace WebCenter.IServices
 	
 	  IorganizationService IorganizationService{get;set;} 
 	
+	  IpatentService IpatentService{get;set;} 
+	
 	  IpositionService IpositionService{get;set;} 
 	
 	  Ireg_abroadService Ireg_abroadService{get;set;} 
@@ -43,6 +45,8 @@ namespace WebCenter.IServices
 	  IsequenceService IsequenceService{get;set;} 
 	
 	  ItimelineService ItimelineService{get;set;} 
+	
+	  ItrademarkService ItrademarkService{get;set;} 
 	
 }
 }

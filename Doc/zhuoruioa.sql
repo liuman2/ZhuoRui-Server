@@ -18,8 +18,8 @@ INSERT INTO `sequence` VALUES ('position', '11');
 INSERT INTO `sequence` VALUES ('role', '6');
 INSERT INTO `sequence` VALUES ('member', '2');
 INSERT INTO `sequence` VALUES ('area', '4');
-INSERT INTO `sequence` VALUES ('dictionary_group', '8');
-INSERT INTO `sequence` VALUES ('dictionary', '6');
+INSERT INTO `sequence` VALUES ('dictionary_group', '13');
+INSERT INTO `sequence` VALUES ('dictionary', '11');
 INSERT INTO `sequence` VALUES ('customer', '1');
 INSERT INTO `sequence` VALUES ('bank_account', '1');
 INSERT INTO `sequence` VALUES ('reg_abroad', '1');
@@ -30,6 +30,8 @@ INSERT INTO `sequence` VALUES ('reg_history', '1');
 INSERT INTO `sequence` VALUES ('reg_internal_history', '1');
 INSERT INTO `sequence` VALUES ('reg_internal', '1');
 INSERT INTO `sequence` VALUES ('audit', '1');
+INSERT INTO `sequence` VALUES ('trademark', '1');
+INSERT INTO `sequence` VALUES ('patent', '1');
 
 -- ----------------------------
 -- Table structure for organization
@@ -309,6 +311,8 @@ CREATE TABLE `reg_abroad` (
 
   `review_status` int(11) DEFAULT NULL COMMENT '审核状体 未审核：-1；未通过：0；已通过：1',
   `date_finish` datetime DEFAULT NULL COMMENT '完成时间',
+
+  `progress` varchar(50) DEFAULT NULL COMMENT '注册进度',
 
   `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
   `salesman_id` int(11) DEFAULT NULL COMMENT '业务员',
@@ -620,10 +624,12 @@ CREATE TABLE `patent` (
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
   `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
   `currency` varchar(10) DEFAULT NULL COMMENT '币别',
+
   `date_accept` datetime DEFAULT NULL COMMENT '受理时间',
   `date_empower` datetime DEFAULT NULL COMMENT '授权时间',
   `date_inspection` datetime DEFAULT NULL COMMENT '年检时间',
-  `progress` varchar(50) DEFAULT NULL COMMENT '商标进度',
+  `progress` varchar(50) DEFAULT NULL COMMENT '专利进度',
+
   `status` tinyint(3) NULL COMMENT '订单状态 状态:0-未提交, 1-已提交, 2-财务已审核, 3-提交人已审核, 4-完成',
   `finance_reviewer_id` int(11) DEFAULT NULL COMMENT '财务审核人员ID',
   `finance_review_date` datetime DEFAULT NULL COMMENT '财务审核日期',

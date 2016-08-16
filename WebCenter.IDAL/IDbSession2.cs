@@ -43,6 +43,9 @@ namespace WebCenter.IDAL
 		IDAL.IorganizationRepository organizationRepository { get; }
 	  
 
+		IDAL.IpatentRepository patentRepository { get; }
+	  
+
 		IDAL.IpositionRepository positionRepository { get; }
 	  
 
@@ -65,5 +68,8 @@ namespace WebCenter.IDAL
 	  
 
 		IDAL.ItimelineRepository timelineRepository { get; }
+	  
+
+		IDAL.ItrademarkRepository trademarkRepository { get; }
 	}
 }

@@ -722,5 +722,19 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetProgress(int id)
+        {
+            var p = Uof.Ireg_abroadService.GetAll(r => r.id == id).Select(r => new
+            {
+                id = r.id,
+                name = r.progress
+            });
+
+            return Json(p, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProgress()
     }
 }

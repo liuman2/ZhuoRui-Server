@@ -121,6 +121,9 @@
     <Compile Include="organization.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="patent.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="position.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
@@ -144,6 +147,9 @@
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
     <Compile Include="timeline.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
+    <Compile Include="trademark.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
   </ItemGroup>

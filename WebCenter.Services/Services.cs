@@ -113,6 +113,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class patentService:BaseService<patent>,IpatentService
+    {   
+        public patentService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.patentRepository;
+        }  
+    }
+	
 	public partial class positionService:BaseService<position>,IpositionService
     {   
         public positionService()
@@ -190,6 +200,16 @@ namespace WebCenter.Services
         public override void SetCurrentRepository()
         {
             CurrentRepository = _dbSession.timelineRepository;
+        }  
+    }
+	
+	public partial class trademarkService:BaseService<trademark>,ItrademarkService
+    {   
+        public trademarkService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.trademarkRepository;
         }  
     }
 	

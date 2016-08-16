@@ -27,6 +27,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.IorganizationRepository organizationRepository { get { return new organizationRepository(); } }
 	
+	public IDAL.IpatentRepository patentRepository { get { return new patentRepository(); } }
+	
 	public IDAL.IpositionRepository positionRepository { get { return new positionRepository(); } }
 	
 	public IDAL.Ireg_abroadRepository reg_abroadRepository { get { return new reg_abroadRepository(); } }
@@ -42,5 +44,7 @@ namespace WebCenter.DAL
 	public IDAL.IsequenceRepository sequenceRepository { get { return new sequenceRepository(); } }
 	
 	public IDAL.ItimelineRepository timelineRepository { get { return new timelineRepository(); } }
+	
+	public IDAL.ItrademarkRepository trademarkRepository { get { return new trademarkRepository(); } }
 	}
 }
