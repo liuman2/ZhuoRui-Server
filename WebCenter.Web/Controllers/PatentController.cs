@@ -583,6 +583,8 @@ namespace WebCenter.Web.Controllers
             dbPatent.status = 4;
             dbPatent.date_updated = DateTime.Now;
             dbPatent.date_finish = date_finish;
+            dbPatent.progress = "已完成";
+
             var r = Uof.IpatentService.UpdateEntity(dbPatent);
 
             if (r)
@@ -599,6 +601,44 @@ namespace WebCenter.Web.Controllers
             }
 
             return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
-        }        
+        }
+
+        public ActionResult GetProgress(int id)
+        {
+            var p = Uof.IpatentService.GetAll(r => r.id == id).Select(r => new
+            {
+                id = r.id,
+                name = r.progress,
+                date_accept = r.date_accept,
+                date_empower = r.date_empower
+            });
+
+            return Json(p, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProgress(PatentProgressRequest request)
+        {
+            var dbPantent = Uof.IpatentService.GetById(request.id);
+            if (dbPantent == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (dbPantent.progress == request.name &&
+                dbPantent.date_accept == request.date_accept &&
+                dbPantent.date_empower == request.date_empower)
+            {
+                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbPantent.progress = request.name;
+            dbPantent.date_accept = request.date_accept;
+            dbPantent.date_empower = request.date_empower;
+
+            var r = Uof.IpatentService.UpdateEntity(dbPantent);
+
+            return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

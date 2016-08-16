@@ -592,6 +592,7 @@ namespace WebCenter.Web.Controllers
             dbReg.status = 4;
             dbReg.date_updated = DateTime.Now;
             dbReg.date_finish = date_finish;
+            dbReg.progress = "已完成";
             var r = Uof.ItrademarkService.UpdateEntity(dbReg);
 
             if (r)
@@ -608,6 +609,53 @@ namespace WebCenter.Web.Controllers
             }
 
             return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
-        }        
+        }
+
+        public ActionResult GetProgress(int id)
+        {
+            var p = Uof.ItrademarkService.GetAll(r => r.id == id).Select(r => new
+            {
+                id = r.id,
+                name = r.progress,
+                date_accept = r.date_accept,
+                date_receipt = r.date_receipt,
+                date_trial = r.date_trial,
+                date_regit = r.date_regit,
+                date_exten = r.date_exten
+            });
+
+            return Json(p, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProgress(TtrademarkProgressRequest request)
+        {
+            var dbtrademark = Uof.ItrademarkService.GetById(request.id);
+            if (dbtrademark == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (dbtrademark.progress == request.name &&
+                dbtrademark.date_accept == request.date_accept &&
+                dbtrademark.date_receipt == request.date_receipt &&
+                dbtrademark.date_trial == request.date_trial &&
+                dbtrademark.date_regit == request.date_regit &&
+                dbtrademark.date_exten == request.date_exten)
+            {
+                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbtrademark.progress = request.name;
+            dbtrademark.date_accept = request.date_accept;
+            dbtrademark.date_receipt = request.date_receipt;
+            dbtrademark.date_trial = request.date_trial;
+            dbtrademark.date_regit = request.date_regit;
+            dbtrademark.date_exten = request.date_exten;
+
+            var r = Uof.ItrademarkService.UpdateEntity(dbtrademark);
+
+            return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

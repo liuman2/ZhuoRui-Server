@@ -84,6 +84,7 @@ namespace WebCenter.Web.Controllers
                 amount_transaction = c.amount_transaction,
                 amount_income = 0,
                 amount_unreceive = 0,
+                progress = c.progress,
                 salesman_id = c.salesman_id,
                 salesman_name = c.member3.name,
 
@@ -227,8 +228,7 @@ namespace WebCenter.Web.Controllers
                 accounting_standard = a.accounting_standard,
                 cost_accounting = a.cost_accounting,
                 progress = a.progress,
-
-
+                
                 address = a.address,
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
@@ -283,8 +283,7 @@ namespace WebCenter.Web.Controllers
                 accounting_standard = a.accounting_standard,
                 cost_accounting = a.cost_accounting,
                 progress = a.progress,
-
-
+                
                 address = a.address,
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
@@ -590,6 +589,7 @@ namespace WebCenter.Web.Controllers
             dbAudit.status = 4;
             dbAudit.date_updated = DateTime.Now;
             dbAudit.date_finish = date_finish;
+            dbAudit.progress = "已完成";
             var r = Uof.IauditService.UpdateEntity(dbAudit);
 
             if (r)
@@ -606,6 +606,38 @@ namespace WebCenter.Web.Controllers
             }
 
             return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetProgress(int id)
+        {
+            var p = Uof.Ireg_abroadService.GetAll(r => r.id == id).Select(r => new
+            {
+                id = r.id,
+                name = r.progress
+            });
+
+            return Json(p, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProgress(ProgressRequest request)
+        {
+            var dbAbroad = Uof.IauditService.GetById(request.id);
+            if (dbAbroad == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (dbAbroad.progress == request.name)
+            {
+                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbAbroad.progress = request.name;
+
+            var r = Uof.IauditService.UpdateEntity(dbAbroad);
+
+            return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
     }
 }
