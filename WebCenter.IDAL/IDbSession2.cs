@@ -67,6 +67,9 @@ namespace WebCenter.IDAL
 		IDAL.IsequenceRepository sequenceRepository { get; }
 	  
 
+		IDAL.IsettingRepository settingRepository { get; }
+	  
+
 		IDAL.ItimelineRepository timelineRepository { get; }
 	  
 

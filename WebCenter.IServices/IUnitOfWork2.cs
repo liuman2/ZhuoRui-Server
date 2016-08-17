@@ -44,6 +44,8 @@ namespace WebCenter.IServices
 	
 	  IsequenceService IsequenceService{get;set;} 
 	
+	  IsettingService IsettingService{get;set;} 
+	
 	  ItimelineService ItimelineService{get;set;} 
 	
 	  ItrademarkService ItrademarkService{get;set;} 

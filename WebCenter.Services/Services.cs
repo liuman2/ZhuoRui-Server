@@ -193,6 +193,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class settingService:BaseService<setting>,IsettingService
+    {   
+        public settingService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.settingRepository;
+        }  
+    }
+	
 	public partial class timelineService:BaseService<timeline>,ItimelineService
     {   
         public timelineService()

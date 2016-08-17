@@ -135,6 +135,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IsettingService IsettingService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  ItimelineService ItimelineService
     {
         get;

@@ -146,6 +146,9 @@
     <Compile Include="sequence.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="setting.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="timeline.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

@@ -97,6 +97,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class settingRepository :BaseRepository<setting>,IsettingRepository
+    {
+         
+    }
+	
 	public partial class timelineRepository :BaseRepository<timeline>,ItimelineRepository
     {
          

@@ -53,6 +53,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<IsequenceService>().To<sequenceService>().InRequestScope();
 	
+	   kernel.Bind<IsettingService>().To<settingService>().InRequestScope();
+	
 	   kernel.Bind<ItimelineService>().To<timelineService>().InRequestScope();
 	
 	   kernel.Bind<ItrademarkService>().To<trademarkService>().InRequestScope();

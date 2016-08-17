@@ -45,5 +45,6 @@ namespace WebCenter.Entities
         public virtual DbSet<patent> patents { get; set; }
         public virtual DbSet<trademark> trademarks { get; set; }
         public virtual DbSet<reg_abroad> reg_abroad { get; set; }
+        public virtual DbSet<setting> settings { get; set; }
     }
 }

@@ -202,6 +202,7 @@
     <Compile Include="App_Start\WeixinConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Code\CacheKeys.cs" />
+    <Compile Include="Code\Coding.cs" />
     <Compile Include="Code\Enums.cs" />
     <Compile Include="Code\JsonNetResult.cs" />
     <Compile Include="Code\OrderSearchRequest.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="Controllers\RegAbroadController.cs" />
     <Compile Include="Controllers\RegInternalController.cs" />
     <Compile Include="Controllers\ReserveController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TimelineController.cs" />
     <Compile Include="Controllers\TrademarkController.cs" />
     <Compile Include="Filters\JsonAttribute.cs" />
@@ -319,6 +321,7 @@
     <Folder Include="Views\RegAbroad\" />
     <Folder Include="Views\Register\" />
     <Folder Include="Views\Reserve\" />
+    <Folder Include="Views\Settings\" />
     <Folder Include="Views\Timeline\" />
     <Folder Include="Views\User\" />
     <Folder Include="Views\Waitdeal\" />

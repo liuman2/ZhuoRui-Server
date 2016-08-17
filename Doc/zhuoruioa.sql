@@ -32,6 +32,7 @@ INSERT INTO `sequence` VALUES ('reg_internal', '1');
 INSERT INTO `sequence` VALUES ('audit', '1');
 INSERT INTO `sequence` VALUES ('trademark', '1');
 INSERT INTO `sequence` VALUES ('patent', '1');
+INSERT INTO `sequence` VALUES ('settings', '1');
 
 -- ----------------------------
 -- Table structure for organization
@@ -664,5 +665,11 @@ CREATE TABLE `patent` (
   CONSTRAINT `patent_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
+DROP TABLE IF EXISTS `settings`;
+CREATE TABLE `settings` (
+  `id` int(11) NOT NULL,
+  `name` varchar(20) NULL,
+  `value` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `settings` VALUES ('1', 'CODING', '{"customer":{"suffix":"4","area_code":[{"id":1,"name":"","value":"XM"},{"id":2,"name":"","value":"QZ"},{"id":3,"name":"","value":"QD"}]},"order":{"suffix":"4","code":[{"module":"ZW","module_name":"境外注册","value":"ZW"},{"module":"ZN","module_name":"境内注册","value":"ZN"},{"module":"SJ","module_name":"审计","value":"SJ"},{"module":"SB","module_name":"商标","value":"SB"},{"module":"ZL","module_name":"专利","value":"ZL"},{"module":"NS","module_name":"年审","value":"NS"}]}}');

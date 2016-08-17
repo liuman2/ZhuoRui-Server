@@ -78,7 +78,6 @@
           <Property Name="code" Type="varchar" MaxLength="20" />
           <Property Name="name" Type="varchar" MaxLength="100" />
           <Property Name="industry" Type="varchar" MaxLength="50" />
-          <Property Name="business_nature" Type="varchar" MaxLength="50" />
           <Property Name="province" Type="varchar" MaxLength="20" />
           <Property Name="city" Type="varchar" MaxLength="20" />
           <Property Name="county" Type="varchar" MaxLength="20" />
@@ -99,6 +98,7 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="description" Type="varchar" MaxLength="100" />
+          <Property Name="business_nature" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="customer_timeline">
           <Key>
@@ -248,7 +248,6 @@
           <Property Name="bank_id" Type="int" />
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="amount_transaction" Type="float" />
-          <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="invoice_name" Type="varchar" MaxLength="200" />
           <Property Name="invoice_tax" Type="varchar" MaxLength="200" />
           <Property Name="invoice_address" Type="varchar" MaxLength="200" />
@@ -273,6 +272,7 @@
           <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="progress" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="reg_history">
@@ -311,7 +311,6 @@
           <Property Name="customs_address" Type="varchar" MaxLength="300" />
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="amount_transaction" Type="float" />
-          <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="is_bookkeeping" Type="tinyint" />
           <Property Name="amount_bookkeeping" Type="float" />
           <Property Name="invoice_name" Type="varchar" MaxLength="200" />
@@ -339,6 +338,7 @@
           <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="currency" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="reg_internal_history">
           <Key>
@@ -373,6 +373,14 @@
           </Key>
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="id" Type="ubigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="settings">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="20" />
+          <Property Name="value" Type="text" />
         </EntityType>
         <EntityType Name="timeline">
           <Key>
@@ -1010,6 +1018,7 @@
           <EntitySet Name="reg_internal_history" EntityType="Self.reg_internal_history" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="role" EntityType="Self.role" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="sequence" EntityType="Self.sequence" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="settings" EntityType="Self.settings" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="timeline" EntityType="Self.timeline" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="trademark" EntityType="Self.trademark" Schema="zhuoruioa" store:Type="Tables" />
           <AssociationSet Name="abroad_ibfk_bank" Association="Self.abroad_ibfk_bank">
@@ -1414,6 +1423,7 @@
             <End Role="member" EntitySet="members" />
             <End Role="reg_abroad" EntitySet="reg_abroad" />
           </AssociationSet>
+          <EntitySet Name="settings" EntityType="DataCenter.Entities.setting" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -2495,6 +2505,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="setting">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="value" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2939,6 +2957,15 @@
                 <ScalarProperty Name="name_cn" ColumnName="name_cn" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="settings">
+            <EntityTypeMapping TypeName="DataCenter.Entities.setting">
+              <MappingFragment StoreEntitySet="settings">
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

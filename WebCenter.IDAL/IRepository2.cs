@@ -78,6 +78,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IsettingRepository :IBaseRepository<setting>
+    {         
+    }
+	
     public partial interface ItimelineRepository :IBaseRepository<timeline>
     {         
     }

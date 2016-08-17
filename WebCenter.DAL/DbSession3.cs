@@ -43,6 +43,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.IsequenceRepository sequenceRepository { get { return new sequenceRepository(); } }
 	
+	public IDAL.IsettingRepository settingRepository { get { return new settingRepository(); } }
+	
 	public IDAL.ItimelineRepository timelineRepository { get { return new timelineRepository(); } }
 	
 	public IDAL.ItrademarkRepository trademarkRepository { get { return new trademarkRepository(); } }
