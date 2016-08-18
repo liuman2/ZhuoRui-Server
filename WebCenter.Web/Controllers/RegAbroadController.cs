@@ -181,7 +181,7 @@ namespace WebCenter.Web.Controllers
             aboad.status = 0;
             aboad.review_status = -1;
             aboad.creator_id = userId;
-            aboad.salesman_id = userId;
+            //aboad.salesman_id = userId;
             aboad.organization_id = organization_id;
 
             if (aboad.is_open_bank == 0)
@@ -361,6 +361,8 @@ namespace WebCenter.Web.Controllers
                 reg.invoice_tel == dbReg.invoice_tel &&
                 reg.invoice_bank == dbReg.invoice_bank &&
                 reg.invoice_account == dbReg.invoice_account &&
+
+                reg.salesman_id == dbReg.salesman_id &&
                 reg.waiter_id == dbReg.waiter_id &&
                 reg.manager_id == dbReg.manager_id && 
                 reg.description == dbReg.description &&
@@ -395,6 +397,8 @@ namespace WebCenter.Web.Controllers
             dbReg.invoice_tel = reg.invoice_tel;
             dbReg.invoice_bank = reg.invoice_bank;
             dbReg.invoice_account = reg.invoice_account;
+
+            dbReg.salesman_id = reg.salesman_id;
             dbReg.waiter_id = reg.waiter_id;
             dbReg.manager_id = reg.manager_id;
             dbReg.description = reg.description;

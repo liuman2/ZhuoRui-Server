@@ -95,7 +95,7 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
 
-            c.salesman_id = userId;
+            //c.salesman_id = userId;
             c.organization_id = organization_id;
             c.status = 0;
 
@@ -150,6 +150,7 @@ namespace WebCenter.Web.Controllers
                 _c.QQ == c.QQ &&
                 _c.source == c.source &&
                 _c.source_id == c.source_id &&
+                _c.salesman_id == c.salesman_id &&
                 _c.tel == c.tel &&
                 _c.wechat == c.wechat
                 )
@@ -170,6 +171,7 @@ namespace WebCenter.Web.Controllers
             _c.province = c.province;
             _c.QQ = c.QQ;
             _c.source = c.source;
+            _c.salesman_id = c.salesman_id;
 
             if (c.source != "客户介绍")
             {

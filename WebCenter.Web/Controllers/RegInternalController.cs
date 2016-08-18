@@ -174,7 +174,7 @@ namespace WebCenter.Web.Controllers
             reginternal.status = 0;
             reginternal.review_status = -1;
             reginternal.creator_id = userId;
-            reginternal.salesman_id = userId;
+            //reginternal.salesman_id = userId;
             reginternal.organization_id = organization_id;
 
             if (reginternal.is_customs == 0)
@@ -375,6 +375,7 @@ namespace WebCenter.Web.Controllers
                 reg.invoice_tel == dbReg.invoice_tel &&
                 reg.invoice_bank == dbReg.invoice_bank &&
                 reg.invoice_account == dbReg.invoice_account &&
+                reg.salesman_id == dbReg.salesman_id &&
                 reg.waiter_id == dbReg.waiter_id &&
                 reg.manager_id == dbReg.manager_id &&
                 reg.outworker_id == dbReg.outworker_id &&
@@ -418,6 +419,7 @@ namespace WebCenter.Web.Controllers
             dbReg.invoice_bank = reg.invoice_bank;
             dbReg.invoice_account = reg.invoice_account;
             dbReg.waiter_id = reg.waiter_id;
+            dbReg.salesman_id = reg.salesman_id;
             dbReg.manager_id = reg.manager_id;
             dbReg.description = reg.description;
 

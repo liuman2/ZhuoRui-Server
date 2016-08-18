@@ -190,7 +190,7 @@ namespace WebCenter.Web.Controllers
             trade.status = 0;
             trade.review_status = -1;
             trade.creator_id = userId;
-            trade.salesman_id = userId;
+            //trade.salesman_id = userId;
             trade.organization_id = organization_id;
 
             var newTrade = Uof.ItrademarkService.AddEntity(trade);
@@ -351,6 +351,7 @@ namespace WebCenter.Web.Controllers
                 trade.date_exten == dbTrade.date_exten &&
                 trade.progress == dbTrade.progress &&
 
+                trade.salesman_id == dbTrade.salesman_id &&
                 trade.waiter_id == dbTrade.waiter_id &&
                 trade.manager_id == dbTrade.manager_id && 
                 trade.description == dbTrade.description &&
@@ -385,6 +386,7 @@ namespace WebCenter.Web.Controllers
             dbTrade.date_exten = trade.date_exten;
             dbTrade.progress = trade.progress;
 
+            dbTrade.salesman_id = trade.salesman_id;
             dbTrade.waiter_id = trade.waiter_id;
             dbTrade.manager_id = trade.manager_id;
             dbTrade.description = trade.description;

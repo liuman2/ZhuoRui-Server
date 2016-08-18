@@ -173,11 +173,9 @@ namespace WebCenter.Web.Controllers
             _audit.status = 0;
             _audit.review_status = -1;
             _audit.creator_id = userId;
-            _audit.salesman_id = userId;
+            //_audit.salesman_id = userId;
             _audit.organization_id = organization_id;
-
-
-
+            
             var newAbroad = Uof.IauditService.AddEntity(_audit);
             if (newAbroad == null)
             {
@@ -349,6 +347,7 @@ namespace WebCenter.Web.Controllers
                 _audit.amount_transaction == dbAudit.amount_transaction &&
                 _audit.accountant_id == dbAudit.accountant_id &&
                 _audit.manager_id == dbAudit.manager_id &&
+                _audit.salesman_id == dbAudit.salesman_id &&
                 _audit.description == dbAudit.description &&
                 _audit.currency == dbAudit.currency
                 )
@@ -385,6 +384,7 @@ namespace WebCenter.Web.Controllers
             dbAudit.amount_transaction = _audit.amount_transaction;
             dbAudit.accountant_id = _audit.accountant_id;
             dbAudit.manager_id = _audit.manager_id;
+            dbAudit.salesman_id = _audit.salesman_id;
             dbAudit.description = _audit.description;
             dbAudit.currency = _audit.currency;
             dbAudit.date_updated = DateTime.Now;

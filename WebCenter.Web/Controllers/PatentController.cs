@@ -185,7 +185,7 @@ namespace WebCenter.Web.Controllers
             _patent.status = 0;
             _patent.review_status = -1;
             _patent.creator_id = userId;
-            _patent.salesman_id = userId;
+            //_patent.salesman_id = userId;
             _patent.organization_id = organization_id;
 
             var newPatent = Uof.IpatentService.AddEntity(_patent);
@@ -346,6 +346,7 @@ namespace WebCenter.Web.Controllers
                 _patent.date_accept == dbPatent.date_accept &&                
                 _patent.progress == dbPatent.progress &&                
                 _patent.waiter_id == dbPatent.waiter_id &&
+                _patent.salesman_id == dbPatent.salesman_id &&
                 _patent.manager_id == dbPatent.manager_id && 
                 _patent.description == dbPatent.description &&
                 _patent.currency == dbPatent.currency
@@ -378,11 +379,12 @@ namespace WebCenter.Web.Controllers
             dbPatent.date_inspection = _patent.date_inspection;
             dbPatent.progress = _patent.progress;
 
+            dbPatent.salesman_id = _patent.salesman_id;
             dbPatent.waiter_id = _patent.waiter_id;
             dbPatent.manager_id = _patent.manager_id;
             dbPatent.description = _patent.description;
             dbPatent.date_updated = DateTime.Now;
-
+            
             var r = Uof.IpatentService.UpdateEntity(dbPatent);
 
             if (r)
