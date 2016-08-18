@@ -74,6 +74,7 @@ namespace WebCenter.Web.Controllers
             var list = Uof.Ireg_abroadService.GetAll(condition).OrderByDescending(item => item.id).Select(c => new
             {
                 id = c.id,
+                code = c.code,
                 customer_id = c.customer_id,
                 customer_name = c.customer.name,
                 name_cn = c.name_cn,
@@ -175,8 +176,7 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
 
-            // TODO: 自动编码
-            aboad.code = "";
+            aboad.code = GetNextOrderCode("ZW");
 
             aboad.status = 0;
             aboad.review_status = -1;

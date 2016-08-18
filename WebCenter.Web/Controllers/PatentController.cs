@@ -86,6 +86,7 @@ namespace WebCenter.Web.Controllers
             var list = Uof.IpatentService.GetAll(condition).OrderByDescending(item => item.id).Select(c => new
             {
                 id = c.id,
+                code = c.code,
                 customer_id = c.customer_id,
                 customer_name = c.customer.name,
                 type = c.type,
@@ -178,9 +179,8 @@ namespace WebCenter.Web.Controllers
             var organization_id = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
-
-            // TODO: 自动编码
-            _patent.code = "";
+                        
+            _patent.code = GetNextOrderCode("ZL");
 
             _patent.status = 0;
             _patent.review_status = -1;

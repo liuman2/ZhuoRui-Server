@@ -86,6 +86,7 @@ namespace WebCenter.Web.Controllers
             var list = Uof.ItrademarkService.GetAll(condition).OrderByDescending(item => item.id).Select(c => new
             {
                 id = c.id,
+                code = c.code,
                 customer_id = c.customer_id,
                 customer_name = c.customer.name,
                 type = c.type,
@@ -184,8 +185,7 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
 
-            // TODO: 自动编码
-            trade.code = "";
+            trade.code = GetNextOrderCode("SB");
 
             trade.status = 0;
             trade.review_status = -1;

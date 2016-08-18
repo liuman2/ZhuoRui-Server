@@ -277,7 +277,7 @@ namespace WebCenter.Web.Controllers
             }
 
             // TODO: 生成客户编码
-
+            c.code = GetNextCustomerCode(c.salesman_id.Value);
             c.status = 1;
             c.date_updated = DateTime.Now;
 

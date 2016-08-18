@@ -81,9 +81,10 @@ namespace WebCenter.Web.Controllers
                 condition = tmp;
             }
 
-            var list = Uof.IcustomerService.GetAll(condition).OrderBy(item => item.id).Select(c => new
+            var list = Uof.IcustomerService.GetAll(condition).OrderByDescending(item => item.id).Select(c => new
             {
                 id = c.id,
+                code = c.code,
                 name = c.name,
                 contact = c.contact,
                 mobile = c.mobile,
@@ -138,11 +139,13 @@ namespace WebCenter.Web.Controllers
             var organization_id = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
-
-            c.code = ""; // TODO: 自动编码
+            
+            
             c.salesman_id = userId;
             c.organization_id = organization_id;
             c.status = 1;
+
+            c.code = GetNextCustomerCode(c.salesman_id.Value);
 
             var _c = Uof.IcustomerService.AddEntity(c);
 
@@ -263,6 +266,7 @@ namespace WebCenter.Web.Controllers
             return Json(new
             {
                 id = _customer.id,
+                code = _customer.code,
                 name = _customer.name,
                 industry = _customer.industry,
                 province = _customer.province,
@@ -384,5 +388,7 @@ namespace WebCenter.Web.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        
     }
 }

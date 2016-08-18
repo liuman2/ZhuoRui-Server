@@ -61,5 +61,87 @@ namespace WebCenter.Web.Controllers
                 JsonRequestBehavior = behavior
             };
         }
+
+        public string GetNextCustomerCode(int userId)
+        {
+            var areaId = Uof.ImemberService.GetAll(m => m.id == userId).Select(m => m.area_id).FirstOrDefault();
+
+            var codeSetting = Uof.IsettingService.GetAll(s => s.name == "CODING").FirstOrDefault();
+            var codingObj = JsonConvert.DeserializeObject<Coding>(codeSetting.value);
+
+            var suffix = codingObj.customer.suffix;
+            var codeStr = codingObj.customer.area_code.Where(a => a.id == areaId).Select(a => a.value).FirstOrDefault();
+
+
+            var c = Uof.IcustomerService.GetAll(a => a.status == 1 && a.code.Contains(codeStr)).Select(a => new
+            {
+                id = a.id,
+                code = a.code,
+                name = a.name
+            }).OrderByDescending(a => a.id).FirstOrDefault();
+
+            if (c == null)
+            {
+                return string.Format("{0}{1}", codeStr, 1.ToString().PadLeft(suffix, '0'));
+            }
+
+            var indexStr = c.code.Replace(codeStr, "").Replace("0", "");
+
+            var index = 0;
+            int.TryParse(indexStr, out index);
+
+            return string.Format("{0}{1}", codeStr, (index + 1).ToString().PadLeft(suffix, '0'));
+        }
+
+        public string GetNextOrderCode(string moduleCode)
+        {
+            var codeSetting = Uof.IsettingService.GetAll(s => s.name == "CODING").FirstOrDefault();
+            var codingObj = JsonConvert.DeserializeObject<Coding>(codeSetting.value);
+
+            var suffix = codingObj.order.suffix;
+            var codeStr = codingObj.order.code.Where(a => a.module == moduleCode).Select(a => a.value).FirstOrDefault();
+
+            var dbCode = "";
+            switch (moduleCode)
+            {
+                // 境外注册
+                case "ZW":
+                   dbCode = Uof.Ireg_abroadService.GetAll().OrderByDescending(a=>a.id).Select(a => a.code).FirstOrDefault();
+                    break;
+                // 境内注册
+                case "ZN":
+                    dbCode = Uof.Ireg_internalService.GetAll().OrderByDescending(a => a.id).Select(a => a.code).FirstOrDefault();
+                    break;
+                // 审计
+                case "SJ":
+                    dbCode = Uof.IauditService.GetAll().OrderByDescending(a => a.id).Select(a => a.code).FirstOrDefault();
+                    break;
+                // 商标
+                case "SB":
+                    dbCode = Uof.ItrademarkService.GetAll().OrderByDescending(a => a.id).Select(a => a.code).FirstOrDefault();
+                    break;
+                // 专利
+                case "ZL":
+                    dbCode = Uof.IpatentService.GetAll().OrderByDescending(a => a.id).Select(a => a.code).FirstOrDefault();
+                    break;
+                //年审
+                case "NS":
+                    break;
+                default:
+                    break;
+            }
+
+            if (string.IsNullOrEmpty(dbCode))
+            {
+                return string.Format("{0}{1}", codeStr, 1.ToString().PadLeft(suffix, '0'));
+            }
+
+            var indexStr = dbCode.Replace(codeStr, "").Replace("0", "");
+
+            var index = 0;
+            int.TryParse(indexStr, out index);
+
+            return string.Format("{0}{1}", codeStr, (index + 1).ToString().PadLeft(suffix, '0'));
+        }
     }
 }
