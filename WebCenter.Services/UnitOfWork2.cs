@@ -9,6 +9,13 @@ namespace WebCenter.Services
 {  
 	
   [Ninject.Inject]
+	 public  Iannual_examService Iannual_examService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IareaService IareaService
     {
         get;

@@ -10,6 +10,10 @@ namespace WebCenter.IServices
 {
    
 	
+	public partial interface Iannual_examService:IBaseService<annual_exam>
+    {   
+    }
+	
 	public partial interface IareaService:IBaseService<area>
     {   
     }

@@ -8,6 +8,8 @@ namespace WebCenter.IServices
     public partial interface IUnitOfWork
 {  
 	
+	  Iannual_examService Iannual_examService{get;set;} 
+	
 	  IareaService IareaService{get;set;} 
 	
 	  IauditService IauditService{get;set;} 

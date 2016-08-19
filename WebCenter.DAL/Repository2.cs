@@ -7,6 +7,11 @@ namespace WebCenter.DAL
 {
    
 	
+	public partial class annual_examRepository :BaseRepository<annual_exam>,Iannual_examRepository
+    {
+         
+    }
+	
 	public partial class areaRepository :BaseRepository<area>,IareaRepository
     {
          

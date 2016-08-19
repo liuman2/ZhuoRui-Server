@@ -50,6 +50,13 @@ namespace WebCenter.Entities
             this.reg_abroad4 = new HashSet<reg_abroad>();
             this.reg_abroad5 = new HashSet<reg_abroad>();
             this.reg_abroad6 = new HashSet<reg_abroad>();
+            this.annual_exam = new HashSet<annual_exam>();
+            this.annual_exam1 = new HashSet<annual_exam>();
+            this.annual_exam2 = new HashSet<annual_exam>();
+            this.annual_exam3 = new HashSet<annual_exam>();
+            this.annual_exam4 = new HashSet<annual_exam>();
+            this.annual_exam5 = new HashSet<annual_exam>();
+            this.annual_exam6 = new HashSet<annual_exam>();
         }
     
     
@@ -147,5 +154,12 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad4 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad5 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad6 { get; set; }
+        public virtual ICollection<annual_exam> annual_exam { get; set; }
+        public virtual ICollection<annual_exam> annual_exam1 { get; set; }
+        public virtual ICollection<annual_exam> annual_exam2 { get; set; }
+        public virtual ICollection<annual_exam> annual_exam3 { get; set; }
+        public virtual ICollection<annual_exam> annual_exam4 { get; set; }
+        public virtual ICollection<annual_exam> annual_exam5 { get; set; }
+        public virtual ICollection<annual_exam> annual_exam6 { get; set; }
     }
 }

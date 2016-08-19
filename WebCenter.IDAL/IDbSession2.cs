@@ -13,6 +13,9 @@ namespace WebCenter.IDAL
    
 	  
 
+		IDAL.Iannual_examRepository annual_examRepository { get; }
+	  
+
 		IDAL.IareaRepository areaRepository { get; }
 	  
 

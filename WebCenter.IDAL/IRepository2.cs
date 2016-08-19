@@ -6,6 +6,10 @@ namespace WebCenter.IDAL
 {
    
 	
+    public partial interface Iannual_examRepository :IBaseRepository<annual_exam>
+    {         
+    }
+	
     public partial interface IareaRepository :IBaseRepository<area>
     {         
     }

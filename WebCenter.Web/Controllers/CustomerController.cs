@@ -21,13 +21,14 @@ namespace WebCenter.Web.Controllers
             Expression<Func<customer, bool>> condition = c => true;
             if (!string.IsNullOrEmpty(name))
             {
-                Expression<Func<customer, bool>> tmp = c => (c.name.IndexOf(name) > -1);
+                Expression<Func<customer, bool>> tmp = c => (c.name.IndexOf(name) > -1 || c.code.IndexOf(name) > -1);
                 condition = tmp;
             }
 
             var list = Uof.IcustomerService.GetAll(condition).OrderBy(item => item.id).Select(c => new
             {
                 id = c.id,
+                code = c.code,
                 name = c.name
             }).ToPagedList(index, size).ToList();
 
@@ -77,7 +78,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<customer, bool>> condition = c => c.status == 1 && c.salesman_id == userId;
             if (!string.IsNullOrEmpty(name))
             {
-                Expression<Func<customer, bool>> tmp = c => (c.name.IndexOf(name) > -1);
+                Expression<Func<customer, bool>> tmp = c => (c.name.IndexOf(name) > -1 || c.code.IndexOf(name) > -1);
                 condition = tmp;
             }
 

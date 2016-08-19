@@ -33,6 +33,7 @@ INSERT INTO `sequence` VALUES ('audit', '1');
 INSERT INTO `sequence` VALUES ('trademark', '1');
 INSERT INTO `sequence` VALUES ('patent', '1');
 INSERT INTO `sequence` VALUES ('settings', '1');
+INSERT INTO `sequence` VALUES ('annual_exam', '1');
 
 -- ----------------------------
 -- Table structure for organization
@@ -460,6 +461,7 @@ CREATE TABLE `income` (
   `source_id` int(11) NULL,
   `source_name` varchar(20) DEFAULT NULL,
   `payer` varchar(100) DEFAULT NULL COMMENT '付款人',
+  `pay_way` varchar(100) DEFAULT NULL COMMENT '付款方式',
   `account` varchar(100) DEFAULT NULL COMMENT '付款账号',
   `amount` float(255,2) DEFAULT NULL COMMENT '付款金额',
   `date_pay` datetime DEFAULT NULL COMMENT '付款时间',
@@ -664,6 +666,53 @@ CREATE TABLE `patent` (
   CONSTRAINT `patent_ibfk_finance_reviewer` FOREIGN KEY (`finance_reviewer_id`) REFERENCES `member` (`id`),
   CONSTRAINT `patent_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `annual_exam`;
+CREATE TABLE `annual_exam` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NULL,
+  `code` varchar(20) DEFAULT NULL COMMENT '档案号',
+  `type` varchar(10) DEFAULT NULL COMMENT '订单类别',
+  `order_id` int(11) NULL COMMENT '年审来源单据',
+  `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
+  `status` tinyint(3) NULL COMMENT '订单状态 状态:0-未提交, 1-已提交, 2-财务已审核, 3-提交人已审核, 4-完成',
+  `finance_reviewer_id` int(11) DEFAULT NULL COMMENT '财务审核人员ID',
+  `finance_review_date` datetime DEFAULT NULL COMMENT '财务审核日期',
+  `finance_review_moment` varchar(100) DEFAULT NULL COMMENT '财务审核意见',
+  `submit_reviewer_id` int(11) DEFAULT NULL COMMENT '提交审核人员ID',
+  `submit_review_date` datetime DEFAULT NULL COMMENT '提交审核日期',
+  `submit_review_moment` varchar(100) DEFAULT NULL COMMENT '提交审核意见',
+  `review_status` int(11) DEFAULT NULL COMMENT '审核状体 未审核：-1；未通过：0；已通过：1',
+  `date_finish` datetime DEFAULT NULL COMMENT '完成时间',
+  `progress` varchar(50) DEFAULT NULL COMMENT '注册进度',
+  `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
+  `salesman_id` int(11) DEFAULT NULL COMMENT '业务员',
+  `waiter_id` int(11) DEFAULT NULL COMMENT '年检客服',
+  `accountant_id` int(11) DEFAULT NULL COMMENT '会计',
+  `manager_id` int(11) DEFAULT NULL COMMENT '经理',
+  `organization_id` int(11) DEFAULT NULL COMMENT '业务员部门',
+  `description` varchar(300) NULL,
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `customer_id` (`customer_id`),
+  KEY `creator_id` (`creator_id`),
+  KEY `salesman_id` (`salesman_id`),
+  KEY `waiter_id` (`waiter_id`),
+  KEY `accountant_id` (`accountant_id`),
+  KEY `manager_id` (`manager_id`),
+  KEY `finance_reviewer_id` (`finance_reviewer_id`),
+  KEY `submit_reviewer_id` (`submit_reviewer_id`),
+  CONSTRAINT `annual_ibfk_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
+  CONSTRAINT `annual_ibfk_creator` FOREIGN KEY (`creator_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `annual_ibfk_salesman` FOREIGN KEY (`salesman_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `annual_ibfk_waiter` FOREIGN KEY (`waiter_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `annual_ibfk_accountant` FOREIGN KEY (`accountant_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `annual_ibfk_manager` FOREIGN KEY (`manager_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `annual_ibfk_finance_reviewer` FOREIGN KEY (`finance_reviewer_id`) REFERENCES `member` (`id`),
+  CONSTRAINT `annual_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (

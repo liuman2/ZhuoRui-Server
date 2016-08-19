@@ -13,6 +13,16 @@ namespace WebCenter.Services
 {
    
 	
+	public partial class annual_examService:BaseService<annual_exam>,Iannual_examService
+    {   
+        public annual_examService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.annual_examRepository;
+        }  
+    }
+	
 	public partial class areaService:BaseService<area>,IareaService
     {   
         public areaService()

@@ -38,6 +38,10 @@ namespace WebCenter.Entities
     
     
     
+        public string pay_way { get; set; }
+    
+    
+    
         public string account { get; set; }
     
     

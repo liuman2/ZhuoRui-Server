@@ -17,6 +17,8 @@ public partial class  NinjectDependencyResolver:IDependencyResolver
 private void AutoAddBinds()
 {
 	
+	   kernel.Bind<Iannual_examService>().To<annual_examService>().InRequestScope();
+	
 	   kernel.Bind<IareaService>().To<areaService>().InRequestScope();
 	
 	   kernel.Bind<IauditService>().To<auditService>().InRequestScope();
