@@ -37,53 +37,58 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
 
             Expression<Func<trademark, bool>> condition = c => c.salesman_id == userId;
+
             // 客户id
+            Expression<Func<trademark, bool>> customerQuery = c => true;
             if (request.customer_id != null && request.customer_id.Value > 0)
             {
-                Expression<Func<trademark, bool>> tmp = c => (c.customer_id == request.customer_id);
-                condition = tmp;
+                customerQuery = c => (c.customer_id == request.customer_id);
             }
             // 订单状态
+            Expression<Func<trademark, bool>> statusQuery = c => true;
             if (request.status != null)
             {
                 if (request.status == 2)
                 {
-                    Expression<Func<trademark, bool>> tmp = c => (c.status == 2 || c.status == 3);
-                    condition = tmp;
+                    statusQuery = c => (c.status == 2 || c.status == 3);
                 }
                 else
                 {
-                    Expression<Func<trademark, bool>> tmp = c => (c.status == request.status.Value);
-                    condition = tmp;
+                    statusQuery = c => (c.status == request.status.Value);
                 }                
             }
             // 成交开始日期
+            Expression<Func<trademark, bool>> date1Query = c => true;
+            Expression<Func<trademark, bool>> date2Query = c => true;
             if (request.start_time != null)
             {
-                Expression<Func<trademark, bool>> tmp = c => (c.date_transaction >= request.start_time.Value);
-                condition = tmp;
+                date1Query = c => (c.date_transaction >= request.start_time.Value);
             }
             // 成交结束日期
             if (request.end_time != null)
             {
                 var endTime = request.end_time.Value.AddDays(1);
-                Expression<Func<trademark, bool>> tmp = c => (c.date_transaction < endTime);
-                condition = tmp;
+                date2Query = c => (c.date_transaction < endTime);
             }
-
+            Expression<Func<trademark, bool>> nameQuery = c => true;
             if (!string.IsNullOrEmpty(request.name))
             {
-                Expression<Func<trademark, bool>> tmp = c => (c.name.Contains(request.name));
-                condition = tmp;
+                nameQuery = c => (c.name.Contains(request.name));
             }
-
+            Expression<Func<trademark, bool>> applicantQuery = c => true;
             if (!string.IsNullOrEmpty(request.applicant))
             {
-                Expression<Func<trademark, bool>> tmp = c => (c.applicant.Contains(request.applicant));
-                condition = tmp;
+                applicantQuery = c => (c.applicant.Contains(request.applicant));
             }
 
-            var list = Uof.ItrademarkService.GetAll(condition).OrderByDescending(item => item.id).Select(c => new
+            var list = Uof.ItrademarkService.GetAll(condition)
+                .Where(customerQuery)
+                .Where(statusQuery)
+                .Where(date1Query)
+                .Where(date2Query)
+                .Where(nameQuery)
+                .Where(applicantQuery)
+                .OrderByDescending(item => item.id).Select(c => new
             {
                 id = c.id,
                 code = c.code,

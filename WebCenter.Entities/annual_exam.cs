@@ -42,6 +42,14 @@ namespace WebCenter.Entities
     
     
     
+        public Nullable<System.DateTime> date_transaction { get; set; }
+    
+    
+    
+        public string currency { get; set; }
+    
+    
+    
         public Nullable<sbyte> status { get; set; }
     
     

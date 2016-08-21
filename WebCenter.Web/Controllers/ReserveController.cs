@@ -36,13 +36,13 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
 
             Expression<Func<customer, bool>> condition = c => c.status == 0 && c.salesman_id == userId;
+            Expression<Func<customer, bool>> nameQuery = c => true;
             if (!string.IsNullOrEmpty(name))
             {
-                Expression<Func<customer, bool>> tmp = c => (c.name.IndexOf(name) > -1);
-                condition = tmp;
+                nameQuery = c => (c.name.IndexOf(name) > -1);
             }
 
-            var list = Uof.IcustomerService.GetAll(condition).OrderBy(item => item.id).Select(c => new
+            var list = Uof.IcustomerService.GetAll(condition).Where(nameQuery).OrderBy(item => item.id).Select(c => new
             {
                 id = c.id,
                 name = c.name,

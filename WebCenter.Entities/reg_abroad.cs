@@ -74,10 +74,6 @@ namespace WebCenter.Entities
     
     
     
-        public string currency { get; set; }
-    
-    
-    
         public string invoice_name { get; set; }
     
     
@@ -174,7 +170,15 @@ namespace WebCenter.Entities
     
     
     
+        public string currency { get; set; }
+    
+    
+    
         public string progress { get; set; }
+    
+    
+    
+        public Nullable<int> annual_year { get; set; }
     
         public virtual bank_account bank_account { get; set; }
         public virtual customer customer { get; set; }

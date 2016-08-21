@@ -36,13 +36,13 @@ namespace WebCenter.Web.Controllers
         public ActionResult DroplistByGroup(string group, string name)
         {
             Expression<Func<dictionary, bool>> condition = m => m.group == group;
+            Expression<Func<dictionary, bool>> nameQuery = m => true;
             if (!string.IsNullOrEmpty(name))
             {
-                Expression<Func<dictionary, bool>> tmp = m => (m.name.IndexOf(name) > -1);
-                condition = tmp;
+                nameQuery = m => (m.name.IndexOf(name) > -1);
             }
 
-            var list = Uof.IdictionaryService.GetAll(condition).Select(d => new { id = d.name, name = d.name, value = d.name }).ToList();
+            var list = Uof.IdictionaryService.GetAll(condition).Where(nameQuery).Select(d => new { id = d.name, name = d.name, value = d.name }).ToList();
 
             var result = new
             {

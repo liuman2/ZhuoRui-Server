@@ -76,13 +76,16 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
 
             Expression<Func<customer, bool>> condition = c => c.status == 1 && c.salesman_id == userId;
+            Expression<Func<customer, bool>> nameQuery = c => true;
+                
             if (!string.IsNullOrEmpty(name))
             {
-                Expression<Func<customer, bool>> tmp = c => (c.name.IndexOf(name) > -1 || c.code.IndexOf(name) > -1);
-                condition = tmp;
+                nameQuery = c => (c.name.IndexOf(name) > -1 || c.code.IndexOf(name) > -1);
             }
 
-            var list = Uof.IcustomerService.GetAll(condition).OrderByDescending(item => item.id).Select(c => new
+            var list = Uof.IcustomerService.GetAll(condition)
+                .Where(nameQuery)
+                .OrderByDescending(item => item.id).Select(c => new
             {
                 id = c.id,
                 code = c.code,
@@ -370,13 +373,15 @@ namespace WebCenter.Web.Controllers
         public ActionResult Banks(int customer_id, string name = "")
         {
             Expression<Func<bank_account, bool>> condition = c => c.customer_id == customer_id;
+            Expression<Func<bank_account, bool>> nameQuery = c => true;
             if (!string.IsNullOrEmpty(name))
             {
-                Expression<Func<bank_account, bool>> tmp = c => (c.bank.IndexOf(name) > -1);
-                condition = tmp;
+                nameQuery = c => (c.bank.IndexOf(name) > -1);
             }
 
-            var list = Uof.Ibank_accountService.GetAll(condition).OrderBy(item => item.id).Select(c => new
+            var list = Uof.Ibank_accountService.GetAll(condition)
+                .Where(nameQuery)
+                .OrderBy(item => item.id).Select(c => new
             {
                 id = c.id,
                 name = c.bank,

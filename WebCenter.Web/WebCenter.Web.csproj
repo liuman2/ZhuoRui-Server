@@ -201,6 +201,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WeixinConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Code\AnnualOrigOrder.cs" />
+    <Compile Include="Code\AnnualWarning.cs" />
     <Compile Include="Code\CacheKeys.cs" />
     <Compile Include="Code\Coding.cs" />
     <Compile Include="Code\Enums.cs" />
@@ -208,6 +210,7 @@
     <Compile Include="Code\OrderSearchRequest.cs" />
     <Compile Include="Code\ProgressRequest.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AnnualController.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\AuditController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -306,6 +309,7 @@
     <Folder Include="Models\" />
     <Folder Include="Photo\" />
     <Folder Include="Views\Account\" />
+    <Folder Include="Views\Annual\" />
     <Folder Include="Views\Area\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Company\" />

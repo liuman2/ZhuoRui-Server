@@ -20,23 +20,20 @@
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_2" />
         <EntityTypeShape EntityType="DataCenter.Entities.reg_history" Width="1.5" PointX="5.375" PointY="6.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.timeline" Width="1.5" PointX="7.375" PointY="6.75" />
-        <EntityTypeShape EntityType="DataCenter.Entities.reg_internal" Width="1.5" PointX="18.375" PointY="10.5" />
         <EntityTypeShape EntityType="DataCenter.Entities.reg_internal_history" Width="1.5" PointX="0.75" PointY="7.75" />
-        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_bank" />
-        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_creator" />
-        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_finance_reviewer" />
-        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_manager" />
-        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_outworker" />
-        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_salesman" />
-        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_submit_reviewer" />
-        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_waiter" />
         <EntityTypeShape EntityType="DataCenter.Entities.customer" Width="1.5" PointX="13.625" PointY="1.25" />
         <AssociationConnector Association="DataCenter.Entities.bank_account_customer" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_salesman" />
-        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.timeline_ibfk_customer" />
+        <EntityTypeShape EntityType="DataCenter.Entities.setting" Width="1.5" PointX="3.375" PointY="10.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.income" Width="1.5" PointX="15.875" PointY="12.125" />
+        <AssociationConnector Association="DataCenter.Entities.income_ibfk_customer" />
         <EntityTypeShape EntityType="DataCenter.Entities.audit" Width="1.5" PointX="15.875" PointY="0.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.patent" Width="1.5" PointX="18.875" PointY="2.125" />
+        <EntityTypeShape EntityType="DataCenter.Entities.reg_abroad" Width="1.5" PointX="21.125" PointY="12.25" />
+        <EntityTypeShape EntityType="DataCenter.Entities.reg_internal" Width="1.5" PointX="18.125" PointY="12.875" />
+        <EntityTypeShape EntityType="DataCenter.Entities.trademark" Width="1.5" PointX="21.875" PointY="2.125" />
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_accountant" />
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_customer" />
@@ -44,25 +41,12 @@
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_manager" />
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_submit_reviewer" />
-        <EntityTypeShape EntityType="DataCenter.Entities.patent" Width="1.5" PointX="18.875" PointY="0.75" />
-        <EntityTypeShape EntityType="DataCenter.Entities.trademark" Width="1.5" PointX="21.875" PointY="2.75" />
-        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_customer" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_customer" />
-        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_creator" />
-        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_finance_reviewer" />
-        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_manager" />
-        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_salesman" />
-        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_submit_reviewer" />
-        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_waiter" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_creator" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_finance_reviewer" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_manager" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_salesman" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_submit_reviewer" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_waiter" />
-        <EntityTypeShape EntityType="DataCenter.Entities.reg_abroad" Width="1.5" PointX="21.125" PointY="13.875" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_bank" />
+        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_bank" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_customer" />
+        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_customer" />
+        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_customer" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_finance_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_manager" />
@@ -70,9 +54,26 @@
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_waiter" />
-        <EntityTypeShape EntityType="DataCenter.Entities.setting" Width="1.5" PointX="3.375" PointY="10.75" />
-        <EntityTypeShape EntityType="DataCenter.Entities.annual_exam" Width="1.5" PointX="24.875" PointY="3" />
-        <EntityTypeShape EntityType="DataCenter.Entities.income" Width="1.5" PointX="15.875" PointY="12.125" />
+        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_creator" />
+        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_finance_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_manager" />
+        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_salesman" />
+        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_submit_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.patent_ibfk_waiter" />
+        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_creator" />
+        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_finance_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_manager" />
+        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_outworker" />
+        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_salesman" />
+        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_submit_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_waiter" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_creator" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_finance_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_manager" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_salesman" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_submit_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_waiter" />
+        <EntityTypeShape EntityType="DataCenter.Entities.annual_exam" Width="1.5" PointX="18.875" PointY="0.75" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_accountant" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_customer" />
@@ -81,7 +82,6 @@
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_waiter" />
-        <AssociationConnector Association="DataCenter.Entities.income_ibfk_customer" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

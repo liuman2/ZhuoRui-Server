@@ -281,7 +281,7 @@ DROP TABLE IF EXISTS `reg_abroad`;
 CREATE TABLE `reg_abroad` (
   `id` int(11) NOT NULL,
   `customer_id` int(11) NULL,
-  `code` varchar(20) DEFAULT NULL COMMENT '档案号',
+  `code` varchar(20) DEFAULT NULL COMMENT '单号',
   `name_cn` varchar(100) DEFAULT NULL COMMENT '公司中文名称',
   `name_en` varchar(100) DEFAULT NULL COMMENT '公司英文名称',
   `date_setup` datetime DEFAULT NULL COMMENT '公司成立日期',
@@ -326,6 +326,8 @@ CREATE TABLE `reg_abroad` (
 
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
+  `annual_year` int(11) DEFAULT NULL COMMENT '上次年检年份',
+
   PRIMARY KEY (`id`),
   KEY `customer_id` (`customer_id`),
   KEY `creator_id` (`creator_id`),
@@ -368,7 +370,7 @@ DROP TABLE IF EXISTS `reg_internal`;
 CREATE TABLE `reg_internal` (
   `id` int(11) NOT NULL,
   `customer_id` int(11) NULL,
-  `code` varchar(20) DEFAULT NULL COMMENT '档案号',
+  `code` varchar(20) DEFAULT NULL COMMENT '单号',
   `name_cn` varchar(100) DEFAULT NULL COMMENT '公司中文名称',
   `date_setup` datetime DEFAULT NULL COMMENT '公司成立日期',
   `reg_no` varchar(100) DEFAULT NULL COMMENT '公司统一信用编号',
@@ -417,6 +419,7 @@ CREATE TABLE `reg_internal` (
 
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
+  `annual_year` int(11) DEFAULT NULL COMMENT '上次年检年份',
   PRIMARY KEY (`id`),
   KEY `customer_id` (`customer_id`),
   KEY `creator_id` (`creator_id`),
@@ -490,7 +493,7 @@ DROP TABLE IF EXISTS `audit`;
 CREATE TABLE `audit` (
   `id` int(11) NOT NULL,
   `customer_id` int(11) NULL,
-  `code` varchar(20) DEFAULT NULL COMMENT '档案号',
+  `code` varchar(20) DEFAULT NULL COMMENT '单号',
   `type` varchar(10) DEFAULT NULL COMMENT '单据类别境内外',
   `name_cn` varchar(100) DEFAULT NULL COMMENT '公司中文名称',
   `name_en` varchar(100) DEFAULT NULL COMMENT '公司英文名称',
@@ -532,6 +535,7 @@ CREATE TABLE `audit` (
   `description` varchar(100) NULL,
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
+  `annual_year` int(11) DEFAULT NULL COMMENT '上次年检年份',
   PRIMARY KEY (`id`),
   KEY `customer_id` (`customer_id`),
   KEY `creator_id` (`creator_id`),
@@ -555,7 +559,7 @@ DROP TABLE IF EXISTS `trademark`;
 CREATE TABLE `trademark` (
   `id` int(11) NOT NULL,
   `customer_id` int(11) NULL,
-  `code` varchar(20) DEFAULT NULL COMMENT '档案号',
+  `code` varchar(20) DEFAULT NULL COMMENT '单号',
   `type` varchar(10) DEFAULT NULL COMMENT '单据类别境内外',
   `name` varchar(100) DEFAULT NULL COMMENT '商标名称',
   `applicant` varchar(50) DEFAULT NULL COMMENT '申请人',
@@ -593,6 +597,7 @@ CREATE TABLE `trademark` (
   `description` varchar(100) NULL,
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
+  `annual_year` int(11) DEFAULT NULL COMMENT '上次年检年份',
   PRIMARY KEY (`id`),
   KEY `customer_id` (`customer_id`),
   KEY `creator_id` (`creator_id`),
@@ -614,7 +619,7 @@ DROP TABLE IF EXISTS `patent`;
 CREATE TABLE `patent` (
   `id` int(11) NOT NULL,
   `customer_id` int(11) NULL,
-  `code` varchar(20) DEFAULT NULL COMMENT '档案号',
+  `code` varchar(20) DEFAULT NULL COMMENT '单号',
   `type` varchar(10) DEFAULT NULL COMMENT '单据类别境内外',
   `name` varchar(100) DEFAULT NULL COMMENT '专利名称',
   `applicant` varchar(50) DEFAULT NULL COMMENT '申请人',
@@ -650,6 +655,7 @@ CREATE TABLE `patent` (
   `description` varchar(100) NULL,
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
+  `annual_year` int(11) DEFAULT NULL COMMENT '上次年检年份',
   PRIMARY KEY (`id`),
   KEY `customer_id` (`customer_id`),
   KEY `creator_id` (`creator_id`),
@@ -671,10 +677,17 @@ DROP TABLE IF EXISTS `annual_exam`;
 CREATE TABLE `annual_exam` (
   `id` int(11) NOT NULL,
   `customer_id` int(11) NULL,
-  `code` varchar(20) DEFAULT NULL COMMENT '档案号',
-  `type` varchar(10) DEFAULT NULL COMMENT '订单类别',
-  `order_id` int(11) NULL COMMENT '年审来源单据',
+  `code` varchar(20) DEFAULT NULL COMMENT '单号',
+  `type` varchar(10) DEFAULT NULL COMMENT '年检类别',
+  `order_id` int(11) NULL COMMENT '年检来源单据',
+
+  `name_cn` varchar(100) DEFAULT NULL COMMENT '公司中文名称',
+  `name_en` varchar(100) DEFAULT NULL COMMENT '公司英文名称',
+
   `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
+  `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
+  `currency` varchar(10) DEFAULT NULL COMMENT '币别',
+
   `status` tinyint(3) NULL COMMENT '订单状态 状态:0-未提交, 1-已提交, 2-财务已审核, 3-提交人已审核, 4-完成',
   `finance_reviewer_id` int(11) DEFAULT NULL COMMENT '财务审核人员ID',
   `finance_review_date` datetime DEFAULT NULL COMMENT '财务审核日期',
@@ -721,4 +734,4 @@ CREATE TABLE `settings` (
   `value` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO `settings` VALUES ('1', 'CODING', '{"customer":{"suffix":"4","area_code":[{"id":1,"name":"","value":"XM"},{"id":2,"name":"","value":"QZ"},{"id":3,"name":"","value":"QD"}]},"order":{"suffix":"4","code":[{"module":"ZW","module_name":"境外注册","value":"ZW"},{"module":"ZN","module_name":"境内注册","value":"ZN"},{"module":"SJ","module_name":"审计","value":"SJ"},{"module":"SB","module_name":"商标","value":"SB"},{"module":"ZL","module_name":"专利","value":"ZL"},{"module":"NS","module_name":"年审","value":"NS"}]}}');
+INSERT INTO `settings` VALUES ('1', 'CODING', '{"customer":{"suffix":"4","area_code":[{"id":1,"name":"","value":"XM"},{"id":2,"name":"","value":"QZ"},{"id":3,"name":"","value":"QD"}]},"order":{"suffix":"4","code":[{"module":"ZW","module_name":"境外注册","value":"ZW"},{"module":"ZN","module_name":"境内注册","value":"ZN"},{"module":"SJ","module_name":"审计","value":"SJ"},{"module":"SB","module_name":"商标","value":"SB"},{"module":"ZL","module_name":"专利","value":"ZL"},{"module":"NS","module_name":"年审","value":"NS"},{"module":"NJ","module_name":"年检","value":"NJ"}]}}');

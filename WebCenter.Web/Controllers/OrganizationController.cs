@@ -33,8 +33,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<organization, bool>> condition = m => true;
             if (!string.IsNullOrEmpty(name))
             {
-                Expression<Func<organization, bool>> tmp = m => (m.name.IndexOf(name) > -1);
-                condition = tmp;
+                condition = m => (m.name.IndexOf(name) > -1);
             }
 
             var list = Uof.IorganizationService.GetAll(condition).OrderBy(item => item.id).Select(m => new

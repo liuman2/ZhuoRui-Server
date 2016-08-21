@@ -21,8 +21,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<member, bool>> condition = m => true;
             if (!string.IsNullOrEmpty(name))
             {
-                Expression<Func<member, bool>> tmp = m => (m.name.IndexOf(name) > -1);
-                condition = tmp;
+                condition = m => (m.name.IndexOf(name) > -1);
             }
 
             var list = Uof.ImemberService.GetAll(condition).OrderByDescending(item => item.id).Select(m => new
@@ -146,13 +145,13 @@ namespace WebCenter.Web.Controllers
         public ActionResult ExistUsername(string username, int? id)
         {
             Expression<Func<member, bool>> condition = m => (m.username == username);
+            Expression<Func<member, bool>> idQuery = m => true;
             if (id != null)
             {
-                Expression<Func<member, bool>> tmp = m => (m.id == id.Value);
-                condition = tmp;
+                idQuery = m => (m.id == id.Value);
             }
 
-            var _member = Uof.ImemberService.GetAll(condition).Select(m => new {
+            var _member = Uof.ImemberService.GetAll(condition).Where(idQuery).Select(m => new {
                 id = m.id,
                 name = m.name,
                 username = m.username
