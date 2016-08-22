@@ -14,6 +14,9 @@
           <Property Name="code" Type="varchar" MaxLength="20" />
           <Property Name="type" Type="varchar" MaxLength="10" />
           <Property Name="order_id" Type="int" />
+          <Property Name="name_cn" Type="varchar" MaxLength="100" />
+          <Property Name="name_en" Type="varchar" MaxLength="100" />
+          <Property Name="order_code" Type="varchar" MaxLength="20" />
           <Property Name="amount_transaction" Type="float" />
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="currency" Type="varchar" MaxLength="10" />
@@ -111,6 +114,7 @@
           <Property Name="code" Type="varchar" MaxLength="20" />
           <Property Name="name" Type="varchar" MaxLength="100" />
           <Property Name="industry" Type="varchar" MaxLength="50" />
+          <Property Name="business_nature" Type="varchar" MaxLength="50" />
           <Property Name="province" Type="varchar" MaxLength="20" />
           <Property Name="city" Type="varchar" MaxLength="20" />
           <Property Name="county" Type="varchar" MaxLength="20" />
@@ -131,7 +135,6 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="description" Type="varchar" MaxLength="100" />
-          <Property Name="business_nature" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="customer_timeline">
           <Key>
@@ -283,6 +286,7 @@
           <Property Name="bank_id" Type="int" />
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="amount_transaction" Type="float" />
+          <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="invoice_name" Type="varchar" MaxLength="200" />
           <Property Name="invoice_tax" Type="varchar" MaxLength="200" />
           <Property Name="invoice_address" Type="varchar" MaxLength="200" />
@@ -307,7 +311,6 @@
           <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
-          <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="progress" Type="varchar" MaxLength="50" />
           <Property Name="annual_year" Type="int" />
         </EntityType>
@@ -347,6 +350,7 @@
           <Property Name="customs_address" Type="varchar" MaxLength="300" />
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="amount_transaction" Type="float" />
+          <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="is_bookkeeping" Type="tinyint" />
           <Property Name="amount_bookkeeping" Type="float" />
           <Property Name="invoice_name" Type="varchar" MaxLength="200" />
@@ -374,7 +378,6 @@
           <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
-          <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="annual_year" Type="int" />
         </EntityType>
         <EntityType Name="reg_internal_history">
@@ -2736,6 +2739,9 @@
           <Property Name="code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="order_id" Type="Int32" />
+          <Property Name="name_cn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="name_en" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="order_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="amount_transaction" Type="Single" />
           <Property Name="date_transaction" Type="DateTime" />
           <Property Name="currency" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
@@ -3351,6 +3357,9 @@
                 <ScalarProperty Name="currency" ColumnName="currency" />
                 <ScalarProperty Name="date_transaction" ColumnName="date_transaction" />
                 <ScalarProperty Name="amount_transaction" ColumnName="amount_transaction" />
+                <ScalarProperty Name="order_code" ColumnName="order_code" />
+                <ScalarProperty Name="name_en" ColumnName="name_en" />
+                <ScalarProperty Name="name_cn" ColumnName="name_cn" />
                 <ScalarProperty Name="order_id" ColumnName="order_id" />
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="code" ColumnName="code" />

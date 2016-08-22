@@ -181,8 +181,8 @@ namespace WebCenter.Web.Controllers
                         order_id = a.id,
                         order_code = a.code,
                         order_type_name = "海外注册",
-                        order_name_cn = a.name_cn,
-                        order_name_en = a.name_en,
+                        name_cn = a.name_cn,
+                        name_en = a.name_en,
 
                         customer_id = a.customer_id,
                         customer_code = a.customer.code,
@@ -235,6 +235,26 @@ namespace WebCenter.Web.Controllers
                     dbRegAbroad.annual_year = DateTime.Now.Year;
                     Uof.Ireg_abroadService.UpdateEntity(dbRegAbroad);
                     break;
+                case "reg_internal":
+                    var dbRegInternal = Uof.Ireg_internalService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
+                    dbRegInternal.annual_year = DateTime.Now.Year;
+                    Uof.Ireg_internalService.UpdateEntity(dbRegInternal);
+                    break;
+                case "audit":
+                    var dbAudit = Uof.IauditService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
+                    dbAudit.annual_year = DateTime.Now.Year;
+                    Uof.IauditService.UpdateEntity(dbAudit);
+                    break;
+                case "patent":
+                    var dbPatent = Uof.IpatentService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
+                    dbPatent.annual_year = DateTime.Now.Year;
+                    Uof.IpatentService.UpdateEntity(dbPatent);
+                    break;
+                case "trademark":
+                    var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
+                    dbTrademark.annual_year = DateTime.Now.Year;
+                    Uof.ItrademarkService.UpdateEntity(dbTrademark);
+                    break;
                 default:
                     break;
             }
@@ -244,13 +264,56 @@ namespace WebCenter.Web.Controllers
                 source_id = newExam.id,
                 source_name = "annual",
                 title = "新建年检",
-                content = string.Format("{0}新建了年检订单, 单号{1}", arrs[3], newExam.code)
+                content = string.Format("{0}新建了客户{1}{2}年度年检订单, 单号{3}", arrs[3], newExam.customer.name, DateTime.Now.Year, newExam.code)
             });
 
             return Json(new { id = newExam.id }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Get(int id)
+        {
+            var annua = Uof.Iannual_examService.GetAll(a => a.id == id).Select(a => new
+            {
+                id = a.id,
+                code = a.code,
+                customer_id = a.customer_id,
+                customer_name = a.customer.name,
+                customer_code = a.customer.code,
+                type = a.type,
+                order_type_name = "",
+                order_code = a.order_code,
+                name_cn = a.name_cn,
+                name_en = a.name_en,
+                date_transaction = a.date_transaction,
+                amount_transaction = a.amount_transaction,
+                currency = a.currency,
+                description = a.description,
+                progress = a.progress,
+                salesman_id = a.salesman_id,
+                salesman = a.member4.name,
+                waiter_id = a.waiter_id,
+                waiter_name = a.member6.name,
 
+                status = a.status,
+                review_status = a.review_status
+
+            }).FirstOrDefault();
+
+            switch (annua.type)
+            {
+                case "":
+                    break;
+                case "":
+                    break;
+                case "":
+                    break;
+                default:
+                    break;
+            }
+
+            return Json(annua, JsonRequestBehavior.AllowGet);
+        }
+        
         public ActionResult Search(OrderSearchRequest request)
         {
             // TODO: 查询权限
@@ -357,5 +420,289 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetView(int id)
+        {
+            var annua = Uof.Iannual_examService.GetAll(a => a.id == id).Select(a => new
+            {
+                id = a.id,
+                code = a.code,
+                customer_id = a.customer_id,
+                customer_name = a.customer.name,
+                customer_code = a.customer.code,
+                type = a.type,
+                order_code = a.order_code,
+                name_cn = a.name_cn,
+                name_en = a.name_en,
+                date_transaction = a.date_transaction,
+                amount_transaction = a.amount_transaction,
+                currency = a.currency,
+                description = a.description,
+                progress = a.progress,
+                salesman_id = a.salesman_id,
+                salesman = a.member4.name,
+                waiter_id = a.waiter_id,
+                waiter_name = a.member6.name,
+                
+                status = a.status,
+                review_status = a.review_status
+
+            }).FirstOrDefault();
+
+            var list = Uof.IincomeService.GetAll(i => i.source_id == annua.id && i.customer_id == i.customer_id && i.source_name == "annual").ToList();
+
+            var total = 0f;
+            if (list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    total += item.amount.Value;
+                }
+            }
+
+            var incomes = new
+            {
+                items = list,
+                total = total,
+                balance = annua.amount_transaction - total
+            };
+
+            return Json(new { order = annua, incomes = incomes }, JsonRequestBehavior.AllowGet);
+        }
+        
+        public ActionResult Submit(int id)
+        {
+            var dbAnnual = Uof.Iannual_examService.GetById(id);
+            if (dbAnnual == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbAnnual.status = 1;
+            dbAnnual.date_updated = DateTime.Now;
+
+            var r = Uof.Iannual_examService.UpdateEntity(dbAnnual);
+
+            if (r)
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbAnnual.id,
+                    source_name = "annual",
+                    title = "提交审核",
+                    content = string.Format("提交给财务审核")
+                });
+
+                // TODO 通知 财务人员
+            }
+            return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PassAudit(int id)
+        {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var dbAnnual = Uof.Iannual_examService.GetById(id);
+            if (dbAnnual == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+            var t = "";
+            if (dbAnnual.status == 1)
+            {
+                dbAnnual.status = 2;
+                dbAnnual.review_status = 1;
+                dbAnnual.finance_reviewer_id = userId;
+                dbAnnual.finance_review_date = DateTime.Now;
+                dbAnnual.finance_review_moment = "";
+
+                t = "财务审核";
+                // TODO 通知 提交人，业务员
+            }
+            else
+            {
+                dbAnnual.status = 3;
+                dbAnnual.review_status = 1;
+                dbAnnual.submit_reviewer_id = userId;
+                dbAnnual.submit_review_date = DateTime.Now;
+                dbAnnual.submit_review_moment = "";
+
+                t = "提交的审核";
+                // TODO 通知 业务员
+            }
+
+            dbAnnual.date_updated = DateTime.Now;
+
+            var r = Uof.Iannual_examService.UpdateEntity(dbAnnual);
+
+            if (r)
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbAnnual.id,
+                    source_name = "annual",
+                    title = "通过审核",
+                    content = string.Format("{0}通过了{1}", arrs[3], t)
+                });
+            }
+            return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult RefuseAudit(int id, string description)
+        {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var dbAnnual = Uof.Iannual_examService.GetById(id);
+            if (dbAnnual == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+            var t = "";
+            if (dbAnnual.status == 1)
+            {
+                dbAnnual.status = 2;
+                dbAnnual.review_status = 0;
+                dbAnnual.finance_reviewer_id = userId;
+                dbAnnual.finance_review_date = DateTime.Now;
+                dbAnnual.finance_review_moment = description;
+
+                t = "驳回了财务审核";
+                // TODO 通知 业务员
+            }
+            else
+            {
+                dbAnnual.status = 3;
+                dbAnnual.review_status = 0;
+                dbAnnual.submit_reviewer_id = userId;
+                dbAnnual.submit_review_date = DateTime.Now;
+                dbAnnual.submit_review_moment = description;
+
+                t = "驳回了提交的审核";
+                // TODO 通知 业务员
+            }
+
+            dbAnnual.date_updated = DateTime.Now;
+
+            var r = Uof.Iannual_examService.UpdateEntity(dbAnnual);
+
+            if (r)
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbAnnual.id,
+                    source_name = "annual",
+                    title = "驳回审核",
+                    content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
+                });
+            }
+
+            return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult Finish(int id, DateTime date_finish)
+        {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var dbAnnual = Uof.Iannual_examService.GetById(id);
+            if (dbAnnual == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+            dbAnnual.status = 4;
+            dbAnnual.date_updated = DateTime.Now;
+            dbAnnual.date_finish = date_finish;
+            dbAnnual.progress = "已完成";
+            var r = Uof.Iannual_examService.UpdateEntity(dbAnnual);
+
+            if (r)
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbAnnual.id,
+                    source_name = "annual",
+                    title = "完成订单",
+                    content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
+                });
+
+                // TODO 通知 业务员
+            }
+
+            return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetProgress(int id)
+        {
+            var p = Uof.Iannual_examService.GetAll(r => r.id == id).Select(r => new
+            {
+                id = r.id,
+                name = r.progress
+            });
+
+            return Json(p, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProgress(ProgressRequest request)
+        {
+            var dbAnnual = Uof.Iannual_examService.GetById(request.id);
+            if (dbAnnual == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (dbAnnual.progress == request.name)
+            {
+                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbAnnual.progress = request.name;
+
+            var r = Uof.Iannual_examService.UpdateEntity(dbAnnual);
+
+            return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

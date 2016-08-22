@@ -83,6 +83,7 @@ namespace WebCenter.Web.Controllers
                account = i.account,
                amount = i.amount,
                date_pay = i.date_pay,
+               pay_way = i.pay_way,
                attachment_url = i.attachment_url,
                description = i.description
            }).FirstOrDefault();
@@ -98,6 +99,7 @@ namespace WebCenter.Web.Controllers
                 dbIncome.account == _income.account &&
                 dbIncome.amount == _income.amount &&
                 dbIncome.date_pay == _income.date_pay &&
+                dbIncome.pay_way == _income.pay_way &&
                 dbIncome.attachment_url == _income.attachment_url)
             {
                 return SuccessResult;
@@ -115,6 +117,7 @@ namespace WebCenter.Web.Controllers
             dbIncome.account = _income.account;
             dbIncome.amount = _income.amount;
             dbIncome.date_pay = _income.date_pay;
+            dbIncome.pay_way = _income.pay_way;
             dbIncome.attachment_url = _income.attachment_url;
 
             dbIncome.date_updated = DateTime.Now;

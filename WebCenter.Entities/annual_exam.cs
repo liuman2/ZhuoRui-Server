@@ -38,6 +38,18 @@ namespace WebCenter.Entities
     
     
     
+        public string name_cn { get; set; }
+    
+    
+    
+        public string name_en { get; set; }
+    
+    
+    
+        public string order_code { get; set; }
+    
+    
+    
         public Nullable<float> amount_transaction { get; set; }
     
     

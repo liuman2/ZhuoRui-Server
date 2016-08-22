@@ -73,7 +73,7 @@
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_waiter" />
-        <EntityTypeShape EntityType="DataCenter.Entities.annual_exam" Width="1.5" PointX="18.875" PointY="0.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.annual_exam" Width="1.5" PointX="24.875" PointY="2.625" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_accountant" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_customer" />
@@ -82,7 +82,7 @@
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_waiter" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

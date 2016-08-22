@@ -19,7 +19,7 @@ INSERT INTO `sequence` VALUES ('role', '6');
 INSERT INTO `sequence` VALUES ('member', '2');
 INSERT INTO `sequence` VALUES ('area', '4');
 INSERT INTO `sequence` VALUES ('dictionary_group', '13');
-INSERT INTO `sequence` VALUES ('dictionary', '11');
+INSERT INTO `sequence` VALUES ('dictionary', '15');
 INSERT INTO `sequence` VALUES ('customer', '1');
 INSERT INTO `sequence` VALUES ('bank_account', '1');
 INSERT INTO `sequence` VALUES ('reg_abroad', '1');
@@ -185,6 +185,7 @@ INSERT INTO `dictionary_group` VALUES ('10', '专利用途', '专利用途');
 INSERT INTO `dictionary_group` VALUES ('11', '注册地区', '注册地区');
 INSERT INTO `dictionary_group` VALUES ('12', '纳税人资格', '纳税人资格');
 INSERT INTO `dictionary_group` VALUES ('13', '币别', '币别');
+INSERT INTO `dictionary_group` VALUES ('14', '付款方式', '付款方式');
 -- ----------------------------
 -- Table structure for dictionary
 -- ----------------------------
@@ -209,6 +210,11 @@ INSERT INTO `dictionary` VALUES ('7', '纳税人资格', '小规模纳税人', 1
 INSERT INTO `dictionary` VALUES ('8', '币别', '人民币', 1, null, null);
 INSERT INTO `dictionary` VALUES ('9', '币别', '港币', 1, null, null);
 INSERT INTO `dictionary` VALUES ('10', '币别', '美元', 1, null, null);
+
+INSERT INTO `dictionary` VALUES ('11', '付款方式', '现金', 1, null, null);
+INSERT INTO `dictionary` VALUES ('12', '付款方式', '转账', 1, null, null);
+INSERT INTO `dictionary` VALUES ('13', '付款方式', '其他方式', 1, null, null);
+INSERT INTO `dictionary` VALUES ('14', '付款方式', '先提交,未付款', 1, null, null);
 
 -- ----------------------------
 -- Table structure for customer
@@ -680,10 +686,9 @@ CREATE TABLE `annual_exam` (
   `code` varchar(20) DEFAULT NULL COMMENT '单号',
   `type` varchar(10) DEFAULT NULL COMMENT '年检类别',
   `order_id` int(11) NULL COMMENT '年检来源单据',
-
   `name_cn` varchar(100) DEFAULT NULL COMMENT '公司中文名称',
   `name_en` varchar(100) DEFAULT NULL COMMENT '公司英文名称',
-
+  `order_code` varchar(20) DEFAULT NULL COMMENT '原始单号',
   `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
   `currency` varchar(10) DEFAULT NULL COMMENT '币别',
