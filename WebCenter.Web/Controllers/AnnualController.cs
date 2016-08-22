@@ -264,7 +264,7 @@ namespace WebCenter.Web.Controllers
                 source_id = newExam.id,
                 source_name = "annual",
                 title = "新建年检",
-                content = string.Format("{0}新建了客户{1}{2}年度年检订单, 单号{3}", arrs[3], newExam.customer.name, DateTime.Now.Year, newExam.code)
+                content = string.Format("{0}新建了{1}年度年检订单, 单号{2}", arrs[3], DateTime.Now.Year, newExam.code)
             });
 
             return Json(new { id = newExam.id }, JsonRequestBehavior.AllowGet);
@@ -280,7 +280,6 @@ namespace WebCenter.Web.Controllers
                 customer_name = a.customer.name,
                 customer_code = a.customer.code,
                 type = a.type,
-                order_type_name = "",
                 order_code = a.order_code,
                 name_cn = a.name_cn,
                 name_en = a.name_en,
@@ -294,23 +293,14 @@ namespace WebCenter.Web.Controllers
                 waiter_id = a.waiter_id,
                 waiter_name = a.member6.name,
 
+                accountant_id = a.accountant_id,
+                accountant_name = a.member.name,
+
                 status = a.status,
                 review_status = a.review_status
 
             }).FirstOrDefault();
-
-            switch (annua.type)
-            {
-                case "":
-                    break;
-                case "":
-                    break;
-                case "":
-                    break;
-                default:
-                    break;
-            }
-
+                        
             return Json(annua, JsonRequestBehavior.AllowGet);
         }
         
@@ -442,7 +432,9 @@ namespace WebCenter.Web.Controllers
                 salesman = a.member4.name,
                 waiter_id = a.waiter_id,
                 waiter_name = a.member6.name,
-                
+                accountant_id = a.accountant_id,
+                accountant_name = a.member.name,
+
                 status = a.status,
                 review_status = a.review_status
 
@@ -679,7 +671,7 @@ namespace WebCenter.Web.Controllers
             {
                 id = r.id,
                 name = r.progress
-            });
+            }).FirstOrDefault();
 
             return Json(p, JsonRequestBehavior.AllowGet);
         }

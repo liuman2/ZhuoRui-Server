@@ -629,7 +629,7 @@ namespace WebCenter.Web.Controllers
                 date_trial = r.date_trial,
                 date_regit = r.date_regit,
                 date_exten = r.date_exten
-            });
+            }).FirstOrDefault();
 
             return Json(p, JsonRequestBehavior.AllowGet);
         }

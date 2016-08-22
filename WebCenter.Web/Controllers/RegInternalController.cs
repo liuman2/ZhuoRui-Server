@@ -756,7 +756,7 @@ namespace WebCenter.Web.Controllers
             {
                 id = r.id,
                 name = r.progress
-            });
+            }).FirstOrDefault();
 
             return Json(p, JsonRequestBehavior.AllowGet);
         }

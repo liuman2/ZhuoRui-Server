@@ -622,7 +622,7 @@ namespace WebCenter.Web.Controllers
                 name = r.progress,
                 date_accept = r.date_accept,
                 date_empower = r.date_empower
-            });
+            }).FirstOrDefault();
 
             return Json(p, JsonRequestBehavior.AllowGet);
         }
