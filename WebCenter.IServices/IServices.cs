@@ -50,6 +50,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface ImenuService:IBaseService<menu>
+    {   
+    }
+	
 	public partial interface IorganizationService:IBaseService<organization>
     {   
     }
@@ -79,6 +83,14 @@ namespace WebCenter.IServices
     }
 	
 	public partial interface IroleService:IBaseService<role>
+    {   
+    }
+	
+	public partial interface Irole_memberService:IBaseService<role_member>
+    {   
+    }
+	
+	public partial interface Irole_memuService:IBaseService<role_memu>
     {   
     }
 	

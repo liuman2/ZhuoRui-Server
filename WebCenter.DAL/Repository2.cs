@@ -57,6 +57,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class menuRepository :BaseRepository<menu>,ImenuRepository
+    {
+         
+    }
+	
 	public partial class organizationRepository :BaseRepository<organization>,IorganizationRepository
     {
          
@@ -93,6 +98,16 @@ namespace WebCenter.DAL
     }
 	
 	public partial class roleRepository :BaseRepository<role>,IroleRepository
+    {
+         
+    }
+	
+	public partial class role_memberRepository :BaseRepository<role_member>,Irole_memberRepository
+    {
+         
+    }
+	
+	public partial class role_memuRepository :BaseRepository<role_memu>,Irole_memuRepository
     {
          
     }

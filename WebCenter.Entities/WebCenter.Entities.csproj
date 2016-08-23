@@ -121,6 +121,9 @@
     <Compile Include="member.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="menu.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="organization.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
@@ -144,6 +147,12 @@
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
     <Compile Include="role.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
+    <Compile Include="role_member.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
+    <Compile Include="role_memu.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
     <Compile Include="sequence.cs">

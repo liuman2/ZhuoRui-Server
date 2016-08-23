@@ -47,5 +47,8 @@ namespace WebCenter.Entities
         public virtual DbSet<reg_internal> reg_internal { get; set; }
         public virtual DbSet<trademark> trademarks { get; set; }
         public virtual DbSet<annual_exam> annual_exam { get; set; }
+        public virtual DbSet<menu> menus { get; set; }
+        public virtual DbSet<role_member> role_member { get; set; }
+        public virtual DbSet<role_memu> role_memu { get; set; }
     }
 }

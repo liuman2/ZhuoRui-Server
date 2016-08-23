@@ -43,6 +43,9 @@ namespace WebCenter.IDAL
 		IDAL.ImemberRepository memberRepository { get; }
 	  
 
+		IDAL.ImenuRepository menuRepository { get; }
+	  
+
 		IDAL.IorganizationRepository organizationRepository { get; }
 	  
 
@@ -65,6 +68,12 @@ namespace WebCenter.IDAL
 	  
 
 		IDAL.IroleRepository roleRepository { get; }
+	  
+
+		IDAL.Irole_memberRepository role_memberRepository { get; }
+	  
+
+		IDAL.Irole_memuRepository role_memuRepository { get; }
 	  
 
 		IDAL.IsequenceRepository sequenceRepository { get; }

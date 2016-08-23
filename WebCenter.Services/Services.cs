@@ -113,6 +113,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class menuService:BaseService<menu>,ImenuService
+    {   
+        public menuService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.menuRepository;
+        }  
+    }
+	
 	public partial class organizationService:BaseService<organization>,IorganizationService
     {   
         public organizationService()
@@ -190,6 +200,26 @@ namespace WebCenter.Services
         public override void SetCurrentRepository()
         {
             CurrentRepository = _dbSession.roleRepository;
+        }  
+    }
+	
+	public partial class role_memberService:BaseService<role_member>,Irole_memberService
+    {   
+        public role_memberService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.role_memberRepository;
+        }  
+    }
+	
+	public partial class role_memuService:BaseService<role_memu>,Irole_memuService
+    {   
+        public role_memuService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.role_memuRepository;
         }  
     }
 	

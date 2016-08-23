@@ -5,6 +5,7 @@ using WebCenter.Entities;
 using Common;
 using System.Linq.Expressions;
 using System;
+using System.Collections.Generic;
 
 namespace WebCenter.Web.Controllers
 {
@@ -25,6 +26,12 @@ namespace WebCenter.Web.Controllers
                 description = a.description
             }).ToList();
 
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Tree()
+        {
+            var list = Uof.IroleService.GetAll().Select(d => new { id = d.id, name = d.name, parent_id = 0 }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
@@ -125,6 +132,58 @@ namespace WebCenter.Web.Controllers
 
             var r = Uof.IroleService.DeleteEntity(_role);
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetMenuByRoleId(int roleId)
+        {
+            var roleMenus = Uof.Irole_memuService.GetAll(m => m.role_id == roleId).Select(m => m.memu_id).ToList();
+
+            var menus = Uof.ImenuService.GetAll().Select(m => new RoleMenus {
+                id = m.id,
+                check = false,
+                icon = m.icon,
+                name = m.name,
+                parent_id = m.parent_id,
+                route = m.route
+            }).ToList();
+
+            if (roleMenus.Count() > 0)
+            {
+                foreach (var item in roleMenus)
+                {
+                   var hasMenu =  menus.Where(m => m.id == item).FirstOrDefault();
+                    if (hasMenu != null)
+                    {
+                        hasMenu.check = true;
+                    }
+                }
+            }
+
+            return Json(menus, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult SaveRoleMenu(int roleId, int[] menuIds)
+        {
+            var oldMenus = Uof.Irole_memuService.GetAll(m => m.role_id == roleId).ToList();
+            var deletes = new List<role_memu>();
+            var adds = new List<role_memu>();
+
+            if (menuIds.Count() == 0)
+            {
+                deletes = oldMenus;
+            }
+            else
+            {
+                if (oldMenus.Count() > 0)
+                {
+                    // uids.Contains(p.user_id.Value)
+                    deletes = oldMenus.Where(o => !menuIds.Contains(o.memu_id.Value)).ToList();
+                    
+                }
+            }
+
+            return ErrorResult;
         }
     }
 }

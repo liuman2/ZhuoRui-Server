@@ -114,7 +114,6 @@
           <Property Name="code" Type="varchar" MaxLength="20" />
           <Property Name="name" Type="varchar" MaxLength="100" />
           <Property Name="industry" Type="varchar" MaxLength="50" />
-          <Property Name="business_nature" Type="varchar" MaxLength="50" />
           <Property Name="province" Type="varchar" MaxLength="20" />
           <Property Name="city" Type="varchar" MaxLength="20" />
           <Property Name="county" Type="varchar" MaxLength="20" />
@@ -135,6 +134,7 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="description" Type="varchar" MaxLength="100" />
+          <Property Name="business_nature" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="customer_timeline">
           <Key>
@@ -204,6 +204,17 @@
           <Property Name="status" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="menu">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="parent_id" Type="int" />
+          <Property Name="route" Type="varchar" MaxLength="30" />
+          <Property Name="icon" Type="varchar" MaxLength="30" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="enable" Type="tinyint" />
         </EntityType>
         <EntityType Name="organization">
           <Key>
@@ -286,7 +297,6 @@
           <Property Name="bank_id" Type="int" />
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="amount_transaction" Type="float" />
-          <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="invoice_name" Type="varchar" MaxLength="200" />
           <Property Name="invoice_tax" Type="varchar" MaxLength="200" />
           <Property Name="invoice_address" Type="varchar" MaxLength="200" />
@@ -311,6 +321,7 @@
           <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="progress" Type="varchar" MaxLength="50" />
           <Property Name="annual_year" Type="int" />
         </EntityType>
@@ -350,7 +361,6 @@
           <Property Name="customs_address" Type="varchar" MaxLength="300" />
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="amount_transaction" Type="float" />
-          <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="is_bookkeeping" Type="tinyint" />
           <Property Name="amount_bookkeeping" Type="float" />
           <Property Name="invoice_name" Type="varchar" MaxLength="200" />
@@ -378,6 +388,7 @@
           <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="annual_year" Type="int" />
         </EntityType>
         <EntityType Name="reg_internal_history">
@@ -406,6 +417,22 @@
           <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="role_member">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="role_id" Type="int" />
+          <Property Name="member_id" Type="int" />
+        </EntityType>
+        <EntityType Name="role_memu">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="role_id" Type="int" />
+          <Property Name="memu_id" Type="int" />
         </EntityType>
         <EntityType Name="sequence">
           <Key>
@@ -1147,6 +1174,7 @@
           <EntitySet Name="dictionary_group" EntityType="Self.dictionary_group" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="income" EntityType="Self.income" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="member" EntityType="Self.member" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="menu" EntityType="Self.menu" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="organization" EntityType="Self.organization" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="patent" EntityType="Self.patent" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="position" EntityType="Self.position" Schema="zhuoruioa" store:Type="Tables" />
@@ -1155,6 +1183,8 @@
           <EntitySet Name="reg_internal" EntityType="Self.reg_internal" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="reg_internal_history" EntityType="Self.reg_internal_history" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="role" EntityType="Self.role" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="role_member" EntityType="Self.role_member" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="role_memu" EntityType="Self.role_memu" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="sequence" EntityType="Self.sequence" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="settings" EntityType="Self.settings" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="timeline" EntityType="Self.timeline" Schema="zhuoruioa" store:Type="Tables" />
@@ -1627,6 +1657,9 @@
             <End Role="member" EntitySet="members" />
             <End Role="annual_exam" EntitySet="annual_exam" />
           </AssociationSet>
+          <EntitySet Name="menus" EntityType="DataCenter.Entities.menu" />
+          <EntitySet Name="role_member" EntityType="DataCenter.Entities.role_member" />
+          <EntitySet Name="role_memu" EntityType="DataCenter.Entities.role_memu" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -2869,6 +2902,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="menu">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="parent_id" Type="Int32" />
+          <Property Name="route" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="icon" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="enable" Type="SByte" />
+        </EntityType>
+        <EntityType Name="role_member">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="role_id" Type="Int32" />
+          <Property Name="member_id" Type="Int32" />
+        </EntityType>
+        <EntityType Name="role_memu">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="role_id" Type="Int32" />
+          <Property Name="memu_id" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3364,6 +3424,36 @@
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="menus">
+            <EntityTypeMapping TypeName="DataCenter.Entities.menu">
+              <MappingFragment StoreEntitySet="menu">
+                <ScalarProperty Name="enable" ColumnName="enable" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="icon" ColumnName="icon" />
+                <ScalarProperty Name="route" ColumnName="route" />
+                <ScalarProperty Name="parent_id" ColumnName="parent_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="role_member">
+            <EntityTypeMapping TypeName="DataCenter.Entities.role_member">
+              <MappingFragment StoreEntitySet="role_member">
+                <ScalarProperty Name="member_id" ColumnName="member_id" />
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="role_memu">
+            <EntityTypeMapping TypeName="DataCenter.Entities.role_memu">
+              <MappingFragment StoreEntitySet="role_memu">
+                <ScalarProperty Name="memu_id" ColumnName="memu_id" />
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

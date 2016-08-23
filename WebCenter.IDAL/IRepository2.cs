@@ -46,6 +46,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface ImenuRepository :IBaseRepository<menu>
+    {         
+    }
+	
     public partial interface IorganizationRepository :IBaseRepository<organization>
     {         
     }
@@ -75,6 +79,14 @@ namespace WebCenter.IDAL
     }
 	
     public partial interface IroleRepository :IBaseRepository<role>
+    {         
+    }
+	
+    public partial interface Irole_memberRepository :IBaseRepository<role_member>
+    {         
+    }
+	
+    public partial interface Irole_memuRepository :IBaseRepository<role_memu>
     {         
     }
 	

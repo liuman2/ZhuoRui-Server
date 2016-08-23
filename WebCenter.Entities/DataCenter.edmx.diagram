@@ -82,6 +82,9 @@
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_waiter" />
+        <EntityTypeShape EntityType="DataCenter.Entities.menu" Width="1.5" PointX="0.75" PointY="11.875" />
+        <EntityTypeShape EntityType="DataCenter.Entities.role_member" Width="1.5" PointX="5.375" PointY="10.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.role_memu" Width="1.5" PointX="7.375" PointY="10.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

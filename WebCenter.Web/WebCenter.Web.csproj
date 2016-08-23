@@ -209,6 +209,7 @@
     <Compile Include="Code\JsonNetResult.cs" />
     <Compile Include="Code\OrderSearchRequest.cs" />
     <Compile Include="Code\ProgressRequest.cs" />
+    <Compile Include="Code\RoleMenus.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AnnualController.cs" />
     <Compile Include="Controllers\AreaController.cs" />

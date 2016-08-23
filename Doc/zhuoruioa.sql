@@ -792,7 +792,7 @@ INSERT INTO `menu` VALUES ('22', '17', 'dictionary', 'fa fa-user', '数据字典
 -- ----------------------------
 INSERT INTO `menu` VALUES ('23', '0', '', 'fa fa-lock', '权限管理', '1');
 INSERT INTO `menu` VALUES ('24', '23', 'role', 'fa fa-graduation-cap', '角色管理', '1');
-INSERT INTO `menu` VALUES ('25', '23', 'role_perm', 'fa fa-key', '功能权限', '1');
+INSERT INTO `menu` VALUES ('25', '23', 'role_assign', 'fa fa-key', '功能权限', '1');
 INSERT INTO `menu` VALUES ('26', '23', 'role_user', 'fa fa-unlock-alt', '用户角色', '1');
 -- ----------------------------
 -- Records of 系统设置
@@ -806,23 +806,23 @@ CREATE TABLE `role_member` (
   `id` int(11) NOT NULL,
   `role_id` int(11) NULL,
   `member_id` int(11) NULL,
-  PRIMARY KEY (`id`),
-  KEY `role_id` (`role_id`),
-  KEY `member_id` (`member_id`),
-  CONSTRAINT `role_ibfk` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
-  CONSTRAINT `member_ibfk` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`)
+  PRIMARY KEY (`id`)
+  -- KEY `role_id` (`role_id`),
+  -- KEY `member_id` (`member_id`),
+  -- CONSTRAINT `role_ibfk` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
+  -- CONSTRAINT `member_ibfk` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `role_memu`;
-CREATE TABLE `role_member` (
+CREATE TABLE `role_memu` (
   `id` int(11) NOT NULL,
   `role_id` int(11) NULL,
   `memu_id` int(11) NULL,
-  PRIMARY KEY (`id`),
-  KEY `role_id` (`role_id`),
-  KEY `memu_id` (`memu_id`),
-  CONSTRAINT `role_ibfk` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
-  CONSTRAINT `memu_ibfk` FOREIGN KEY (`memu_id`) REFERENCES `menu` (`id`)
+  PRIMARY KEY (`id`)
+  -- KEY `role_id` (`role_id`),
+  -- KEY `memu_id` (`memu_id`),
+  -- CONSTRAINT `role_ibfk_menu` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
+  -- CONSTRAINT `memu_ibfk_role` FOREIGN KEY (`memu_id`) REFERENCES `menu` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

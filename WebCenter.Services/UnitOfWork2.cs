@@ -79,6 +79,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  ImenuService ImenuService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IorganizationService IorganizationService
     {
         get;
@@ -129,6 +136,20 @@ namespace WebCenter.Services
 	
   [Ninject.Inject]
 	 public  IroleService IroleService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  Irole_memberService Irole_memberService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  Irole_memuService Irole_memuService
     {
         get;
         set;

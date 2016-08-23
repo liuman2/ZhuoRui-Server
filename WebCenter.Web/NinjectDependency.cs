@@ -37,6 +37,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<ImemberService>().To<memberService>().InRequestScope();
 	
+	   kernel.Bind<ImenuService>().To<menuService>().InRequestScope();
+	
 	   kernel.Bind<IorganizationService>().To<organizationService>().InRequestScope();
 	
 	   kernel.Bind<IpatentService>().To<patentService>().InRequestScope();
@@ -52,6 +54,10 @@ private void AutoAddBinds()
 	   kernel.Bind<Ireg_internal_historyService>().To<reg_internal_historyService>().InRequestScope();
 	
 	   kernel.Bind<IroleService>().To<roleService>().InRequestScope();
+	
+	   kernel.Bind<Irole_memberService>().To<role_memberService>().InRequestScope();
+	
+	   kernel.Bind<Irole_memuService>().To<role_memuService>().InRequestScope();
 	
 	   kernel.Bind<IsequenceService>().To<sequenceService>().InRequestScope();
 	
