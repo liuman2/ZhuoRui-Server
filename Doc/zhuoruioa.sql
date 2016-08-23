@@ -107,11 +107,12 @@ CREATE TABLE `role` (
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-INSERT INTO `role` (id, name, code, is_system, description) VALUES ('1', '系统管理员', 'admin',     '1',   '拥有最高权限');
-INSERT INTO `role` (id, name, code, is_system, description) VALUES ('2', '总经理',     'manager',   '1',   '可查看公司所有业务资料');
-INSERT INTO `role` (id, name, code, is_system, description) VALUES ('3', '部门经理',   'leader',    '1',   '可查看所属部门员工的客户资料和订单资料');
-INSERT INTO `role` (id, name, code, is_system, description) VALUES ('4', '业务员',     'employee',  '1',   '只能查看自己的客户资料和订单资料');
-INSERT INTO `role` (id, name, code, is_system, description) VALUES ('5', '财务',       'finance',   '1',   '财务审核权限');
+INSERT INTO `role` (id, name, code, is_system, description) VALUES ('1', '系统管理员',  'admin',    '1',  '拥有最高权限');
+INSERT INTO `role` (id, name, code, is_system, description) VALUES ('2', '总经理',      'manager',  '1',  '可查看公司所有业务资料');
+INSERT INTO `role` (id, name, code, is_system, description) VALUES ('3', '部门经理',    'leader',   '1',  '可查看所属部门员工的客户资料和订单资料');
+INSERT INTO `role` (id, name, code, is_system, description) VALUES ('4', '业务员',      'employee', '1',  '只能查看自己的客户资料和订单资料');
+INSERT INTO `role` (id, name, code, is_system, description) VALUES ('5', '财务',        'finance',  '1',  '财务审核权限');
+INSERT INTO `role` (id, name, code, is_system, description) VALUES ('6', '提交',        'submit',   '1',  '订单提交人');
 
 -- ----------------------------
 -- Table structure for member
@@ -740,3 +741,93 @@ CREATE TABLE `settings` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `settings` VALUES ('1', 'CODING', '{"customer":{"suffix":"4","area_code":[{"id":1,"name":"","value":"XM"},{"id":2,"name":"","value":"QZ"},{"id":3,"name":"","value":"QD"}]},"order":{"suffix":"4","code":[{"module":"ZW","module_name":"境外注册","value":"ZW"},{"module":"ZN","module_name":"境内注册","value":"ZN"},{"module":"SJ","module_name":"审计","value":"SJ"},{"module":"SB","module_name":"商标","value":"SB"},{"module":"ZL","module_name":"专利","value":"ZL"},{"module":"NS","module_name":"年审","value":"NS"},{"module":"NJ","module_name":"年检","value":"NJ"}]}}');
+
+
+DROP TABLE IF EXISTS `menu`;
+CREATE TABLE `menu` (
+  `id` int(11) NOT NULL,
+  `parent_id` int(11) NULL,
+  `route` varchar(30) NULL,
+  `icon` varchar(30) NULL,
+  `name` varchar(50) NULL,
+  `enable` tinyint(3) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- ----------------------------
+-- Records of 客户管理
+-- ----------------------------
+INSERT INTO `menu` VALUES ('1', '0', '', 'fa fa-users', '客户管理', '1');
+INSERT INTO `menu` VALUES ('2', '1', 'reserve', 'fa fa-user-md', '预备客户', '1');
+INSERT INTO `menu` VALUES ('3', '1', 'customer', 'fa fa-user-secret', '正式客户', '1');
+-- ----------------------------
+-- Records of 订单管理
+-- ----------------------------
+INSERT INTO `menu` VALUES ('4', '0', '', 'fa fa-cart-arrow-down', '订单管理', '1');
+INSERT INTO `menu` VALUES ('5', '4', 'abroad', 'fa fa-globe', '境外注册', '1');
+INSERT INTO `menu` VALUES ('6', '4', 'internal', 'fa fa-street-view', '境内注册', '1');
+INSERT INTO `menu` VALUES ('7', '4', 'trademark', 'fa fa-trademark', '商标订单', '1');
+INSERT INTO `menu` VALUES ('8', '4', 'patent', 'fa fa-cube', '专利订单', '1');
+INSERT INTO `menu` VALUES ('9', '4', 'audit', 'fa fa-calculator', '审计订单', '1');
+INSERT INTO `menu` VALUES ('10', '4', 'annual_warning', 'fa fa-calculator', '年检预警', '1');
+INSERT INTO `menu` VALUES ('11', '4', 'annual', 'fa fa-calculator', '年检列表', '1');
+INSERT INTO `menu` VALUES ('12', '4', '', 'fa fa-calculator', '订单财务审核', '1');
+INSERT INTO `menu` VALUES ('13', '4', '', 'fa fa-calculator', '订单提交审核', '1');
+INSERT INTO `menu` VALUES ('14', '4', '', 'fa fa-calculator', '订单汇总表', '1');
+-- ----------------------------
+-- Records of 快件登记管理
+-- ----------------------------
+INSERT INTO `menu` VALUES ('15', '0', '', 'fa fa-envelope-o', '快件登记管理', '1');
+INSERT INTO `menu` VALUES ('16', '15', '', 'fa fa-list', '快件列表', '1');
+-- ----------------------------
+-- Records of 基本资料管理
+-- ----------------------------
+INSERT INTO `menu` VALUES ('17', '0', '', 'fa fa-university', '基本资料管理', '1');
+INSERT INTO `menu` VALUES ('18', '17', 'organization', 'fa fa-sitemap', '组织架构', '1');
+INSERT INTO `menu` VALUES ('19', '17', 'area', 'fa fa-crosshairs', '区域设置', '1');
+INSERT INTO `menu` VALUES ('20', '17', 'position', 'fa fa-graduation-cap', '职位设置', '1');
+INSERT INTO `menu` VALUES ('21', '17', 'member', 'fa fa-user', '用户管理', '1');
+INSERT INTO `menu` VALUES ('22', '17', 'dictionary', 'fa fa-user', '数据字典', '1');
+-- ----------------------------
+-- Records of 权限管理
+-- ----------------------------
+INSERT INTO `menu` VALUES ('23', '0', '', 'fa fa-lock', '权限管理', '1');
+INSERT INTO `menu` VALUES ('24', '23', 'role', 'fa fa-graduation-cap', '角色管理', '1');
+INSERT INTO `menu` VALUES ('25', '23', 'role_perm', 'fa fa-key', '功能权限', '1');
+INSERT INTO `menu` VALUES ('26', '23', 'role_user', 'fa fa-unlock-alt', '用户角色', '1');
+-- ----------------------------
+-- Records of 系统设置
+-- ----------------------------
+INSERT INTO `menu` VALUES ('27', '0', '', 'fa fa-cog', '系统设置', '1');
+INSERT INTO `menu` VALUES ('28', '27', 'coding', 'fa fa-file-text-o', '编码规则', '1');
+
+
+DROP TABLE IF EXISTS `role_member`;
+CREATE TABLE `role_member` (
+  `id` int(11) NOT NULL,
+  `role_id` int(11) NULL,
+  `member_id` int(11) NULL,
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`),
+  KEY `member_id` (`member_id`),
+  CONSTRAINT `role_ibfk` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
+  CONSTRAINT `member_ibfk` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `role_memu`;
+CREATE TABLE `role_member` (
+  `id` int(11) NOT NULL,
+  `role_id` int(11) NULL,
+  `memu_id` int(11) NULL,
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`),
+  KEY `memu_id` (`memu_id`),
+  CONSTRAINT `role_ibfk` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
+  CONSTRAINT `memu_ibfk` FOREIGN KEY (`memu_id`) REFERENCES `menu` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+
+
