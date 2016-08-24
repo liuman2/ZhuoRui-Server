@@ -60,6 +60,58 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetMembersForRole(int index = 1, int size = 500, string name = "")
+        {
+            var userIds = Uof.Irole_memberService.GetAll().Select(m => m.member_id).ToList();
+
+            Expression<Func<member, bool>> condition = m => true;
+            if (!string.IsNullOrEmpty(name))
+            {
+                condition = m => (m.name.IndexOf(name) > -1);
+            }
+
+            Expression<Func<member, bool>> excludeIds = m => true;
+            if (userIds.Count() > 0)
+            {
+                excludeIds = m => !userIds.Contains(m.id);
+            }
+
+            var list = Uof.ImemberService.GetAll(condition).Where(excludeIds).OrderByDescending(item => item.id).Select(m => new
+            {
+                id = m.id,
+                name = m.name,
+                english_name = m.english_name,
+                username = m.username,
+                department = m.organization.name,
+                area = m.area.name,
+                position = m.position.name,
+                status = m.status
+            }).ToPagedList(index, size).ToList();
+
+            var totalRecord = Uof.ImemberService.GetAll(condition).Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + size - 1) / size;
+            }
+            var page = new
+            {
+                current_index = index,
+                current_size = size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+
+            var result = new
+            {
+                page = page,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Get(int id)
         {
             var _member = Uof.ImemberService.GetAll(a => a.id == id).FirstOrDefault();

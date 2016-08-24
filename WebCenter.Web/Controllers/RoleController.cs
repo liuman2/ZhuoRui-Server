@@ -166,24 +166,60 @@ namespace WebCenter.Web.Controllers
         public ActionResult SaveRoleMenu(int roleId, int[] menuIds)
         {
             var oldMenus = Uof.Irole_memuService.GetAll(m => m.role_id == roleId).ToList();
-            var deletes = new List<role_memu>();
             var adds = new List<role_memu>();
 
-            if (menuIds.Count() == 0)
+            if (oldMenus.Count() == 0)
             {
-                deletes = oldMenus;
-            }
-            else
-            {
-                if (oldMenus.Count() > 0)
+                foreach (var item in menuIds)
                 {
-                    // uids.Contains(p.user_id.Value)
-                    deletes = oldMenus.Where(o => !menuIds.Contains(o.memu_id.Value)).ToList();
-                    
+                    adds.Add(new role_memu()
+                    {
+                        role_id = roleId,
+                        memu_id = item
+                    });
+                }
+
+                Uof.Irole_memuService.AddEntities(adds);
+                return SuccessResult;
+            }
+            
+            var deletes = new List<role_memu>();
+            foreach (var item in oldMenus)
+            {
+                var exist = menuIds.Where(m => m == item.memu_id);
+                if (exist.Count() == 0)
+                {
+                    deletes.Add(item);
                 }
             }
 
-            return ErrorResult;
+            foreach (var item in menuIds)
+            {
+                var exist = oldMenus.Where(o => o.memu_id == item);
+                if (exist.Count() == 0)
+                {
+                    adds.Add(new role_memu()
+                    {
+                        memu_id = item,
+                        role_id = roleId
+                    });
+                }
+            }
+
+            if (deletes.Count() > 0)
+            {
+                foreach (var delete in deletes)
+                {
+                    Uof.Irole_memuService.DeleteEntity(delete);
+                }
+            }
+
+            if (adds.Count() > 0)
+            {
+                Uof.Irole_memuService.AddEntities(adds);
+            }
+
+            return SuccessResult;
         }
     }
 }
