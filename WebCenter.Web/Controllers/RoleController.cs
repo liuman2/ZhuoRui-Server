@@ -162,6 +162,35 @@ namespace WebCenter.Web.Controllers
             return Json(menus, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetMemberByRoleId(int roleId)
+        {
+            var roleMembers = Uof.Irole_memberService.GetAll(m => m.role_id == roleId).Select(m => m.member_id).ToList();
+
+            var allMembers = Uof.ImemberService.GetAll().Select(m => new RoleMembers()
+            {
+                id = m.id,
+                name = m.name,
+                english_name = m.english_name,
+                department = m.organization.name,
+                area = m.area.name
+            }).ToList();
+
+            var _roleMembers = new List<RoleMembers>();
+            if (roleMembers.Count() > 0)
+            {
+                foreach (var item in roleMembers)
+                {
+                    var hasMember = allMembers.Where(m => m.id == item).FirstOrDefault();
+                    if (hasMember != null)
+                    {
+                        _roleMembers.Add(hasMember);
+                    }
+                }
+            }
+
+            return Json(_roleMembers, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public ActionResult SaveRoleMenu(int roleId, int[] menuIds)
         {
@@ -220,6 +249,63 @@ namespace WebCenter.Web.Controllers
             }
 
             return SuccessResult;
+        }
+
+        [HttpPost]
+        public ActionResult SaveRoleMember(int roleId, int[] memberIds)
+        {
+
+            var oldMembers = Uof.Irole_memberService.GetAll(m => m.role_id == roleId).ToList();
+            var adds = new List<role_member>();
+
+            if (oldMembers.Count() == 0)
+            {
+                foreach (var item in memberIds)
+                {
+                    adds.Add(new role_member()
+                    {
+                        role_id = roleId,
+                        member_id = item
+                    });
+                }
+
+                Uof.Irole_memberService.AddEntities(adds);
+                return SuccessResult;
+            }
+                        
+            foreach (var item in memberIds)
+            {
+                var exist = oldMembers.Where(o => o.member_id == item);
+                if (exist.Count() == 0)
+                {
+                    adds.Add(new role_member()
+                    {
+                        member_id = item,
+                        role_id = roleId
+                    });
+                }
+            }
+            
+            if (adds.Count() > 0)
+            {
+                Uof.Irole_memberService.AddEntities(adds);
+            }
+
+            return SuccessResult;
+        }
+
+        public ActionResult DeleteRoleMember(int roleId, int userId)
+        {
+            var roleMember = Uof.Irole_memberService.GetAll(m => m.member_id == userId && m.role_id == roleId).FirstOrDefault();
+
+            if (roleMember == null)
+            {
+                return ErrorResult;
+            }
+
+            var r = Uof.Irole_memberService.DeleteEntity(roleMember);
+
+            return Json(new { success = r, message = r ? "" : "删除失败" }, JsonRequestBehavior.AllowGet);
         }
     }
 }

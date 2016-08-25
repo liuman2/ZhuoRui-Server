@@ -14,4 +14,13 @@ namespace WebCenter.Web
         public string name { get; set; }
         public bool check { get; set; }
     }
+
+    public class RoleMembers
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string english_name { get; set; }
+        public string department { get; set; }
+        public string area { get; set; }
+    }
 }
