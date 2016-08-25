@@ -4,6 +4,8 @@ using System.Web.Mvc;
 using WebCenter.IServices;
 using Common;
 using System.Web.Security;
+using System.Collections.Generic;
+using WebCenter.Entities;
 
 namespace WebCenter.Web.Controllers
 {
@@ -60,10 +62,35 @@ namespace WebCenter.Web.Controllers
                 {
                     return new HttpUnauthorizedResult();
                 }
+
                 var username = arrs[1];
                 var user = Uof.ImemberService.GetAll(m => m.username == username).FirstOrDefault();
                 user.password = "";
-                return Json(new { success = true, user = user }, JsonRequestBehavior.AllowGet);
+
+                var menus = Uof.ImenuService.GetAll().ToList();
+                if (user.username == "admin")
+                {
+                    return Json(new { success = true, user = user, menus = getUserMenus(menus) }, JsonRequestBehavior.AllowGet);
+                }
+
+                var memberMenus = new List<menu>();
+
+                var role = Uof.Irole_memberService.GetAll(m => m.member_id == user.id).FirstOrDefault();
+                var hasMenus = Uof.Irole_memuService.GetAll(m => m.role_id == role.role_id).ToList();
+                if (hasMenus.Count() == 0)
+                {
+                    return Json(new { success = true, user = user, menus = getUserMenus(memberMenus) }, JsonRequestBehavior.AllowGet);
+                }
+
+                foreach (var item in hasMenus)
+                {
+                    var _m = menus.Where(m => m.id == item.memu_id).FirstOrDefault();
+                    if (_m != null)
+                    {
+                        memberMenus.Add(_m);
+                    }
+                }
+                return Json(new { success = true, user = user, menus = getUserMenus(memberMenus) }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
             {
@@ -71,6 +98,38 @@ namespace WebCenter.Web.Controllers
                 throw;
             }
             
+        }
+
+        private List<UserMenus> getUserMenus(List<menu> ms)
+        {
+            if (ms.Count() == 0)
+            {
+                return new List<UserMenus>();
+            }
+
+            var parents = ms.Where(m => m.parent_id == 0).OrderBy(m => m.id).ToList();
+
+            if (parents.Count() == 0)
+            {
+                return new List<UserMenus>();
+            }
+
+            var userMenus = new List<UserMenus>();
+            foreach (var parent in parents)
+            {
+                var children = ms.Where(m => m.parent_id == parent.id).ToList();
+                userMenus.Add(new UserMenus()
+                {
+                    id = parent.id,
+                    parent_id = parent.parent_id,
+                    route = parent.route,
+                    name = parent.name,
+                    icon = parent.icon,
+                    children = children
+                });
+            }
+
+            return userMenus;
         }
     }
 }

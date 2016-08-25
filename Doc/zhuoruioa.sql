@@ -770,8 +770,8 @@ INSERT INTO `menu` VALUES ('8', '4', 'patent', 'fa fa-cube', '专利订单', '1'
 INSERT INTO `menu` VALUES ('9', '4', 'audit', 'fa fa-calculator', '审计订单', '1');
 INSERT INTO `menu` VALUES ('10', '4', 'annual_warning', 'fa fa-calculator', '年检预警', '1');
 INSERT INTO `menu` VALUES ('11', '4', 'annual', 'fa fa-calculator', '年检列表', '1');
-INSERT INTO `menu` VALUES ('12', '4', '', 'fa fa-calculator', '订单财务审核', '1');
-INSERT INTO `menu` VALUES ('13', '4', '', 'fa fa-calculator', '订单提交审核', '1');
+INSERT INTO `menu` VALUES ('12', '4', 'check_finance', 'fa fa-calculator', '订单财务审核', '1');
+INSERT INTO `menu` VALUES ('13', '4', 'check_submit', 'fa fa-calculator', '订单提交审核', '1');
 INSERT INTO `menu` VALUES ('14', '4', '', 'fa fa-calculator', '订单汇总表', '1');
 -- ----------------------------
 -- Records of 快件登记管理

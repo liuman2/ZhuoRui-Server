@@ -210,6 +210,7 @@
     <Compile Include="Code\OrderSearchRequest.cs" />
     <Compile Include="Code\ProgressRequest.cs" />
     <Compile Include="Code\RoleMenus.cs" />
+    <Compile Include="Code\UserMenus.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AnnualController.cs" />
     <Compile Include="Controllers\AreaController.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\IncomeController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
+    <Compile Include="Controllers\OrderCheckController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Controllers\PatentController.cs" />
     <Compile Include="Controllers\PositionController.cs" />
@@ -321,6 +323,7 @@
     <Folder Include="Views\Income\" />
     <Folder Include="Views\Message\" />
     <Folder Include="Views\Notice\" />
+    <Folder Include="Views\OrderCheck\" />
     <Folder Include="Views\Organization\" />
     <Folder Include="Views\Permission\" />
     <Folder Include="Views\Project\" />

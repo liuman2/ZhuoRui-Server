@@ -397,6 +397,55 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        
+        public ActionResult DropDownSearch(int index = 1, int size = 10, string name = "")
+        {
+            Expression<Func<customer, bool>> condition = c => c.status == 1;
+            Expression<Func<customer, bool>> nameQuery = c => true;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                nameQuery = c => (c.name.IndexOf(name) > -1 || c.code.IndexOf(name) > -1);
+            }
+
+            var list = Uof.IcustomerService.GetAll(condition)
+                .Where(nameQuery)
+                .OrderByDescending(item => item.id).Select(c => new
+                {
+                    id = c.id,
+                    code = c.code,
+                    name = c.name,
+                    contact = c.contact,
+                    mobile = c.mobile,
+                    tel = c.tel,
+                    industry = c.industry,
+                    province = c.province,
+                    city = c.city,
+                    county = c.county,
+                    address = c.address
+                }).ToPagedList(index, size).ToList();
+
+            var totalRecord = Uof.IcustomerService.GetAll(condition).Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + size - 1) / size;
+            }
+            var page = new
+            {
+                current_index = index,
+                current_size = size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+
+            var result = new
+            {
+                page = page,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace WebCenter.Web.Controllers
                 condition = m => (m.name.IndexOf(name) > -1);
             }
 
-            var list = Uof.ImemberService.GetAll(condition).OrderByDescending(item => item.id).Select(m => new
+            var list = Uof.ImemberService.GetAll(condition).Where(m => m.username != "admin").OrderByDescending(item => item.id).Select(m => new
             {
                 id = m.id,
                 name = m.name,
@@ -67,7 +67,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<member, bool>> condition = m => true;
             if (!string.IsNullOrEmpty(name))
             {
-                condition = m => (m.name.IndexOf(name) > -1);
+                condition = m => (m.name.IndexOf(name) > -1 && m.username != "admin");
             }
 
             Expression<Func<member, bool>> excludeIds = m => true;
@@ -76,7 +76,7 @@ namespace WebCenter.Web.Controllers
                 excludeIds = m => !userIds.Contains(m.id);
             }
 
-            var list = Uof.ImemberService.GetAll(condition).Where(excludeIds).OrderByDescending(item => item.id).Select(m => new
+            var list = Uof.ImemberService.GetAll(condition).Where(excludeIds).Where(m => m.username != "admin").OrderByDescending(item => item.id).Select(m => new
             {
                 id = m.id,
                 name = m.name,
