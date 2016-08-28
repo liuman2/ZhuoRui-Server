@@ -56,7 +56,7 @@ namespace WebCenter.Web.Controllers
                 else
                 {
                     statusQuery = c => (c.status == request.status.Value);
-                }                
+                }
             }
             // 成交开始日期
             Expression<Func<reg_internal, bool>> date1Query = c => true;
@@ -71,32 +71,34 @@ namespace WebCenter.Web.Controllers
                 var endTime = request.end_time.Value.AddDays(1);
                 date2Query = c => (c.date_transaction < endTime);
             }
-            
+
             var list = Uof.Ireg_internalService.GetAll(condition)
                 .Where(customerQuery)
                 .Where(statusQuery)
                 .Where(date1Query)
                 .Where(date2Query)
                 .OrderByDescending(item => item.id).Select(c => new
-            {
-                id = c.id,
-                code = c.code,
-                customer_id = c.customer_id,
-                customer_name = c.customer.name,
-                name_cn = c.name_cn,
-                address = c.address,
-                legal = c.legal,
-                status = c.status,
-                review_status = c.review_status,
-                date_transaction = c.date_transaction,
-                amount_transaction = c.amount_transaction,
-                amount_income = 0,
-                amount_unreceive = 0,
-                progress = c.progress,
-                salesman_id = c.salesman_id,
-                salesman_name = c.member3.name,
+                {
+                    id = c.id,
+                    code = c.code,
+                    customer_id = c.customer_id,
+                    customer_name = c.customer.name,
+                    name_cn = c.name_cn,
+                    address = c.address,
+                    legal = c.legal,
+                    status = c.status,
+                    review_status = c.review_status,
+                    date_transaction = c.date_transaction,
+                    amount_transaction = c.amount_transaction,
+                    amount_income = 0,
+                    amount_unreceive = 0,
+                    progress = c.progress,
+                    salesman_id = c.salesman_id,
+                    salesman_name = c.member3.name,
+                    finance_review_moment = c.finance_review_moment,
+                    submit_review_moment = c.submit_review_moment
 
-            }).ToPagedList(request.index, request.size).ToList();
+                }).ToPagedList(request.index, request.size).ToList();
 
             var totalRecord = Uof.Ireg_internalService.GetAll(condition).Count();
 
@@ -132,14 +134,14 @@ namespace WebCenter.Web.Controllers
             {
                 return Json(new { success = false, message = "请填写公司中文名称" }, JsonRequestBehavior.AllowGet);
             }
-            if (reginternal.date_setup == null)
-            {
-                return Json(new { success = false, message = "请填写公司成立日期" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(reginternal.reg_no))
-            {
-                return Json(new { success = false, message = "请填写统一信用编号" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (reginternal.date_setup == null)
+            //{
+            //    return Json(new { success = false, message = "请填写公司成立日期" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(reginternal.reg_no))
+            //{
+            //    return Json(new { success = false, message = "请填写统一信用编号" }, JsonRequestBehavior.AllowGet);
+            //}
             if (string.IsNullOrEmpty(reginternal.address))
             {
                 return Json(new { success = false, message = "请填写公司注册地址" }, JsonRequestBehavior.AllowGet);
@@ -330,7 +332,9 @@ namespace WebCenter.Web.Controllers
                 outworker_name = a.member3.name,
 
                 status = a.status,
-                review_status = a.review_status
+                review_status = a.review_status,
+                finance_review_moment = a.finance_review_moment,
+                submit_review_moment = a.submit_review_moment
 
             }).FirstOrDefault();
 
@@ -361,18 +365,18 @@ namespace WebCenter.Web.Controllers
 
             if (reg.customer_id == dbReg.customer_id &&
                 reg.name_cn == dbReg.name_cn &&
-                reg.date_setup == dbReg.date_setup &&
-                reg.reg_no == dbReg.reg_no &&
+                //reg.date_setup == dbReg.date_setup &&
+                //reg.reg_no == dbReg.reg_no &&
                 reg.address == dbReg.address &&
-                reg.amount_bookkeeping == dbReg.amount_bookkeeping &&
-                reg.is_bookkeeping == dbReg.is_bookkeeping &&
-                reg.is_customs == dbReg.is_customs &&
-                reg.taxpayer == dbReg.taxpayer &&
-                reg.customs_address == dbReg.customs_address && 
-                reg.customs_name == dbReg.customs_name &&
+                //reg.amount_bookkeeping == dbReg.amount_bookkeeping &&
+                //reg.is_bookkeeping == dbReg.is_bookkeeping &&
+                //reg.is_customs == dbReg.is_customs &&
+                //reg.taxpayer == dbReg.taxpayer &&
+                //reg.customs_address == dbReg.customs_address && 
+                //reg.customs_name == dbReg.customs_name &&
                 reg.legal == dbReg.legal &&
                 reg.director == dbReg.director &&
-                reg.bank_id == dbReg.bank_id &&
+                //reg.bank_id == dbReg.bank_id &&
                 reg.date_transaction == dbReg.date_transaction &&
                 reg.amount_transaction == dbReg.amount_transaction &&
                 reg.invoice_name == dbReg.invoice_name &&
@@ -456,6 +460,7 @@ namespace WebCenter.Web.Controllers
             }
 
             dbReg.status = 1;
+            dbReg.review_status = -1;
             dbReg.date_updated = DateTime.Now;
 
             var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
@@ -566,7 +571,7 @@ namespace WebCenter.Web.Controllers
             var t = "";
             if (dbReg.status == 1)
             {
-                dbReg.status = 2;
+                dbReg.status = 0;
                 dbReg.review_status = 0;
                 dbReg.finance_reviewer_id = userId;
                 dbReg.finance_review_date = DateTime.Now;
@@ -577,7 +582,7 @@ namespace WebCenter.Web.Controllers
             }
             else
             {
-                dbReg.status = 3;
+                dbReg.status = 0;
                 dbReg.review_status = 0;
                 dbReg.submit_reviewer_id = userId;
                 dbReg.submit_review_date = DateTime.Now;
@@ -755,29 +760,122 @@ namespace WebCenter.Web.Controllers
             var p = Uof.Ireg_internalService.GetAll(r => r.id == id).Select(r => new
             {
                 id = r.id,
-                name = r.progress
+                customer_id = r.customer_id,
+                is_done = r.status == 4 ? 1 : 0,
+                progress = r.progress,
+
+                address = r.address,
+                date_setup = r.date_setup,
+                reg_no = r.reg_no,
+
+                is_customs = r.is_customs,
+                customs_name = r.customs_name,
+                customs_address = r.customs_address,
+
+                taxpayer = r.taxpayer,
+                bank_id = r.bank_id,
+                is_bookkeeping = r.is_bookkeeping,
+                amount_bookkeeping = r.amount_bookkeeping
+
             }).FirstOrDefault();
 
             return Json(p, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult UpdateProgress(ProgressRequest request)
+        public ActionResult UpdateProgress(RegInternalProgressRequest request)
         {
-            var dbAbroad = Uof.Ireg_internalService.GetById(request.id);
-            if (dbAbroad == null)
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var dbInternal = Uof.Ireg_internalService.GetById(request.id);
+            if (dbInternal == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (dbAbroad.progress == request.name)
+            if (request.is_done == 1)
             {
-                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                dbInternal.status = 4;
+                dbInternal.date_updated = DateTime.Now;
+                dbInternal.date_finish = request.date_finish;
+                dbInternal.date_setup = request.date_setup;
+                dbInternal.reg_no = request.reg_no;
+                //dbInternal.address = request.address;
+                dbInternal.taxpayer = request.taxpayer;
+                dbInternal.is_bookkeeping = request.is_bookkeeping;
+                dbInternal.amount_bookkeeping = request.amount_bookkeeping;
+                dbInternal.bank_id = request.bank_id;
+
+                dbInternal.is_customs = request.is_customs;
+                dbInternal.progress = request.progress ?? "已完成";
+
+                if (request.is_customs == 1)
+                {
+                    dbInternal.customs_name = request.customs_name;
+                    dbInternal.customs_address = request.customs_address;
+                }
+            }
+            else
+            {
+                if (dbInternal.progress == request.progress)
+                {
+                    return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                }
+
+                dbInternal.progress = request.progress;
             }
 
-            dbAbroad.progress = request.name;
+            var r = Uof.Ireg_internalService.UpdateEntity(dbInternal);
 
-            var r = Uof.Ireg_internalService.UpdateEntity(dbAbroad);
+            if (r)
+            {
+                if (request.is_done == 1)
+                {
+                    var h = new reg_internal_history()
+                    {
+                        reg_id = dbInternal.id,
+                        name_cn = dbInternal.name_cn,
+                        address = dbInternal.address,
+                        date_setup = dbInternal.date_setup,
+                        director = dbInternal.director,
+                        reg_no = dbInternal.reg_no,
+                        legal = dbInternal.legal
+                    };
+
+                    Uof.Ireg_internal_historyService.AddEntity(h);
+
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbInternal.id,
+                        source_name = "reg_internal",
+                        title = "完成订单",
+                        content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], dbInternal.date_finish.Value.ToString("yyyy-MM-dd"))
+                    });
+                    // TODO 通知 业务员
+                }
+                else
+                {
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbInternal.id,
+                        source_name = "reg_internal",
+                        title = "更新了订单进度",
+                        content = string.Format("{0}更新了进度: {1}", arrs[3], dbInternal.progress)
+                    });
+                }
+            }
 
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }

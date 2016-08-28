@@ -95,8 +95,10 @@ namespace WebCenter.Web.Controllers
                 progress = c.progress,
                 salesman_id = c.salesman_id,
                 salesman_name = c.member3.name,
+                finance_review_moment = c.finance_review_moment,
+                submit_review_moment = c.submit_review_moment
 
-            }).ToPagedList(request.index, request.size).ToList();
+                }).ToPagedList(request.index, request.size).ToList();
 
             var totalRecord = Uof.IauditService.GetAll(condition).Count();
 
@@ -303,7 +305,9 @@ namespace WebCenter.Web.Controllers
                 manager_name = a.member2.name,
 
                 status = a.status,
-                review_status = a.review_status
+                review_status = a.review_status,
+                finance_review_moment = a.finance_review_moment,
+                submit_review_moment = a.submit_review_moment
 
             }).FirstOrDefault();
 
@@ -420,6 +424,7 @@ namespace WebCenter.Web.Controllers
             }
 
             dbAudit.status = 1;
+            dbAudit.review_status = -1;
             dbAudit.date_updated = DateTime.Now;
 
             var r = Uof.IauditService.UpdateEntity(dbAudit);
@@ -530,7 +535,7 @@ namespace WebCenter.Web.Controllers
             var t = "";
             if (dbAudit.status == 1)
             {
-                dbAudit.status = 2;
+                dbAudit.status = 0;
                 dbAudit.review_status = 0;
                 dbAudit.finance_reviewer_id = userId;
                 dbAudit.finance_review_date = DateTime.Now;
@@ -541,7 +546,7 @@ namespace WebCenter.Web.Controllers
             }
             else
             {
-                dbAudit.status = 3;
+                dbAudit.status = 0;
                 dbAudit.review_status = 0;
                 dbAudit.submit_reviewer_id = userId;
                 dbAudit.submit_review_date = DateTime.Now;
@@ -617,10 +622,14 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetProgress(int id)
         {
-            var p = Uof.Ireg_abroadService.GetAll(r => r.id == id).Select(r => new
+            var p = Uof.IauditService.GetAll(r => r.id == id).Select(r => new
             {
                 id = r.id,
-                name = r.progress
+                customer_id = r.customer_id,
+                is_done = r.status == 4 ? 1 : 0,
+                date_finish = r.date_finish,
+                progress = r.progress
+
             }).FirstOrDefault();
 
             return Json(p, JsonRequestBehavior.AllowGet);
@@ -629,21 +638,70 @@ namespace WebCenter.Web.Controllers
         [HttpPost]
         public ActionResult UpdateProgress(ProgressRequest request)
         {
-            var dbAbroad = Uof.IauditService.GetById(request.id);
-            if (dbAbroad == null)
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var dbAudit = Uof.IauditService.GetById(request.id);
+            if (dbAudit == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (dbAbroad.progress == request.name)
+            if (request.is_done == 1)
             {
-                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                dbAudit.status = 4;
+                dbAudit.date_updated = DateTime.Now;
+                dbAudit.date_finish = request.date_finish;
+                dbAudit.progress = request.progress ?? "已完成";
+            }
+            else
+            {
+                if (dbAudit.progress == request.progress)
+                {
+                    return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                }
+
+                dbAudit.progress = request.progress;
             }
 
-            dbAbroad.progress = request.name;
+            var r = Uof.IauditService.UpdateEntity(dbAudit);
 
-            var r = Uof.IauditService.UpdateEntity(dbAbroad);
-
+            if (r)
+            {
+                if (request.is_done == 1)
+                {
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbAudit.id,
+                        source_name = "audit",
+                        title = "完成订单",
+                        content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], dbAudit.date_finish.Value.ToString("yyyy-MM-dd"))
+                    });
+                    // TODO 通知 业务员
+                }
+                else
+                {
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbAudit.id,
+                        source_name = "audit",
+                        title = "更新了订单进度",
+                        content = string.Format("{0}更新了进度: {1}", arrs[3], dbAudit.progress)
+                    });
+                }
+            }
+            
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
     }

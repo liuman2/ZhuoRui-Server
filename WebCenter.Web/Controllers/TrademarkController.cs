@@ -110,8 +110,10 @@ namespace WebCenter.Web.Controllers
                 amount_unreceive = 0,
                 salesman_id = c.salesman_id,
                 salesman_name = c.member3.name,
+                finance_review_moment = c.finance_review_moment,
+                submit_review_moment = c.submit_review_moment
 
-            }).ToPagedList(request.index, request.size).ToList();
+                }).ToPagedList(request.index, request.size).ToList();
 
             var totalRecord = Uof.ItrademarkService.GetAll(condition).Count();
 
@@ -267,7 +269,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetView(int id)
         {
-            var reg = Uof.ItrademarkService.GetAll(a => a.id == id).Select(a => new
+            var dbTrademar = Uof.ItrademarkService.GetAll(a => a.id == id).Select(a => new
             {
                 id = a.id,
                 customer_id = a.customer_id,
@@ -309,11 +311,13 @@ namespace WebCenter.Web.Controllers
                 manager_name = a.member2.name,
 
                 status = a.status,
-                review_status = a.review_status
+                review_status = a.review_status,
+                finance_review_moment = a.finance_review_moment,
+                submit_review_moment = a.submit_review_moment
 
             }).FirstOrDefault();
 
-            var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.customer_id == i.customer_id && i.source_name == "reg_abroad").ToList();
+            var list = Uof.IincomeService.GetAll(i => i.source_id == dbTrademar.id && i.customer_id == i.customer_id && i.source_name == "trademark").ToList();
 
             var total = 0f;
             if (list.Count > 0)
@@ -328,10 +332,10 @@ namespace WebCenter.Web.Controllers
             {
                 items = list,
                 total = total,
-                balance = reg.amount_transaction - total
+                balance = dbTrademar.amount_transaction - total
             };
 
-            return Json(new { order = reg, incomes = incomes }, JsonRequestBehavior.AllowGet);
+            return Json(new { order = dbTrademar, incomes = incomes }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Update(trademark trade)
@@ -349,12 +353,12 @@ namespace WebCenter.Web.Controllers
                 trade.date_transaction == dbTrade.date_transaction &&
                 trade.amount_transaction == dbTrade.amount_transaction &&
                 trade.currency == dbTrade.currency &&
-                trade.date_receipt == dbTrade.date_receipt &&
-                trade.date_accept == dbTrade.date_accept &&
-                trade.date_trial == dbTrade.date_trial &&
-                trade.date_regit == dbTrade.date_regit &&
-                trade.date_exten == dbTrade.date_exten &&
-                trade.progress == dbTrade.progress &&
+                //trade.date_receipt == dbTrade.date_receipt &&
+                //trade.date_accept == dbTrade.date_accept &&
+                //trade.date_trial == dbTrade.date_trial &&
+                //trade.date_regit == dbTrade.date_regit &&
+                //trade.date_exten == dbTrade.date_exten &&
+                //trade.progress == dbTrade.progress &&
 
                 trade.salesman_id == dbTrade.salesman_id &&
                 trade.waiter_id == dbTrade.waiter_id &&
@@ -384,18 +388,17 @@ namespace WebCenter.Web.Controllers
             dbTrade.date_transaction = trade.date_transaction;
             dbTrade.amount_transaction = trade.amount_transaction;
             dbTrade.currency = trade.currency;
-            dbTrade.date_receipt = trade.date_receipt;
-            dbTrade.date_accept = trade.date_accept;
-            dbTrade.date_trial = trade.date_trial;
-            dbTrade.date_regit = trade.date_regit;
-            dbTrade.date_exten = trade.date_exten;
-            dbTrade.progress = trade.progress;
+            //dbTrade.date_receipt = trade.date_receipt;
+            //dbTrade.date_accept = trade.date_accept;
+            //dbTrade.date_trial = trade.date_trial;
+            //dbTrade.date_regit = trade.date_regit;
+            //dbTrade.date_exten = trade.date_exten;
+            //dbTrade.progress = trade.progress;
 
             dbTrade.salesman_id = trade.salesman_id;
             dbTrade.waiter_id = trade.waiter_id;
             dbTrade.manager_id = trade.manager_id;
             dbTrade.description = trade.description;
-
 
             dbTrade.date_updated = DateTime.Now;
 
@@ -423,6 +426,7 @@ namespace WebCenter.Web.Controllers
             }
 
             dbTrade.status = 1;
+            dbTrade.review_status = -1;
             dbTrade.date_updated = DateTime.Now;
 
             var r = Uof.ItrademarkService.UpdateEntity(dbTrade);
@@ -533,7 +537,7 @@ namespace WebCenter.Web.Controllers
             var t = "";
             if (dbTrade.status == 1)
             {
-                dbTrade.status = 2;
+                dbTrade.status = 0;
                 dbTrade.review_status = 0;
                 dbTrade.finance_reviewer_id = userId;
                 dbTrade.finance_review_date = DateTime.Now;
@@ -544,7 +548,7 @@ namespace WebCenter.Web.Controllers
             }
             else
             {
-                dbTrade.status = 3;
+                dbTrade.status = 0;
                 dbTrade.review_status = 0;
                 dbTrade.submit_reviewer_id = userId;
                 dbTrade.submit_review_date = DateTime.Now;
@@ -623,7 +627,10 @@ namespace WebCenter.Web.Controllers
             var p = Uof.ItrademarkService.GetAll(r => r.id == id).Select(r => new
             {
                 id = r.id,
-                name = r.progress,
+                customer_id = r.customer_id,
+                progress = r.progress,
+                is_done = r.status == 4 ? 1 : 0,
+
                 date_accept = r.date_accept,
                 date_receipt = r.date_receipt,
                 date_trial = r.date_trial,
@@ -637,30 +644,74 @@ namespace WebCenter.Web.Controllers
         [HttpPost]
         public ActionResult UpdateProgress(TtrademarkProgressRequest request)
         {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
             var dbtrademark = Uof.ItrademarkService.GetById(request.id);
             if (dbtrademark == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (dbtrademark.progress == request.name &&
-                dbtrademark.date_accept == request.date_accept &&
-                dbtrademark.date_receipt == request.date_receipt &&
-                dbtrademark.date_trial == request.date_trial &&
-                dbtrademark.date_regit == request.date_regit &&
-                dbtrademark.date_exten == request.date_exten)
+            if (request.is_done == 1)
             {
-                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                dbtrademark.status = 4;
+                dbtrademark.date_updated = DateTime.Now;
+                dbtrademark.date_finish = request.date_finish;
+                dbtrademark.progress = request.progress ?? "已完成";
+                dbtrademark.date_accept = request.date_accept;
+                dbtrademark.date_receipt = request.date_receipt;
+                dbtrademark.date_trial = request.date_trial;
+                dbtrademark.date_regit = request.date_regit;
+                dbtrademark.date_exten = request.date_exten;
+            }
+            else
+            {
+                if (dbtrademark.progress == request.progress)
+                {
+                    return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                }
+
+                dbtrademark.progress = request.progress;
             }
 
-            dbtrademark.progress = request.name;
-            dbtrademark.date_accept = request.date_accept;
-            dbtrademark.date_receipt = request.date_receipt;
-            dbtrademark.date_trial = request.date_trial;
-            dbtrademark.date_regit = request.date_regit;
-            dbtrademark.date_exten = request.date_exten;
-
             var r = Uof.ItrademarkService.UpdateEntity(dbtrademark);
+
+            if (r)
+            {
+                if (request.is_done == 1)
+                {
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbtrademark.id,
+                        source_name = "trademark",
+                        title = "完成订单",
+                        content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], dbtrademark.date_finish.Value.ToString("yyyy-MM-dd"))
+                    });
+                    // TODO 通知 业务员
+                }
+                else
+                {
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbtrademark.id,
+                        source_name = "trademark",
+                        title = "更新了订单进度",
+                        content = string.Format("{0}更新了进度: {1}", arrs[3], dbtrademark.progress)
+                    });
+                }
+            }
 
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }

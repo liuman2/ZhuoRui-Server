@@ -55,7 +55,7 @@ namespace WebCenter.Web.Controllers
                 else
                 {
                     statusQuery = c => (c.status == request.status.Value);
-                }                
+                }
             }
 
             // 成交开始日期
@@ -71,31 +71,33 @@ namespace WebCenter.Web.Controllers
                 var endTime = request.end_time.Value.AddDays(1);
                 date2Query = c => (c.date_transaction < endTime);
             }
-            
+
             var list = Uof.Ireg_abroadService.GetAll(condition)
                 .Where(customerQuery)
                 .Where(statusQuery)
                 .Where(date1Query)
                 .Where(date2Query)
                 .OrderByDescending(item => item.id).Select(c => new
-            {
-                id = c.id,
-                code = c.code,
-                customer_id = c.customer_id,
-                customer_name = c.customer.name,
-                name_cn = c.name_cn,
-                name_en = c.name_en,
-                status = c.status,
-                review_status = c.review_status,
-                date_transaction = c.date_transaction,
-                amount_transaction = c.amount_transaction,
-                amount_income = 0,
-                amount_unreceive = 0,
-                progress = c.progress,
-                salesman_id = c.salesman_id,
-                salesman_name = c.member3.name,
+                {
+                    id = c.id,
+                    code = c.code,
+                    customer_id = c.customer_id,
+                    customer_name = c.customer.name,
+                    name_cn = c.name_cn,
+                    name_en = c.name_en,
+                    status = c.status,
+                    review_status = c.review_status,
+                    date_transaction = c.date_transaction,
+                    amount_transaction = c.amount_transaction,
+                    amount_income = 0,
+                    amount_unreceive = 0,
+                    progress = c.progress,
+                    salesman_id = c.salesman_id,
+                    salesman_name = c.member3.name,
+                    finance_review_moment = c.finance_review_moment,
+                    submit_review_moment = c.submit_review_moment
 
-            }).ToPagedList(request.index, request.size).ToList();
+                }).ToPagedList(request.index, request.size).ToList();
 
             var totalRecord = Uof.Ireg_abroadService.GetAll(condition).Count();
 
@@ -127,30 +129,30 @@ namespace WebCenter.Web.Controllers
             {
                 return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
             }
-            if (string.IsNullOrEmpty(aboad.name_cn))
-            {
-                return Json(new { success = false, message = "请填写公司中文名称" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (string.IsNullOrEmpty(aboad.name_cn))
+            //{
+            //    return Json(new { success = false, message = "请填写公司中文名称" }, JsonRequestBehavior.AllowGet);
+            //}
             if (string.IsNullOrEmpty(aboad.name_en))
             {
                 return Json(new { success = false, message = "请填写公司英文名称" }, JsonRequestBehavior.AllowGet);
             }
-            if (aboad.date_setup == null)
-            {
-                return Json(new { success = false, message = "请填写公司成立日期" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(aboad.reg_no))
-            {
-                return Json(new { success = false, message = "请填写公司注册编号" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(aboad.region))
-            {
-                return Json(new { success = false, message = "请填写公司注册地区" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(aboad.address))
-            {
-                return Json(new { success = false, message = "请填写公司注册地址" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (aboad.date_setup == null)
+            //{
+            //    return Json(new { success = false, message = "请填写公司成立日期" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(aboad.reg_no))
+            //{
+            //    return Json(new { success = false, message = "请填写公司注册编号" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(aboad.region))
+            //{
+            //    return Json(new { success = false, message = "请填写公司注册地区" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(aboad.address))
+            //{
+            //    return Json(new { success = false, message = "请填写公司注册地址" }, JsonRequestBehavior.AllowGet);
+            //}
             if (aboad.date_transaction == null)
             {
                 return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
@@ -317,10 +319,10 @@ namespace WebCenter.Web.Controllers
                 waiter_name = a.member6.name,
                 manager_id = a.manager_id,
                 manager_name = a.member2.name,
-                
-
                 status = a.status,
-                review_status = a.review_status
+                review_status = a.review_status,
+                finance_review_moment = a.finance_review_moment,
+                submit_review_moment = a.submit_review_moment
 
             }).FirstOrDefault();
 
@@ -441,6 +443,7 @@ namespace WebCenter.Web.Controllers
             }
 
             dbReg.status = 1;
+            dbReg.review_status = -1;
             dbReg.date_updated = DateTime.Now;
 
             var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
@@ -551,7 +554,7 @@ namespace WebCenter.Web.Controllers
             var t = "";
             if (dbReg.status == 1)
             {
-                dbReg.status = 2;
+                dbReg.status = 0;
                 dbReg.review_status = 0;
                 dbReg.finance_reviewer_id = userId;
                 dbReg.finance_review_date = DateTime.Now;
@@ -562,7 +565,7 @@ namespace WebCenter.Web.Controllers
             }
             else
             {
-                dbReg.status = 3;
+                dbReg.status = 0;
                 dbReg.review_status = 0;
                 dbReg.submit_reviewer_id = userId;
                 dbReg.submit_review_date = DateTime.Now;
@@ -590,65 +593,63 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public ActionResult Finish(int id, DateTime date_finish)
-        {
-            var u = HttpContext.User.Identity.IsAuthenticated;
-            if (!u)
-            {
-                return new HttpUnauthorizedResult();
-            }
+        //[HttpPost]
+        //public ActionResult Finish(int id, DateTime date_finish)
+        //{
+        //    var u = HttpContext.User.Identity.IsAuthenticated;
+        //    if (!u)
+        //    {
+        //        return new HttpUnauthorizedResult();
+        //    }
 
-            var identityName = HttpContext.User.Identity.Name;
-            var arrs = identityName.Split('|');
-            if (arrs.Length == 0)
-            {
-                return new HttpUnauthorizedResult();
-            }
+        //    var identityName = HttpContext.User.Identity.Name;
+        //    var arrs = identityName.Split('|');
+        //    if (arrs.Length == 0)
+        //    {
+        //        return new HttpUnauthorizedResult();
+        //    }
 
-            var userId = 0;
-            int.TryParse(arrs[0], out userId);
+        //    var userId = 0;
+        //    int.TryParse(arrs[0], out userId);
 
-            var dbReg = Uof.Ireg_abroadService.GetById(id);
-            if (dbReg == null)
-            {
-                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
-            }
-            dbReg.status = 4;
-            dbReg.date_updated = DateTime.Now;
-            dbReg.date_finish = date_finish;
-            dbReg.progress = "已完成";
-            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+        //    var dbReg = Uof.Ireg_abroadService.GetById(id);
+        //    if (dbReg == null)
+        //    {
+        //        return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    dbReg.status = 4;
+        //    dbReg.date_updated = DateTime.Now;
+        //    dbReg.date_finish = date_finish;
+        //    dbReg.progress = "已完成";
+        //    var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
 
-            if (r)
-            {
-                var h = new reg_history()
-                {
-                    reg_id = dbReg.id,
-                    name_cn = dbReg.name_cn,
-                    name_en = dbReg.name_en,
-                    address = dbReg.address,
-                    date_setup = dbReg.date_setup,
-                    director = dbReg.director,
-                    region = dbReg.region,
-                    reg_no = dbReg.reg_no
-                };
+        //    if (r)
+        //    {
+        //        var h = new reg_history()
+        //        {
+        //            reg_id = dbReg.id,
+        //            name_cn = dbReg.name_cn,
+        //            name_en = dbReg.name_en,
+        //            address = dbReg.address,
+        //            date_setup = dbReg.date_setup,
+        //            director = dbReg.director,
+        //            region = dbReg.region,
+        //            reg_no = dbReg.reg_no
+        //        };
 
-                Uof.Ireg_historyService.AddEntity(h);
+        //        Uof.Ireg_historyService.AddEntity(h);
 
-                Uof.ItimelineService.AddEntity(new timeline()
-                {
-                    source_id = dbReg.id,
-                    source_name = "reg_abroad",
-                    title = "完成订单",
-                    content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
-                });
+        //        Uof.ItimelineService.AddEntity(new timeline()
+        //        {
+        //            source_id = dbReg.id,
+        //            source_name = "reg_abroad",
+        //            title = "完成订单",
+        //            content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
+        //        });
+        //    }
 
-                // TODO 通知 业务员
-            }
-
-            return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
+        //}
 
         public ActionResult History(int id, int index = 1, int size = 10)
         {
@@ -742,29 +743,108 @@ namespace WebCenter.Web.Controllers
             var p = Uof.Ireg_abroadService.GetAll(r => r.id == id).Select(r => new
             {
                 id = r.id,
-                name = r.progress
+                customer_id = r.customer_id,
+                is_done = r.status == 4 ? 1 : 0,
+                date_finish = r.date_finish,
+                progress = r.progress,
+
+                address = r.address,
+                date_setup = r.date_setup,
+                reg_no = r.reg_no,
+                is_open_bank = r.is_open_bank,
+                bank_id = r.bank_id
+
             }).FirstOrDefault();
 
             return Json(p, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult UpdateProgress(ProgressRequest request)
+        public ActionResult UpdateProgress(RegAbroadProgressRequest request)
         {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
             var dbAbroad = Uof.Ireg_abroadService.GetById(request.id);
             if (dbAbroad == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (dbAbroad.progress == request.name)
+            if (request.is_done == 1)
             {
-                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                dbAbroad.status = 4;
+                dbAbroad.date_updated = DateTime.Now;
+                dbAbroad.date_finish = request.date_finish;
+                dbAbroad.date_setup = request.date_setup;
+                dbAbroad.reg_no = request.reg_no;
+                dbAbroad.address = request.address;
+                dbAbroad.is_open_bank = request.is_open_bank;
+                dbAbroad.progress = request.progress ?? "已完成";
+                if (request.is_open_bank == 1)
+                {
+                    dbAbroad.bank_id = request.bank_id;
+                }
+            } else
+            {
+                if (dbAbroad.progress == request.progress)
+                {
+                    return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                }
+
+                dbAbroad.progress = request.progress;
             }
-
-            dbAbroad.progress = request.name;
-
+            
             var r = Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
+
+            if (r)
+            {
+                if (request.is_done == 1)
+                {
+                    var h = new reg_history()
+                    {
+                        reg_id = dbAbroad.id,
+                        name_cn = dbAbroad.name_cn,
+                        name_en = dbAbroad.name_en,
+                        address = dbAbroad.address,
+                        date_setup = dbAbroad.date_setup,
+                        director = dbAbroad.director,
+                        region = dbAbroad.region,
+                        reg_no = dbAbroad.reg_no
+                    };
+
+                    Uof.Ireg_historyService.AddEntity(h);
+
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbAbroad.id,
+                        source_name = "reg_abroad",
+                        title = "完成订单",
+                        content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], dbAbroad.date_finish.Value.ToString("yyyy-MM-dd"))
+                    });
+                    // TODO 通知 业务员
+                } else
+                {
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbAbroad.id,
+                        source_name = "reg_abroad",
+                        title = "更新了订单进度",
+                        content = string.Format("{0}更新了进度: {1}", arrs[3], dbAbroad.progress)
+                    });
+                }
+            }
 
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }

@@ -113,8 +113,10 @@ namespace WebCenter.Web.Controllers
                 amount_unreceive = 0,
                 salesman_id = c.salesman_id,
                 salesman_name = c.member3.name,
+                finance_review_moment = c.finance_review_moment,
+                submit_review_moment = c.submit_review_moment
 
-            }).ToPagedList(request.index, request.size).ToList();
+                }).ToPagedList(request.index, request.size).ToList();
 
             var totalRecord = Uof.IpatentService.GetAll(condition).Count();
 
@@ -299,6 +301,7 @@ namespace WebCenter.Web.Controllers
                 date_accept = a.date_accept,
                 date_empower = a.date_empower,
                 date_inspection = a.date_inspection,
+                date_finish = a.date_finish,
                 progress = a.progress,
 
                 salesman_id = a.salesman_id,
@@ -309,7 +312,9 @@ namespace WebCenter.Web.Controllers
                 manager_name = a.member2.name,
 
                 status = a.status,
-                review_status = a.review_status
+                review_status = a.review_status,
+                finance_review_moment = a.finance_review_moment,
+                submit_review_moment = a.submit_review_moment
 
             }).FirstOrDefault();
 
@@ -418,6 +423,7 @@ namespace WebCenter.Web.Controllers
             }
 
             dbPatent.status = 1;
+            dbPatent.review_status = -1;
             dbPatent.date_updated = DateTime.Now;
 
             var r = Uof.IpatentService.UpdateEntity(dbPatent);
@@ -528,7 +534,7 @@ namespace WebCenter.Web.Controllers
             var t = "";
             if (dbPatent.status == 1)
             {
-                dbPatent.status = 2;
+                dbPatent.status = 0;
                 dbPatent.review_status = 0;
                 dbPatent.finance_reviewer_id = userId;
                 dbPatent.finance_review_date = DateTime.Now;
@@ -539,7 +545,7 @@ namespace WebCenter.Web.Controllers
             }
             else
             {
-                dbPatent.status = 3;
+                dbPatent.status = 0;
                 dbPatent.review_status = 0;
                 dbPatent.submit_reviewer_id = userId;
                 dbPatent.submit_review_date = DateTime.Now;
@@ -619,7 +625,9 @@ namespace WebCenter.Web.Controllers
             var p = Uof.IpatentService.GetAll(r => r.id == id).Select(r => new
             {
                 id = r.id,
-                name = r.progress,
+                progress = r.progress,
+                is_done = r.status == 4 ? 1 : 0,
+
                 date_accept = r.date_accept,
                 date_empower = r.date_empower
             }).FirstOrDefault();
@@ -630,25 +638,72 @@ namespace WebCenter.Web.Controllers
         [HttpPost]
         public ActionResult UpdateProgress(PatentProgressRequest request)
         {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
             var dbPantent = Uof.IpatentService.GetById(request.id);
             if (dbPantent == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (dbPantent.progress == request.name &&
-                dbPantent.date_accept == request.date_accept &&
-                dbPantent.date_empower == request.date_empower)
+            if (request.is_done == 1)
             {
-                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                dbPantent.status = 4;
+                dbPantent.date_updated = DateTime.Now;
+                dbPantent.date_finish = request.date_finish;
+                dbPantent.progress = request.progress ?? "已完成";
+                dbPantent.date_accept = request.date_accept;
+                dbPantent.date_empower = request.date_empower;
             }
+            else
+            {
+                if (dbPantent.progress == request.progress)
+                {
+                    return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+                }
 
-            dbPantent.progress = request.name;
-            dbPantent.date_accept = request.date_accept;
-            dbPantent.date_empower = request.date_empower;
+                dbPantent.progress = request.progress;
+            }
 
             var r = Uof.IpatentService.UpdateEntity(dbPantent);
 
+            if (r)
+            {
+                if (request.is_done == 1)
+                {
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbPantent.id,
+                        source_name = "patent",
+                        title = "完成订单",
+                        content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], dbPantent.date_finish.Value.ToString("yyyy-MM-dd"))
+                    });
+                    // TODO 通知 业务员
+                }
+                else
+                {
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbPantent.id,
+                        source_name = "patent",
+                        title = "更新了订单进度",
+                        content = string.Format("{0}更新了进度: {1}", arrs[3], dbPantent.progress)
+                    });
+                }
+            }
+            
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
     }
