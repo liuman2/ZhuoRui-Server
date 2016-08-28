@@ -247,6 +247,7 @@ namespace WebCenter.Web.Controllers
                 account = a.bank_account.account,
                 date_finish = a.date_finish,
                 currency = a.currency,
+                rate = a.rate,
                 progress = a.progress,
 
                 invoice_name = a.invoice_name,
@@ -304,6 +305,7 @@ namespace WebCenter.Web.Controllers
                 account = a.bank_account.account,
                 date_finish = a.date_finish,
                 currency = a.currency,
+                rate = a.rate,
                 progress = a.progress,
 
                 invoice_name = a.invoice_name,
@@ -374,7 +376,9 @@ namespace WebCenter.Web.Controllers
                 reg.waiter_id == dbReg.waiter_id &&
                 reg.manager_id == dbReg.manager_id && 
                 reg.description == dbReg.description &&
-                reg.currency == dbReg.currency
+                reg.currency == dbReg.currency && 
+                reg.rate == dbReg.rate
+                
                 )
             {
                 return Json(new { id = reg.id }, JsonRequestBehavior.AllowGet);
@@ -411,6 +415,7 @@ namespace WebCenter.Web.Controllers
             dbReg.manager_id = reg.manager_id;
             dbReg.description = reg.description;
             dbReg.currency = reg.currency;
+            dbReg.rate = reg.rate;
 
             if (reg.is_open_bank == 0)
             {

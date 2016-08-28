@@ -244,6 +244,7 @@ namespace WebCenter.Web.Controllers
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
                 currency = a.currency,
+                rate = a.rate,
 
                 date_receipt = a.date_receipt,
                 date_accept = a.date_accept,
@@ -294,6 +295,7 @@ namespace WebCenter.Web.Controllers
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
                 currency = a.currency,
+                rate = a.rate,
 
                 date_receipt = a.date_receipt,
                 date_accept = a.date_receipt,
@@ -364,7 +366,8 @@ namespace WebCenter.Web.Controllers
                 trade.waiter_id == dbTrade.waiter_id &&
                 trade.manager_id == dbTrade.manager_id && 
                 trade.description == dbTrade.description &&
-                trade.currency == dbTrade.currency
+                trade.currency == dbTrade.currency &&
+                trade.rate == dbTrade.rate
                 )
             {
                 return Json(new { id = trade.id }, JsonRequestBehavior.AllowGet);
@@ -388,6 +391,8 @@ namespace WebCenter.Web.Controllers
             dbTrade.date_transaction = trade.date_transaction;
             dbTrade.amount_transaction = trade.amount_transaction;
             dbTrade.currency = trade.currency;
+            dbTrade.rate = trade.rate;
+
             //dbTrade.date_receipt = trade.date_receipt;
             //dbTrade.date_accept = trade.date_accept;
             //dbTrade.date_trial = trade.date_trial;

@@ -241,6 +241,7 @@ namespace WebCenter.Web.Controllers
                 amount_transaction = a.amount_transaction,
                 date_finish = a.date_finish,
                 currency = a.currency,
+                rate = a.rate,
 
                 salesman_id = a.salesman_id,
                 salesman = a.member4.name,
@@ -296,6 +297,7 @@ namespace WebCenter.Web.Controllers
                 amount_transaction = a.amount_transaction,
                 date_finish = a.date_finish,
                 currency = a.currency,
+                rate = a.rate,
 
                 salesman_id = a.salesman_id,
                 salesman = a.member4.name,
@@ -360,7 +362,8 @@ namespace WebCenter.Web.Controllers
                 _audit.manager_id == dbAudit.manager_id &&
                 _audit.salesman_id == dbAudit.salesman_id &&
                 _audit.description == dbAudit.description &&
-                _audit.currency == dbAudit.currency
+                _audit.currency == dbAudit.currency &&
+                _audit.rate == dbAudit.rate
                 )
             {
                 return Json(new { id = _audit.id }, JsonRequestBehavior.AllowGet);
@@ -398,6 +401,7 @@ namespace WebCenter.Web.Controllers
             dbAudit.salesman_id = _audit.salesman_id;
             dbAudit.description = _audit.description;
             dbAudit.currency = _audit.currency;
+            dbAudit.rate = _audit.rate;
             dbAudit.date_updated = DateTime.Now;
 
             var r = Uof.IauditService.UpdateEntity(dbAudit);

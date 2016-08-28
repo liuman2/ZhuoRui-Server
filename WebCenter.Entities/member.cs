@@ -18,6 +18,13 @@ namespace WebCenter.Entities
         {
             this.customers = new HashSet<customer>();
             this.customers1 = new HashSet<customer>();
+            this.annual_exam = new HashSet<annual_exam>();
+            this.annual_exam1 = new HashSet<annual_exam>();
+            this.annual_exam2 = new HashSet<annual_exam>();
+            this.annual_exam3 = new HashSet<annual_exam>();
+            this.annual_exam4 = new HashSet<annual_exam>();
+            this.annual_exam5 = new HashSet<annual_exam>();
+            this.annual_exam6 = new HashSet<annual_exam>();
             this.audits = new HashSet<audit>();
             this.audits1 = new HashSet<audit>();
             this.audits2 = new HashSet<audit>();
@@ -50,13 +57,6 @@ namespace WebCenter.Entities
             this.trademarks3 = new HashSet<trademark>();
             this.trademarks4 = new HashSet<trademark>();
             this.trademarks5 = new HashSet<trademark>();
-            this.annual_exam = new HashSet<annual_exam>();
-            this.annual_exam1 = new HashSet<annual_exam>();
-            this.annual_exam2 = new HashSet<annual_exam>();
-            this.annual_exam3 = new HashSet<annual_exam>();
-            this.annual_exam4 = new HashSet<annual_exam>();
-            this.annual_exam5 = new HashSet<annual_exam>();
-            this.annual_exam6 = new HashSet<annual_exam>();
         }
     
     
@@ -122,6 +122,13 @@ namespace WebCenter.Entities
         public virtual position position { get; set; }
         public virtual ICollection<customer> customers { get; set; }
         public virtual ICollection<customer> customers1 { get; set; }
+        public virtual ICollection<annual_exam> annual_exam { get; set; }
+        public virtual ICollection<annual_exam> annual_exam1 { get; set; }
+        public virtual ICollection<annual_exam> annual_exam2 { get; set; }
+        public virtual ICollection<annual_exam> annual_exam3 { get; set; }
+        public virtual ICollection<annual_exam> annual_exam4 { get; set; }
+        public virtual ICollection<annual_exam> annual_exam5 { get; set; }
+        public virtual ICollection<annual_exam> annual_exam6 { get; set; }
         public virtual ICollection<audit> audits { get; set; }
         public virtual ICollection<audit> audits1 { get; set; }
         public virtual ICollection<audit> audits2 { get; set; }
@@ -154,12 +161,5 @@ namespace WebCenter.Entities
         public virtual ICollection<trademark> trademarks3 { get; set; }
         public virtual ICollection<trademark> trademarks4 { get; set; }
         public virtual ICollection<trademark> trademarks5 { get; set; }
-        public virtual ICollection<annual_exam> annual_exam { get; set; }
-        public virtual ICollection<annual_exam> annual_exam1 { get; set; }
-        public virtual ICollection<annual_exam> annual_exam2 { get; set; }
-        public virtual ICollection<annual_exam> annual_exam3 { get; set; }
-        public virtual ICollection<annual_exam> annual_exam4 { get; set; }
-        public virtual ICollection<annual_exam> annual_exam5 { get; set; }
-        public virtual ICollection<annual_exam> annual_exam6 { get; set; }
     }
 }

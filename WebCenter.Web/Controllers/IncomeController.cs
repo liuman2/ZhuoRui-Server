@@ -25,15 +25,15 @@ namespace WebCenter.Web.Controllers
             }            
             if (string.IsNullOrEmpty(_inc.account))
             {
-                return Json(new { success = false, message = "付款账号不能为空" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "收款账号不能为空" }, JsonRequestBehavior.AllowGet);
             }
             if (_inc.amount == null)
             {
-                return Json(new { success = false, message = "付款金额不能为空" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "收款金额不能为空" }, JsonRequestBehavior.AllowGet);
             }
             if (_inc.date_pay == null)
             {
-                return Json(new { success = false, message = "付款日期额不能为空" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "收款日期额不能为空" }, JsonRequestBehavior.AllowGet);
             }
             if (_inc.source_id == null)
             {
@@ -82,6 +82,7 @@ namespace WebCenter.Web.Controllers
                payer = i.payer,
                account = i.account,
                amount = i.amount,
+               bank = i.bank,
                date_pay = i.date_pay,
                pay_way = i.pay_way,
                attachment_url = i.attachment_url,
@@ -97,6 +98,7 @@ namespace WebCenter.Web.Controllers
 
             if (dbIncome.payer == _income.payer &&
                 dbIncome.account == _income.account &&
+                dbIncome.bank == _income.bank &&
                 dbIncome.amount == _income.amount &&
                 dbIncome.date_pay == _income.date_pay &&
                 dbIncome.pay_way == _income.pay_way &&
@@ -118,6 +120,7 @@ namespace WebCenter.Web.Controllers
             dbIncome.amount = _income.amount;
             dbIncome.date_pay = _income.date_pay;
             dbIncome.pay_way = _income.pay_way;
+            dbIncome.bank = _income.bank;
             dbIncome.attachment_url = _income.attachment_url;
 
             dbIncome.date_updated = DateTime.Now;

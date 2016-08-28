@@ -270,6 +270,55 @@ namespace WebCenter.Web.Controllers
             return Json(new { id = newExam.id }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Update(annual_exam exam)
+        {
+            var dbExam = Uof.Iannual_examService.GetById(exam.id);
+
+            if (exam.description == dbExam.description &&
+                exam.date_transaction == dbExam.date_transaction &&
+                exam.amount_transaction == dbExam.amount_transaction &&
+                exam.rate == dbExam.rate &&
+                exam.currency == dbExam.currency &&
+                exam.salesman_id == dbExam.salesman_id &&
+                exam.accountant_id == dbExam.accountant_id
+               
+                )
+            {
+                return Json(new { success = true, id = dbExam.id }, JsonRequestBehavior.AllowGet);
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            dbExam.description = exam.description;
+            dbExam.date_updated = DateTime.Now;
+            dbExam.date_transaction = exam.date_transaction;
+            dbExam.amount_transaction = exam.amount_transaction;
+            dbExam.rate = exam.rate;
+            dbExam.currency = exam.currency;
+            dbExam.salesman_id = exam.salesman_id;
+            dbExam.accountant_id = exam.accountant_id;
+
+            var r = Uof.Iannual_examService.UpdateEntity(dbExam);
+
+            if (r)
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbExam.id,
+                    source_name = "annual",
+                    title = "修改年检资料",
+                    content = string.Format("{0}修改了年检资料", arrs[3])
+                });
+            }
+
+            return Json(new { success = r, id = dbExam.id }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Get(int id)
         {
             var annua = Uof.Iannual_examService.GetAll(a => a.id == id).Select(a => new
@@ -286,6 +335,7 @@ namespace WebCenter.Web.Controllers
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
                 currency = a.currency,
+                rate = a.rate,
                 description = a.description,
                 progress = a.progress,
                 salesman_id = a.salesman_id,
@@ -428,6 +478,7 @@ namespace WebCenter.Web.Controllers
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
                 currency = a.currency,
+                rate = a.rate,
                 description = a.description,
                 progress = a.progress,
                 salesman_id = a.salesman_id,
@@ -437,7 +488,7 @@ namespace WebCenter.Web.Controllers
                 accountant_id = a.accountant_id,
                 accountant_name = a.member.name,
                 date_finish = a.date_finish,
-
+                
                 status = a.status,
                 review_status = a.review_status,
                 finance_review_moment = a.finance_review_moment,

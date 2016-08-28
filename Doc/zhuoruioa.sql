@@ -301,6 +301,7 @@ CREATE TABLE `reg_abroad` (
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
   `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
   `currency` varchar(10) DEFAULT NULL COMMENT '币别',
+  `rate` float(255,2) DEFAULT NULL COMMENT '汇率',
 
   `invoice_name` varchar(200) DEFAULT NULL COMMENT '开票信息名称',
   `invoice_tax` varchar(200) DEFAULT NULL COMMENT '开票信息纳税人识别号',
@@ -396,6 +397,8 @@ CREATE TABLE `reg_internal` (
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
   `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
   `currency` varchar(10) DEFAULT NULL COMMENT '币别',
+  `rate` float(255,2) DEFAULT NULL COMMENT '汇率',
+
   `is_bookkeeping` tinyint(3) NULL COMMENT '是否在我司代理记账',
   `amount_bookkeeping` float(255,2) DEFAULT NULL COMMENT '代理记账费用',
 
@@ -475,10 +478,11 @@ CREATE TABLE `income` (
   `source_id` int(11) NULL,
   `source_name` varchar(20) DEFAULT NULL,
   `payer` varchar(100) DEFAULT NULL COMMENT '付款人',
-  `pay_way` varchar(100) DEFAULT NULL COMMENT '付款方式',
-  `account` varchar(100) DEFAULT NULL COMMENT '付款账号',
-  `amount` float(255,2) DEFAULT NULL COMMENT '付款金额',
-  `date_pay` datetime DEFAULT NULL COMMENT '付款时间',
+  `pay_way` varchar(100) DEFAULT NULL COMMENT '收款方式',
+  `account` varchar(100) DEFAULT NULL COMMENT '收款账号',
+  `bank` varchar(100) DEFAULT NULL COMMENT '收款银行',
+  `amount` float(255,2) DEFAULT NULL COMMENT '收款金额',
+  `date_pay` datetime DEFAULT NULL COMMENT '收款时间',
   `attachment_url` varchar(100) DEFAULT NULL COMMENT '附件地址',
   `description` varchar(100) NULL,
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
@@ -525,6 +529,8 @@ CREATE TABLE `audit` (
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
   `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
   `currency` varchar(10) DEFAULT NULL COMMENT '币别',
+  `rate` float(255,2) DEFAULT NULL COMMENT '汇率',
+
   `progress` varchar(50) DEFAULT NULL COMMENT '审计进度',
 
   `status` tinyint(3) NULL COMMENT '订单状态 状态:0-未提交, 1-已提交, 2-财务已审核, 3-提交人已审核, 4-完成',
@@ -565,7 +571,6 @@ CREATE TABLE `audit` (
   CONSTRAINT `audit_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 DROP TABLE IF EXISTS `trademark`;
 CREATE TABLE `trademark` (
   `id` int(11) NOT NULL,
@@ -580,6 +585,8 @@ CREATE TABLE `trademark` (
   `reg_mode` varchar(50) DEFAULT NULL COMMENT '注册方式',
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
   `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
+  `rate` float(255,2) DEFAULT NULL COMMENT '汇率',
+
   `currency` varchar(10) DEFAULT NULL COMMENT '币别',
 
   `date_receipt` datetime DEFAULT NULL COMMENT '回执时间',
@@ -642,6 +649,8 @@ CREATE TABLE `patent` (
   `reg_mode` varchar(50) DEFAULT NULL COMMENT '注册方式',
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
   `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
+  `rate` float(255,2) DEFAULT NULL COMMENT '汇率',
+
   `currency` varchar(10) DEFAULT NULL COMMENT '币别',
 
   `date_accept` datetime DEFAULT NULL COMMENT '受理时间',
@@ -697,6 +706,7 @@ CREATE TABLE `annual_exam` (
   `amount_transaction` float(255,2) DEFAULT NULL COMMENT '成交金额',
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
   `currency` varchar(10) DEFAULT NULL COMMENT '币别',
+  `rate` float(255,2) DEFAULT NULL COMMENT '汇率',
 
   `status` tinyint(3) NULL COMMENT '订单状态 状态:0-未提交, 1-已提交, 2-财务已审核, 3-提交人已审核, 4-完成',
   `finance_reviewer_id` int(11) DEFAULT NULL COMMENT '财务审核人员ID',
@@ -735,7 +745,6 @@ CREATE TABLE `annual_exam` (
   CONSTRAINT `annual_ibfk_finance_reviewer` FOREIGN KEY (`finance_reviewer_id`) REFERENCES `member` (`id`),
   CONSTRAINT `annual_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (

@@ -246,6 +246,7 @@ namespace WebCenter.Web.Controllers
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
                 currency = a.currency,
+                rate = a.rate,
                 
                 date_accept = a.date_accept,
                 date_empower = a.date_empower,
@@ -297,6 +298,7 @@ namespace WebCenter.Web.Controllers
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
                 currency = a.currency,
+                rate = a.rate,
 
                 date_accept = a.date_accept,
                 date_empower = a.date_empower,
@@ -363,7 +365,8 @@ namespace WebCenter.Web.Controllers
                 _patent.salesman_id == dbPatent.salesman_id &&
                 _patent.manager_id == dbPatent.manager_id && 
                 _patent.description == dbPatent.description &&
-                _patent.currency == dbPatent.currency
+                _patent.currency == dbPatent.currency &&
+                _patent.rate == dbPatent.rate
                 )
             {
                 return Json(new { id = _patent.id }, JsonRequestBehavior.AllowGet);
@@ -387,6 +390,7 @@ namespace WebCenter.Web.Controllers
             dbPatent.date_transaction = _patent.date_transaction;
             dbPatent.amount_transaction = _patent.amount_transaction;
             dbPatent.currency = _patent.currency;
+            dbPatent.rate = _patent.rate;
             
             dbPatent.date_accept = _patent.date_accept;
             dbPatent.date_empower = _patent.date_empower;

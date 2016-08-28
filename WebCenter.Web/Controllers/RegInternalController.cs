@@ -250,6 +250,7 @@ namespace WebCenter.Web.Controllers
                 amount_bookkeeping = a.amount_bookkeeping,
                 date_finish = a.date_finish,
                 currency = a.currency,
+                rate = a.rate,
                 progress = a.progress,
 
                 invoice_name = a.invoice_name,
@@ -313,6 +314,7 @@ namespace WebCenter.Web.Controllers
                 amount_bookkeeping = a.amount_bookkeeping,
                 date_finish = a.date_finish,
                 currency = a.currency,
+                rate = a.rate,
                 progress = a.progress,
 
                 invoice_name = a.invoice_name,
@@ -390,6 +392,7 @@ namespace WebCenter.Web.Controllers
                 reg.manager_id == dbReg.manager_id &&
                 reg.outworker_id == dbReg.outworker_id &&
                 reg.description == dbReg.description &&
+                reg.rate == dbReg.rate &&
                 reg.currency == dbReg.currency
                 )
             {
@@ -415,6 +418,9 @@ namespace WebCenter.Web.Controllers
             dbReg.taxpayer = reg.taxpayer;
             dbReg.date_setup = reg.date_setup;
             dbReg.reg_no = reg.reg_no;
+
+            dbReg.currency = reg.currency;
+            dbReg.rate = reg.rate;
             
             dbReg.address = reg.address;
             dbReg.director = reg.director;
