@@ -50,6 +50,10 @@ namespace WebCenter.Entities
     
     
     
+        public string others { get; set; }
+    
+    
+    
         public Nullable<System.DateTime> date_created { get; set; }
     
     

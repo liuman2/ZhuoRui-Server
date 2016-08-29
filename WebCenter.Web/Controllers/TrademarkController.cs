@@ -319,7 +319,20 @@ namespace WebCenter.Web.Controllers
 
             }).FirstOrDefault();
 
-            var list = Uof.IincomeService.GetAll(i => i.source_id == dbTrademar.id && i.customer_id == i.customer_id && i.source_name == "trademark").ToList();
+            var list = Uof.IincomeService.GetAll(i => i.source_id == dbTrademar.id && i.source_name == "trademark").Select(i => new {
+                id = i.id,
+                customer_id = i.customer_id,
+                source_id = i.source_id,
+                source_name = i.source_name,
+                payer = i.payer,
+                pay_way = i.pay_way,
+                account = i.account,
+                amount = i.amount,
+                date_pay = i.date_pay,
+                attachment_url = i.attachment_url,
+                description = i.description,
+                bank = i.bank
+            }).ToList();
 
             var total = 0f;
             if (list.Count > 0)
@@ -330,11 +343,17 @@ namespace WebCenter.Web.Controllers
                 }
             }
 
+            var balance = dbTrademar.amount_transaction - total;
             var incomes = new
             {
                 items = list,
                 total = total,
-                balance = dbTrademar.amount_transaction - total
+                balance = balance,
+
+                rate = dbTrademar.rate,
+                local_amount = dbTrademar.amount_transaction * dbTrademar.rate,
+                local_total = total * dbTrademar.rate,
+                local_balance = balance * dbTrademar.rate
             };
 
             return Json(new { order = dbTrademar, incomes = incomes }, JsonRequestBehavior.AllowGet);
@@ -380,6 +399,8 @@ namespace WebCenter.Web.Controllers
                 return new HttpUnauthorizedResult();
             }
 
+            var isChangeCurrency = trade.currency != dbTrade.currency || trade.rate != dbTrade.rate;
+
             dbTrade.customer_id = trade.customer_id;
             dbTrade.type = trade.type;
             dbTrade.name = trade.name;
@@ -411,6 +432,21 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
+                if (isChangeCurrency)
+                {
+                    var list = Uof.IincomeService.GetAll(i => i.source_id == trade.id && i.source_name == "trademark").ToList();
+                    if (list.Count() > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            item.currency = trade.currency;
+                            item.rate = trade.rate;
+                        }
+
+                        Uof.IincomeService.UpdateEntities(list);
+                    }
+                }
+
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbTrade.id,

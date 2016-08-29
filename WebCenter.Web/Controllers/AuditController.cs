@@ -313,7 +313,20 @@ namespace WebCenter.Web.Controllers
 
             }).FirstOrDefault();
 
-            var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.customer_id == i.customer_id && i.source_name == "audit").ToList();
+            var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "audit").Select(i => new {
+                id = i.id,
+                customer_id = i.customer_id,
+                source_id = i.source_id,
+                source_name = i.source_name,
+                payer = i.payer,
+                pay_way = i.pay_way,
+                account = i.account,
+                amount = i.amount,
+                date_pay = i.date_pay,
+                attachment_url = i.attachment_url,
+                description = i.description,
+                bank = i.bank
+            }).ToList();
 
             var total = 0f;
             if (list.Count > 0)
@@ -324,11 +337,17 @@ namespace WebCenter.Web.Controllers
                 }
             }
 
+            var balance = reg.amount_transaction - total;
             var incomes = new
             {
                 items = list,
                 total = total,
-                balance = reg.amount_transaction - total
+                balance = balance,
+
+                rate = reg.rate,
+                local_amount = reg.amount_transaction * reg.rate,
+                local_total = total * reg.rate,
+                local_balance = balance * reg.rate
             };
 
             return Json(new { order = reg, incomes = incomes }, JsonRequestBehavior.AllowGet);
@@ -376,6 +395,8 @@ namespace WebCenter.Web.Controllers
                 return new HttpUnauthorizedResult();
             }
 
+            var isChangeCurrency = _audit.currency != dbAudit.currency || _audit.rate != dbAudit.rate;
+
             dbAudit.customer_id = _audit.customer_id;
             dbAudit.name_cn = _audit.name_cn;
             dbAudit.name_en = _audit.name_en;
@@ -408,6 +429,21 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
+                if (isChangeCurrency)
+                {
+                    var list = Uof.IincomeService.GetAll(i => i.source_id == _audit.id && i.source_name == "audit").ToList();
+                    if (list.Count() > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            item.currency = _audit.currency;
+                            item.rate = _audit.rate;
+                        }
+
+                        Uof.IincomeService.UpdateEntities(list);
+                    }
+                }
+
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbAudit.id,

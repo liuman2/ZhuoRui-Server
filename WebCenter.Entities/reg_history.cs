@@ -50,6 +50,10 @@ namespace WebCenter.Entities
     
     
     
+        public string others { get; set; }
+    
+    
+    
         public string director { get; set; }
     
     

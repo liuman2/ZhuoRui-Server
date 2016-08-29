@@ -18,9 +18,7 @@
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_3" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_1" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_2" />
-        <EntityTypeShape EntityType="DataCenter.Entities.reg_history" Width="1.5" PointX="5.375" PointY="6.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.timeline" Width="1.5" PointX="7.375" PointY="6.75" />
-        <EntityTypeShape EntityType="DataCenter.Entities.reg_internal_history" Width="1.5" PointX="0.75" PointY="7.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.customer" Width="1.5" PointX="13.625" PointY="1.25" />
         <AssociationConnector Association="DataCenter.Entities.bank_account_customer" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_creator" />
@@ -83,8 +81,10 @@
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_waiter" />
-        <EntityTypeShape EntityType="DataCenter.Entities.income" Width="1.5" PointX="15.875" PointY="12.25" />
+        <EntityTypeShape EntityType="DataCenter.Entities.income" Width="1.5" PointX="15.875" PointY="12" />
         <AssociationConnector Association="DataCenter.Entities.income_ibfk_customer" />
+        <EntityTypeShape EntityType="DataCenter.Entities.reg_history" Width="1.5" PointX="3.75" PointY="6.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.reg_internal_history" Width="1.5" PointX="0.75" PointY="7.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

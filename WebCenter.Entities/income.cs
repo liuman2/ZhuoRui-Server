@@ -46,7 +46,19 @@ namespace WebCenter.Entities
     
     
     
+        public string bank { get; set; }
+    
+    
+    
         public Nullable<float> amount { get; set; }
+    
+    
+    
+        public Nullable<float> rate { get; set; }
+    
+    
+    
+        public string currency { get; set; }
     
     
     
@@ -67,10 +79,6 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
-    
-    
-    
-        public string bank { get; set; }
     
         public virtual customer customer { get; set; }
     }

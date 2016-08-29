@@ -369,6 +369,7 @@ CREATE TABLE `reg_history` (
   `region` varchar(50) DEFAULT NULL COMMENT '公司注册地区',
   `address` varchar(300) DEFAULT NULL COMMENT '公司注册地址',
   `director` varchar(20) DEFAULT NULL COMMENT '公司董事',
+  `others` varchar(100) DEFAULT NULL COMMENT '其他变更',
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -466,6 +467,7 @@ CREATE TABLE `reg_internal_history` (
   `address` varchar(300) DEFAULT NULL COMMENT '公司注册地址',
   `legal` varchar(20) DEFAULT NULL COMMENT '公司法人',
   `director` varchar(20) DEFAULT NULL COMMENT '公司董事',
+  `others` varchar(100) DEFAULT NULL COMMENT '其他变更',
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -482,6 +484,10 @@ CREATE TABLE `income` (
   `account` varchar(100) DEFAULT NULL COMMENT '收款账号',
   `bank` varchar(100) DEFAULT NULL COMMENT '收款银行',
   `amount` float(255,2) DEFAULT NULL COMMENT '收款金额',
+
+  `rate` float(255,2) DEFAULT NULL COMMENT '汇率',
+  `currency` varchar(10) DEFAULT NULL COMMENT '币别',
+
   `date_pay` datetime DEFAULT NULL COMMENT '收款时间',
   `attachment_url` varchar(100) DEFAULT NULL COMMENT '附件地址',
   `description` varchar(100) NULL,

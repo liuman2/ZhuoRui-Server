@@ -294,6 +294,8 @@ namespace WebCenter.Web.Controllers
                 return new HttpUnauthorizedResult();
             }
 
+            var isChangeCurrency = exam.currency != dbExam.currency || exam.rate != dbExam.rate;
+
             dbExam.description = exam.description;
             dbExam.date_updated = DateTime.Now;
             dbExam.date_transaction = exam.date_transaction;
@@ -307,6 +309,21 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
+                if (isChangeCurrency)
+                {
+                    var list = Uof.IincomeService.GetAll(i => i.source_id == exam.id && i.source_name == "annual").ToList();
+                    if (list.Count() > 0)
+                    {
+                        foreach (var item in list)
+                        {
+                            item.currency = exam.currency;
+                            item.rate = exam.rate;
+                        }
+
+                        Uof.IincomeService.UpdateEntities(list);
+                    }
+                }
+
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbExam.id,
@@ -496,7 +513,20 @@ namespace WebCenter.Web.Controllers
 
             }).FirstOrDefault();
 
-            var list = Uof.IincomeService.GetAll(i => i.source_id == annua.id && i.customer_id == i.customer_id && i.source_name == "annual").ToList();
+            var list = Uof.IincomeService.GetAll(i => i.source_id == annua.id && i.source_name == "annual").Select(i => new {
+                id = i.id,
+                customer_id = i.customer_id,
+                source_id = i.source_id,
+                source_name = i.source_name,
+                payer = i.payer,
+                pay_way = i.pay_way,
+                account = i.account,
+                amount = i.amount,
+                date_pay = i.date_pay,
+                attachment_url = i.attachment_url,
+                description = i.description,
+                bank = i.bank
+            }).ToList();
 
             var total = 0f;
             if (list.Count > 0)
@@ -507,11 +537,17 @@ namespace WebCenter.Web.Controllers
                 }
             }
 
+            var balance = annua.amount_transaction - total;
             var incomes = new
             {
                 items = list,
                 total = total,
-                balance = annua.amount_transaction - total
+                balance = balance,
+
+                rate = annua.rate,
+                local_amount = annua.amount_transaction * annua.rate,
+                local_total = total * annua.rate,
+                local_balance = balance * annua.rate
             };
 
             return Json(new { order = annua, incomes = incomes }, JsonRequestBehavior.AllowGet);
