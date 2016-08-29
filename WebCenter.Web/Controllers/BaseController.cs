@@ -93,10 +93,14 @@ namespace WebCenter.Web.Controllers
             return string.Format("{0}{1}", codeStr, (index + 1).ToString().PadLeft(suffix, '0'));
         }
 
-        public string GetNextOrderCode(string moduleCode)
+        public string GetNextOrderCode(int userId, string moduleCode)
         {
+            var areaId = Uof.ImemberService.GetAll(m => m.id == userId).Select(m => m.area_id).FirstOrDefault();
+
             var codeSetting = Uof.IsettingService.GetAll(s => s.name == "CODING").FirstOrDefault();
             var codingObj = JsonConvert.DeserializeObject<Coding>(codeSetting.value);
+
+            var areaCodeStr = codingObj.customer.area_code.Where(a => a.id == areaId).Select(a => a.value).FirstOrDefault();
 
             var suffix = codingObj.order.suffix;
             var codeStr = codingObj.order.code.Where(a => a.module == moduleCode).Select(a => a.value).FirstOrDefault();
@@ -133,7 +137,7 @@ namespace WebCenter.Web.Controllers
 
             if (string.IsNullOrEmpty(dbCode))
             {
-                return string.Format("{0}{1}", codeStr, 1.ToString().PadLeft(suffix, '0'));
+                return string.Format("{0}{1}{2}", areaCodeStr, codeStr, 1.ToString().PadLeft(suffix, '0'));
             }
 
             var indexStr = dbCode.Replace(codeStr, "").Replace("0", "");
@@ -141,7 +145,7 @@ namespace WebCenter.Web.Controllers
             var index = 0;
             int.TryParse(indexStr, out index);
 
-            return string.Format("{0}{1}", codeStr, (index + 1).ToString().PadLeft(suffix, '0'));
+            return string.Format("{0}{1}{2}", areaCodeStr, codeStr, (index + 1).ToString().PadLeft(suffix, '0'));
         }
     }
 }

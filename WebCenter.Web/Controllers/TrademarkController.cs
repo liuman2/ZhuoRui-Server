@@ -169,6 +169,10 @@ namespace WebCenter.Web.Controllers
             {
                 return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
             }
+            if (trade.salesman_id == null)
+            {
+                return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
+            }
             if (trade.waiter_id == null)
             {
                 return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
@@ -191,14 +195,14 @@ namespace WebCenter.Web.Controllers
             var organization_id = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
-
-            trade.code = GetNextOrderCode("SB");
-
+                       
             trade.status = 0;
             trade.review_status = -1;
             trade.creator_id = userId;
             //trade.salesman_id = userId;
             trade.organization_id = organization_id;
+
+            trade.code = GetNextOrderCode(trade.salesman_id.Value, "SB");
 
             var newTrade = Uof.ItrademarkService.AddEntity(trade);
             if (newTrade == null)

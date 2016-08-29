@@ -216,7 +216,7 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
 
-            exam.code = GetNextOrderCode("NJ");
+            exam.code = GetNextOrderCode(userId, "NJ");
             exam.status = 0;
             exam.review_status = -1;
             exam.creator_id = userId;

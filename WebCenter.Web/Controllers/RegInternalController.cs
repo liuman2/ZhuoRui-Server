@@ -154,6 +154,10 @@ namespace WebCenter.Web.Controllers
             {
                 return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
             }
+            if (reginternal.salesman_id == null)
+            {
+                return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
+            }
             if (reginternal.waiter_id == null)
             {
                 return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
@@ -176,14 +180,14 @@ namespace WebCenter.Web.Controllers
             var organization_id = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
-            
-            reginternal.code = GetNextOrderCode("ZN");
-
+                        
             reginternal.status = 0;
             reginternal.review_status = -1;
             reginternal.creator_id = userId;
             //reginternal.salesman_id = userId;
             reginternal.organization_id = organization_id;
+
+            reginternal.code = GetNextOrderCode(reginternal.salesman_id.Value, "ZN");
 
             if (reginternal.is_customs == 0)
             {

@@ -168,6 +168,11 @@ namespace WebCenter.Web.Controllers
             {
                 return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
             }
+            if (_patent.salesman_id == null)
+            {
+                return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
+            }
+
             if (_patent.waiter_id == null)
             {
                 return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
@@ -190,14 +195,14 @@ namespace WebCenter.Web.Controllers
             var organization_id = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
-                        
-            _patent.code = GetNextOrderCode("ZL");
-
+                                  
             _patent.status = 0;
             _patent.review_status = -1;
             _patent.creator_id = userId;
             //_patent.salesman_id = userId;
             _patent.organization_id = organization_id;
+
+            _patent.code = GetNextOrderCode(_patent.salesman_id.Value, "ZL");
 
             var newPatent = Uof.IpatentService.AddEntity(_patent);
             if (newPatent == null)

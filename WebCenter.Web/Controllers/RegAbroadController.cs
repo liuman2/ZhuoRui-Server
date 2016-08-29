@@ -165,6 +165,10 @@ namespace WebCenter.Web.Controllers
             {
                 return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
             }
+            if (aboad.salesman_id == null)
+            {
+                return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
+            }
 
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
@@ -183,14 +187,14 @@ namespace WebCenter.Web.Controllers
             var organization_id = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
-
-            aboad.code = GetNextOrderCode("ZW");
-
+                        
             aboad.status = 0;
             aboad.review_status = -1;
             aboad.creator_id = userId;
             //aboad.salesman_id = userId;
             aboad.organization_id = organization_id;
+
+            aboad.code = GetNextOrderCode(aboad.salesman_id.Value, "ZW");
 
             if (aboad.is_open_bank == 0)
             {

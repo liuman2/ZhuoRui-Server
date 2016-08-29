@@ -154,6 +154,12 @@ namespace WebCenter.Web.Controllers
             {
                 return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
             }
+
+            if (_audit.salesman_id == null)
+            {
+                return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
+            }
+
             if (_audit.accountant_id == null)
             {
                 return Json(new { success = false, message = "请选择会计" }, JsonRequestBehavior.AllowGet);
@@ -176,15 +182,15 @@ namespace WebCenter.Web.Controllers
             var organization_id = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
-
-            _audit.code = GetNextOrderCode("SJ");
-
+                       
             _audit.status = 0;
             _audit.review_status = -1;
             _audit.creator_id = userId;
             //_audit.salesman_id = userId;
             _audit.organization_id = organization_id;
-            
+
+            _audit.code = GetNextOrderCode(_audit.salesman_id.Value, "SJ");
+
             var newAbroad = Uof.IauditService.AddEntity(_audit);
             if (newAbroad == null)
             {
