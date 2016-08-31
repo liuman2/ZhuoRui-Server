@@ -23,8 +23,8 @@ namespace WebCenter.Entities
             this.reg_abroad = new HashSet<reg_abroad>();
             this.patents = new HashSet<patent>();
             this.reg_internal = new HashSet<reg_internal>();
-            this.trademarks = new HashSet<trademark>();
             this.incomes = new HashSet<income>();
+            this.trademarks = new HashSet<trademark>();
         }
     
     
@@ -138,7 +138,7 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual ICollection<patent> patents { get; set; }
         public virtual ICollection<reg_internal> reg_internal { get; set; }
-        public virtual ICollection<trademark> trademarks { get; set; }
         public virtual ICollection<income> incomes { get; set; }
+        public virtual ICollection<trademark> trademarks { get; set; }
     }
 }

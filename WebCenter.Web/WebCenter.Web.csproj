@@ -210,6 +210,7 @@
     <Compile Include="Code\OrderSearchRequest.cs" />
     <Compile Include="Code\ProgressRequest.cs" />
     <Compile Include="Code\RoleMenus.cs" />
+    <Compile Include="Code\RolePermission.cs" />
     <Compile Include="Code\UserMenus.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AnnualController.cs" />

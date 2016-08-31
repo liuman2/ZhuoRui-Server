@@ -50,6 +50,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IoperationRepository :IBaseRepository<operation>
+    {         
+    }
+	
     public partial interface IorganizationRepository :IBaseRepository<organization>
     {         
     }
@@ -87,6 +91,10 @@ namespace WebCenter.IDAL
     }
 	
     public partial interface Irole_memuRepository :IBaseRepository<role_memu>
+    {         
+    }
+	
+    public partial interface Irole_operationRepository :IBaseRepository<role_operation>
     {         
     }
 	

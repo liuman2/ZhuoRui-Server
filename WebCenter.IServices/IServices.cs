@@ -54,6 +54,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IoperationService:IBaseService<operation>
+    {   
+    }
+	
 	public partial interface IorganizationService:IBaseService<organization>
     {   
     }
@@ -91,6 +95,10 @@ namespace WebCenter.IServices
     }
 	
 	public partial interface Irole_memuService:IBaseService<role_memu>
+    {   
+    }
+	
+	public partial interface Irole_operationService:IBaseService<role_operation>
     {   
     }
 	

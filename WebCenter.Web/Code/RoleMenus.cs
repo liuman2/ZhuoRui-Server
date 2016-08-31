@@ -23,4 +23,12 @@ namespace WebCenter.Web
         public string department { get; set; }
         public string area { get; set; }
     }
+
+    public class RoleOpers
+    {
+        public int id { get; set; }
+        public int? parent_id { get; set; }
+        public string name { get; set; }
+        public bool check { get; set; }
+    }
 }

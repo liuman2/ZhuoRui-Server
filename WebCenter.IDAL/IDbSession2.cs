@@ -46,6 +46,9 @@ namespace WebCenter.IDAL
 		IDAL.ImenuRepository menuRepository { get; }
 	  
 
+		IDAL.IoperationRepository operationRepository { get; }
+	  
+
 		IDAL.IorganizationRepository organizationRepository { get; }
 	  
 
@@ -74,6 +77,9 @@ namespace WebCenter.IDAL
 	  
 
 		IDAL.Irole_memuRepository role_memuRepository { get; }
+	  
+
+		IDAL.Irole_operationRepository role_operationRepository { get; }
 	  
 
 		IDAL.IsequenceRepository sequenceRepository { get; }

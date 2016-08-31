@@ -29,6 +29,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.ImenuRepository menuRepository { get { return new menuRepository(); } }
 	
+	public IDAL.IoperationRepository operationRepository { get { return new operationRepository(); } }
+	
 	public IDAL.IorganizationRepository organizationRepository { get { return new organizationRepository(); } }
 	
 	public IDAL.IpatentRepository patentRepository { get { return new patentRepository(); } }
@@ -48,6 +50,8 @@ namespace WebCenter.DAL
 	public IDAL.Irole_memberRepository role_memberRepository { get { return new role_memberRepository(); } }
 	
 	public IDAL.Irole_memuRepository role_memuRepository { get { return new role_memuRepository(); } }
+	
+	public IDAL.Irole_operationRepository role_operationRepository { get { return new role_operationRepository(); } }
 	
 	public IDAL.IsequenceRepository sequenceRepository { get { return new sequenceRepository(); } }
 	

@@ -34,6 +34,8 @@ INSERT INTO `sequence` VALUES ('trademark', '1');
 INSERT INTO `sequence` VALUES ('patent', '1');
 INSERT INTO `sequence` VALUES ('settings', '1');
 INSERT INTO `sequence` VALUES ('annual_exam', '1');
+INSERT INTO `sequence` VALUES ('role_operation', '1');
+
 
 -- ----------------------------
 -- Table structure for organization
@@ -178,7 +180,7 @@ INSERT INTO `dictionary_group` VALUES ('2', '业务性质', '业务性质');
 INSERT INTO `dictionary_group` VALUES ('3', '业务范围', '业务范围');
 INSERT INTO `dictionary_group` VALUES ('4', '客户来源',  '客户来源');
 INSERT INTO `dictionary_group` VALUES ('5', '贸易方式', '贸易方式');
-INSERT INTO `dictionary_group` VALUES ('6', '商标类别', '商标类别');
+-- INSERT INTO `dictionary_group` VALUES ('6', '商标类别', '商标类别');
 INSERT INTO `dictionary_group` VALUES ('7', '商标注册方式', '商标注册方式');
 INSERT INTO `dictionary_group` VALUES ('8', '专利注册方式', '专利注册方式');
 INSERT INTO `dictionary_group` VALUES ('9', '专利类型', '专利类型');
@@ -586,7 +588,7 @@ CREATE TABLE `trademark` (
   `name` varchar(100) DEFAULT NULL COMMENT '商标名称',
   `applicant` varchar(50) DEFAULT NULL COMMENT '申请人',
   `address` varchar(300) DEFAULT NULL COMMENT '申请人地址',
-  `trademark_type` varchar(20) DEFAULT NULL COMMENT '商标类别',
+  `trademark_type` varchar(300) DEFAULT NULL COMMENT '商标类别',
   `region` varchar(50) DEFAULT NULL COMMENT '商标地区',
   `reg_mode` varchar(50) DEFAULT NULL COMMENT '注册方式',
   `date_transaction` datetime DEFAULT NULL COMMENT '成交日期',
@@ -843,6 +845,27 @@ CREATE TABLE `role_memu` (
   -- CONSTRAINT `role_ibfk_menu` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
   -- CONSTRAINT `memu_ibfk_role` FOREIGN KEY (`memu_id`) REFERENCES `menu` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `operation`;
+CREATE TABLE `operation` (
+  `id` int(11) NOT NULL,
+  `name` varchar(20) NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `operation` VALUES ('1', '查看公司数据');
+INSERT INTO `operation` VALUES ('2', '查看下属数据');
+INSERT INTO `operation` VALUES ('3', '财务审核');
+INSERT INTO `operation` VALUES ('4', '提交审核');
+
+DROP TABLE IF EXISTS `role_operation`;
+CREATE TABLE `role_operation` (
+  `id` int(11) NOT NULL,
+  `role_id` int(11) NULL,
+  `operation_id` int(11) NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 

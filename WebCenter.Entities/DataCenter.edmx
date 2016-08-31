@@ -20,6 +20,7 @@
           <Property Name="amount_transaction" Type="float" />
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="currency" Type="varchar" MaxLength="10" />
+          <Property Name="rate" Type="float" />
           <Property Name="status" Type="tinyint" />
           <Property Name="finance_reviewer_id" Type="int" />
           <Property Name="finance_review_date" Type="datetime" Precision="0" />
@@ -39,7 +40,6 @@
           <Property Name="description" Type="varchar" MaxLength="300" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
-          <Property Name="rate" Type="float" />
         </EntityType>
         <EntityType Name="area">
           <Key>
@@ -75,6 +75,7 @@
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="amount_transaction" Type="float" />
           <Property Name="currency" Type="varchar" MaxLength="10" />
+          <Property Name="rate" Type="float" />
           <Property Name="progress" Type="varchar" MaxLength="50" />
           <Property Name="status" Type="tinyint" />
           <Property Name="finance_reviewer_id" Type="int" />
@@ -94,7 +95,6 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="annual_year" Type="int" />
-          <Property Name="rate" Type="float" />
         </EntityType>
         <EntityType Name="bank_account">
           <Key>
@@ -116,6 +116,7 @@
           <Property Name="code" Type="varchar" MaxLength="20" />
           <Property Name="name" Type="varchar" MaxLength="100" />
           <Property Name="industry" Type="varchar" MaxLength="50" />
+          <Property Name="business_nature" Type="varchar" MaxLength="50" />
           <Property Name="province" Type="varchar" MaxLength="20" />
           <Property Name="city" Type="varchar" MaxLength="20" />
           <Property Name="county" Type="varchar" MaxLength="20" />
@@ -136,7 +137,6 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="description" Type="varchar" MaxLength="100" />
-          <Property Name="business_nature" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="customer_timeline">
           <Key>
@@ -221,6 +221,13 @@
           <Property Name="name" Type="varchar" MaxLength="50" />
           <Property Name="enable" Type="tinyint" />
         </EntityType>
+        <EntityType Name="operation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="organization">
           <Key>
             <PropertyRef Name="id" />
@@ -250,6 +257,7 @@
           <Property Name="reg_mode" Type="varchar" MaxLength="50" />
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="amount_transaction" Type="float" />
+          <Property Name="rate" Type="float" />
           <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="date_accept" Type="datetime" Precision="0" />
           <Property Name="date_empower" Type="datetime" Precision="0" />
@@ -273,7 +281,6 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="annual_year" Type="int" />
-          <Property Name="rate" Type="float" />
         </EntityType>
         <EntityType Name="position">
           <Key>
@@ -303,6 +310,8 @@
           <Property Name="bank_id" Type="int" />
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="amount_transaction" Type="float" />
+          <Property Name="currency" Type="varchar" MaxLength="10" />
+          <Property Name="rate" Type="float" />
           <Property Name="invoice_name" Type="varchar" MaxLength="200" />
           <Property Name="invoice_tax" Type="varchar" MaxLength="200" />
           <Property Name="invoice_address" Type="varchar" MaxLength="200" />
@@ -318,6 +327,7 @@
           <Property Name="submit_review_moment" Type="varchar" MaxLength="100" />
           <Property Name="review_status" Type="int" />
           <Property Name="date_finish" Type="datetime" Precision="0" />
+          <Property Name="progress" Type="varchar" MaxLength="50" />
           <Property Name="creator_id" Type="int" />
           <Property Name="salesman_id" Type="int" />
           <Property Name="waiter_id" Type="int" />
@@ -327,10 +337,7 @@
           <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
-          <Property Name="currency" Type="varchar" MaxLength="10" />
-          <Property Name="progress" Type="varchar" MaxLength="50" />
           <Property Name="annual_year" Type="int" />
-          <Property Name="rate" Type="float" />
         </EntityType>
         <EntityType Name="reg_history">
           <Key>
@@ -344,8 +351,8 @@
           <Property Name="reg_no" Type="varchar" MaxLength="100" />
           <Property Name="region" Type="varchar" MaxLength="50" />
           <Property Name="address" Type="varchar" MaxLength="300" />
-          <Property Name="others" Type="varchar" MaxLength="100" />
           <Property Name="director" Type="varchar" MaxLength="20" />
+          <Property Name="others" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
@@ -369,6 +376,8 @@
           <Property Name="customs_address" Type="varchar" MaxLength="300" />
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="amount_transaction" Type="float" />
+          <Property Name="currency" Type="varchar" MaxLength="10" />
+          <Property Name="rate" Type="float" />
           <Property Name="is_bookkeeping" Type="tinyint" />
           <Property Name="amount_bookkeeping" Type="float" />
           <Property Name="invoice_name" Type="varchar" MaxLength="200" />
@@ -396,9 +405,7 @@
           <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
-          <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="annual_year" Type="int" />
-          <Property Name="rate" Type="float" />
         </EntityType>
         <EntityType Name="reg_internal_history">
           <Key>
@@ -444,6 +451,14 @@
           <Property Name="role_id" Type="int" />
           <Property Name="memu_id" Type="int" />
         </EntityType>
+        <EntityType Name="role_operation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="role_id" Type="int" />
+          <Property Name="operation_id" Type="int" />
+        </EntityType>
         <EntityType Name="sequence">
           <Key>
             <PropertyRef Name="name" />
@@ -482,11 +497,12 @@
           <Property Name="name" Type="varchar" MaxLength="100" />
           <Property Name="applicant" Type="varchar" MaxLength="50" />
           <Property Name="address" Type="varchar" MaxLength="300" />
-          <Property Name="trademark_type" Type="varchar" MaxLength="20" />
+          <Property Name="trademark_type" Type="varchar" MaxLength="300" />
           <Property Name="region" Type="varchar" MaxLength="50" />
           <Property Name="reg_mode" Type="varchar" MaxLength="50" />
           <Property Name="date_transaction" Type="datetime" Precision="0" />
           <Property Name="amount_transaction" Type="float" />
+          <Property Name="rate" Type="float" />
           <Property Name="currency" Type="varchar" MaxLength="10" />
           <Property Name="date_receipt" Type="datetime" Precision="0" />
           <Property Name="date_accept" Type="datetime" Precision="0" />
@@ -512,7 +528,6 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="annual_year" Type="int" />
-          <Property Name="rate" Type="float" />
         </EntityType>
         <Association Name="abroad_ibfk_bank">
           <End Role="bank_account" Type="Self.bank_account" Multiplicity="0..1" />
@@ -1186,6 +1201,7 @@
           <EntitySet Name="income" EntityType="Self.income" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="member" EntityType="Self.member" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="menu" EntityType="Self.menu" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="operation" EntityType="Self.operation" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="organization" EntityType="Self.organization" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="patent" EntityType="Self.patent" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="position" EntityType="Self.position" Schema="zhuoruioa" store:Type="Tables" />
@@ -1196,6 +1212,7 @@
           <EntitySet Name="role" EntityType="Self.role" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="role_member" EntityType="Self.role_member" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="role_memu" EntityType="Self.role_memu" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="role_operation" EntityType="Self.role_operation" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="sequence" EntityType="Self.sequence" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="settings" EntityType="Self.settings" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="timeline" EntityType="Self.timeline" Schema="zhuoruioa" store:Type="Tables" />
@@ -1475,7 +1492,6 @@
           <EntitySet Name="patents" EntityType="DataCenter.Entities.patent" />
           <EntitySet Name="reg_abroad" EntityType="DataCenter.Entities.reg_abroad" />
           <EntitySet Name="reg_internal" EntityType="DataCenter.Entities.reg_internal" />
-          <EntitySet Name="trademarks" EntityType="DataCenter.Entities.trademark" />
           <AssociationSet Name="annual_ibfk_accountant" Association="DataCenter.Entities.annual_ibfk_accountant">
             <End Role="member" EntitySet="members" />
             <End Role="annual_exam" EntitySet="annual_exam" />
@@ -1555,10 +1571,6 @@
           <AssociationSet Name="reg_internal_ibfk_customer" Association="DataCenter.Entities.reg_internal_ibfk_customer">
             <End Role="customer" EntitySet="customers" />
             <End Role="reg_internal" EntitySet="reg_internal" />
-          </AssociationSet>
-          <AssociationSet Name="trademark_ibfk_customer" Association="DataCenter.Entities.trademark_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="trademark" EntitySet="trademarks" />
           </AssociationSet>
           <AssociationSet Name="abroad_ibfk_creator" Association="DataCenter.Entities.abroad_ibfk_creator">
             <End Role="member" EntitySet="members" />
@@ -1640,6 +1652,18 @@
             <End Role="member" EntitySet="members" />
             <End Role="reg_internal" EntitySet="reg_internal" />
           </AssociationSet>
+          <EntitySet Name="incomes" EntityType="DataCenter.Entities.income" />
+          <AssociationSet Name="income_ibfk_customer" Association="DataCenter.Entities.income_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="income" EntitySet="incomes" />
+          </AssociationSet>
+          <EntitySet Name="reg_history" EntityType="DataCenter.Entities.reg_history" />
+          <EntitySet Name="reg_internal_history" EntityType="DataCenter.Entities.reg_internal_history" />
+          <EntitySet Name="trademarks" EntityType="DataCenter.Entities.trademark" />
+          <AssociationSet Name="trademark_ibfk_customer" Association="DataCenter.Entities.trademark_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="trademark" EntitySet="trademarks" />
+          </AssociationSet>
           <AssociationSet Name="trademark_ibfk_creator" Association="DataCenter.Entities.trademark_ibfk_creator">
             <End Role="member" EntitySet="members" />
             <End Role="trademark" EntitySet="trademarks" />
@@ -1664,13 +1688,8 @@
             <End Role="member" EntitySet="members" />
             <End Role="trademark" EntitySet="trademarks" />
           </AssociationSet>
-          <EntitySet Name="incomes" EntityType="DataCenter.Entities.income" />
-          <AssociationSet Name="income_ibfk_customer" Association="DataCenter.Entities.income_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="income" EntitySet="incomes" />
-          </AssociationSet>
-          <EntitySet Name="reg_history" EntityType="DataCenter.Entities.reg_history" />
-          <EntitySet Name="reg_internal_history" EntityType="DataCenter.Entities.reg_internal_history" />
+          <EntitySet Name="operations" EntityType="DataCenter.Entities.operation" />
+          <EntitySet Name="role_operation" EntityType="DataCenter.Entities.role_operation" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -1920,8 +1939,8 @@
           <NavigationProperty Name="reg_abroad" Relationship="DataCenter.Entities.abroad_ibfk_customer" FromRole="customer" ToRole="reg_abroad" />
           <NavigationProperty Name="patents" Relationship="DataCenter.Entities.patent_ibfk_customer" FromRole="customer" ToRole="patent" />
           <NavigationProperty Name="reg_internal" Relationship="DataCenter.Entities.reg_internal_ibfk_customer" FromRole="customer" ToRole="reg_internal" />
-          <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="customer" ToRole="trademark" />
           <NavigationProperty Name="incomes" Relationship="DataCenter.Entities.income_ibfk_customer" FromRole="customer" ToRole="income" />
+          <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="customer" ToRole="trademark" />
         </EntityType>
         <Association Name="bank_account_customer">
           <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
@@ -2270,56 +2289,6 @@
           <NavigationProperty Name="member5" Relationship="DataCenter.Entities.reg_internal_ibfk_submit_reviewer" FromRole="reg_internal" ToRole="member" />
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.reg_internal_ibfk_waiter" FromRole="reg_internal" ToRole="member" />
         </EntityType>
-        <EntityType Name="trademark">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="customer_id" Type="Int32" />
-          <Property Name="code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="applicant" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="trademark_type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="region" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="reg_mode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="date_transaction" Type="DateTime" />
-          <Property Name="amount_transaction" Type="Single" />
-          <Property Name="currency" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="date_receipt" Type="DateTime" />
-          <Property Name="date_accept" Type="DateTime" />
-          <Property Name="date_trial" Type="DateTime" />
-          <Property Name="date_regit" Type="DateTime" />
-          <Property Name="date_exten" Type="DateTime" />
-          <Property Name="progress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="status" Type="SByte" />
-          <Property Name="finance_reviewer_id" Type="Int32" />
-          <Property Name="finance_review_date" Type="DateTime" />
-          <Property Name="finance_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="submit_reviewer_id" Type="Int32" />
-          <Property Name="submit_review_date" Type="DateTime" />
-          <Property Name="submit_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="review_status" Type="Int32" />
-          <Property Name="date_finish" Type="DateTime" />
-          <Property Name="creator_id" Type="Int32" />
-          <Property Name="salesman_id" Type="Int32" />
-          <Property Name="waiter_id" Type="Int32" />
-          <Property Name="manager_id" Type="Int32" />
-          <Property Name="organization_id" Type="Int32" />
-          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-          <Property Name="annual_year" Type="Int32" />
-          <Property Name="rate" Type="Single" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="trademark" ToRole="customer" />
-          <NavigationProperty Name="member" Relationship="DataCenter.Entities.trademark_ibfk_creator" FromRole="trademark" ToRole="member" />
-          <NavigationProperty Name="member1" Relationship="DataCenter.Entities.trademark_ibfk_finance_reviewer" FromRole="trademark" ToRole="member" />
-          <NavigationProperty Name="member2" Relationship="DataCenter.Entities.trademark_ibfk_manager" FromRole="trademark" ToRole="member" />
-          <NavigationProperty Name="member3" Relationship="DataCenter.Entities.trademark_ibfk_salesman" FromRole="trademark" ToRole="member" />
-          <NavigationProperty Name="member4" Relationship="DataCenter.Entities.trademark_ibfk_submit_reviewer" FromRole="trademark" ToRole="member" />
-          <NavigationProperty Name="member5" Relationship="DataCenter.Entities.trademark_ibfk_waiter" FromRole="trademark" ToRole="member" />
-        </EntityType>
         <Association Name="annual_ibfk_accountant">
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
           <End Type="DataCenter.Entities.annual_exam" Role="annual_exam" Multiplicity="*" />
@@ -2556,18 +2525,6 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="reg_internal">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="trademark_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="trademark">
               <PropertyRef Name="customer_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -2812,6 +2769,135 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="income">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="customer_id" Type="Int32" />
+          <Property Name="source_id" Type="Int32" />
+          <Property Name="source_name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="payer" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="pay_way" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="account" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="bank" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="amount" Type="Single" />
+          <Property Name="rate" Type="Single" />
+          <Property Name="currency" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="date_pay" Type="DateTime" />
+          <Property Name="attachment_url" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.income_ibfk_customer" FromRole="income" ToRole="customer" />
+        </EntityType>
+        <Association Name="income_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.income" Role="income" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="income">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="reg_history">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="reg_id" Type="Int32" />
+          <Property Name="name_cn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="name_en" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="date_setup" Type="DateTime" />
+          <Property Name="reg_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="region" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="others" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="director" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="reg_internal_history">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="reg_id" Type="Int32" />
+          <Property Name="name_cn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="date_setup" Type="DateTime" />
+          <Property Name="reg_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="legal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="director" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="others" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="trademark">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="customer_id" Type="Int32" />
+          <Property Name="code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="applicant" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="trademark_type" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="region" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="reg_mode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="date_transaction" Type="DateTime" />
+          <Property Name="amount_transaction" Type="Single" />
+          <Property Name="rate" Type="Single" />
+          <Property Name="currency" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="date_receipt" Type="DateTime" />
+          <Property Name="date_accept" Type="DateTime" />
+          <Property Name="date_trial" Type="DateTime" />
+          <Property Name="date_regit" Type="DateTime" />
+          <Property Name="date_exten" Type="DateTime" />
+          <Property Name="progress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="SByte" />
+          <Property Name="finance_reviewer_id" Type="Int32" />
+          <Property Name="finance_review_date" Type="DateTime" />
+          <Property Name="finance_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="submit_reviewer_id" Type="Int32" />
+          <Property Name="submit_review_date" Type="DateTime" />
+          <Property Name="submit_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="review_status" Type="Int32" />
+          <Property Name="date_finish" Type="DateTime" />
+          <Property Name="creator_id" Type="Int32" />
+          <Property Name="salesman_id" Type="Int32" />
+          <Property Name="waiter_id" Type="Int32" />
+          <Property Name="manager_id" Type="Int32" />
+          <Property Name="organization_id" Type="Int32" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <Property Name="annual_year" Type="Int32" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="trademark" ToRole="customer" />
+          <NavigationProperty Name="member" Relationship="DataCenter.Entities.trademark_ibfk_creator" FromRole="trademark" ToRole="member" />
+          <NavigationProperty Name="member1" Relationship="DataCenter.Entities.trademark_ibfk_finance_reviewer" FromRole="trademark" ToRole="member" />
+          <NavigationProperty Name="member2" Relationship="DataCenter.Entities.trademark_ibfk_manager" FromRole="trademark" ToRole="member" />
+          <NavigationProperty Name="member3" Relationship="DataCenter.Entities.trademark_ibfk_salesman" FromRole="trademark" ToRole="member" />
+          <NavigationProperty Name="member4" Relationship="DataCenter.Entities.trademark_ibfk_submit_reviewer" FromRole="trademark" ToRole="member" />
+          <NavigationProperty Name="member5" Relationship="DataCenter.Entities.trademark_ibfk_waiter" FromRole="trademark" ToRole="member" />
+        </EntityType>
+        <Association Name="trademark_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="trademark_ibfk_creator">
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
           <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
@@ -2884,72 +2970,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="income">
+        <EntityType Name="operation">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="customer_id" Type="Int32" />
-          <Property Name="source_id" Type="Int32" />
-          <Property Name="source_name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="payer" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="pay_way" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="account" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="bank" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="amount" Type="Single" />
-          <Property Name="rate" Type="Single" />
-          <Property Name="currency" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="date_pay" Type="DateTime" />
-          <Property Name="attachment_url" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.income_ibfk_customer" FromRole="income" ToRole="customer" />
+          <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
-        <Association Name="income_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.income" Role="income" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="income">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="reg_history">
+        <EntityType Name="role_operation">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="reg_id" Type="Int32" />
-          <Property Name="name_cn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="name_en" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="date_setup" Type="DateTime" />
-          <Property Name="reg_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="region" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="others" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="director" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-        </EntityType>
-        <EntityType Name="reg_internal_history">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="reg_id" Type="Int32" />
-          <Property Name="name_cn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="date_setup" Type="DateTime" />
-          <Property Name="reg_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="legal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="director" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="others" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
+          <Property Name="role_id" Type="Int32" />
+          <Property Name="operation_id" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -3390,50 +3424,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="trademarks">
-            <EntityTypeMapping TypeName="DataCenter.Entities.trademark">
-              <MappingFragment StoreEntitySet="trademark">
-                <ScalarProperty Name="rate" ColumnName="rate" />
-                <ScalarProperty Name="annual_year" ColumnName="annual_year" />
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
-                <ScalarProperty Name="manager_id" ColumnName="manager_id" />
-                <ScalarProperty Name="waiter_id" ColumnName="waiter_id" />
-                <ScalarProperty Name="salesman_id" ColumnName="salesman_id" />
-                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
-                <ScalarProperty Name="date_finish" ColumnName="date_finish" />
-                <ScalarProperty Name="review_status" ColumnName="review_status" />
-                <ScalarProperty Name="submit_review_moment" ColumnName="submit_review_moment" />
-                <ScalarProperty Name="submit_review_date" ColumnName="submit_review_date" />
-                <ScalarProperty Name="submit_reviewer_id" ColumnName="submit_reviewer_id" />
-                <ScalarProperty Name="finance_review_moment" ColumnName="finance_review_moment" />
-                <ScalarProperty Name="finance_review_date" ColumnName="finance_review_date" />
-                <ScalarProperty Name="finance_reviewer_id" ColumnName="finance_reviewer_id" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="progress" ColumnName="progress" />
-                <ScalarProperty Name="date_exten" ColumnName="date_exten" />
-                <ScalarProperty Name="date_regit" ColumnName="date_regit" />
-                <ScalarProperty Name="date_trial" ColumnName="date_trial" />
-                <ScalarProperty Name="date_accept" ColumnName="date_accept" />
-                <ScalarProperty Name="date_receipt" ColumnName="date_receipt" />
-                <ScalarProperty Name="currency" ColumnName="currency" />
-                <ScalarProperty Name="amount_transaction" ColumnName="amount_transaction" />
-                <ScalarProperty Name="date_transaction" ColumnName="date_transaction" />
-                <ScalarProperty Name="reg_mode" ColumnName="reg_mode" />
-                <ScalarProperty Name="region" ColumnName="region" />
-                <ScalarProperty Name="trademark_type" ColumnName="trademark_type" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="applicant" ColumnName="applicant" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="type" ColumnName="type" />
-                <ScalarProperty Name="code" ColumnName="code" />
-                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="incomes">
             <EntityTypeMapping TypeName="DataCenter.Entities.income">
               <MappingFragment StoreEntitySet="income">
@@ -3487,6 +3477,67 @@
                 <ScalarProperty Name="date_setup" ColumnName="date_setup" />
                 <ScalarProperty Name="name_cn" ColumnName="name_cn" />
                 <ScalarProperty Name="reg_id" ColumnName="reg_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trademarks">
+            <EntityTypeMapping TypeName="DataCenter.Entities.trademark">
+              <MappingFragment StoreEntitySet="trademark">
+                <ScalarProperty Name="annual_year" ColumnName="annual_year" />
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
+                <ScalarProperty Name="manager_id" ColumnName="manager_id" />
+                <ScalarProperty Name="waiter_id" ColumnName="waiter_id" />
+                <ScalarProperty Name="salesman_id" ColumnName="salesman_id" />
+                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
+                <ScalarProperty Name="date_finish" ColumnName="date_finish" />
+                <ScalarProperty Name="review_status" ColumnName="review_status" />
+                <ScalarProperty Name="submit_review_moment" ColumnName="submit_review_moment" />
+                <ScalarProperty Name="submit_review_date" ColumnName="submit_review_date" />
+                <ScalarProperty Name="submit_reviewer_id" ColumnName="submit_reviewer_id" />
+                <ScalarProperty Name="finance_review_moment" ColumnName="finance_review_moment" />
+                <ScalarProperty Name="finance_review_date" ColumnName="finance_review_date" />
+                <ScalarProperty Name="finance_reviewer_id" ColumnName="finance_reviewer_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="progress" ColumnName="progress" />
+                <ScalarProperty Name="date_exten" ColumnName="date_exten" />
+                <ScalarProperty Name="date_regit" ColumnName="date_regit" />
+                <ScalarProperty Name="date_trial" ColumnName="date_trial" />
+                <ScalarProperty Name="date_accept" ColumnName="date_accept" />
+                <ScalarProperty Name="date_receipt" ColumnName="date_receipt" />
+                <ScalarProperty Name="currency" ColumnName="currency" />
+                <ScalarProperty Name="rate" ColumnName="rate" />
+                <ScalarProperty Name="amount_transaction" ColumnName="amount_transaction" />
+                <ScalarProperty Name="date_transaction" ColumnName="date_transaction" />
+                <ScalarProperty Name="reg_mode" ColumnName="reg_mode" />
+                <ScalarProperty Name="region" ColumnName="region" />
+                <ScalarProperty Name="trademark_type" ColumnName="trademark_type" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="applicant" ColumnName="applicant" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="operations">
+            <EntityTypeMapping TypeName="DataCenter.Entities.operation">
+              <MappingFragment StoreEntitySet="operation">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="role_operation">
+            <EntityTypeMapping TypeName="DataCenter.Entities.role_operation">
+              <MappingFragment StoreEntitySet="role_operation">
+                <ScalarProperty Name="operation_id" ColumnName="operation_id" />
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

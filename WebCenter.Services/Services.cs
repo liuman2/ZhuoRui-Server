@@ -123,6 +123,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class operationService:BaseService<operation>,IoperationService
+    {   
+        public operationService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.operationRepository;
+        }  
+    }
+	
 	public partial class organizationService:BaseService<organization>,IorganizationService
     {   
         public organizationService()
@@ -220,6 +230,16 @@ namespace WebCenter.Services
         public override void SetCurrentRepository()
         {
             CurrentRepository = _dbSession.role_memuRepository;
+        }  
+    }
+	
+	public partial class role_operationService:BaseService<role_operation>,Irole_operationService
+    {   
+        public role_operationService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.role_operationRepository;
         }  
     }
 	

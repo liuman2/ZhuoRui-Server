@@ -136,6 +136,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetMenuByRoleId(int roleId)
         {
+            // 菜单
             var roleMenus = Uof.Irole_memuService.GetAll(m => m.role_id == roleId).Select(m => m.memu_id).ToList();
 
             var menus = Uof.ImenuService.GetAll().Select(m => new RoleMenus {
@@ -159,7 +160,36 @@ namespace WebCenter.Web.Controllers
                 }
             }
 
-            return Json(menus, JsonRequestBehavior.AllowGet);
+            // 操作
+            var roleOpers = Uof.Irole_operationService.GetAll(o => o.role_id == roleId).Select(o => o.operation_id).ToList();
+
+            var opers = Uof.IoperationService.GetAll().Select(o => new RoleOpers
+            {
+                id = o.id,
+                check = false,
+                name = o.name,
+                parent_id = 0
+            }).ToList();
+
+            if (roleOpers.Count() > 0)
+            {
+                foreach (var item in roleOpers)
+                {
+                    var hasOperu = opers.Where(o => o.id == item).FirstOrDefault();
+                    if (hasOperu != null)
+                    {
+                        hasOperu.check = true;
+                    }
+                }
+            }
+
+            var perms = new RolePermission()
+            {
+                menus = menus,
+                opers = opers
+            };
+
+            return Json(perms, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetMemberByRoleId(int roleId)
@@ -192,61 +222,137 @@ namespace WebCenter.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveRoleMenu(int roleId, int[] menuIds)
+        public ActionResult SaveRoleMenu(int roleId, int[] menuIds, int[] operIds)
         {
+            if (menuIds == null)
+            {
+                menuIds = new int[0];
+            }
+
+            if (operIds == null)
+            {
+                operIds = new int[0];
+            }
+
+            #region 菜单
             var oldMenus = Uof.Irole_memuService.GetAll(m => m.role_id == roleId).ToList();
-            var adds = new List<role_memu>();
+            var addMenus = new List<role_memu>();
 
             if (oldMenus.Count() == 0)
             {
                 foreach (var item in menuIds)
                 {
-                    adds.Add(new role_memu()
+                    addMenus.Add(new role_memu()
                     {
                         role_id = roleId,
                         memu_id = item
                     });
                 }
 
-                Uof.Irole_memuService.AddEntities(adds);
-                return SuccessResult;
-            }
-            
-            var deletes = new List<role_memu>();
-            foreach (var item in oldMenus)
-            {
-                var exist = menuIds.Where(m => m == item.memu_id);
-                if (exist.Count() == 0)
+                if (addMenus.Count() > 0)
                 {
-                    deletes.Add(item);
+                    Uof.Irole_memuService.AddEntities(addMenus);
                 }
             }
-
-            foreach (var item in menuIds)
+            else
             {
-                var exist = oldMenus.Where(o => o.memu_id == item);
-                if (exist.Count() == 0)
+                var deleteMenus = new List<role_memu>();
+                foreach (var item in oldMenus)
                 {
-                    adds.Add(new role_memu()
+                    var exist = menuIds.Where(m => m == item.memu_id);
+                    if (exist.Count() == 0)
                     {
-                        memu_id = item,
-                        role_id = roleId
+                        deleteMenus.Add(item);
+                    }
+                }
+
+                foreach (var item in menuIds)
+                {
+                    var exist = oldMenus.Where(o => o.memu_id == item);
+                    if (exist.Count() == 0)
+                    {
+                        addMenus.Add(new role_memu()
+                        {
+                            memu_id = item,
+                            role_id = roleId
+                        });
+                    }
+                }
+
+                if (deleteMenus.Count() > 0)
+                {
+                    foreach (var delete in deleteMenus)
+                    {
+                        Uof.Irole_memuService.DeleteEntity(delete);
+                    }
+                }
+
+                if (addMenus.Count() > 0)
+                {
+                    Uof.Irole_memuService.AddEntities(addMenus);
+                }
+            }
+            #endregion
+
+            #region 操作
+            var oldOpers = Uof.Irole_operationService.GetAll(o => o.role_id == roleId).ToList();
+            var addOpers = new List<role_operation>();
+            if (addOpers.Count() == 0)
+            {
+                foreach (var item in operIds)
+                {
+                    addOpers.Add(new role_operation()
+                    {
+                        role_id = roleId,
+                        operation_id = item
+                        
                     });
                 }
-            }
 
-            if (deletes.Count() > 0)
-            {
-                foreach (var delete in deletes)
+                if (addOpers.Count() > 0)
                 {
-                    Uof.Irole_memuService.DeleteEntity(delete);
+                    Uof.Irole_operationService.AddEntities(addOpers);
                 }
             }
-
-            if (adds.Count() > 0)
+            else
             {
-                Uof.Irole_memuService.AddEntities(adds);
+                var deleteOpers = new List<role_operation>();
+                foreach (var item in oldOpers)
+                {
+                    var exist = operIds.Where(m => m == item.operation_id);
+                    if (exist.Count() == 0)
+                    {
+                        deleteOpers.Add(item);
+                    }
+                }
+
+                foreach (var item in operIds)
+                {
+                    var exist = oldOpers.Where(o => o.operation_id == item);
+                    if (exist.Count() == 0)
+                    {
+                        addOpers.Add(new role_operation()
+                        {
+                            operation_id = item,
+                            role_id = roleId
+                        });
+                    }
+                }
+
+                if (deleteOpers.Count() > 0)
+                {
+                    foreach (var delete in deleteOpers)
+                    {
+                        Uof.Irole_operationService.DeleteEntity(delete);
+                    }
+                }
+
+                if (addOpers.Count() > 0)
+                {
+                    Uof.Irole_operationService.AddEntities(addOpers);
+                }
             }
+            #endregion
 
             return SuccessResult;
         }

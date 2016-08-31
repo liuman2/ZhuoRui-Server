@@ -30,6 +30,8 @@ namespace WebCenter.IServices
 	
 	  ImenuService ImenuService{get;set;} 
 	
+	  IoperationService IoperationService{get;set;} 
+	
 	  IorganizationService IorganizationService{get;set;} 
 	
 	  IpatentService IpatentService{get;set;} 
@@ -49,6 +51,8 @@ namespace WebCenter.IServices
 	  Irole_memberService Irole_memberService{get;set;} 
 	
 	  Irole_memuService Irole_memuService{get;set;} 
+	
+	  Irole_operationService Irole_operationService{get;set;} 
 	
 	  IsequenceService IsequenceService{get;set;} 
 	

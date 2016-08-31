@@ -35,9 +35,21 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false }, JsonRequestBehavior.AllowGet);
             }
 
-            FormsAuthentication.SetAuthCookie(string.Format("{0}|{1}|{2}|{3}", _user.id, _user.username, _user.organization_id, _user.name), true);
-            //Session["UserName"] = username;
+            var hasOpers = new List<int>();
 
+            if (_user.username == "admin")
+            {
+                int[] a = { 1, 2, 3, 4 };
+                hasOpers.AddRange(a);
+            } else
+            {
+                var role = Uof.Irole_memberService.GetAll(m => m.member_id == _user.id).FirstOrDefault();
+                hasOpers = Uof.Irole_operationService.GetAll(o => o.role_id == role.role_id).Select(o => o.id).ToList();
+            }
+
+            var ops = string.Join(",", hasOpers);
+
+            FormsAuthentication.SetAuthCookie(string.Format("{0}|{1}|{2}|{3}|{4}", _user.id, _user.username, _user.organization_id, _user.name, ops), true);
             return Json(new { success = true, user = _user }, JsonRequestBehavior.AllowGet);
         }
 
@@ -68,18 +80,25 @@ namespace WebCenter.Web.Controllers
                 user.password = "";
 
                 var menus = Uof.ImenuService.GetAll().ToList();
+                var opers = new List<int>();
                 if (user.username == "admin")
                 {
-                    return Json(new { success = true, user = user, menus = getUserMenus(menus) }, JsonRequestBehavior.AllowGet);
+                    int[] a = { 1, 2, 3, 4 };
+                    opers.AddRange(a);
+                    return Json(new { success = true, user = user, menus = getUserMenus(menus), opers = opers }, JsonRequestBehavior.AllowGet);
                 }
 
                 var memberMenus = new List<menu>();
 
                 var role = Uof.Irole_memberService.GetAll(m => m.member_id == user.id).FirstOrDefault();
+
                 var hasMenus = Uof.Irole_memuService.GetAll(m => m.role_id == role.role_id).ToList();
+
+                var hasOpers = Uof.Irole_operationService.GetAll(o => o.role_id == role.role_id).Select(o => o.id).ToList();
+
                 if (hasMenus.Count() == 0)
                 {
-                    return Json(new { success = true, user = user, menus = getUserMenus(memberMenus) }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, user = user, menus = getUserMenus(memberMenus), opers = hasOpers }, JsonRequestBehavior.AllowGet);
                 }
 
                 foreach (var item in hasMenus)
@@ -90,7 +109,7 @@ namespace WebCenter.Web.Controllers
                         memberMenus.Add(_m);
                     }
                 }
-                return Json(new { success = true, user = user, menus = getUserMenus(memberMenus) }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, user = user, menus = getUserMenus(memberMenus), opers = hasOpers }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception)
             {
