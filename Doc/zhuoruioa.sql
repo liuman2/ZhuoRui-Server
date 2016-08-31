@@ -857,6 +857,7 @@ INSERT INTO `operation` VALUES ('1', '查看公司数据');
 INSERT INTO `operation` VALUES ('2', '查看本部门数据');
 INSERT INTO `operation` VALUES ('3', '财务审核');
 INSERT INTO `operation` VALUES ('4', '提交审核');
+INSERT INTO `operation` VALUES ('5', '单据年检');
 
 DROP TABLE IF EXISTS `role_operation`;
 CREATE TABLE `role_operation` (

@@ -18,12 +18,38 @@ namespace WebCenter.Web.Controllers
 
         }
 
-        public ActionResult Warning(int? customer_id, int? waiter_id)
+        public ActionResult Warning(int? customer_id)
         {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            var deptId = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out deptId);
+
+            var ops = arrs[4].Split(',');
+            var hasInspect = ops.Where(o => o == "5").FirstOrDefault();
+                        
             var items = new List<AnnualWarning>();
             var nowYear = DateTime.Now.Year;
             var Month1 = DateTime.Now.AddMonths(-13).Month;
-
+            
             #region 境外注册
             Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 && (c.submit_review_date.Value.Month - Month1 == 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear)));
             Expression<Func<reg_abroad, bool>> customerQuery1 = c => true;
@@ -31,11 +57,15 @@ namespace WebCenter.Web.Controllers
             {
                 customerQuery1 = c => (c.customer_id == customer_id);
             }
-            Expression<Func<reg_abroad, bool>> waiteQuery1 = c => true;
-            if (waiter_id != null && waiter_id.Value > 0)
-            {
-                waiteQuery1 = c => (c.waiter_id == waiter_id);
-            }
+
+            //Expression<Func<reg_abroad, bool>> waiteQuery1 = c => true;
+            //if (waiter_id != null && waiter_id.Value > 0)
+            //{
+            //    waiteQuery1 = c => (c.waiter_id == waiter_id);
+            //}
+
+            Expression<Func<reg_abroad, bool>> userQuery = c => true;
+
 
             var abroads = Uof.Ireg_abroadService.GetAll(condition1).Where(customerQuery1).Where(waiteQuery1).Select(a => new AnnualWarning
             {
@@ -48,6 +78,7 @@ namespace WebCenter.Web.Controllers
                 order_type = "reg_abroad",
                 order_type_name = "境外注册",
                 saleman = a.member4.name,
+                waiter = a.member6.name,
                 submit_review_date = a.submit_review_date,
                 date_finish = a.date_finish
             }).ToList();
@@ -86,6 +117,7 @@ namespace WebCenter.Web.Controllers
                     order_type = "reg_internal",
                     order_type_name = "境内注册",
                     saleman = a.member4.name,
+                    waiter = a.member6.name,
                     submit_review_date = a.submit_review_date,
                     date_finish = a.date_finish
                 }).ToList();
@@ -121,6 +153,7 @@ namespace WebCenter.Web.Controllers
                 order_type = "trademark",
                 order_type_name = "商标注册",
                 saleman = a.member3.name,
+                waiter = a.member5.name,
                 submit_review_date = a.submit_review_date,
                 date_finish = a.date_finish
             }).ToList();
@@ -156,6 +189,7 @@ namespace WebCenter.Web.Controllers
                 order_type = "patent",
                 order_type_name = "专利注册",
                 saleman = a.member3.name,
+                waiter = a.member5.name,
                 submit_review_date = a.submit_review_date,
                 date_finish = a.date_finish
             }).ToList();
