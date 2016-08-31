@@ -47,6 +47,7 @@ namespace WebCenter.Web.Controllers
                 order_name = a.name_cn,
                 order_type = "reg_abroad",
                 order_type_name = "境外注册",
+                saleman = a.member4.name,
                 submit_review_date = a.submit_review_date,
                 date_finish = a.date_finish
             }).ToList();
@@ -84,6 +85,7 @@ namespace WebCenter.Web.Controllers
                     order_name = a.name_cn,
                     order_type = "reg_internal",
                     order_type_name = "境内注册",
+                    saleman = a.member4.name,
                     submit_review_date = a.submit_review_date,
                     date_finish = a.date_finish
                 }).ToList();
@@ -118,6 +120,7 @@ namespace WebCenter.Web.Controllers
                 order_name = a.name,
                 order_type = "trademark",
                 order_type_name = "商标注册",
+                saleman = a.member3.name,
                 submit_review_date = a.submit_review_date,
                 date_finish = a.date_finish
             }).ToList();
@@ -152,6 +155,7 @@ namespace WebCenter.Web.Controllers
                 order_name = a.name,
                 order_type = "patent",
                 order_type_name = "专利注册",
+                saleman = a.member3.name,
                 submit_review_date = a.submit_review_date,
                 date_finish = a.date_finish
             }).ToList();

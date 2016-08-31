@@ -18,7 +18,6 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Search(int index = 1, int size = 10, string name = "")
         {
-            // TODO: 查询权限
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
             {
@@ -32,17 +31,47 @@ namespace WebCenter.Web.Controllers
                 return new HttpUnauthorizedResult();
             }
 
-            var userId = 0;
-            int.TryParse(arrs[0], out userId);
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
 
-            Expression<Func<customer, bool>> condition = c => c.status == 0 && c.salesman_id == userId;
+            var userId = 0;
+            var deptId = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out deptId);
+
+            Expression<Func<customer, bool>> condition = c => c.status == 0;
             Expression<Func<customer, bool>> nameQuery = c => true;
             if (!string.IsNullOrEmpty(name))
             {
                 nameQuery = c => (c.name.IndexOf(name) > -1);
             }
 
-            var list = Uof.IcustomerService.GetAll(condition).Where(nameQuery).OrderBy(item => item.id).Select(c => new
+            var ops = arrs[4].Split(',');
+                        
+            Expression<Func<customer, bool>> permQuery = c => true;
+            if (ops.Count() == 0)
+            {
+                permQuery = c => c.salesman_id == userId;
+            } else
+            {
+                var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+                var hasDepart = ops.Where(o => o == "2").FirstOrDefault();
+                if (hasCompany == null)
+                {
+                    if (hasDepart == null)
+                    {
+                        permQuery = c => c.salesman_id == userId;
+                    } else
+                    {
+                        permQuery = c => c.organization_id == deptId;
+                    }
+                }
+            }
+
+
+            var list = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Where(permQuery).OrderBy(item => item.id).Select(c => new
             {
                 id = c.id,
                 name = c.name,

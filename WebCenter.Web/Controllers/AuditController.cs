@@ -19,7 +19,6 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Search(OrderSearchRequest request)
         {
-            // TODO: 查询权限
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
             {
@@ -33,10 +32,38 @@ namespace WebCenter.Web.Controllers
                 return new HttpUnauthorizedResult();
             }
 
-            var userId = 0;
-            int.TryParse(arrs[0], out userId);
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
 
-            Expression<Func<audit, bool>> condition = c => c.salesman_id == userId;
+            var userId = 0;
+            var deptId = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out deptId);
+
+            Expression<Func<audit, bool>> condition = c => true; //c.salesman_id == userId;
+            var ops = arrs[4].Split(',');
+            if (ops.Count() == 0)
+            {
+                condition = c => c.salesman_id == userId;
+            }
+            else
+            {
+                var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+                var hasDepart = ops.Where(o => o == "2").FirstOrDefault();
+                if (hasCompany == null)
+                {
+                    if (hasDepart == null)
+                    {
+                        condition = c => c.salesman_id == userId;
+                    }
+                    else
+                    {
+                        condition = c => c.organization_id == deptId;
+                    }
+                }
+            }
 
             // 客户id
             Expression<Func<audit, bool>> customerQuery = c => true;

@@ -854,7 +854,7 @@ CREATE TABLE `operation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `operation` VALUES ('1', '查看公司数据');
-INSERT INTO `operation` VALUES ('2', '查看下属数据');
+INSERT INTO `operation` VALUES ('2', '查看本部门数据');
 INSERT INTO `operation` VALUES ('3', '财务审核');
 INSERT INTO `operation` VALUES ('4', '提交审核');
 
