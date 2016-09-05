@@ -39,12 +39,12 @@ namespace WebCenter.Web.Controllers
 
             if (_user.username == "admin")
             {
-                int[] a = { 1, 2, 3, 4 };
+                int[] a = { 1, 2, 3, 4, 5 };
                 hasOpers.AddRange(a);
             } else
             {
                 var role = Uof.Irole_memberService.GetAll(m => m.member_id == _user.id).FirstOrDefault();
-                hasOpers = Uof.Irole_operationService.GetAll(o => o.role_id == role.role_id).Select(o => o.id).ToList();
+                hasOpers = Uof.Irole_operationService.GetAll(o => o.role_id == role.role_id).Select(o => o.operation_id.Value).ToList();
             }
 
             var ops = string.Join(",", hasOpers);
@@ -83,7 +83,7 @@ namespace WebCenter.Web.Controllers
                 var opers = new List<int>();
                 if (user.username == "admin")
                 {
-                    int[] a = { 1, 2, 3, 4 };
+                    int[] a = { 1, 2, 3, 4, 5 };
                     opers.AddRange(a);
                     return Json(new { success = true, user = user, menus = getUserMenus(menus), opers = opers }, JsonRequestBehavior.AllowGet);
                 }
@@ -94,7 +94,7 @@ namespace WebCenter.Web.Controllers
 
                 var hasMenus = Uof.Irole_memuService.GetAll(m => m.role_id == role.role_id).ToList();
 
-                var hasOpers = Uof.Irole_operationService.GetAll(o => o.role_id == role.role_id).Select(o => o.id).ToList();
+                var hasOpers = Uof.Irole_operationService.GetAll(o => o.role_id == role.role_id).Select(o => o.operation_id.Value).ToList();
 
                 if (hasMenus.Count() == 0)
                 {

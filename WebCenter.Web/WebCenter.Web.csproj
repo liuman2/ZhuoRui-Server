@@ -208,6 +208,7 @@
     <Compile Include="Code\Enums.cs" />
     <Compile Include="Code\JsonNetResult.cs" />
     <Compile Include="Code\OrderSearchRequest.cs" />
+    <Compile Include="Code\OrderSummaryRequest.cs" />
     <Compile Include="Code\ProgressRequest.cs" />
     <Compile Include="Code\RoleMenus.cs" />
     <Compile Include="Code\RolePermission.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="Controllers\PositionController.cs" />
     <Compile Include="Controllers\RegAbroadController.cs" />
     <Compile Include="Controllers\RegInternalController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReserveController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -358,6 +360,7 @@
     <Folder Include="Views\Project\" />
     <Folder Include="Views\RegAbroad\" />
     <Folder Include="Views\Register\" />
+    <Folder Include="Views\Report\" />
     <Folder Include="Views\Reserve\" />
     <Folder Include="Views\Settings\" />
     <Folder Include="Views\Timeline\" />

@@ -793,7 +793,7 @@ INSERT INTO `menu` VALUES ('10', '4', 'annual_warning', 'fa fa-calculator', '年
 INSERT INTO `menu` VALUES ('11', '4', 'annual', 'fa fa-calculator', '年检列表', '1');
 INSERT INTO `menu` VALUES ('12', '4', 'check_finance', 'fa fa-calculator', '订单财务审核', '1');
 INSERT INTO `menu` VALUES ('13', '4', 'check_submit', 'fa fa-calculator', '订单提交审核', '1');
-INSERT INTO `menu` VALUES ('14', '4', '', 'fa fa-calculator', '订单汇总表', '1');
+INSERT INTO `menu` VALUES ('14', '4', 'order_summary', 'fa fa-calculator', '订单汇总表', '1');
 -- ----------------------------
 -- Records of 快件登记管理
 -- ----------------------------
@@ -857,7 +857,7 @@ INSERT INTO `operation` VALUES ('1', '查看公司数据');
 INSERT INTO `operation` VALUES ('2', '查看本部门数据');
 INSERT INTO `operation` VALUES ('3', '财务审核');
 INSERT INTO `operation` VALUES ('4', '提交审核');
-INSERT INTO `operation` VALUES ('5', '单据年检');
+INSERT INTO `operation` VALUES ('5', '年检权限');
 
 DROP TABLE IF EXISTS `role_operation`;
 CREATE TABLE `role_operation` (
@@ -867,6 +867,22 @@ CREATE TABLE `role_operation` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `meetings`;
+CREATE TABLE `meetings` (
+  `id` int(11) NOT NULL,
+  `type` varchar(50) DEFAULT NULL COMMENT '类型',
+  `form` varchar(50) DEFAULT NULL COMMENT '形式',
+  `title` varchar(100) DEFAULT NULL COMMENT '主题',
+  `teacher` varchar(20) DEFAULT NULL COMMENT '讲师',3
+  `sponsor` varchar(100) DEFAULT NULL COMMENT '主办方',
+  `co_sponsor` varchar(300) DEFAULT NULL COMMENT '协办方',
+  `customer_target` varchar(300) DEFAULT NULL COMMENT '客户群体',
+  `date_meeting` datetime DEFAULT NULL COMMENT '时间',
+  `form` varchar(50) DEFAULT NULL COMMENT '形式',
+  `city` varchar(50) DEFAULT NULL COMMENT '城市',
+  `address` varchar(200) DEFAULT NULL COMMENT '地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 

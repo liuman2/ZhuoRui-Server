@@ -45,7 +45,9 @@ namespace WebCenter.Web.Controllers
 
             var ops = arrs[4].Split(',');
             var hasInspect = ops.Where(o => o == "5").FirstOrDefault();
-                        
+            var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+            var hasDepart = ops.Where(o => o == "2").FirstOrDefault();
+
             var items = new List<AnnualWarning>();
             var nowYear = DateTime.Now.Year;
             var Month1 = DateTime.Now.AddMonths(-13).Month;
@@ -64,10 +66,36 @@ namespace WebCenter.Web.Controllers
             //    waiteQuery1 = c => (c.waiter_id == waiter_id);
             //}
 
-            Expression<Func<reg_abroad, bool>> userQuery = c => true;
+            Expression<Func<reg_abroad, bool>> userQuery1 = c => true;
+            if (hasInspect == null)
+            {
+                if (hasCompany == null)
+                {
+                    if (hasDepart != null)
+                    {
+                        userQuery1 = c => c.organization_id == deptId;
+                    } else
+                    {
+                        userQuery1 = c => c.salesman_id == userId;
+                    }
+                }                
+            } else
+            {
+                if (hasCompany == null)
+                {
+                    if (hasDepart != null)
+                    {
+                        userQuery1 = c => c.organization_id == deptId;
+                    }
+                    else
+                    {
+                        userQuery1 = c => c.waiter_id == userId;
+                    }
+                }
+            }
 
 
-            var abroads = Uof.Ireg_abroadService.GetAll(condition1).Where(customerQuery1).Where(waiteQuery1).Select(a => new AnnualWarning
+            var abroads = Uof.Ireg_abroadService.GetAll(condition1).Where(customerQuery1).Where(userQuery1).Select(a => new AnnualWarning
             {
                 id = a.id,
                 customer_id = a.customer_id,
@@ -100,13 +128,43 @@ namespace WebCenter.Web.Controllers
                 {
                     customerQuery2 = c => (c.customer_id == customer_id);
                 }
-                Expression<Func<reg_internal, bool>> waiteQuery2 = c => true;
-                if (waiter_id != null && waiter_id.Value > 0)
+                //Expression<Func<reg_internal, bool>> waiteQuery2 = c => true;
+                //if (waiter_id != null && waiter_id.Value > 0)
+                //{
+                //    waiteQuery2 = c => (c.waiter_id == waiter_id);
+                //}
+
+                Expression<Func<reg_internal, bool>> userQuery2 = c => true;
+                if (hasInspect == null)
                 {
-                    waiteQuery2 = c => (c.waiter_id == waiter_id);
+                    if (hasCompany == null)
+                    {
+                        if (hasDepart != null)
+                        {
+                            userQuery2 = c => c.organization_id == deptId;
+                        }
+                        else
+                        {
+                            userQuery2 = c => c.salesman_id == userId;
+                        }
+                    }
+                }
+                else
+                {
+                    if (hasCompany == null)
+                    {
+                        if (hasDepart != null)
+                        {
+                            userQuery2 = c => c.organization_id == deptId;
+                        }
+                        else
+                        {
+                            userQuery2 = c => c.waiter_id == userId;
+                        }
+                    }
                 }
 
-                var internas = Uof.Ireg_internalService.GetAll(condition2).Where(customerQuery2).Where(waiteQuery2).Select(a => new AnnualWarning
+                var internas = Uof.Ireg_internalService.GetAll(condition2).Where(customerQuery2).Where(userQuery2).Select(a => new AnnualWarning
                 {
                     id = a.id,
                     customer_id = a.customer_id,
@@ -136,13 +194,43 @@ namespace WebCenter.Web.Controllers
             {
                 customerQuery3 = c => (c.customer_id == customer_id);
             }
-            Expression<Func<trademark, bool>> waiteQuery3 = c => true;
-            if (waiter_id != null && waiter_id.Value > 0)
+            //Expression<Func<trademark, bool>> waiteQuery3 = c => true;
+            //if (waiter_id != null && waiter_id.Value > 0)
+            //{
+            //    waiteQuery3 = c => (c.waiter_id == waiter_id);
+            //}
+
+            Expression<Func<trademark, bool>> userQuery3 = c => true;
+            if (hasInspect == null)
             {
-                waiteQuery3 = c => (c.waiter_id == waiter_id);
+                if (hasCompany == null)
+                {
+                    if (hasDepart != null)
+                    {
+                        userQuery3 = c => c.organization_id == deptId;
+                    }
+                    else
+                    {
+                        userQuery3 = c => c.salesman_id == userId;
+                    }
+                }
+            }
+            else
+            {
+                if (hasCompany == null)
+                {
+                    if (hasDepart != null)
+                    {
+                        userQuery3 = c => c.organization_id == deptId;
+                    }
+                    else
+                    {
+                        userQuery3 = c => c.waiter_id == userId;
+                    }
+                }
             }
 
-            var trademarks = Uof.ItrademarkService.GetAll(condition3).Where(customerQuery3).Where(waiteQuery3).Select(a => new AnnualWarning
+            var trademarks = Uof.ItrademarkService.GetAll(condition3).Where(customerQuery3).Where(userQuery3).Select(a => new AnnualWarning
             {
                 id = a.id,
                 customer_id = a.customer_id,
@@ -171,14 +259,44 @@ namespace WebCenter.Web.Controllers
             {
                 customerQuery4 = c => (c.customer_id == customer_id);
             }
-            Expression<Func<patent, bool>> waiteQuery4 = c => true;
-            if (waiter_id != null && waiter_id.Value > 0)
+            //Expression<Func<patent, bool>> waiteQuery4 = c => true;
+            //if (waiter_id != null && waiter_id.Value > 0)
+            //{
+            //    waiteQuery4 = c => (c.waiter_id == waiter_id);
+            //}
+
+            Expression<Func<patent, bool>> userQuery4 = c => true;
+            if (hasInspect == null)
             {
-                waiteQuery4 = c => (c.waiter_id == waiter_id);
+                if (hasCompany == null)
+                {
+                    if (hasDepart != null)
+                    {
+                        userQuery3 = c => c.organization_id == deptId;
+                    }
+                    else
+                    {
+                        userQuery3 = c => c.salesman_id == userId;
+                    }
+                }
+            }
+            else
+            {
+                if (hasCompany == null)
+                {
+                    if (hasDepart != null)
+                    {
+                        userQuery3 = c => c.organization_id == deptId;
+                    }
+                    else
+                    {
+                        userQuery3 = c => c.waiter_id == userId;
+                    }
+                }
             }
 
-            
-            var patents = Uof.IpatentService.GetAll(condition4).Where(customerQuery4).Where(waiteQuery4).Select(a => new AnnualWarning
+
+            var patents = Uof.IpatentService.GetAll(condition4).Where(customerQuery4).Where(userQuery4).Select(a => new AnnualWarning
             {
                 id = a.id,
                 customer_id = a.customer_id,
@@ -411,7 +529,6 @@ namespace WebCenter.Web.Controllers
         
         public ActionResult Search(OrderSearchRequest request)
         {
-            // TODO: 查询权限
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
             {
@@ -425,10 +542,40 @@ namespace WebCenter.Web.Controllers
                 return new HttpUnauthorizedResult();
             }
 
-            var userId = 0;
-            int.TryParse(arrs[0], out userId);
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
 
-            Expression<Func<annual_exam, bool>> condition = c => c.salesman_id == userId;
+            var userId = 0;
+            var deptId = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out deptId);
+
+            //Expression<Func<annual_exam, bool>> condition = c => c.salesman_id == userId;
+            Expression<Func<annual_exam, bool>> condition = c => true;
+            var ops = arrs[4].Split(',');
+            if (ops.Count() == 0)
+            {
+                condition = c => c.salesman_id == userId;
+            }
+            else
+            {
+                var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+                var hasDepart = ops.Where(o => o == "2").FirstOrDefault();
+                if (hasCompany == null)
+                {
+                    if (hasDepart == null)
+                    {
+                        condition = c => c.salesman_id == userId;
+                    }
+                    else
+                    {
+                        condition = c => c.organization_id == deptId;
+                    }
+                }
+            }
+
 
             // 客户id
             Expression<Func<annual_exam, bool>> customerQuery = c => true;
