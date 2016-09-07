@@ -103,6 +103,26 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class lectureService:BaseService<lecture>,IlectureService
+    {   
+        public lectureService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.lectureRepository;
+        }  
+    }
+	
+	public partial class lecture_customerService:BaseService<lecture_customer>,Ilecture_customerService
+    {   
+        public lecture_customerService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.lecture_customerRepository;
+        }  
+    }
+	
 	public partial class memberService:BaseService<member>,ImemberService
     {   
         public memberService()

@@ -20,4 +20,10 @@ namespace WebCenter.Web
         public string name { get; set; }
         public string applicant { get; set; }
     }
+
+    public class LectureRequest : OrderSearchRequest
+    {
+        public string title { get; set; }
+        public string form { get; set; }
+    }
 }

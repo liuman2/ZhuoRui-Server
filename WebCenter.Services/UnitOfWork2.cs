@@ -72,6 +72,20 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IlectureService IlectureService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  Ilecture_customerService Ilecture_customerService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  ImemberService ImemberService
     {
         get;

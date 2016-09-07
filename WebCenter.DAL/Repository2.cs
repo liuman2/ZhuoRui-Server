@@ -52,6 +52,16 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class lectureRepository :BaseRepository<lecture>,IlectureRepository
+    {
+         
+    }
+	
+	public partial class lecture_customerRepository :BaseRepository<lecture_customer>,Ilecture_customerRepository
+    {
+         
+    }
+	
 	public partial class memberRepository :BaseRepository<member>,ImemberRepository
     {
          

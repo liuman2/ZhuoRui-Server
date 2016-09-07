@@ -42,6 +42,14 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IlectureRepository :IBaseRepository<lecture>
+    {         
+    }
+	
+    public partial interface Ilecture_customerRepository :IBaseRepository<lecture_customer>
+    {         
+    }
+	
     public partial interface ImemberRepository :IBaseRepository<member>
     {         
     }

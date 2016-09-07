@@ -25,6 +25,7 @@ namespace WebCenter.Entities
             this.reg_internal = new HashSet<reg_internal>();
             this.incomes = new HashSet<income>();
             this.trademarks = new HashSet<trademark>();
+            this.lecture_customer = new HashSet<lecture_customer>();
         }
     
     
@@ -140,5 +141,6 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual ICollection<income> incomes { get; set; }
         public virtual ICollection<trademark> trademarks { get; set; }
+        public virtual ICollection<lecture_customer> lecture_customer { get; set; }
     }
 }

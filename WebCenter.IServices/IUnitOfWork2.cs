@@ -26,6 +26,10 @@ namespace WebCenter.IServices
 	
 	  IincomeService IincomeService{get;set;} 
 	
+	  IlectureService IlectureService{get;set;} 
+	
+	  Ilecture_customerService Ilecture_customerService{get;set;} 
+	
 	  ImemberService ImemberService{get;set;} 
 	
 	  ImenuService ImenuService{get;set;} 

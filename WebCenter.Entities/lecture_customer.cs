@@ -12,32 +12,23 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class menu:BaseModel
+    public partial class lecture_customer:BaseModel
     {
     
     
     
-    [EntityPrimKey("menu")]
+    [EntityPrimKey("lecture_customer")]
         public int id { get; set; }
     
     
     
-        public Nullable<int> parent_id { get; set; }
+        public Nullable<int> lecture_id { get; set; }
     
     
     
-        public string route { get; set; }
+        public Nullable<int> customer_id { get; set; }
     
-    
-    
-        public string icon { get; set; }
-    
-    
-    
-        public string name { get; set; }
-    
-    
-    
-        public Nullable<sbyte> order { get; set; }
+        public virtual customer customer { get; set; }
+        public virtual lecture lecture { get; set; }
     }
 }

@@ -25,6 +25,10 @@ namespace WebCenter.DAL
 	
 	public IDAL.IincomeRepository incomeRepository { get { return new incomeRepository(); } }
 	
+	public IDAL.IlectureRepository lectureRepository { get { return new lectureRepository(); } }
+	
+	public IDAL.Ilecture_customerRepository lecture_customerRepository { get { return new lecture_customerRepository(); } }
+	
 	public IDAL.ImemberRepository memberRepository { get { return new memberRepository(); } }
 	
 	public IDAL.ImenuRepository menuRepository { get { return new menuRepository(); } }

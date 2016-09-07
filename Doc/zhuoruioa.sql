@@ -771,13 +771,13 @@ CREATE TABLE `menu` (
   `route` varchar(30) NULL,
   `icon` varchar(30) NULL,
   `name` varchar(50) NULL,
-  `enable` tinyint(3) DEFAULT NULL,
+  `order` tinyint(3) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- ----------------------------
 -- Records of 客户管理
 -- ----------------------------
-INSERT INTO `menu` VALUES ('1', '0', '', 'fa fa-users', '客户管理', '1');
+INSERT INTO `menu` VALUES ('1', '0', '', 'fa fa-users', '客户管理', '0');
 INSERT INTO `menu` VALUES ('2', '1', 'reserve', 'fa fa-user-md', '预备客户', '1');
 INSERT INTO `menu` VALUES ('3', '1', 'customer', 'fa fa-user-secret', '正式客户', '1');
 -- ----------------------------
@@ -789,20 +789,20 @@ INSERT INTO `menu` VALUES ('6', '4', 'internal', 'fa fa-street-view', '境内注
 INSERT INTO `menu` VALUES ('7', '4', 'trademark', 'fa fa-trademark', '商标订单', '1');
 INSERT INTO `menu` VALUES ('8', '4', 'patent', 'fa fa-cube', '专利订单', '1');
 INSERT INTO `menu` VALUES ('9', '4', 'audit', 'fa fa-calculator', '审计订单', '1');
-INSERT INTO `menu` VALUES ('10', '4', 'annual_warning', 'fa fa-calculator', '年检预警', '1');
-INSERT INTO `menu` VALUES ('11', '4', 'annual', 'fa fa-calculator', '年检列表', '1');
+INSERT INTO `menu` VALUES ('10', '4', 'annual_warning', 'fa fa-calendar-check-o', '年检预警', '1');
+INSERT INTO `menu` VALUES ('11', '4', 'annual', 'fa fa-calendar', '年检列表', '1');
 INSERT INTO `menu` VALUES ('12', '4', 'check_finance', 'fa fa-calculator', '订单财务审核', '1');
 INSERT INTO `menu` VALUES ('13', '4', 'check_submit', 'fa fa-calculator', '订单提交审核', '1');
-INSERT INTO `menu` VALUES ('14', '4', 'order_summary', 'fa fa-calculator', '订单汇总表', '1');
+INSERT INTO `menu` VALUES ('14', '4', 'order_summary', 'fa fa-th', '订单汇总表', '1');
 -- ----------------------------
 -- Records of 快件登记管理
 -- ----------------------------
-INSERT INTO `menu` VALUES ('15', '0', '', 'fa fa-envelope-o', '快件登记管理', '1');
+INSERT INTO `menu` VALUES ('15', '0', '', 'fa fa-envelope-o', '快件登记管理', '2');
 INSERT INTO `menu` VALUES ('16', '15', '', 'fa fa-list', '快件列表', '1');
 -- ----------------------------
 -- Records of 基本资料管理
 -- ----------------------------
-INSERT INTO `menu` VALUES ('17', '0', '', 'fa fa-university', '基本资料管理', '1');
+INSERT INTO `menu` VALUES ('17', '0', '', 'fa fa-university', '基本资料管理', '3');
 INSERT INTO `menu` VALUES ('18', '17', 'organization', 'fa fa-sitemap', '组织架构', '1');
 INSERT INTO `menu` VALUES ('19', '17', 'area', 'fa fa-crosshairs', '区域设置', '1');
 INSERT INTO `menu` VALUES ('20', '17', 'position', 'fa fa-graduation-cap', '职位设置', '1');
@@ -811,15 +811,20 @@ INSERT INTO `menu` VALUES ('22', '17', 'dictionary', 'fa fa-user', '数据字典
 -- ----------------------------
 -- Records of 权限管理
 -- ----------------------------
-INSERT INTO `menu` VALUES ('23', '0', '', 'fa fa-lock', '权限管理', '1');
+INSERT INTO `menu` VALUES ('23', '0', '', 'fa fa-lock', '权限管理', '4');
 INSERT INTO `menu` VALUES ('24', '23', 'role', 'fa fa-graduation-cap', '角色管理', '1');
 INSERT INTO `menu` VALUES ('25', '23', 'role_assign', 'fa fa-key', '功能权限', '1');
 INSERT INTO `menu` VALUES ('26', '23', 'role_user', 'fa fa-unlock-alt', '用户角色', '1');
 -- ----------------------------
 -- Records of 系统设置
 -- ----------------------------
-INSERT INTO `menu` VALUES ('27', '0', '', 'fa fa-cog', '系统设置', '1');
+INSERT INTO `menu` VALUES ('27', '0', '', 'fa fa-cog', '系统设置', '6');
 INSERT INTO `menu` VALUES ('28', '27', 'coding', 'fa fa-file-text-o', '编码规则', '1');
+
+-- ----------------------------
+-- Records of 视频讲座
+-- ----------------------------
+INSERT INTO `menu` VALUES ('29', '1', 'lecture', 'fa fa-video-camera', '讲座管理', '2');
 
 
 DROP TABLE IF EXISTS `role_member`;
@@ -867,21 +872,37 @@ CREATE TABLE `role_operation` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `meetings`;
-CREATE TABLE `meetings` (
+DROP TABLE IF EXISTS `lecture`;
+CREATE TABLE `lecture` (
   `id` int(11) NOT NULL,
-  `type` varchar(50) DEFAULT NULL COMMENT '类型',
   `form` varchar(50) DEFAULT NULL COMMENT '形式',
   `title` varchar(100) DEFAULT NULL COMMENT '主题',
-  `teacher` varchar(20) DEFAULT NULL COMMENT '讲师',3
+  `teacher` varchar(20) DEFAULT NULL COMMENT '讲师',
+  `date_at` datetime DEFAULT NULL COMMENT '时间',
+
+  `city` varchar(50) DEFAULT NULL COMMENT '城市',
+  `address` varchar(200) DEFAULT NULL COMMENT '地址',
   `sponsor` varchar(100) DEFAULT NULL COMMENT '主办方',
   `co_sponsor` varchar(300) DEFAULT NULL COMMENT '协办方',
   `customer_target` varchar(300) DEFAULT NULL COMMENT '客户群体',
-  `date_meeting` datetime DEFAULT NULL COMMENT '时间',
-  `form` varchar(50) DEFAULT NULL COMMENT '形式',
-  `city` varchar(50) DEFAULT NULL COMMENT '城市',
-  `address` varchar(200) DEFAULT NULL COMMENT '地址',
-  PRIMARY KEY (`id`)
+  `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `creator_id` (`creator_id`),
+  CONSTRAINT `lecture_ibfk_creator` FOREIGN KEY (`creator_id`) REFERENCES `member` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `lecture_customer`;
+CREATE TABLE `lecture_customer` (
+  `id` int(11) NOT NULL,
+  `lecture_id` int(11) NULL,
+  `customer_id` int(11) NULL,
+  PRIMARY KEY (`id`),
+  KEY `lecture_id` (`lecture_id`),
+  KEY `customer_id` (`customer_id`),
+  CONSTRAINT `lecture_ibfk_lec` FOREIGN KEY (`lecture_id`) REFERENCES `lecture` (`id`),
+  CONSTRAINT `customer_ibfk_lec` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

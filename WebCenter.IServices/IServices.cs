@@ -46,6 +46,14 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IlectureService:IBaseService<lecture>
+    {   
+    }
+	
+	public partial interface Ilecture_customerService:IBaseService<lecture_customer>
+    {   
+    }
+	
 	public partial interface ImemberService:IBaseService<member>
     {   
     }

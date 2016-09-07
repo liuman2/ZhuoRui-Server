@@ -38,7 +38,6 @@ namespace WebCenter.Entities
         public virtual DbSet<timeline> timelines { get; set; }
         public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<setting> settings { get; set; }
-        public virtual DbSet<menu> menus { get; set; }
         public virtual DbSet<role_member> role_member { get; set; }
         public virtual DbSet<role_memu> role_memu { get; set; }
         public virtual DbSet<annual_exam> annual_exam { get; set; }
@@ -52,5 +51,8 @@ namespace WebCenter.Entities
         public virtual DbSet<trademark> trademarks { get; set; }
         public virtual DbSet<operation> operations { get; set; }
         public virtual DbSet<role_operation> role_operation { get; set; }
+        public virtual DbSet<lecture_customer> lecture_customer { get; set; }
+        public virtual DbSet<menu> menus { get; set; }
+        public virtual DbSet<lecture> lectures { get; set; }
     }
 }

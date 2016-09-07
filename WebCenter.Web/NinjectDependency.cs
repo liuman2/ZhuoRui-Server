@@ -35,6 +35,10 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<IincomeService>().To<incomeService>().InRequestScope();
 	
+	   kernel.Bind<IlectureService>().To<lectureService>().InRequestScope();
+	
+	   kernel.Bind<Ilecture_customerService>().To<lecture_customerService>().InRequestScope();
+	
 	   kernel.Bind<ImemberService>().To<memberService>().InRequestScope();
 	
 	   kernel.Bind<ImenuService>().To<menuService>().InRequestScope();

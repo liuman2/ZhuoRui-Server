@@ -40,6 +40,12 @@ namespace WebCenter.IDAL
 		IDAL.IincomeRepository incomeRepository { get; }
 	  
 
+		IDAL.IlectureRepository lectureRepository { get; }
+	  
+
+		IDAL.Ilecture_customerRepository lecture_customerRepository { get; }
+	  
+
 		IDAL.ImemberRepository memberRepository { get; }
 	  
 

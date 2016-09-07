@@ -57,6 +57,7 @@ namespace WebCenter.Entities
             this.trademarks3 = new HashSet<trademark>();
             this.trademarks4 = new HashSet<trademark>();
             this.trademarks5 = new HashSet<trademark>();
+            this.lectures = new HashSet<lecture>();
         }
     
     
@@ -161,5 +162,6 @@ namespace WebCenter.Entities
         public virtual ICollection<trademark> trademarks3 { get; set; }
         public virtual ICollection<trademark> trademarks4 { get; set; }
         public virtual ICollection<trademark> trademarks5 { get; set; }
+        public virtual ICollection<lecture> lectures { get; set; }
     }
 }

@@ -191,6 +191,32 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
+        <EntityType Name="lecture">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="form" Type="varchar" MaxLength="50" />
+          <Property Name="title" Type="varchar" MaxLength="100" />
+          <Property Name="teacher" Type="varchar" MaxLength="20" />
+          <Property Name="date_at" Type="datetime" Precision="0" />
+          <Property Name="city" Type="varchar" MaxLength="50" />
+          <Property Name="address" Type="varchar" MaxLength="200" />
+          <Property Name="sponsor" Type="varchar" MaxLength="100" />
+          <Property Name="co_sponsor" Type="varchar" MaxLength="300" />
+          <Property Name="customer_target" Type="varchar" MaxLength="300" />
+          <Property Name="creator_id" Type="int" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="lecture_customer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="lecture_id" Type="int" />
+          <Property Name="customer_id" Type="int" />
+        </EntityType>
         <EntityType Name="member">
           <Key>
             <PropertyRef Name="id" />
@@ -219,7 +245,7 @@
           <Property Name="route" Type="varchar" MaxLength="30" />
           <Property Name="icon" Type="varchar" MaxLength="30" />
           <Property Name="name" Type="varchar" MaxLength="50" />
-          <Property Name="enable" Type="tinyint" />
+          <Property Name="order" Type="tinyint" />
         </EntityType>
         <EntityType Name="operation">
           <Key>
@@ -829,6 +855,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="customer_ibfk_lec">
+          <End Role="customer" Type="Self.customer" Multiplicity="0..1" />
+          <End Role="lecture_customer" Type="Self.lecture_customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture_customer">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="income_ibfk_customer">
           <End Role="customer" Type="Self.customer" Multiplicity="0..1" />
           <End Role="income" Type="Self.income" Multiplicity="*" />
@@ -838,6 +876,30 @@
             </Principal>
             <Dependent Role="income">
               <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="lecture_ibfk_creator">
+          <End Role="member" Type="Self.member" Multiplicity="0..1" />
+          <End Role="lecture" Type="Self.lecture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture">
+              <PropertyRef Name="creator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="lecture_ibfk_lec">
+          <End Role="lecture" Type="Self.lecture" Multiplicity="0..1" />
+          <End Role="lecture_customer" Type="Self.lecture_customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lecture">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture_customer">
+              <PropertyRef Name="lecture_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1199,6 +1261,8 @@
           <EntitySet Name="dictionary" EntityType="Self.dictionary" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="dictionary_group" EntityType="Self.dictionary_group" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="income" EntityType="Self.income" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="lecture" EntityType="Self.lecture" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="lecture_customer" EntityType="Self.lecture_customer" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="member" EntityType="Self.member" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="menu" EntityType="Self.menu" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="operation" EntityType="Self.operation" Schema="zhuoruioa" store:Type="Tables" />
@@ -1317,9 +1381,21 @@
             <End Role="customer" EntitySet="customer" />
             <End Role="bank_account" EntitySet="bank_account" />
           </AssociationSet>
+          <AssociationSet Name="customer_ibfk_lec" Association="Self.customer_ibfk_lec">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="lecture_customer" EntitySet="lecture_customer" />
+          </AssociationSet>
           <AssociationSet Name="income_ibfk_customer" Association="Self.income_ibfk_customer">
             <End Role="customer" EntitySet="customer" />
             <End Role="income" EntitySet="income" />
+          </AssociationSet>
+          <AssociationSet Name="lecture_ibfk_creator" Association="Self.lecture_ibfk_creator">
+            <End Role="member" EntitySet="member" />
+            <End Role="lecture" EntitySet="lecture" />
+          </AssociationSet>
+          <AssociationSet Name="lecture_ibfk_lec" Association="Self.lecture_ibfk_lec">
+            <End Role="lecture" EntitySet="lecture" />
+            <End Role="lecture_customer" EntitySet="lecture_customer" />
           </AssociationSet>
           <AssociationSet Name="member_ibfk_1" Association="Self.member_ibfk_1">
             <End Role="organization" EntitySet="organization" />
@@ -1484,7 +1560,6 @@
             <End Role="customer_timeline" EntitySet="customer_timeline" />
           </AssociationSet>
           <EntitySet Name="settings" EntityType="DataCenter.Entities.setting" />
-          <EntitySet Name="menus" EntityType="DataCenter.Entities.menu" />
           <EntitySet Name="role_member" EntityType="DataCenter.Entities.role_member" />
           <EntitySet Name="role_memu" EntityType="DataCenter.Entities.role_memu" />
           <EntitySet Name="annual_exam" EntityType="DataCenter.Entities.annual_exam" />
@@ -1690,6 +1765,21 @@
           </AssociationSet>
           <EntitySet Name="operations" EntityType="DataCenter.Entities.operation" />
           <EntitySet Name="role_operation" EntityType="DataCenter.Entities.role_operation" />
+          <EntitySet Name="lecture_customer" EntityType="DataCenter.Entities.lecture_customer" />
+          <EntitySet Name="menus" EntityType="DataCenter.Entities.menu" />
+          <AssociationSet Name="customer_ibfk_lec" Association="DataCenter.Entities.customer_ibfk_lec">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="lecture_customer" EntitySet="lecture_customer" />
+          </AssociationSet>
+          <EntitySet Name="lectures" EntityType="DataCenter.Entities.lecture" />
+          <AssociationSet Name="lecture_ibfk_creator" Association="DataCenter.Entities.lecture_ibfk_creator">
+            <End Role="member" EntitySet="members" />
+            <End Role="lecture" EntitySet="lectures" />
+          </AssociationSet>
+          <AssociationSet Name="lecture_ibfk_lec" Association="DataCenter.Entities.lecture_ibfk_lec">
+            <End Role="lecture" EntitySet="lectures" />
+            <End Role="lecture_customer" EntitySet="lecture_customer" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -1852,6 +1942,7 @@
           <NavigationProperty Name="trademarks3" Relationship="DataCenter.Entities.trademark_ibfk_salesman" FromRole="member" ToRole="trademark" />
           <NavigationProperty Name="trademarks4" Relationship="DataCenter.Entities.trademark_ibfk_submit_reviewer" FromRole="member" ToRole="trademark" />
           <NavigationProperty Name="trademarks5" Relationship="DataCenter.Entities.trademark_ibfk_waiter" FromRole="member" ToRole="trademark" />
+          <NavigationProperty Name="lectures" Relationship="DataCenter.Entities.lecture_ibfk_creator" FromRole="member" ToRole="lecture" />
           </EntityType>
         <Association Name="member_ibfk_3">
           <End Type="DataCenter.Entities.area" Role="area" Multiplicity="0..1" />
@@ -1941,6 +2032,7 @@
           <NavigationProperty Name="reg_internal" Relationship="DataCenter.Entities.reg_internal_ibfk_customer" FromRole="customer" ToRole="reg_internal" />
           <NavigationProperty Name="incomes" Relationship="DataCenter.Entities.income_ibfk_customer" FromRole="customer" ToRole="income" />
           <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="customer" ToRole="trademark" />
+          <NavigationProperty Name="lecture_customer" Relationship="DataCenter.Entities.customer_ibfk_lec" FromRole="customer" ToRole="lecture_customer" />
         </EntityType>
         <Association Name="bank_account_customer">
           <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
@@ -1997,17 +2089,6 @@
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="value" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="menu">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="parent_id" Type="Int32" />
-          <Property Name="route" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="icon" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="enable" Type="SByte" />
         </EntityType>
         <EntityType Name="role_member">
           <Key>
@@ -2985,6 +3066,83 @@
           <Property Name="role_id" Type="Int32" />
           <Property Name="operation_id" Type="Int32" />
         </EntityType>
+        <EntityType Name="lecture_customer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="lecture_id" Type="Int32" />
+          <Property Name="customer_id" Type="Int32" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.customer_ibfk_lec" FromRole="lecture_customer" ToRole="customer" />
+          <NavigationProperty Name="lecture" Relationship="DataCenter.Entities.lecture_ibfk_lec" FromRole="lecture_customer" ToRole="lecture" />
+        </EntityType>
+        <EntityType Name="menu">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="parent_id" Type="Int32" />
+          <Property Name="route" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="icon" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="order" Type="SByte" />
+        </EntityType>
+        <Association Name="customer_ibfk_lec">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture_customer">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="lecture">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="form" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="teacher" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="date_at" Type="DateTime" />
+          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="sponsor" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="co_sponsor" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="customer_target" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="creator_id" Type="Int32" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <NavigationProperty Name="member" Relationship="DataCenter.Entities.lecture_ibfk_creator" FromRole="lecture" ToRole="member" />
+          <NavigationProperty Name="lecture_customer" Relationship="DataCenter.Entities.lecture_ibfk_lec" FromRole="lecture" ToRole="lecture_customer" />
+        </EntityType>
+        <Association Name="lecture_ibfk_creator">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.lecture" Role="lecture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture">
+              <PropertyRef Name="creator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="lecture_ibfk_lec">
+          <End Type="DataCenter.Entities.lecture" Role="lecture" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lecture">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture_customer">
+              <PropertyRef Name="lecture_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3161,18 +3319,6 @@
               <MappingFragment StoreEntitySet="settings">
                 <ScalarProperty Name="value" ColumnName="value" />
                 <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="menus">
-            <EntityTypeMapping TypeName="DataCenter.Entities.menu">
-              <MappingFragment StoreEntitySet="menu">
-                <ScalarProperty Name="enable" ColumnName="enable" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="icon" ColumnName="icon" />
-                <ScalarProperty Name="route" ColumnName="route" />
-                <ScalarProperty Name="parent_id" ColumnName="parent_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3538,6 +3684,46 @@
               <MappingFragment StoreEntitySet="role_operation">
                 <ScalarProperty Name="operation_id" ColumnName="operation_id" />
                 <ScalarProperty Name="role_id" ColumnName="role_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lecture_customer">
+            <EntityTypeMapping TypeName="DataCenter.Entities.lecture_customer">
+              <MappingFragment StoreEntitySet="lecture_customer">
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="lecture_id" ColumnName="lecture_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="menus">
+            <EntityTypeMapping TypeName="DataCenter.Entities.menu">
+              <MappingFragment StoreEntitySet="menu">
+                <ScalarProperty Name="order" ColumnName="order" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="icon" ColumnName="icon" />
+                <ScalarProperty Name="route" ColumnName="route" />
+                <ScalarProperty Name="parent_id" ColumnName="parent_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lectures">
+            <EntityTypeMapping TypeName="DataCenter.Entities.lecture">
+              <MappingFragment StoreEntitySet="lecture">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
+                <ScalarProperty Name="customer_target" ColumnName="customer_target" />
+                <ScalarProperty Name="co_sponsor" ColumnName="co_sponsor" />
+                <ScalarProperty Name="sponsor" ColumnName="sponsor" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="date_at" ColumnName="date_at" />
+                <ScalarProperty Name="teacher" ColumnName="teacher" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="form" ColumnName="form" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
