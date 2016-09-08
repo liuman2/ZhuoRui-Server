@@ -35,6 +35,8 @@ INSERT INTO `sequence` VALUES ('patent', '1');
 INSERT INTO `sequence` VALUES ('settings', '1');
 INSERT INTO `sequence` VALUES ('annual_exam', '1');
 INSERT INTO `sequence` VALUES ('role_operation', '1');
+INSERT INTO `sequence` VALUES ('mail', '1');
+
 
 
 -- ----------------------------
@@ -797,8 +799,8 @@ INSERT INTO `menu` VALUES ('14', '4', 'order_summary', 'fa fa-th', '订单汇总
 -- ----------------------------
 -- Records of 快件登记管理
 -- ----------------------------
-INSERT INTO `menu` VALUES ('15', '0', '', 'fa fa-envelope-o', '快件登记管理', '2');
-INSERT INTO `menu` VALUES ('16', '15', '', 'fa fa-list', '快件列表', '1');
+INSERT INTO `menu` VALUES ('15', '0', '', 'fa fa-envelope-o', '信件登记管理', '2');
+INSERT INTO `menu` VALUES ('16', '15', 'letter', 'fa fa-list', '信件登记管理', '1');
 -- ----------------------------
 -- Records of 基本资料管理
 -- ----------------------------
@@ -906,8 +908,20 @@ CREATE TABLE `lecture_customer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
-
-
-
+DROP TABLE IF EXISTS `mail`;
+CREATE TABLE `mail` (
+  `id` int(11) NOT NULL,
+  `type` varchar(10) DEFAULT NULL COMMENT '类型, 收件, 寄件',
+  `owner` varchar(100) DEFAULT NULL COMMENT '收/寄人',
+  `letter_type` varchar(20) DEFAULT NULL COMMENT '信件类型',
+  `merchant` varchar(20) DEFAULT NULL COMMENT '快递公司',
+  `code` varchar(50) DEFAULT NULL COMMENT '信件单号',
+  `date_at` datetime DEFAULT NULL COMMENT '收/寄日期',
+  `description` varchar(300) DEFAULT NULL COMMENT '备注',
+  `file_url` varchar(200) DEFAULT NULL COMMENT '附件地址',
+  `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

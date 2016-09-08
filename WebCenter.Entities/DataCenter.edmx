@@ -217,6 +217,23 @@
           <Property Name="lecture_id" Type="int" />
           <Property Name="customer_id" Type="int" />
         </EntityType>
+        <EntityType Name="mail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="type" Type="varchar" MaxLength="10" />
+          <Property Name="owner" Type="varchar" MaxLength="100" />
+          <Property Name="letter_type" Type="varchar" MaxLength="20" />
+          <Property Name="merchant" Type="varchar" MaxLength="20" />
+          <Property Name="code" Type="varchar" MaxLength="50" />
+          <Property Name="date_at" Type="datetime" Precision="0" />
+          <Property Name="description" Type="varchar" MaxLength="300" />
+          <Property Name="file_url" Type="varchar" MaxLength="200" />
+          <Property Name="creator_id" Type="int" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
         <EntityType Name="member">
           <Key>
             <PropertyRef Name="id" />
@@ -1263,6 +1280,7 @@
           <EntitySet Name="income" EntityType="Self.income" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="lecture" EntityType="Self.lecture" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="lecture_customer" EntityType="Self.lecture_customer" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="mail" EntityType="Self.mail" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="member" EntityType="Self.member" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="menu" EntityType="Self.menu" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="operation" EntityType="Self.operation" Schema="zhuoruioa" store:Type="Tables" />
@@ -1780,6 +1798,7 @@
             <End Role="lecture" EntitySet="lectures" />
             <End Role="lecture_customer" EntitySet="lecture_customer" />
           </AssociationSet>
+          <EntitySet Name="mails" EntityType="DataCenter.Entities.mail" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -3143,6 +3162,23 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="mail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="owner" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="letter_type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="merchant" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="date_at" Type="DateTime" />
+          <Property Name="description" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="file_url" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="creator_id" Type="Int32" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3724,6 +3760,24 @@
                 <ScalarProperty Name="teacher" ColumnName="teacher" />
                 <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="form" ColumnName="form" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mails">
+            <EntityTypeMapping TypeName="DataCenter.Entities.mail">
+              <MappingFragment StoreEntitySet="mail">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
+                <ScalarProperty Name="file_url" ColumnName="file_url" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="date_at" ColumnName="date_at" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="merchant" ColumnName="merchant" />
+                <ScalarProperty Name="letter_type" ColumnName="letter_type" />
+                <ScalarProperty Name="owner" ColumnName="owner" />
+                <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

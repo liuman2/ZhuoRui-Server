@@ -54,5 +54,6 @@ namespace WebCenter.Entities
         public virtual DbSet<lecture_customer> lecture_customer { get; set; }
         public virtual DbSet<menu> menus { get; set; }
         public virtual DbSet<lecture> lectures { get; set; }
+        public virtual DbSet<mail> mails { get; set; }
     }
 }

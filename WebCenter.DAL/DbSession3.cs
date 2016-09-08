@@ -29,6 +29,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.Ilecture_customerRepository lecture_customerRepository { get { return new lecture_customerRepository(); } }
 	
+	public IDAL.ImailRepository mailRepository { get { return new mailRepository(); } }
+	
 	public IDAL.ImemberRepository memberRepository { get { return new memberRepository(); } }
 	
 	public IDAL.ImenuRepository menuRepository { get { return new menuRepository(); } }

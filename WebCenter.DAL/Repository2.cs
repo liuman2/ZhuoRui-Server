@@ -62,6 +62,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class mailRepository :BaseRepository<mail>,ImailRepository
+    {
+         
+    }
+	
 	public partial class memberRepository :BaseRepository<member>,ImemberRepository
     {
          

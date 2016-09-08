@@ -123,6 +123,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class mailService:BaseService<mail>,ImailService
+    {   
+        public mailService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.mailRepository;
+        }  
+    }
+	
 	public partial class memberService:BaseService<member>,ImemberService
     {   
         public memberService()

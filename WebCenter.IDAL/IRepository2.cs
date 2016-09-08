@@ -50,6 +50,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface ImailRepository :IBaseRepository<mail>
+    {         
+    }
+	
     public partial interface ImemberRepository :IBaseRepository<member>
     {         
     }

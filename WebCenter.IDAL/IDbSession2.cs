@@ -46,6 +46,9 @@ namespace WebCenter.IDAL
 		IDAL.Ilecture_customerRepository lecture_customerRepository { get; }
 	  
 
+		IDAL.ImailRepository mailRepository { get; }
+	  
+
 		IDAL.ImemberRepository memberRepository { get; }
 	  
 

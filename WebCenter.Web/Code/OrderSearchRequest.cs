@@ -26,4 +26,14 @@ namespace WebCenter.Web
         public string title { get; set; }
         public string form { get; set; }
     }
+
+    public class LetterRequest
+    {
+        public int index { get; set; }
+        public int size { get; set; }
+        public string type { get; set; }
+        public string name { get; set; }
+        public DateTime? start_time { get; set; }
+        public DateTime? end_time { get; set; }
+    }
 }

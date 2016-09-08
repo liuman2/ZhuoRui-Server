@@ -54,6 +54,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface ImailService:IBaseService<mail>
+    {   
+    }
+	
 	public partial interface ImemberService:IBaseService<member>
     {   
     }

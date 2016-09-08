@@ -124,6 +124,9 @@
     <Compile Include="lecture_customer.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="mail.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="member.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

@@ -86,6 +86,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  ImailService ImailService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  ImemberService ImemberService
     {
         get;

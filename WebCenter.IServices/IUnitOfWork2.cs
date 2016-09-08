@@ -30,6 +30,8 @@ namespace WebCenter.IServices
 	
 	  Ilecture_customerService Ilecture_customerService{get;set;} 
 	
+	  ImailService ImailService{get;set;} 
+	
 	  ImemberService ImemberService{get;set;} 
 	
 	  ImenuService ImenuService{get;set;} 

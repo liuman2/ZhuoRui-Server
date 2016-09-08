@@ -18,29 +18,6 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Search(LectureRequest request)
         {
-            //var r = HttpContext.User.Identity.IsAuthenticated;
-            //if (!r)
-            //{
-            //    return new HttpUnauthorizedResult();
-            //}
-
-            //var identityName = HttpContext.User.Identity.Name;
-            //var arrs = identityName.Split('|');
-            //if (arrs.Length == 0)
-            //{
-            //    return new HttpUnauthorizedResult();
-            //}
-
-            //if (arrs.Length < 5)
-            //{
-            //    return new HttpUnauthorizedResult();
-            //}
-
-            //var userId = 0;
-            //var deptId = 0;
-            //int.TryParse(arrs[0], out userId);
-            //int.TryParse(arrs[2], out deptId);
-
             Expression<Func<lecture, bool>> condition = c => true;
             if (!string.IsNullOrEmpty(request.title))
             {

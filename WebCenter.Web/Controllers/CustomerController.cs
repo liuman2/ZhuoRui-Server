@@ -5,6 +5,7 @@ using WebCenter.Entities;
 using Common;
 using System.Linq.Expressions;
 using System;
+using System.Collections.Generic;
 
 namespace WebCenter.Web.Controllers
 {
@@ -477,6 +478,79 @@ namespace WebCenter.Web.Controllers
             };
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetBusinessByCustomerId(int customerId)
+        {
+            var orders = new List<CustomerOrder>();
+
+            var regAborads = Uof.Ireg_abroadService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
+            if (regAborads.Count() > 0)
+            {
+                orders.Add(new CustomerOrder
+                {
+                    count = regAborads.Count(),
+                    last_date = regAborads.FirstOrDefault(),
+                    order_name = "境外注册"
+                });
+            }
+
+            var regInterals = Uof.Ireg_internalService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
+            if (regInterals.Count() > 0)
+            {
+                orders.Add(new CustomerOrder
+                {
+                    count = regInterals.Count(),
+                    last_date = regInterals.FirstOrDefault(),
+                    order_name = "境内注册"
+                });
+            }
+
+            var trademarks = Uof.ItrademarkService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
+            if (trademarks.Count() > 0)
+            {
+                orders.Add(new CustomerOrder
+                {
+                    count = trademarks.Count(),
+                    last_date = trademarks.FirstOrDefault(),
+                    order_name = "商标"
+                });
+            }
+
+            var patents = Uof.IpatentService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
+            if (patents.Count() > 0)
+            {
+                orders.Add(new CustomerOrder
+                {
+                    count = patents.Count(),
+                    last_date = patents.FirstOrDefault(),
+                    order_name = "专利"
+                });
+            }
+
+            var audits = Uof.IauditService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
+            if (audits.Count() > 0)
+            {
+                orders.Add(new CustomerOrder
+                {
+                    count = audits.Count(),
+                    last_date = audits.FirstOrDefault(),
+                    order_name = "审计"
+                });
+            }
+
+            var annuals = Uof.Iannual_examService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
+            if (annuals.Count() > 0)
+            {
+                orders.Add(new CustomerOrder
+                {
+                    count = annuals.Count(),
+                    last_date = annuals.FirstOrDefault(),
+                    order_name = "年检"
+                });
+            }
+
+            return Json(orders, JsonRequestBehavior.AllowGet);
         }
     }
 }
