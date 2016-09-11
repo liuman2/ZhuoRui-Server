@@ -6,6 +6,9 @@ using Common;
 using System.Web.Security;
 using System.Collections.Generic;
 using WebCenter.Entities;
+using System.IO;
+using System.Drawing;
+using System.Web;
 
 namespace WebCenter.Web.Controllers
 {
@@ -76,8 +79,19 @@ namespace WebCenter.Web.Controllers
                 }
 
                 var username = arrs[1];
-                var user = Uof.ImemberService.GetAll(m => m.username == username).FirstOrDefault();
-                user.password = "";
+                var user = Uof.ImemberService.GetAll(m => m.username == username).Select(m => new
+                {
+                    id = m.id,
+                    username = m.username,
+                    name = m.name,
+                    english_name = m.username,
+                    mobile = m.mobile,
+                    birthday = m.birthday,
+                    position = m.position.name,
+                    department = m.organization.name,
+                    url = m.url
+
+                }).FirstOrDefault();
 
                 var menus = Uof.ImenuService.GetAll().ToList();
                 var opers = new List<int>();
@@ -116,7 +130,140 @@ namespace WebCenter.Web.Controllers
 
                 throw;
             }
-            
+        }
+
+        public ActionResult SignOut()
+        {
+            FormsAuthentication.SignOut();
+
+            return SuccessResult;
+        }
+
+        public ActionResult ChangePwd(int userId, string old_password, string new_password)
+        {
+            var user = Uof.ImemberService.GetAll(m => m.id == userId).FirstOrDefault();
+
+            var oldPassword = HashPassword.GetHashPassword(old_password);
+            if (oldPassword != user.password)
+            {
+                return Json(new { success = false, message="旧密码不正确" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var newPassword = HashPassword.GetHashPassword(new_password);
+
+            user.password = newPassword;
+            user.date_updated = DateTime.Now;
+
+            var r = Uof.ImemberService.UpdateEntity(user);
+            if (r)
+            {
+                FormsAuthentication.SignOut();
+            }
+            return Json(new { success = r, message = "" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult Upload()
+        {
+            HttpFileCollectionBase files = Request.Files;
+
+            if (files.Count <= 0)
+            {
+                return Json(new { result = true, url = "" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var fileName = files[0].FileName;
+
+            byte[] fileData = null;
+            using (var binaryReader = new BinaryReader(files[0].InputStream))
+            {
+                fileData = binaryReader.ReadBytes(files[0].ContentLength);
+            }
+            var directory = AppDomain.CurrentDomain.BaseDirectory;
+            var uploadDir = Path.Combine(directory, "Uploads");
+            if (!Directory.Exists(uploadDir))
+            {
+                Directory.CreateDirectory(uploadDir);
+            }
+
+            // 不同业务的文件 分不同文件夹保存
+            var docType = Request.Params["DocType"];
+            var userId = Request.Params["UserId"];
+
+            var folder = "image";
+            var isThumbnail = false;
+            var size = new Size(100, 100);
+            if (!string.IsNullOrEmpty(docType))
+            {
+                switch (docType.ToLower())
+                {
+                    case "profile":
+                        folder = "photo";
+                        isThumbnail = true;
+                        break;
+                    case "image":
+                        folder = "image";
+                        isThumbnail = false;
+                        break;
+                    default:
+                        folder = "doc";
+                        isThumbnail = false;
+                        break;
+                }
+            }
+
+            var folderDir = Path.Combine(uploadDir, folder);
+            if (!Directory.Exists(folderDir))
+            {
+                Directory.CreateDirectory(folderDir);
+            }
+
+            var uploadFile = Path.Combine(folderDir, fileName);
+
+            // 防止重复
+            if (System.IO.File.Exists(uploadFile))
+            {
+                var fileArr = fileName.Split('.');
+                var _name = DateTime.Now.ToString("yyyyMMddHHmmss");
+                fileName = _name + "." + fileArr[1];
+            }
+
+            uploadFile = Path.Combine(folderDir, fileName);
+            using (FileStream fs = new FileStream(uploadFile, FileMode.Create))
+            {
+                fs.Write(fileData, 0, fileData.Length);
+            }
+
+            var photoUrl = string.Format("{0}://{1}:{2}/Uploads/{3}/{4}", Request.Url.Scheme, Request.Url.Host, Request.Url.Port, folder, fileName);
+
+            if (isThumbnail)
+            {
+                var thumbnailDir = Path.Combine(folderDir, "thumbnail");
+                if (!Directory.Exists(thumbnailDir))
+                {
+                    Directory.CreateDirectory(thumbnailDir);
+                }
+
+                var thumbnail = Path.Combine(thumbnailDir, fileName);
+
+                Image image = Image.FromFile(uploadFile);
+                Image thumb = image.GetThumbnailImage(size.Width, size.Height, () => false, IntPtr.Zero);
+                thumb.Save(thumbnail);
+
+                photoUrl = string.Format("{0}://{1}:{2}/Uploads/{3}/thumbnail/{4}", Request.Url.Scheme, Request.Url.Host, Request.Url.Port, folder, fileName);
+            }
+
+            int id = 0;
+            int.TryParse(userId, out id);
+            var user = Uof.ImemberService.GetAll(m => m.id == id).FirstOrDefault();
+            if (user != null)
+            {
+                user.url = photoUrl;
+
+                Uof.ImemberService.UpdateEntity(user);
+            }
+
+            return Json(new { result = true, url = photoUrl }, JsonRequestBehavior.AllowGet);
         }
 
         private List<UserMenus> getUserMenus(List<menu> ms)

@@ -131,8 +131,6 @@ namespace WebCenter.Entities
         public string business_nature { get; set; }
     
         public virtual ICollection<bank_account> bank_account { get; set; }
-        public virtual member member { get; set; }
-        public virtual member member1 { get; set; }
         public virtual ICollection<customer_timeline> customer_timeline { get; set; }
         public virtual ICollection<annual_exam> annual_exam { get; set; }
         public virtual ICollection<audit> audits { get; set; }
@@ -142,5 +140,7 @@ namespace WebCenter.Entities
         public virtual ICollection<income> incomes { get; set; }
         public virtual ICollection<trademark> trademarks { get; set; }
         public virtual ICollection<lecture_customer> lecture_customer { get; set; }
+        public virtual member member { get; set; }
+        public virtual member member1 { get; set; }
     }
 }

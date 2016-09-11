@@ -73,7 +73,7 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
-        public virtual member member { get; set; }
         public virtual ICollection<lecture_customer> lecture_customer { get; set; }
+        public virtual member member { get; set; }
     }
 }

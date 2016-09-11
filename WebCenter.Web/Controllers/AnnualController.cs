@@ -246,7 +246,7 @@ namespace WebCenter.Web.Controllers
                 date_finish = a.date_finish
             }).ToList();
 
-            if (abroads.Count() > 0)
+            if (trademarks.Count() > 0)
             {
                 items.AddRange(trademarks);
             }
@@ -312,7 +312,7 @@ namespace WebCenter.Web.Controllers
                 date_finish = a.date_finish
             }).ToList();
 
-            if (abroads.Count() > 0)
+            if (patents.Count() > 0)
             {
                 items.AddRange(patents);
             }

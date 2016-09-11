@@ -830,6 +830,63 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult UpdateHistory(reg_internal_history history)
+        {
+            if (history.reg_id == null)
+            {
+                return Json(new { success = false, message = "参数reg_id不可为空" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var dbReg = Uof.Ireg_internalService.GetAll(a => a.id == history.reg_id).FirstOrDefault();
+            if (dbReg == null)
+            {
+                return Json(new { success = false, message = "找不到订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (history.address == dbReg.address &&
+                history.date_setup == dbReg.date_setup &&
+                history.director == dbReg.director &&
+                history.name_cn == dbReg.name_cn &&
+                history.legal == dbReg.legal &&
+                history.others == dbReg.description &&
+                history.reg_no == dbReg.reg_no)
+            {
+                return Json(new { success = false, message = "您没做任何修改" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbReg.address = history.address ?? dbReg.address;
+            dbReg.date_setup = history.date_setup ?? dbReg.date_setup;
+            dbReg.director = history.director ?? dbReg.director;
+            dbReg.name_cn = history.name_cn ?? dbReg.name_cn;
+            dbReg.legal = history.legal ?? dbReg.legal;
+            dbReg.reg_no = history.reg_no ?? dbReg.reg_no;
+            dbReg.description = history.others ?? dbReg.description;
+
+            dbReg.date_updated = DateTime.Now;
+
+            var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
+
+            if (r)
+            {
+                var dbHistory = Uof.Ireg_internal_historyService.GetById(history.id);
+                dbHistory.address = history.address;
+                dbHistory.date_setup = history.date_setup;
+                dbHistory.director = history.director;
+                dbHistory.name_cn = history.name_cn;
+                dbHistory.legal = history.legal;
+                dbHistory.others = history.others;
+                dbHistory.reg_no = history.reg_no;
+
+
+                Uof.Ireg_internal_historyService.UpdateEntity(dbHistory);
+
+                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetProgress(int id)
         {
             var p = Uof.Ireg_internalService.GetAll(r => r.id == id).Select(r => new

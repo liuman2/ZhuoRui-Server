@@ -922,5 +922,65 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public ActionResult UpdateHistory(reg_history history)
+        {
+            if (history.reg_id == null)
+            {
+                return Json(new { success = false, message = "参数reg_id不可为空" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var dbReg = Uof.Ireg_abroadService.GetAll(a => a.id == history.reg_id).FirstOrDefault();
+            if (dbReg == null)
+            {
+                return Json(new { success = false, message = "找不到订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (history.address == dbReg.address &&
+                history.date_setup == dbReg.date_setup &&
+                history.director == dbReg.director &&
+                history.name_cn == dbReg.name_cn &&
+                history.name_en == dbReg.name_en &&
+                history.region == dbReg.region &&
+                history.others == dbReg.description &&
+                history.reg_no == dbReg.reg_no)
+            {
+                return Json(new { success = false, message = "您没做任何修改" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbReg.address = history.address ?? dbReg.address;
+            dbReg.date_setup = history.date_setup ?? dbReg.date_setup;
+            dbReg.director = history.director ?? dbReg.director;
+            dbReg.name_cn = history.name_cn ?? dbReg.name_cn;
+            dbReg.name_en = history.name_en ?? dbReg.name_en;
+            dbReg.region = history.region ?? dbReg.region;
+            dbReg.reg_no = history.reg_no ?? dbReg.reg_no;
+            dbReg.description = history.others ?? dbReg.description;
+
+            dbReg.date_updated = DateTime.Now;
+
+            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+
+            if (r)
+            {
+                var dbHistory = Uof.Ireg_historyService.GetById(history.id);
+                dbHistory.address = history.address;
+                dbHistory.date_setup = history.date_setup;
+                dbHistory.director = history.director;
+                dbHistory.name_cn = history.name_cn;
+                dbHistory.name_en = history.name_en;
+                dbHistory.region = history.region;
+                dbHistory.others = history.others;
+                dbHistory.reg_no = history.reg_no;
+
+
+                Uof.Ireg_historyService.UpdateEntity(dbHistory);
+
+                return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

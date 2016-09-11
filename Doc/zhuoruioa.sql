@@ -134,6 +134,7 @@ CREATE TABLE `member` (
   `mobile` varchar(20) DEFAULT NULL,
   `hiredate` datetime DEFAULT NULL,
   `birthday` datetime DEFAULT NULL,
+  `url` varchar(120) DEFAULT NULL,
   `status` int(11) DEFAULT NULL COMMENT '在职：1；离职：0；停薪留职：2',
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
