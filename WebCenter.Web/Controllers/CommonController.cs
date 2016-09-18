@@ -113,6 +113,22 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { result = true, url = photoUrl }, JsonRequestBehavior.AllowGet);
         }
-        
+
+
+        public ActionResult GetPrintData(int id, string name)
+        {
+            switch (name)
+            {
+                case "abroad":
+                    Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new PrintData
+                    {
+                        id = a.id,
+                        
+                    }).FirstOrDefault();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
