@@ -274,11 +274,9 @@
     <Content Include="img\user2-160x160-eafc49f5f1.jpg" />
     <Content Include="img\validator_default-35eba8325d.png" />
     <Content Include="img\validator_simple-f284f291f5.png" />
-    <Content Include="index.html" />
     <Content Include="js\common.df260858effd72c32f8b.js" />
     <Content Include="js\index.757d5e1f8e2e9e775a9d.js" />
     <Content Include="js\login.cb07fb155eab942bb293.js" />
-    <Content Include="login.html" />
     <Content Include="NinjectDependency.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>NinjectDependency.cs</LastGenOutput>

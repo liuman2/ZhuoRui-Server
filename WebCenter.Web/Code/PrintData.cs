@@ -26,6 +26,8 @@ namespace WebCenter.Web
         /// </summary>
         public string date { get; set; }
 
+        public DateTime? date_transaction { get; set; }
+
         /// <summary>
         /// 付款人
         /// </summary>
@@ -45,30 +47,44 @@ namespace WebCenter.Web
         public string ordername { get; set; }
 
         /// <summary>
+        /// 商标类别
+        /// </summary>
+        public string type { get; set; }
+
+        /// <summary>
+        /// 提交方式
+        /// </summary>
+        public string mode { get; set; }
+
+        /// <summary>
         /// 入账信息
         /// </summary>
         public string pay_info { get; set; }
         /// <summary>
         /// 收款方式
         /// </summary>
-        public string pay_mode { get; set; }
+        public string pay_way { get; set; }
         /// <summary>
         /// 应收金额
         /// </summary>
-        public double amount { get; set; }
+        public float? amount { get; set; }
         /// <summary>
         /// 已收金额
         /// </summary>
-        public double received { get; set; }
+        public float? received { get; set; }
         /// <summary>
         /// 余额
         /// </summary>
-        public double balance { get; set; }
+        public float? balance { get; set; }
         /// <summary>
         /// 附件数量
         /// </summary>
         public int attachments { get; set; }
 
+        /// <summary>
+        /// 地区
+        /// </summary>
+        public string area { get; set; }
 
         /// <summary>
         /// 审核
@@ -89,5 +105,9 @@ namespace WebCenter.Web
         /// 写票人
         /// </summary>
         public string creator { get; set; }
+
+        public string currency { get; set; }
+
+        public float? rate { get; set; }
     }
 }
