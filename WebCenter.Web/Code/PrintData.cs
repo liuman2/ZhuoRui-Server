@@ -9,6 +9,8 @@ namespace WebCenter.Web
     {
         public int id { get; set; }
 
+        public string print_type { get; set; }
+
         /// <summary>
         /// 档案号
         /// </summary>

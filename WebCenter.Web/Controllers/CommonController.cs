@@ -121,15 +121,18 @@ namespace WebCenter.Web.Controllers
 
             switch (name)
             {
+                
                 case "abroad":
+                    #region 境外注册
                     printData = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new PrintData
                     {
+                        print_type = "abroad",
                         id = a.id,
                         accounter = "",
                         amount = a.amount_transaction,
+                        balance = a.amount_transaction,
                         attachments = 0,
                         auditor = a.member1.name,
-                        balance = null,
                         code = a.code,
                         company = a.customer.name,
                         creator = a.member.name,
@@ -155,6 +158,197 @@ namespace WebCenter.Web.Controllers
                     printData.project = string.Format("{0}提交", printData.area);
 
                     getPrintDataIncome(printData, "reg_abroad");
+                    #endregion
+                    break;
+                case "annual":
+                    #region 年检
+                    printData = Uof.Iannual_examService.GetAll(a => a.id == id).Select(a => new PrintData
+                    {
+                        print_type = "annual",
+                        id = a.id,
+                        accounter = "",
+                        amount = a.amount_transaction,
+                        attachments = 0,
+                        auditor = a.member2.name,
+                        balance = a.amount_transaction,
+                        code = a.code,
+                        company = a.customer.name,
+                        creator = a.member1.name,
+                        date_transaction = a.date_transaction,
+                        date = "",
+                        mode = "",
+                        ordername = a.name_cn,
+                        others = "",
+                        payer = "",
+                        pay_info = "",
+                        pay_way = "",
+                        project = "",
+                        reason = "年检",
+                        received = 0,
+                        saleman = a.member4.name,
+                        type = "",
+                        currency = a.currency,
+                        area = a.member4.area.name,
+                        rate = a.rate
+                    }).FirstOrDefault();
+
+                    printData.date = printData.date_transaction.Value.ToString("yyyy年MM月dd日");
+                    printData.project = string.Format("{0}年报", printData.area);
+
+                    getPrintDataIncome(printData, "annual");
+                    #endregion
+                    break;
+                case "audit":
+                    #region 审计
+                    printData = Uof.IauditService.GetAll(a => a.id == id).Select(a => new PrintData
+                    {
+                        print_type = "audit",
+                        id = a.id,
+                        accounter = "",
+                        amount = a.amount_transaction * a.rate,
+                        attachments = 0,
+                        auditor = a.member2.name,
+                        balance = a.amount_transaction * a.rate,
+                        code = a.code,
+                        company = a.customer.name,
+                        creator = a.member1.name,
+                        date_transaction = a.date_transaction,
+                        date = "",
+                        mode = "",
+                        ordername = a.name_cn,
+                        others = "",
+                        payer = "",
+                        pay_info = "",
+                        pay_way = "",
+                        project = "",
+                        reason = "审计",
+                        received = 0,
+                        saleman = a.member4.name,
+                        type = "",
+                        currency = a.currency,
+                        area = a.member4.area.name,
+                        rate = a.rate
+                    }).FirstOrDefault();
+
+                    printData.date = printData.date_transaction.Value.ToString("yyyy年MM月dd日");
+                    printData.project = string.Format("{0}审计", printData.area);
+
+                    getPrintDataIncome(printData, "audit");
+                    #endregion
+                    break;
+                case "internal":
+                    #region 国内注册
+                    printData = Uof.Ireg_internalService.GetAll(a => a.id == id).Select(a => new PrintData
+                    {
+                        print_type = "internal",
+                        id = a.id,
+                        accounter = "",
+                        amount = a.amount_transaction * a.rate,
+                        attachments = 0,
+                        auditor = a.member1.name,
+                        balance = a.amount_transaction * a.rate,
+                        code = a.code,
+                        company = a.customer.name,
+                        creator = a.member.name,
+                        date_transaction = a.date_transaction,
+                        date = "",
+                        mode = "",
+                        ordername = a.name_cn,
+                        others = "",
+                        payer = "",
+                        pay_info = "",
+                        pay_way = "",
+                        project = "",
+                        reason = "国内注册",
+                        received = 0,
+                        saleman = a.member4.name,
+                        type = "",
+                        currency = a.currency,
+                        area = a.member4.area.name,
+                        rate = a.rate
+                    }).FirstOrDefault();
+
+                    printData.date = printData.date_transaction.Value.ToString("yyyy年MM月dd日");
+                    printData.project = string.Format("{0}提交", printData.area);
+
+                    getPrintDataIncome(printData, "reg_internal");
+                    #endregion
+                    break;
+                case "patent":
+                    #region 专利
+                    printData = Uof.IpatentService.GetAll(a => a.id == id).Select(a => new PrintData
+                    {
+                        print_type = "patent",
+                        id = a.id,
+                        accounter = "",
+                        amount = a.amount_transaction * a.rate,
+                        attachments = 0,
+                        auditor = a.member1.name,
+                        balance = a.amount_transaction * a.rate,
+                        code = a.code,
+                        company = a.customer.name,
+                        creator = a.member.name,
+                        date_transaction = a.date_transaction,
+                        date = "",
+                        mode = a.reg_mode,
+                        ordername = a.name,
+                        others = "",
+                        payer = "",
+                        pay_info = "",
+                        pay_way = "",
+                        project = "",
+                        reason = "专利注册",
+                        received = 0,
+                        saleman = a.member3.name,
+                        type = a.patent_type,
+                        currency = a.currency,
+                        area = a.member3.area.name,
+                        rate = a.rate
+                    }).FirstOrDefault();
+
+                    printData.date = printData.date_transaction.Value.ToString("yyyy年MM月dd日");
+                    printData.project = string.Format("{0}提交", printData.area);
+
+                    getPrintDataIncome(printData, "patent");
+                    #endregion
+                    break;
+                case "trademark":
+                    #region 商标
+                    printData = Uof.ItrademarkService.GetAll(a => a.id == id).Select(a => new PrintData
+                    {
+                        print_type = "trademark",
+                        id = a.id,
+                        accounter = "",
+                        amount = a.amount_transaction * a.rate,
+                        attachments = 0,
+                        auditor = a.member1.name,
+                        balance = a.amount_transaction * a.rate,
+                        code = a.code,
+                        company = a.customer.name,
+                        creator = a.member.name,
+                        date_transaction = a.date_transaction,
+                        date = "",
+                        mode = a.reg_mode,
+                        ordername = a.name,
+                        others = "",
+                        payer = "",
+                        pay_info = "",
+                        pay_way = "",
+                        project = "",
+                        reason = "商标注册",
+                        received = 0,
+                        saleman = a.member3.name,
+                        type = a.trademark_type,
+                        currency = a.currency,
+                        area = a.member3.area.name,
+                        rate = a.rate
+                    }).FirstOrDefault();
+
+                    printData.date = printData.date_transaction.Value.ToString("yyyy年MM月dd日");
+                    printData.project = string.Format("{0}提交", printData.area);
+
+                    getPrintDataIncome(printData, "trademark");
+                    #endregion
                     break;
                 default:
                     break;
@@ -185,8 +379,8 @@ namespace WebCenter.Web.Controllers
                     total += item.amount.Value;
                 }
 
-                pd.received = total;
-                pd.balance = pd.amount - total;
+                pd.received = total * pd.rate;
+                pd.balance = pd.amount - total * pd.rate;
                 pd.payer = list[0].payer ?? "";
 
                 var acc = list[0].account ?? "";
@@ -199,6 +393,10 @@ namespace WebCenter.Web.Controllers
 
                 pd.attachments = list.Where(l => !string.IsNullOrEmpty(l.attachment_url)).Count();
 
+            } else
+            {
+                pd.pay_way = "先提交,未付款";
+                pd.received = 0;
             }
         }
     }
