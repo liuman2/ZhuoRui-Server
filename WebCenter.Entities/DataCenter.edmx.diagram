@@ -93,6 +93,8 @@
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_waiter" />
+        <EntityTypeShape EntityType="DataCenter.Entities.audit_bank" Width="1.5" PointX="18.125" PointY="25.5" />
+        <AssociationConnector Association="DataCenter.Entities.audit_ibfk_bank" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

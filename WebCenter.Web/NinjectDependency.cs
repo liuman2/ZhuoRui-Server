@@ -23,6 +23,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<IauditService>().To<auditService>().InRequestScope();
 	
+	   kernel.Bind<Iaudit_bankService>().To<audit_bankService>().InRequestScope();
+	
 	   kernel.Bind<Ibank_accountService>().To<bank_accountService>().InRequestScope();
 	
 	   kernel.Bind<IcustomerService>().To<customerService>().InRequestScope();

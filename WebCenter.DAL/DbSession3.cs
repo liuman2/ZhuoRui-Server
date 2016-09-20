@@ -13,6 +13,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.IauditRepository auditRepository { get { return new auditRepository(); } }
 	
+	public IDAL.Iaudit_bankRepository audit_bankRepository { get { return new audit_bankRepository(); } }
+	
 	public IDAL.Ibank_accountRepository bank_accountRepository { get { return new bank_accountRepository(); } }
 	
 	public IDAL.IcustomerRepository customerRepository { get { return new customerRepository(); } }

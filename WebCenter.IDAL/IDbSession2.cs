@@ -22,6 +22,9 @@ namespace WebCenter.IDAL
 		IDAL.IauditRepository auditRepository { get; }
 	  
 
+		IDAL.Iaudit_bankRepository audit_bankRepository { get; }
+	  
+
 		IDAL.Ibank_accountRepository bank_accountRepository { get; }
 	  
 

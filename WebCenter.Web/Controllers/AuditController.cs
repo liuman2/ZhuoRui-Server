@@ -383,7 +383,17 @@ namespace WebCenter.Web.Controllers
                 local_balance = balance * reg.rate
             };
 
-            return Json(new { order = reg, incomes = incomes }, JsonRequestBehavior.AllowGet);
+            var banks = Uof.Iaudit_bankService.GetAll(b => b.audit_id == id).Select(b => new
+            {
+                id = b.id,
+                audit_id = b.audit_id,
+                bank_id = b.bank_id,
+                bank = b.bank_account.bank,
+                holder = b.bank_account.holder,
+                account = b.bank_account.account
+            }).ToList();
+
+            return Json(new { order = reg, incomes = incomes, banks = banks }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Update(audit _audit)
@@ -776,6 +786,134 @@ namespace WebCenter.Web.Controllers
             }
             
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult AddBank(int audit_id, int customer_id, string bank, string holder, string account)
+        {
+            var _bank = new bank_account
+            {
+                customer_id = customer_id,
+                bank = bank,
+                holder = holder,
+                account = account
+            };
+
+            var b = Uof.Ibank_accountService.AddEntity(_bank);
+
+             Uof.Iaudit_bankService.AddEntity(new audit_bank
+            {
+                audit_id = audit_id,
+                customer_id = customer_id,
+                bank_id = b.id
+            });
+
+            return SuccessResult;
+        }
+
+        public ActionResult DeleteBank(int id)
+        {
+            var bank = Uof.Iaudit_bankService.GetAll(b => b.id == id).FirstOrDefault();
+
+            Uof.Iaudit_bankService.DeleteEntity(bank);
+
+            return SuccessResult;
+        }
+
+        public ActionResult GetAuditBanks(int audit_id, int customer_id, int index = 1, int size = 500, string name = "")
+        {
+
+            var bankIds = Uof.Iaudit_bankService.GetAll(b=>b.audit_id == audit_id).Select(m => m.bank_id).ToList();
+
+            Expression<Func<bank_account, bool>> condition = b => true;
+            if (!string.IsNullOrEmpty(name))
+            {
+                condition = b => (b.bank.IndexOf(name) > -1);
+            }
+
+            Expression<Func<bank_account, bool>> excludeIds = m => true;
+            if (bankIds.Count() > 0)
+            {
+                excludeIds = m => !bankIds.Contains(m.id);
+            }
+
+            var list = Uof.Ibank_accountService.GetAll(condition).Where(excludeIds).OrderByDescending(item => item.id).Select(m => new
+            {
+                id = m.id,
+                customer_id = m.customer_id,
+                bank = m.bank,
+                account = m.account,
+                holder = m.holder
+            }).ToPagedList(index, size).ToList();
+
+            var totalRecord = Uof.Ibank_accountService.GetAll(condition).Where(excludeIds).Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + size - 1) / size;
+            }
+            var page = new
+            {
+                current_index = index,
+                current_size = size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+
+            var result = new
+            {
+                page = page,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult AddAuditBank(int audit_id, int customer_id, int[] bankIds)
+        {
+
+            var oldBanks = Uof.Iaudit_bankService.GetAll(m => m.audit_id == audit_id).ToList();
+
+            var adds = new List<audit_bank>();
+
+            if (oldBanks.Count() == 0)
+            {
+                foreach (var item in bankIds)
+                {
+                    adds.Add(new audit_bank()
+                    {
+                        customer_id = customer_id,
+                        audit_id = audit_id,
+                        bank_id = item
+                    });
+                }
+
+                Uof.Iaudit_bankService.AddEntities(adds);
+                return SuccessResult;
+            }
+
+            foreach (var item in bankIds)
+            {
+                var exist = oldBanks.Where(o => o.bank_id == item);
+                if (exist.Count() == 0)
+                {
+                    adds.Add(new audit_bank()
+                    {
+                        bank_id = item,
+                        audit_id = audit_id,
+                        customer_id = customer_id
+                    });
+                }
+            }
+
+            if (adds.Count() > 0)
+            {
+                Uof.Iaudit_bankService.AddEntities(adds);
+            }
+
+            return SuccessResult;
         }
     }
 }

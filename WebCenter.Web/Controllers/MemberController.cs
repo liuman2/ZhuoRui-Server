@@ -114,7 +114,27 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
-            var _member = Uof.ImemberService.GetAll(a => a.id == id).FirstOrDefault();
+            var _member = Uof.ImemberService.GetAll(a => a.id == id).Select(m => new
+            {
+                id = m.id,
+                name = m.name,
+                english_name = m.english_name,
+                username = m.username,
+                mobile = m.mobile,
+                birthday = m.birthday,
+                organization_id = m.organization_id,
+                organization_name = m.organization.name,
+
+                area_id = m.area_id,
+                area_name = m.area.name,
+
+                position_id = m.position_id,
+                position_name = m.position.name,
+
+                hiredate = m.hiredate,
+                status = m.status
+
+            }).FirstOrDefault();
             if (_member == null)
             {
                 return ErrorResult;
@@ -164,21 +184,40 @@ namespace WebCenter.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Update(int id, string name, string description)
+        public ActionResult Update(member _member)
         {
-            var _area = Uof.IareaService.GetAll(a=>a.id == id).FirstOrDefault();
-            if (_area == null)
+            var dbMember = Uof.ImemberService.GetAll(a=>a.id == _member.id).FirstOrDefault();
+            if (dbMember == null)
             {
                 return ErrorResult;
             }
-            if (_area.name == name && _area.description == description)
+
+            if (dbMember.name == _member.name &&
+                dbMember.username == _member.username &&
+                dbMember.english_name == _member.english_name &&
+                dbMember.area_id == _member.area_id &&
+                dbMember.birthday == _member.birthday &&
+                dbMember.hiredate == _member.hiredate &&
+                dbMember.mobile == _member.mobile &&
+                dbMember.organization_id == _member.organization_id &&
+                dbMember.position_id == _member.position_id &&
+                dbMember.status == _member.status
+                )
             {
                 return SuccessResult;
             }
-            _area.name = name;
-            _area.description = description;
+            dbMember.name = _member.name;
+            dbMember.username = _member.username;
+            dbMember.english_name = _member.english_name;
+            dbMember.area_id = _member.area_id;
+            dbMember.birthday = _member.birthday;
+            dbMember.hiredate = _member.hiredate;
+            dbMember.mobile = _member.mobile;
+            dbMember.organization_id = _member.organization_id;
+            dbMember.status = _member.status;
+            dbMember.position_id = _member.position_id;
 
-            var r = Uof.IareaService.UpdateEntity(_area);
+            var r = Uof.ImemberService.UpdateEntity(dbMember);
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }
 
@@ -210,6 +249,11 @@ namespace WebCenter.Web.Controllers
             }).FirstOrDefault();
 
             if (_member == null)
+            {
+                return Json(new { ok = "验证成功" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (_member != null && _member.id == id)
             {
                 return Json(new { ok = "验证成功" }, JsonRequestBehavior.AllowGet);
             }

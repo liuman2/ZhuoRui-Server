@@ -582,6 +582,17 @@ CREATE TABLE `audit` (
   CONSTRAINT `audit_ibfk_submit_reviewer` FOREIGN KEY (`submit_reviewer_id`) REFERENCES `member` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `audit_bank`;
+CREATE TABLE `audit_bank` (
+  `id` int(11) NOT NULL,
+  `audit_id` int(11) NULL,
+  `bank_id` int(11) NULL,
+  `customer_id` int(11) NULL,
+  PRIMARY KEY (`id`),
+  KEY `bank_id` (`bank_id`),
+  CONSTRAINT `audit_ibfk_bank` FOREIGN KEY (`bank_id`) REFERENCES `bank_account` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `trademark`;
 CREATE TABLE `trademark` (
   `id` int(11) NOT NULL,

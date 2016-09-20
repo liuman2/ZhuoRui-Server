@@ -18,6 +18,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface Iaudit_bankRepository :IBaseRepository<audit_bank>
+    {         
+    }
+	
     public partial interface Ibank_accountRepository :IBaseRepository<bank_account>
     {         
     }

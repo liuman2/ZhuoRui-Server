@@ -22,6 +22,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface Iaudit_bankService:IBaseService<audit_bank>
+    {   
+    }
+	
 	public partial interface Ibank_accountService:IBaseService<bank_account>
     {   
     }

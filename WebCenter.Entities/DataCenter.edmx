@@ -96,6 +96,15 @@
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="annual_year" Type="int" />
         </EntityType>
+        <EntityType Name="audit_bank">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="audit_id" Type="int" />
+          <Property Name="bank_id" Type="int" />
+          <Property Name="customer_id" Type="int" />
+        </EntityType>
         <EntityType Name="bank_account">
           <Key>
             <PropertyRef Name="id" />
@@ -249,10 +258,10 @@
           <Property Name="mobile" Type="varchar" MaxLength="20" />
           <Property Name="hiredate" Type="datetime" Precision="0" />
           <Property Name="birthday" Type="datetime" Precision="0" />
+          <Property Name="url" Type="varchar" MaxLength="120" />
           <Property Name="status" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
-          <Property Name="url" Type="varchar" MaxLength="120" />
         </EntityType>
         <EntityType Name="menu">
           <Key>
@@ -789,6 +798,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="audit_ibfk_bank">
+          <End Role="bank_account" Type="Self.bank_account" Multiplicity="0..1" />
+          <End Role="audit_bank" Type="Self.audit_bank" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="bank_account">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="audit_bank">
+              <PropertyRef Name="bank_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="audit_ibfk_creator">
           <End Role="member" Type="Self.member" Multiplicity="0..1" />
           <End Role="audit" Type="Self.audit" Multiplicity="*" />
@@ -1273,6 +1294,7 @@
           <EntitySet Name="annual_exam" EntityType="Self.annual_exam" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="area" EntityType="Self.area" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="audit" EntityType="Self.audit" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="audit_bank" EntityType="Self.audit_bank" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="bank_account" EntityType="Self.bank_account" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="customer" EntityType="Self.customer" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="customer_timeline" EntityType="Self.customer_timeline" Schema="zhuoruioa" store:Type="Tables" />
@@ -1371,6 +1393,10 @@
           <AssociationSet Name="audit_ibfk_accountant" Association="Self.audit_ibfk_accountant">
             <End Role="member" EntitySet="member" />
             <End Role="audit" EntitySet="audit" />
+          </AssociationSet>
+          <AssociationSet Name="audit_ibfk_bank" Association="Self.audit_ibfk_bank">
+            <End Role="bank_account" EntitySet="bank_account" />
+            <End Role="audit_bank" EntitySet="audit_bank" />
           </AssociationSet>
           <AssociationSet Name="audit_ibfk_creator" Association="Self.audit_ibfk_creator">
             <End Role="member" EntitySet="member" />
@@ -1800,6 +1826,11 @@
             <End Role="member" EntitySet="members" />
             <End Role="trademark" EntitySet="trademarks" />
           </AssociationSet>
+          <EntitySet Name="audit_bank" EntityType="DataCenter.Entities.audit_bank" />
+          <AssociationSet Name="audit_ibfk_bank" Association="DataCenter.Entities.audit_ibfk_bank">
+            <End Role="bank_account" EntitySet="bank_account" />
+            <End Role="audit_bank" EntitySet="audit_bank" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -1885,6 +1916,7 @@
           <NavigationProperty Name="customer" Relationship="DataCenter.Entities.bank_account_customer" FromRole="bank_account" ToRole="customer" />
           <NavigationProperty Name="reg_abroad" Relationship="DataCenter.Entities.abroad_ibfk_bank" FromRole="bank_account" ToRole="reg_abroad" />
           <NavigationProperty Name="reg_internal" Relationship="DataCenter.Entities.reg_internal_ibfk_bank" FromRole="bank_account" ToRole="reg_internal" />
+          <NavigationProperty Name="audit_bank" Relationship="DataCenter.Entities.audit_ibfk_bank" FromRole="bank_account" ToRole="audit_bank" />
         </EntityType>
         <EntityType Name="customer_timeline">
           <Key>
@@ -3181,6 +3213,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="audit_bank">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="audit_id" Type="Int32" />
+          <Property Name="bank_id" Type="Int32" />
+          <Property Name="customer_id" Type="Int32" />
+          <NavigationProperty Name="bank_account" Relationship="DataCenter.Entities.audit_ibfk_bank" FromRole="audit_bank" ToRole="bank_account" />
+        </EntityType>
+        <Association Name="audit_ibfk_bank">
+          <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.audit_bank" Role="audit_bank" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="bank_account">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="audit_bank">
+              <PropertyRef Name="bank_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3781,6 +3835,16 @@
                 <ScalarProperty Name="position_id" ColumnName="position_id" />
                 <ScalarProperty Name="area_id" ColumnName="area_id" />
                 <ScalarProperty Name="organization_id" ColumnName="organization_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="audit_bank">
+            <EntityTypeMapping TypeName="DataCenter.Entities.audit_bank">
+              <MappingFragment StoreEntitySet="audit_bank">
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="bank_id" ColumnName="bank_id" />
+                <ScalarProperty Name="audit_id" ColumnName="audit_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
