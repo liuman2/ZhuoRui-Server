@@ -146,7 +146,7 @@ CREATE TABLE `member` (
   CONSTRAINT `member_ibfk_2` FOREIGN KEY (`position_id`) REFERENCES `position` (`id`),
   CONSTRAINT `member_ibfk_3` FOREIGN KEY (`area_id`) REFERENCES `area` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='员工管理表';
-INSERT INTO `member` VALUES ('1', '1', '1', null, 'admin', '系统管理员', 'admin', 'M835cqqAkhHw/dbOtLYjyKjnKfo=', null, null, null, null, '2016-08-03 14:08:18', null);
+INSERT INTO `member` VALUES ('1', '1', '1', null, 'admin', '系统管理员', 'admin', 'M835cqqAkhHw/dbOtLYjyKjnKfo=', null, null, null, null, null, '2016-08-03 14:08:18', null);
 
 -- ----------------------------
 -- Table structure for area
