@@ -260,23 +260,10 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="iislog.txt" />
-    <Content Include="img\line_conn-1f8424dabf.png" />
-    <Content Include="img\loading-4f3236673d.gif" />
-    <Content Include="img\loading-c71e992a25.gif" />
-    <Content Include="img\main-bg_2yM_5-2fe18579b9.jpg" />
-    <Content Include="img\metro-453f17f877.png" />
-    <Content Include="img\metro-c4bf350485.gif" />
-    <Content Include="img\user2-160x160-eafc49f5f1.jpg" />
-    <Content Include="img\validator_default-35eba8325d.png" />
-    <Content Include="img\validator_simple-f284f291f5.png" />
-    <Content Include="js\common.df260858effd72c32f8b.js" />
-    <Content Include="js\index.757d5e1f8e2e9e775a9d.js" />
-    <Content Include="js\login.cb07fb155eab942bb293.js" />
     <Content Include="NinjectDependency.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>NinjectDependency.cs</LastGenOutput>
@@ -288,10 +275,6 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Areas\Admin\Views\web.config" />
-    <Content Include="fonts\fontawesome-webfont.eot" />
-    <Content Include="fonts\fontawesome-webfont.ttf" />
-    <Content Include="fonts\fontawesome-webfont.woff" />
-    <Content Include="fonts\fontawesome-webfont.woff2" />
     <None Include="Properties\PublishProfiles\ZhuoRuiOA.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -308,14 +291,6 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Uploads\image\0dd7912397dda1449fad6f63b6b7d0a20df486be.jpg" />
-    <Content Include="Uploads\image\1.jpg" />
-    <Content Include="Uploads\image\71cf3bc79f3df8dcd227017cc911728b461028c0.jpg" />
-    <Content Include="Uploads\image\DNS.png" />
-    <Content Include="Uploads\image\thumbnail\未命名.jpg" />
-    <Content Include="Uploads\image\未命名.jpg" />
-    <Content Include="vendor\es5-shim.js" />
-    <Content Include="vendor\html5shiv.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -344,8 +319,12 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Account\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
+    <Folder Include="img\" />
+    <Folder Include="js\" />
     <Folder Include="Models\" />
     <Folder Include="Photo\" />
+    <Folder Include="Uploads\image\thumbnail\" />
+    <Folder Include="vendor\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\Annual\" />
     <Folder Include="Views\Area\" />
