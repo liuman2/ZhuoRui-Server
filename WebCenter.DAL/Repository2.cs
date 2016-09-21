@@ -162,4 +162,9 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class waitdealRepository :BaseRepository<waitdeal>,IwaitdealRepository
+    {
+         
+    }
+	
 }

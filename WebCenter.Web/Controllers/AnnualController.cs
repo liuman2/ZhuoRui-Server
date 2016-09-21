@@ -801,6 +801,15 @@ namespace WebCenter.Web.Controllers
 
                 t = "财务审核";
                 // TODO 通知 提交人，业务员
+                Uof.IwaitdealService.AddEntity(new waitdeal
+                {
+                    source = "annual",
+                    source_id = dbAnnual.id,
+                    user_id = null,
+                    router = "annual_view",
+                    content = "您有年检订单需要提交审核",
+                    read_status = 0
+                });
             }
             else
             {

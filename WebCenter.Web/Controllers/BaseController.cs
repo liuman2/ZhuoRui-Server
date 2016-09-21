@@ -147,5 +147,41 @@ namespace WebCenter.Web.Controllers
 
             return string.Format("{0}{1}{2}", areaCodeStr, codeStr, (index + 1).ToString().PadLeft(suffix, '0'));
         }
+
+        /// <summary>
+        /// 获取财务审核人员
+        /// </summary>
+        /// <returns></returns>
+        public List<int> GetFinanceMembers()
+        {
+            var roleIds = Uof.Irole_operationService.GetAll(r => r.operation_id == 3).Select(r => r.role_id).ToList();
+
+            if (roleIds.Count() == 0)
+            {
+                return new List<int>();
+            }
+
+            var ids = Uof.Irole_memberService.GetAll(m => roleIds.Contains(m.role_id)).Select(m => m.member_id.Value).ToList();
+            return ids;
+        }
+
+        /// <summary>
+        /// 获取提交审核人员
+        /// </summary>
+        /// <returns></returns>
+        public List<int> GetSubmitMembers()
+        {
+            var roleIds = Uof.Irole_operationService.GetAll(r => r.operation_id == 4).Select(r => r.role_id).ToList();
+
+            if (roleIds.Count() == 0)
+            {
+                return new List<int>();
+            }
+
+            var ids = Uof.Irole_memberService.GetAll(m => roleIds.Contains(m.role_id)).Select(m => m.member_id.Value).ToList();
+            return ids;
+        }
+
+        
     }
 }

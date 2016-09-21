@@ -185,6 +185,9 @@
     <Compile Include="trademark.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="waitdeal.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />

@@ -937,3 +937,17 @@ CREATE TABLE `mail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `waitdeal`;
+CREATE TABLE `waitdeal` (
+  `id` int(11) NOT NULL,
+  `source` varchar(30) DEFAULT NULL,
+  `source_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL COMMENT '为全员时 保存null',
+  `router` varchar(30) DEFAULT NULL,
+  `content` varchar(100) DEFAULT NULL,
+  `read_status` tinyint(3) DEFAULT 0 COMMENT '0未读，1已读，已处理',
+  `date_created` datetime DEFAULT NULL,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

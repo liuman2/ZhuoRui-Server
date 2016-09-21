@@ -78,6 +78,8 @@ private void AutoAddBinds()
 	   kernel.Bind<ItimelineService>().To<timelineService>().InRequestScope();
 	
 	   kernel.Bind<ItrademarkService>().To<trademarkService>().InRequestScope();
+	
+	   kernel.Bind<IwaitdealService>().To<waitdealService>().InRequestScope();
   kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InRequestScope();
 
 }

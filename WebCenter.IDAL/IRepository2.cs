@@ -130,4 +130,8 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IwaitdealRepository :IBaseRepository<waitdeal>
+    {         
+    }
+	
 }

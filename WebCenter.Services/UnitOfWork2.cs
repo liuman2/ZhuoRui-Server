@@ -225,5 +225,12 @@ namespace WebCenter.Services
         set;
     } 
 	
+  [Ninject.Inject]
+	 public  IwaitdealService IwaitdealService
+    {
+        get;
+        set;
+    } 
+	
 }
 }

@@ -104,5 +104,8 @@ namespace WebCenter.IDAL
 	  
 
 		IDAL.ItrademarkRepository trademarkRepository { get; }
+	  
+
+		IDAL.IwaitdealRepository waitdealRepository { get; }
 	}
 }

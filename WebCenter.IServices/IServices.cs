@@ -134,4 +134,8 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IwaitdealService:IBaseService<waitdeal>
+    {   
+    }
+	
 }

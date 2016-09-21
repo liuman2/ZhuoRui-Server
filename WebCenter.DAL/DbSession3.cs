@@ -68,5 +68,7 @@ namespace WebCenter.DAL
 	public IDAL.ItimelineRepository timelineRepository { get { return new timelineRepository(); } }
 	
 	public IDAL.ItrademarkRepository trademarkRepository { get { return new trademarkRepository(); } }
+	
+	public IDAL.IwaitdealRepository waitdealRepository { get { return new waitdealRepository(); } }
 	}
 }

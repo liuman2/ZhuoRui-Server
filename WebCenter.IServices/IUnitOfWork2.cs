@@ -70,5 +70,7 @@ namespace WebCenter.IServices
 	
 	  ItrademarkService ItrademarkService{get;set;} 
 	
+	  IwaitdealService IwaitdealService{get;set;} 
+	
 }
 }

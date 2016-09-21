@@ -258,10 +258,10 @@
           <Property Name="mobile" Type="varchar" MaxLength="20" />
           <Property Name="hiredate" Type="datetime" Precision="0" />
           <Property Name="birthday" Type="datetime" Precision="0" />
-          <Property Name="url" Type="varchar" MaxLength="120" />
           <Property Name="status" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="url" Type="varchar" MaxLength="120" />
         </EntityType>
         <EntityType Name="menu">
           <Key>
@@ -581,6 +581,20 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="annual_year" Type="int" />
+        </EntityType>
+        <EntityType Name="waitdeal">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="source" Type="varchar" MaxLength="30" />
+          <Property Name="source_id" Type="int" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="router" Type="varchar" MaxLength="30" />
+          <Property Name="content" Type="varchar" MaxLength="100" />
+          <Property Name="read_status" Type="tinyint" />
+          <Property Name="date_created" Type="datetime" Precision="0" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
         <Association Name="abroad_ibfk_bank">
           <End Role="bank_account" Type="Self.bank_account" Multiplicity="0..1" />
@@ -1322,6 +1336,7 @@
           <EntitySet Name="settings" EntityType="Self.settings" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="timeline" EntityType="Self.timeline" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="trademark" EntityType="Self.trademark" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="waitdeal" EntityType="Self.waitdeal" Schema="zhuoruioa" store:Type="Tables" />
           <AssociationSet Name="abroad_ibfk_bank" Association="Self.abroad_ibfk_bank">
             <End Role="bank_account" EntitySet="bank_account" />
             <End Role="reg_abroad" EntitySet="reg_abroad" />
@@ -1831,6 +1846,7 @@
             <End Role="bank_account" EntitySet="bank_account" />
             <End Role="audit_bank" EntitySet="audit_bank" />
           </AssociationSet>
+          <EntitySet Name="waitdeals" EntityType="DataCenter.Entities.waitdeal" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -3235,6 +3251,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="waitdeal">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="source" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="source_id" Type="Int32" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="router" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="content" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="read_status" Type="SByte" />
+          <Property Name="date_created" Type="DateTime" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3845,6 +3875,21 @@
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
                 <ScalarProperty Name="bank_id" ColumnName="bank_id" />
                 <ScalarProperty Name="audit_id" ColumnName="audit_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="waitdeals">
+            <EntityTypeMapping TypeName="DataCenter.Entities.waitdeal">
+              <MappingFragment StoreEntitySet="waitdeal">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="read_status" ColumnName="read_status" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="router" ColumnName="router" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="source_id" ColumnName="source_id" />
+                <ScalarProperty Name="source" ColumnName="source" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

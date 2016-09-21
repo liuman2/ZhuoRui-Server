@@ -323,4 +323,14 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class waitdealService:BaseService<waitdeal>,IwaitdealService
+    {   
+        public waitdealService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.waitdealRepository;
+        }  
+    }
+	
 }
