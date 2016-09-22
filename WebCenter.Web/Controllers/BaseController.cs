@@ -181,7 +181,5 @@ namespace WebCenter.Web.Controllers
             var ids = Uof.Irole_memberService.GetAll(m => roleIds.Contains(m.role_id)).Select(m => m.member_id.Value).ToList();
             return ids;
         }
-
-        
     }
 }

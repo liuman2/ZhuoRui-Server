@@ -513,7 +513,25 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("提交给财务审核")
                 });
 
-                // TODO 通知 财务人员
+                var ids = GetFinanceMembers();
+                if (ids.Count() > 0)
+                {
+                    var waitdeals = new List<waitdeal>();
+                    foreach (var item in ids)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "trademark",
+                            source_id = dbTrade.id,
+                            user_id = item,
+                            router = "trademark_view",
+                            content = "您有商标订单需要财务审核",
+                            read_status = 0
+                        });
+                    }
+
+                    Uof.IwaitdealService.AddEntities(waitdeals);
+                }
             }
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
@@ -542,6 +560,7 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
             var t = "";
+            var waitdeals = new List<waitdeal>();
             if (dbTrade.status == 1)
             {
                 dbTrade.status = 2;
@@ -551,7 +570,32 @@ namespace WebCenter.Web.Controllers
                 dbTrade.finance_review_moment = "";
 
                 t = "财务审核";
-                // TODO 通知 提交人，业务员
+                waitdeals.Add(new waitdeal
+                {
+                    source = "trademark",
+                    source_id = dbTrade.id,
+                    user_id = dbTrade.salesman_id,
+                    router = "trademark_view",
+                    content = "您的商标订单已通过财务审核",
+                    read_status = 0
+                });
+
+                var ids = GetSubmitMembers();
+                if (ids.Count() > 0)
+                {
+                    foreach (var item in ids)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "trademark",
+                            source_id = dbTrade.id,
+                            user_id = item,
+                            router = "trademark_view",
+                            content = "您有商标订单需要提交审核",
+                            read_status = 0
+                        });
+                    }
+                }
             }
             else
             {
@@ -562,7 +606,15 @@ namespace WebCenter.Web.Controllers
                 dbTrade.submit_review_moment = "";
 
                 t = "提交的审核";
-                // TODO 通知 业务员
+                waitdeals.Add(new waitdeal
+                {
+                    source = "trademark",
+                    source_id = dbTrade.id,
+                    user_id = dbTrade.salesman_id,
+                    router = "trademark_view",
+                    content = "您的商标订单已通过提交审核",
+                    read_status = 0
+                });
             }
 
             dbTrade.date_updated = DateTime.Now;
@@ -571,6 +623,8 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
+                Uof.IwaitdealService.AddEntities(waitdeals);
+
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbTrade.id,
@@ -607,6 +661,7 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
             var t = "";
+            var waitdeals = new List<waitdeal>();
             if (dbTrade.status == 1)
             {
                 dbTrade.status = 0;
@@ -616,7 +671,15 @@ namespace WebCenter.Web.Controllers
                 dbTrade.finance_review_moment = description;
 
                 t = "驳回了财务审核";
-                // TODO 通知 业务员
+                waitdeals.Add(new waitdeal
+                {
+                    source = "trademark",
+                    source_id = dbTrade.id,
+                    user_id = dbTrade.salesman_id,
+                    router = "trademark_view",
+                    content = "您的商标订单未通过财务审核",
+                    read_status = 0
+                });
             }
             else
             {
@@ -627,7 +690,15 @@ namespace WebCenter.Web.Controllers
                 dbTrade.submit_review_moment = description;
 
                 t = "驳回了提交的审核";
-                // TODO 通知 业务员
+                waitdeals.Add(new waitdeal
+                {
+                    source = "trademark",
+                    source_id = dbTrade.id,
+                    user_id = dbTrade.salesman_id,
+                    router = "trademark_view",
+                    content = "您的商标订单未通过提交审核",
+                    read_status = 0
+                });
             }
 
             dbTrade.date_updated = DateTime.Now;
@@ -636,6 +707,8 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
+                Uof.IwaitdealService.AddEntities(waitdeals);
+
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbTrade.id,
@@ -771,7 +844,15 @@ namespace WebCenter.Web.Controllers
                         title = "完成订单",
                         content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], dbtrademark.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
-                    // TODO 通知 业务员
+                    Uof.IwaitdealService.AddEntity(new waitdeal
+                    {
+                        source = "trademark",
+                        source_id = dbtrademark.id,
+                        user_id = dbtrademark.salesman_id,
+                        router = "trademark_view",
+                        content = "您的商标订单已完成",
+                        read_status = 0
+                    });
                 }
                 else
                 {
@@ -781,6 +862,16 @@ namespace WebCenter.Web.Controllers
                         source_name = "trademark",
                         title = "更新了订单进度",
                         content = string.Format("{0}更新了进度: {1}", arrs[3], dbtrademark.progress)
+                    });
+
+                    Uof.IwaitdealService.AddEntity(new waitdeal
+                    {
+                        source = "trademark",
+                        source_id = dbtrademark.id,
+                        user_id = dbtrademark.salesman_id,
+                        router = "trademark_view",
+                        content = "您的商标订单更新了进度",
+                        read_status = 0
                     });
                 }
             }
