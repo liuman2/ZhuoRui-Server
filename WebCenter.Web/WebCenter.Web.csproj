@@ -208,6 +208,7 @@
     <Compile Include="Code\CustomerOrder.cs" />
     <Compile Include="Code\Enums.cs" />
     <Compile Include="Code\JsonNetResult.cs" />
+    <Compile Include="Code\oldRequest.cs" />
     <Compile Include="Code\OrderSearchRequest.cs" />
     <Compile Include="Code\OrderSummaryRequest.cs" />
     <Compile Include="Code\PrintData.cs" />

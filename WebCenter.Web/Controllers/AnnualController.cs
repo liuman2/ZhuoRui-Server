@@ -53,7 +53,7 @@ namespace WebCenter.Web.Controllers
             var Month1 = DateTime.Now.AddMonths(-13).Month;
             
             #region 境外注册
-            Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 && (c.submit_review_date.Value.Month - Month1 == 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear)));
+            Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 && (c.submit_review_date.Value.Month - Month1 >= 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear)));
             Expression<Func<reg_abroad, bool>> customerQuery1 = c => true;
             if (customer_id != null && customer_id.Value > 0)
             {
@@ -188,7 +188,7 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 商标注册
-            Expression<Func<trademark, bool>> condition3 = c => c.status == 4 && c.submit_review_date.Value.Month - Month1 == 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear));
+            Expression<Func<trademark, bool>> condition3 = c => c.status == 4 && c.submit_review_date.Value.Month - Month1 >= 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear));
             Expression<Func<trademark, bool>> customerQuery3 = c => true;
             if (customer_id != null && customer_id.Value > 0)
             {
@@ -253,7 +253,7 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 专利注册
-            Expression<Func<patent, bool>> condition4 = c => c.status == 4 && c.submit_review_date.Value.Month - Month1 == 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear));
+            Expression<Func<patent, bool>> condition4 = c => c.status == 4 && c.submit_review_date.Value.Month - Month1 >= 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear));
             Expression<Func<patent, bool>> customerQuery4 = c => true;
             if (customer_id != null && customer_id.Value > 0)
             {

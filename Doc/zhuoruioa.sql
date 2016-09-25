@@ -36,8 +36,11 @@ INSERT INTO `sequence` VALUES ('settings', '1');
 INSERT INTO `sequence` VALUES ('annual_exam', '1');
 INSERT INTO `sequence` VALUES ('role_operation', '1');
 INSERT INTO `sequence` VALUES ('mail', '1');
-
-
+INSERT INTO `sequence` VALUES ('waitdeal', '1');
+INSERT INTO `sequence` VALUES ('lecture', '1');
+INSERT INTO `sequence` VALUES ('lecture_customer', '1');
+INSERT INTO `sequence` VALUES ('role_memu', '1');
+INSERT INTO `sequence` VALUES ('role_member', '1');
 
 -- ----------------------------
 -- Table structure for organization
@@ -946,7 +949,7 @@ CREATE TABLE `waitdeal` (
   `router` varchar(30) DEFAULT NULL,
   `content` varchar(100) DEFAULT NULL,
   `read_status` tinyint(3) DEFAULT 0 COMMENT '0未读，1已读，已处理',
-  `date_created` datetime DEFAULT NULL,
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

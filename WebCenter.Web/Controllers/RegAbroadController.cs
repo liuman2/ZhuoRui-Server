@@ -150,36 +150,18 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(reg_abroad aboad)
+        public ActionResult Add(reg_abroad aboad, oldRequest oldRequest)
         {
             if (aboad.customer_id == null)
             {
                 return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
             }
-            //if (string.IsNullOrEmpty(aboad.name_cn))
-            //{
-            //    return Json(new { success = false, message = "请填写公司中文名称" }, JsonRequestBehavior.AllowGet);
-            //}
+
             if (string.IsNullOrEmpty(aboad.name_en))
             {
                 return Json(new { success = false, message = "请填写公司英文名称" }, JsonRequestBehavior.AllowGet);
             }
-            //if (aboad.date_setup == null)
-            //{
-            //    return Json(new { success = false, message = "请填写公司成立日期" }, JsonRequestBehavior.AllowGet);
-            //}
-            //if (string.IsNullOrEmpty(aboad.reg_no))
-            //{
-            //    return Json(new { success = false, message = "请填写公司注册编号" }, JsonRequestBehavior.AllowGet);
-            //}
-            //if (string.IsNullOrEmpty(aboad.region))
-            //{
-            //    return Json(new { success = false, message = "请填写公司注册地区" }, JsonRequestBehavior.AllowGet);
-            //}
-            //if (string.IsNullOrEmpty(aboad.address))
-            //{
-            //    return Json(new { success = false, message = "请填写公司注册地址" }, JsonRequestBehavior.AllowGet);
-            //}
+            
             if (aboad.date_transaction == null)
             {
                 return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
@@ -218,10 +200,26 @@ namespace WebCenter.Web.Controllers
             aboad.status = 0;
             aboad.review_status = -1;
             aboad.creator_id = userId;
-            //aboad.salesman_id = userId;
             aboad.organization_id = organization_id;
 
-            aboad.code = GetNextOrderCode(aboad.salesman_id.Value, "ZW");
+            if (oldRequest.is_old == 0)
+            {
+                aboad.code = GetNextOrderCode(aboad.salesman_id.Value, "ZW");
+            } else
+            {
+                aboad.status = 4;
+                
+                //dbAbroad.date_setup = request.date_setup;
+                //dbAbroad.reg_no = request.reg_no;
+                //dbAbroad.address = request.address;
+                //dbAbroad.is_open_bank = request.is_open_bank;
+                //dbAbroad.progress = request.progress ?? "已完成";
+                //if (request.is_open_bank == 1)
+                //{
+                //    dbAbroad.bank_id = request.bank_id;
+                //}
+            }
+            
 
             if (aboad.is_open_bank == 0)
             {

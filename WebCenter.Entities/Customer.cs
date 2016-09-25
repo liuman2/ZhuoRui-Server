@@ -20,12 +20,12 @@ namespace WebCenter.Entities
             this.customer_timeline = new HashSet<customer_timeline>();
             this.annual_exam = new HashSet<annual_exam>();
             this.audits = new HashSet<audit>();
-            this.reg_abroad = new HashSet<reg_abroad>();
             this.patents = new HashSet<patent>();
             this.reg_internal = new HashSet<reg_internal>();
             this.incomes = new HashSet<income>();
             this.trademarks = new HashSet<trademark>();
             this.lecture_customer = new HashSet<lecture_customer>();
+            this.reg_abroad = new HashSet<reg_abroad>();
         }
     
     
@@ -134,7 +134,6 @@ namespace WebCenter.Entities
         public virtual ICollection<customer_timeline> customer_timeline { get; set; }
         public virtual ICollection<annual_exam> annual_exam { get; set; }
         public virtual ICollection<audit> audits { get; set; }
-        public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual ICollection<patent> patents { get; set; }
         public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual ICollection<income> incomes { get; set; }
@@ -142,5 +141,6 @@ namespace WebCenter.Entities
         public virtual ICollection<lecture_customer> lecture_customer { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
+        public virtual ICollection<reg_abroad> reg_abroad { get; set; }
     }
 }

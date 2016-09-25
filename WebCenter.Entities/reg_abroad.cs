@@ -74,6 +74,14 @@ namespace WebCenter.Entities
     
     
     
+        public string currency { get; set; }
+    
+    
+    
+        public Nullable<float> rate { get; set; }
+    
+    
+    
         public string invoice_name { get; set; }
     
     
@@ -134,6 +142,10 @@ namespace WebCenter.Entities
     
     
     
+        public string progress { get; set; }
+    
+    
+    
         public Nullable<int> creator_id { get; set; }
     
     
@@ -170,19 +182,11 @@ namespace WebCenter.Entities
     
     
     
-        public string currency { get; set; }
-    
-    
-    
-        public string progress { get; set; }
-    
-    
-    
         public Nullable<int> annual_year { get; set; }
     
     
     
-        public Nullable<float> rate { get; set; }
+        public Nullable<int> is_annual { get; set; }
     
         public virtual bank_account bank_account { get; set; }
         public virtual customer customer { get; set; }

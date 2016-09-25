@@ -97,6 +97,181 @@ namespace WebCenter.Web.Controllers
             return Json(customers, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult DashboardInfo()
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            var deptId = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out deptId);
+
+            var customerCount = Uof.IcustomerService.GetAll(c => c.salesman_id == userId & c.status == 1).Count();
+
+            var annualCount = GetAnnualCount(userId);
+
+            var customers = Uof.IcustomerService.GetAll(c => c.salesman_id == userId).Select(c => new
+            {
+                id = c.id,
+                code = c.code,
+                name = c.name,
+                salesman = c.member1.name,
+                contact = c.contact,
+                mobile = c.mobile
+            }).OrderByDescending(c => c.id).ToPagedList(1, 10).ToList();
+
+            var res = new
+            {
+                banner = new
+                {
+                    customers_count = customerCount,
+                    annuals_count = annualCount
+                },
+                customers = customers
+            };
+
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Waitdeal(int index = 1, int size = 10)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            var deptId = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out deptId);
+
+            Expression<Func<waitdeal, bool>> condition = c => c.read_status == 0 && c.user_id == userId;
+                        
+            var list = Uof.IwaitdealService.GetAll(condition)
+                .OrderByDescending(item => item.id).Select(c => new
+                {
+                    id = c.id,
+                    cosourcede = c.source,
+                    source_id = c.source_id,
+                    user_id = c.user_id,
+                    router = c.router,
+                    content = c.content,
+                    date_created = c.date_created,
+                    read_status = c.read_status
+                }).ToPagedList(index, size).ToList();
+
+            var totalRecord = Uof.IwaitdealService.GetAll(condition).Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + size - 1) / size;
+            }
+            var page = new
+            {
+                current_index = index,
+                current_size = size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+
+            var result = new
+            {
+                page = page,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult WaitdealCount()
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            var deptId = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out deptId);
+
+            Expression<Func<waitdeal, bool>> condition = c => c.read_status == 0 && c.user_id == userId;
+
+            //var list = Uof.IwaitdealService.GetAll(condition)
+            //    .OrderByDescending(item => item.id).Select(c => new
+            //    {
+            //        id = c.id,
+            //        cosourcede = c.source,
+            //        source_id = c.source_id,
+            //        user_id = c.user_id,
+            //        router = c.router,
+            //        content = c.content,
+            //        date_created = c.date_created,
+            //        read_status = c.read_status
+            //    }).ToPagedList(1, 5).ToList();
+
+            var totalRecord = Uof.IwaitdealService.GetAll(condition).Count();
+            
+            var result = new
+            {
+                message_count = totalRecord,
+                //items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public  ActionResult HasRead(int id)
+        {
+           var w = Uof.IwaitdealService.GetById(id);
+            w.read_status = 1;
+            Uof.IwaitdealService.UpdateEntity(w);
+            return SuccessResult;
+        }
+
         private int GetAnnualCount(int userId)
         {
             var nowYear = DateTime.Now.Year;
