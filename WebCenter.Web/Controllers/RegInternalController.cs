@@ -151,7 +151,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(reg_internal reginternal)
+        public ActionResult Add(reg_internal reginternal, oldRequest oldRequest)
         {
             if (reginternal.customer_id == null)
             {
@@ -212,9 +212,32 @@ namespace WebCenter.Web.Controllers
             reginternal.review_status = -1;
             reginternal.creator_id = userId;
             //reginternal.salesman_id = userId;
-            reginternal.organization_id = organization_id;
+            reginternal.organization_id = GetOrgIdByUserId(userId); // organization_id;
 
-            reginternal.code = GetNextOrderCode(reginternal.salesman_id.Value, "ZN");
+            var nowYear = DateTime.Now.Year;
+            if (oldRequest.is_old == 0)
+            {
+                reginternal.code = GetNextOrderCode(reginternal.salesman_id.Value, "ZN");
+
+                if (reginternal.is_annual == 1)
+                {
+                    reginternal.annual_year = nowYear - 1;
+                }
+            }
+            else
+            {
+                reginternal.status = 4;
+                reginternal.review_status = 1;
+
+                if (oldRequest.is_already_annual == 1)
+                {
+                    reginternal.annual_year = nowYear;
+                }
+                else
+                {
+                    reginternal.annual_year = nowYear - 1;
+                }
+            }
 
             if (reginternal.is_customs == 0)
             {
@@ -226,6 +249,8 @@ namespace WebCenter.Web.Controllers
             {
                 reginternal.amount_bookkeeping = null;
             }
+
+            
 
             var newInternal = Uof.Ireg_internalService.AddEntity(reginternal);
             if (newInternal == null)

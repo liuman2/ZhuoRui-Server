@@ -169,7 +169,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(patent _patent)
+        public ActionResult Add(patent _patent, oldRequest oldRequest)
         {
             if (_patent.customer_id == null)
             {
@@ -227,9 +227,33 @@ namespace WebCenter.Web.Controllers
             _patent.review_status = -1;
             _patent.creator_id = userId;
             //_patent.salesman_id = userId;
-            _patent.organization_id = organization_id;
+            _patent.organization_id = GetOrgIdByUserId(userId); //organization_id;
 
-            _patent.code = GetNextOrderCode(_patent.salesman_id.Value, "ZL");
+            
+            var nowYear = DateTime.Now.Year;
+            if (oldRequest.is_old == 0)
+            {
+                _patent.code = GetNextOrderCode(_patent.salesman_id.Value, "ZL");
+
+                if (_patent.is_annual == 1)
+                {
+                    _patent.annual_year = nowYear - 1;
+                }
+            }
+            else
+            {
+                _patent.status = 4;
+                _patent.review_status = 1;
+
+                if (oldRequest.is_already_annual == 1)
+                {
+                    _patent.annual_year = nowYear;
+                }
+                else
+                {
+                    _patent.annual_year = nowYear - 1;
+                }
+            }
 
             var newPatent = Uof.IpatentService.AddEntity(_patent);
             if (newPatent == null)

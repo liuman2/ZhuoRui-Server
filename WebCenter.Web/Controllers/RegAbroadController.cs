@@ -200,24 +200,31 @@ namespace WebCenter.Web.Controllers
             aboad.status = 0;
             aboad.review_status = -1;
             aboad.creator_id = userId;
-            aboad.organization_id = organization_id;
+            aboad.organization_id = GetOrgIdByUserId(userId); // organization_id;
+
+            var nowYear = DateTime.Now.Year;
 
             if (oldRequest.is_old == 0)
             {
                 aboad.code = GetNextOrderCode(aboad.salesman_id.Value, "ZW");
+
+                if (aboad.is_annual == 1)
+                {
+                    aboad.annual_year = nowYear - 1;
+                }
             } else
             {
                 aboad.status = 4;
+                aboad.review_status = 1; 
                 
-                //dbAbroad.date_setup = request.date_setup;
-                //dbAbroad.reg_no = request.reg_no;
-                //dbAbroad.address = request.address;
-                //dbAbroad.is_open_bank = request.is_open_bank;
-                //dbAbroad.progress = request.progress ?? "已完成";
-                //if (request.is_open_bank == 1)
-                //{
-                //    dbAbroad.bank_id = request.bank_id;
-                //}
+                if (oldRequest.is_already_annual == 1)
+                {
+                    aboad.annual_year = nowYear;
+                }
+                else
+                {
+                    aboad.annual_year = nowYear - 1;
+                }
             }
             
 

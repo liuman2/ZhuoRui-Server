@@ -181,5 +181,11 @@ namespace WebCenter.Web.Controllers
             var ids = Uof.Irole_memberService.GetAll(m => roleIds.Contains(m.role_id)).Select(m => m.member_id.Value).ToList();
             return ids;
         }
+
+        public int GetOrgIdByUserId(int userid)
+        {
+            var orgId = Uof.ImemberService.GetAll(a => a.id == userid).Select(a => a.organization_id.Value).FirstOrDefault();
+            return orgId;
+        }
     }
 }

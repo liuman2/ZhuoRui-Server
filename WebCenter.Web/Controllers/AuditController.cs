@@ -151,7 +151,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(audit _audit)
+        public ActionResult Add(audit _audit, oldRequest oldRequest)
         {
             if (_audit.customer_id == null)
             {
@@ -214,9 +214,32 @@ namespace WebCenter.Web.Controllers
             _audit.review_status = -1;
             _audit.creator_id = userId;
             //_audit.salesman_id = userId;
-            _audit.organization_id = organization_id;
+            _audit.organization_id = GetOrgIdByUserId(userId); //organization_id;
+                        
+            var nowYear = DateTime.Now.Year;
+            if (oldRequest.is_old == 0)
+            {
+                _audit.code = GetNextOrderCode(_audit.salesman_id.Value, "SJ");
 
-            _audit.code = GetNextOrderCode(_audit.salesman_id.Value, "SJ");
+                //if (_audit.is_annual == 1)
+                //{
+                //    _audit.annual_year = nowYear - 1;
+                //}
+            }
+            else
+            {
+                _audit.status = 4;
+                _audit.review_status = 1;
+
+                //if (oldRequest.is_already_annual == 1)
+                //{
+                //    _audit.annual_year = nowYear;
+                //}
+                //else
+                //{
+                //    _audit.annual_year = nowYear - 1;
+                //}
+            }
 
             var newAbroad = Uof.IauditService.AddEntity(_audit);
             if (newAbroad == null)

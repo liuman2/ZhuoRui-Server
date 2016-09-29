@@ -166,7 +166,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(trademark trade)
+        public ActionResult Add(trademark trade, oldRequest oldRequest)
         {
             if (trade.customer_id == null)
             {
@@ -227,9 +227,33 @@ namespace WebCenter.Web.Controllers
             trade.review_status = -1;
             trade.creator_id = userId;
             //trade.salesman_id = userId;
-            trade.organization_id = organization_id;
+            trade.organization_id = GetOrgIdByUserId(userId); // organization_id;
 
-            trade.code = GetNextOrderCode(trade.salesman_id.Value, "SB");
+           
+            var nowYear = DateTime.Now.Year;
+            if (oldRequest.is_old == 0)
+            {
+                trade.code = GetNextOrderCode(trade.salesman_id.Value, "SB");
+
+                if (trade.is_annual == 1)
+                {
+                    trade.annual_year = nowYear - 1;
+                }
+            }
+            else
+            {
+                trade.status = 4;
+                trade.review_status = 1;
+
+                if (oldRequest.is_already_annual == 1)
+                {
+                    trade.annual_year = nowYear;
+                }
+                else
+                {
+                    trade.annual_year = nowYear - 1;
+                }
+            }
 
             var newTrade = Uof.ItrademarkService.AddEntity(trade);
             if (newTrade == null)

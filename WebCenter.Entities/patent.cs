@@ -74,6 +74,10 @@ namespace WebCenter.Entities
     
     
     
+        public Nullable<float> rate { get; set; }
+    
+    
+    
         public string currency { get; set; }
     
     
@@ -166,7 +170,7 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<float> rate { get; set; }
+        public Nullable<int> is_annual { get; set; }
     
         public virtual customer customer { get; set; }
         public virtual member member { get; set; }

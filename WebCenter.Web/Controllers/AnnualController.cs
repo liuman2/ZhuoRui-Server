@@ -18,6 +18,43 @@ namespace WebCenter.Web.Controllers
 
         }
 
+        public ActionResult GetSourceForAudit(int customer_id, string type)
+        {
+            var year = DateTime.Now.Year;
+
+            switch(type)
+            {
+                case "境内":
+                    var internals = Uof.Ireg_internalService.GetAll(i => i.customer_id == customer_id && (i.annual_year == null || i.annual_year < year)).Select(i => new
+                    {
+                        id = i.id,
+                        name_cn = i.name_cn,
+                        name_en = "",
+                        code = i.code,
+                        customer_name = i.customer.name,
+                        date_finish = i.date_finish,
+                        salement = i.member4.name
+                    }).ToList();
+
+                    return Json(internals, JsonRequestBehavior.AllowGet);
+                case "境外":
+                    var abroads = Uof.Ireg_abroadService.GetAll(i => i.customer_id == customer_id && (i.annual_year == null || i.annual_year < year)).Select(i => new
+                    {
+                        id = i.id,
+                        name_cn = i.name_cn,
+                        name_en = i.name_en,
+                        code = i.code,
+                        customer_name = i.customer.name,
+                        date_finish = i.date_finish,
+                        salement = i.member4.name
+                    }).ToList();
+
+                    return Json(abroads, JsonRequestBehavior.AllowGet);
+            }
+
+            return SuccessResult;
+        }
+
         public ActionResult Warning(int? customer_id)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;

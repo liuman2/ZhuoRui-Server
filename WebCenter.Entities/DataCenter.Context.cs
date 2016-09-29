@@ -40,13 +40,9 @@ namespace WebCenter.Entities
         public virtual DbSet<role_member> role_member { get; set; }
         public virtual DbSet<role_memu> role_memu { get; set; }
         public virtual DbSet<annual_exam> annual_exam { get; set; }
-        public virtual DbSet<audit> audits { get; set; }
-        public virtual DbSet<patent> patents { get; set; }
-        public virtual DbSet<reg_internal> reg_internal { get; set; }
         public virtual DbSet<income> incomes { get; set; }
         public virtual DbSet<reg_history> reg_history { get; set; }
         public virtual DbSet<reg_internal_history> reg_internal_history { get; set; }
-        public virtual DbSet<trademark> trademarks { get; set; }
         public virtual DbSet<operation> operations { get; set; }
         public virtual DbSet<role_operation> role_operation { get; set; }
         public virtual DbSet<lecture_customer> lecture_customer { get; set; }
@@ -57,5 +53,9 @@ namespace WebCenter.Entities
         public virtual DbSet<audit_bank> audit_bank { get; set; }
         public virtual DbSet<waitdeal> waitdeals { get; set; }
         public virtual DbSet<reg_abroad> reg_abroad { get; set; }
+        public virtual DbSet<reg_internal> reg_internal { get; set; }
+        public virtual DbSet<trademark> trademarks { get; set; }
+        public virtual DbSet<patent> patents { get; set; }
+        public virtual DbSet<audit> audits { get; set; }
     }
 }
