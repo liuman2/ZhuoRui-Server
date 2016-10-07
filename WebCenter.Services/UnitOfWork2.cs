@@ -72,6 +72,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IhistoryService IhistoryService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IincomeService IincomeService
     {
         get;

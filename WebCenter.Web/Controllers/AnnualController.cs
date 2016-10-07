@@ -33,6 +33,8 @@ namespace WebCenter.Web.Controllers
                         code = i.code,
                         customer_name = i.customer.name,
                         date_finish = i.date_finish,
+                        date_setup = i.date_setup,
+                        address = i.address,
                         salement = i.member4.name
                     }).ToList();
 
@@ -46,6 +48,8 @@ namespace WebCenter.Web.Controllers
                         code = i.code,
                         customer_name = i.customer.name,
                         date_finish = i.date_finish,
+                        date_setup = i.date_setup,
+                        address = i.address,
                         salement = i.member4.name
                     }).ToList();
 
@@ -87,10 +91,13 @@ namespace WebCenter.Web.Controllers
 
             var items = new List<AnnualWarning>();
             var nowYear = DateTime.Now.Year;
-            var Month1 = DateTime.Now.AddMonths(-13).Month;
+            var Month1 = DateTime.Now.Month; // DateTime.Now.AddMonths(-13).Month;
             
             #region 境外注册
-            Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 && (c.submit_review_date.Value.Month - Month1 >= 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear)));
+            Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 && 
+            ((c.annual_date == null && Month1 >= (c.date_finish.Value.Month - 1) && nowYear > c.date_finish.Value.Year) || 
+            (c.annual_date != null && Month1 >= (c.annual_date.Value.Month - 1) && nowYear > c.annual_date.Value.Year) || 
+            (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
             Expression<Func<reg_abroad, bool>> customerQuery1 = c => true;
             if (customer_id != null && customer_id.Value > 0)
             {
@@ -158,7 +165,11 @@ namespace WebCenter.Web.Controllers
             var internalMonth = DateTime.Now.Month;
             if (internalMonth >= 3 && internalMonth <= 6)
             {
-                Expression<Func<reg_internal, bool>> condition2 = c => c.status == 4 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear));
+                Expression<Func<reg_internal, bool>> condition2 = c => c.status == 4 &&
+                ((c.annual_date == null && Month1 >= (c.date_finish.Value.Month - 1) && nowYear > c.date_finish.Value.Year) ||
+                (c.annual_date != null && Month1 >= (c.annual_date.Value.Month - 1) && nowYear > c.annual_date.Value.Year) ||
+                (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
+
                 Expression<Func<reg_internal, bool>> customerQuery2 = c => true;
 
                 if (customer_id != null && customer_id.Value > 0)
@@ -225,7 +236,17 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 商标注册
-            Expression<Func<trademark, bool>> condition3 = c => c.status == 4 && c.submit_review_date.Value.Month - Month1 >= 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear));
+            // Expression<Func<trademark, bool>> condition3 = c => c.status == 4 && c.submit_review_date.Value.Month - Month1 >= 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear));
+
+            var trademarkPeriodSetting = Uof.IsettingService.GetAll(s => s.name == "TRADEMARK_PERIOD").Select(s => s.value).FirstOrDefault();
+            int trademarkPeriod = 0;
+            int.TryParse(trademarkPeriodSetting, out trademarkPeriod);
+
+            Expression<Func<trademark, bool>> condition3 = c => c.status == 4 &&
+            ((c.annual_date == null && Month1 >= (c.date_finish.Value.Month - 1) && (nowYear - trademarkPeriod) == c.date_finish.Value.Year) ||
+            (c.annual_date != null && Month1 >= (c.annual_date.Value.Month - 1) && (nowYear - trademarkPeriod) == c.annual_date.Value.Year) ||
+            (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
+
             Expression<Func<trademark, bool>> customerQuery3 = c => true;
             if (customer_id != null && customer_id.Value > 0)
             {
@@ -290,7 +311,17 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 专利注册
-            Expression<Func<patent, bool>> condition4 = c => c.status == 4 && c.submit_review_date.Value.Month - Month1 >= 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear));
+            //Expression<Func<patent, bool>> condition4 = c => c.status == 4 && c.submit_review_date.Value.Month - Month1 >= 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear));
+
+            var patentPeriodSetting = Uof.IsettingService.GetAll(s => s.name == "PATENT_PERIOD").Select(s => s.value).FirstOrDefault();
+            int patentPeriod = 0;
+            int.TryParse(patentPeriodSetting, out patentPeriod);
+
+            Expression<Func<patent, bool>> condition4 = c => c.status == 4 &&
+            ((c.annual_date == null && Month1 >= (c.date_finish.Value.Month - 1) && (nowYear - patentPeriod) == c.date_finish.Value.Year) ||
+            (c.annual_date != null && Month1 >= (c.annual_date.Value.Month - 1) && (nowYear - patentPeriod) == c.annual_date.Value.Year) ||
+            (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
+
             Expression<Func<patent, bool>> customerQuery4 = c => true;
             if (customer_id != null && customer_id.Value > 0)
             {
@@ -426,26 +457,34 @@ namespace WebCenter.Web.Controllers
                 case "reg_abroad":
                     var dbRegAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
                     dbRegAbroad.annual_year = DateTime.Now.Year;
+                    dbRegAbroad.annual_date = DateTime.Today;
+
                     Uof.Ireg_abroadService.UpdateEntity(dbRegAbroad);
                     break;
                 case "reg_internal":
                     var dbRegInternal = Uof.Ireg_internalService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
                     dbRegInternal.annual_year = DateTime.Now.Year;
+                    dbRegInternal.annual_date = DateTime.Today;
+
                     Uof.Ireg_internalService.UpdateEntity(dbRegInternal);
                     break;
                 case "audit":
                     var dbAudit = Uof.IauditService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
-                    dbAudit.annual_year = DateTime.Now.Year;
+                    dbAudit.annual_year = DateTime.Now.Year;                    
                     Uof.IauditService.UpdateEntity(dbAudit);
                     break;
                 case "patent":
                     var dbPatent = Uof.IpatentService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
                     dbPatent.annual_year = DateTime.Now.Year;
+                    dbPatent.annual_date = DateTime.Today;
+
                     Uof.IpatentService.UpdateEntity(dbPatent);
                     break;
                 case "trademark":
                     var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
                     dbTrademark.annual_year = DateTime.Now.Year;
+                    dbTrademark.annual_date = DateTime.Today;
+
                     Uof.ItrademarkService.UpdateEntity(dbTrademark);
                     break;
                 default:

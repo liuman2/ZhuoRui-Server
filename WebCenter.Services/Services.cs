@@ -103,6 +103,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class historyService:BaseService<history>,IhistoryService
+    {   
+        public historyService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.historyRepository;
+        }  
+    }
+	
 	public partial class incomeService:BaseService<income>,IincomeService
     {   
         public incomeService()

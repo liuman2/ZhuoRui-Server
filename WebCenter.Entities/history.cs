@@ -12,13 +12,21 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class trademark:BaseModel
+    public partial class history:BaseModel
     {
     
     
     
-    [EntityPrimKey("trademark")]
+    [EntityPrimKey("history")]
         public int id { get; set; }
+    
+    
+    
+        public string source { get; set; }
+    
+    
+    
+        public Nullable<int> source_id { get; set; }
     
     
     
@@ -26,39 +34,7 @@ namespace WebCenter.Entities
     
     
     
-        public string code { get; set; }
-    
-    
-    
-        public string type { get; set; }
-    
-    
-    
-        public string name { get; set; }
-    
-    
-    
-        public string applicant { get; set; }
-    
-    
-    
-        public string address { get; set; }
-    
-    
-    
-        public string trademark_type { get; set; }
-    
-    
-    
-        public string region { get; set; }
-    
-    
-    
-        public string reg_mode { get; set; }
-    
-    
-    
-        public Nullable<System.DateTime> date_transaction { get; set; }
+        public string order_code { get; set; }
     
     
     
@@ -66,7 +42,7 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<float> rate { get; set; }
+        public Nullable<System.DateTime> date_transaction { get; set; }
     
     
     
@@ -74,27 +50,11 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<System.DateTime> date_receipt { get; set; }
+        public Nullable<float> rate { get; set; }
     
     
     
-        public Nullable<System.DateTime> date_accept { get; set; }
-    
-    
-    
-        public Nullable<System.DateTime> date_trial { get; set; }
-    
-    
-    
-        public Nullable<System.DateTime> date_regit { get; set; }
-    
-    
-    
-        public Nullable<System.DateTime> date_exten { get; set; }
-    
-    
-    
-        public string progress { get; set; }
+        public string value { get; set; }
     
     
     
@@ -134,27 +94,15 @@ namespace WebCenter.Entities
     
     
     
+        public string progress { get; set; }
+    
+    
+    
         public Nullable<int> creator_id { get; set; }
     
     
     
         public Nullable<int> salesman_id { get; set; }
-    
-    
-    
-        public Nullable<int> waiter_id { get; set; }
-    
-    
-    
-        public Nullable<int> manager_id { get; set; }
-    
-    
-    
-        public Nullable<int> organization_id { get; set; }
-    
-    
-    
-        public string description { get; set; }
     
     
     
@@ -164,24 +112,9 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
-    
-    
-        public Nullable<int> annual_year { get; set; }
-    
-    
-    
-        public Nullable<int> is_annual { get; set; }
-    
-    
-    
-        public Nullable<System.DateTime> annual_date { get; set; }
-    
-        public virtual customer customer { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }
         public virtual member member3 { get; set; }
-        public virtual member member4 { get; set; }
-        public virtual member member5 { get; set; }
     }
 }

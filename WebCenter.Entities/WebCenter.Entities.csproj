@@ -118,6 +118,9 @@
     <Compile Include="dictionary_group.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="history.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="income.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

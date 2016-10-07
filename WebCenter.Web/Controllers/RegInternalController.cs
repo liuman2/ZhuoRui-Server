@@ -217,24 +217,31 @@ namespace WebCenter.Web.Controllers
             var nowYear = DateTime.Now.Year;
             if (oldRequest.is_old == 0)
             {
+                // 新单据
                 reginternal.code = GetNextOrderCode(reginternal.salesman_id.Value, "ZN");
 
+                // 需要马上年检的 步骤审核流程
                 if (reginternal.is_annual == 1)
                 {
-                    reginternal.annual_year = nowYear - 1;
+                    reginternal.date_finish = DateTime.Now;
+                    reginternal.status = 4;
+                    reginternal.review_status = 1;
                 }
             }
             else
             {
+                // 旧单据
                 reginternal.status = 4;
                 reginternal.review_status = 1;
 
                 if (oldRequest.is_already_annual == 1)
                 {
+                    // 已年检
                     reginternal.annual_year = nowYear;
                 }
                 else
                 {
+                    // 未年检
                     reginternal.annual_year = nowYear - 1;
                 }
             }

@@ -233,15 +233,20 @@ namespace WebCenter.Web.Controllers
             var nowYear = DateTime.Now.Year;
             if (oldRequest.is_old == 0)
             {
+                // 新单据
                 trade.code = GetNextOrderCode(trade.salesman_id.Value, "SB");
 
+                // 需要马上年检的 步骤审核流程
                 if (trade.is_annual == 1)
                 {
-                    trade.annual_year = nowYear - 1;
+                    trade.date_finish = DateTime.Now;
+                    trade.status = 4;
+                    trade.review_status = 1;
                 }
             }
             else
             {
+                // 旧单据
                 trade.status = 4;
                 trade.review_status = 1;
 
@@ -251,6 +256,7 @@ namespace WebCenter.Web.Controllers
                 }
                 else
                 {
+                    // 未年检
                     trade.annual_year = nowYear - 1;
                 }
             }

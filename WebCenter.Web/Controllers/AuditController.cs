@@ -109,6 +109,7 @@ namespace WebCenter.Web.Controllers
             {
                 id = c.id,
                 code = c.code,
+                type = c.type,
                 customer_id = c.customer_id,
                 customer_name = c.customer.name,
                 name_cn = c.name_cn,
@@ -157,10 +158,10 @@ namespace WebCenter.Web.Controllers
             {
                 return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
             }
-            if (string.IsNullOrEmpty(_audit.name_cn))
-            {
-                return Json(new { success = false, message = "请填写公司中文名称" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (string.IsNullOrEmpty(_audit.name_cn))
+            //{
+            //    return Json(new { success = false, message = "请填写公司中文名称" }, JsonRequestBehavior.AllowGet);
+            //}
             if (string.IsNullOrEmpty(_audit.name_en))
             {
                 return Json(new { success = false, message = "请填写公司英文名称" }, JsonRequestBehavior.AllowGet);
@@ -245,6 +246,36 @@ namespace WebCenter.Web.Controllers
             if (newAbroad == null)
             {
                 return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
+            }
+
+            switch (_audit.source)
+            {
+                case "reg_abroad":
+                    var abroad = Uof.Ireg_abroadService.GetAll(a => a.id == _audit.source_id).FirstOrDefault();
+                    abroad.annual_date = DateTime.Today;
+                    abroad.annual_year = DateTime.Today.Year;
+                    Uof.Ireg_abroadService.UpdateEntity(abroad);
+                    break;
+                case "reg_internal":
+                    var intern = Uof.Ireg_internalService.GetAll(i => i.id == _audit.source_id).FirstOrDefault();
+                    intern.annual_date = DateTime.Today;
+                    intern.annual_year = DateTime.Today.Year;
+                    Uof.Ireg_internalService.UpdateEntity(intern);
+                    break;
+                case "patent":
+                    var p = Uof.IpatentService.GetAll(i => i.id == _audit.source_id).FirstOrDefault();
+                    p.annual_date = DateTime.Today;
+                    p.annual_year = DateTime.Today.Year;
+                    Uof.IpatentService.UpdateEntity(p);
+                    break;
+                case "trademark":
+                    var t = Uof.ItrademarkService.GetAll(i => i.id == _audit.source_id).FirstOrDefault();
+                    t.annual_date = DateTime.Today;
+                    t.annual_year = DateTime.Today.Year;
+                    Uof.ItrademarkService.UpdateEntity(t);
+                    break;
+                default:
+                    break;
             }
 
             Uof.ItimelineService.AddEntity(new timeline()
@@ -1026,6 +1057,71 @@ namespace WebCenter.Web.Controllers
             if (adds.Count() > 0)
             {
                 Uof.Iaudit_bankService.AddEntities(adds);
+            }
+
+            return SuccessResult;
+        }
+
+
+        public ActionResult GetSourceForAudit(int id, string type)
+        {
+            var year = DateTime.Now.Year;
+
+            switch (type)
+            {
+                case "reg_internal":
+                    var internals = Uof.Ireg_internalService.GetAll(i => i.id == id).Select(i => new
+                    {
+                        source = "reg_internal",
+                        id = i.id,
+                        customer_id = i.customer_id,
+                        name_cn = i.name_cn,
+                        name_en = "",
+                        code = i.code,
+                        customer_name = i.customer.name,
+
+
+                        province = i.customer.province,
+                        city = i.customer.city,
+                        county = i.customer.county,
+                        customer_address = i.customer.address,
+                        contact = i.customer.contact,
+                        mobile = i.customer.mobile,
+                        tel = i.customer.tel,
+
+                        date_finish = i.date_finish,
+                        date_setup = i.date_setup,
+                        address = i.address,
+                        salement = i.member4.name
+                    }).FirstOrDefault();
+
+                    return Json(internals, JsonRequestBehavior.AllowGet);
+                case "reg_abroad":
+                    var abroads = Uof.Ireg_abroadService.GetAll(i => i.id == id).Select(i => new
+                    {
+                        source = "reg_abroad",
+                        id = i.id,
+                        customer_id = i.customer_id,
+                        name_cn = i.name_cn,
+                        name_en = i.name_en,
+                        code = i.code,
+                        customer_name = i.customer.name,
+
+                        province = i.customer.province,
+                        city = i.customer.city,
+                        county = i.customer.county,
+                        customer_address = i.customer.address,
+                        contact = i.customer.contact,
+                        mobile = i.customer.mobile,
+                        tel = i.customer.tel,
+
+                        date_finish = i.date_finish,
+                        date_setup = i.date_setup,
+                        address = i.address,
+                        salement = i.member4.name
+                    }).FirstOrDefault();
+
+                    return Json(abroads, JsonRequestBehavior.AllowGet);
             }
 
             return SuccessResult;

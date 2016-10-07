@@ -52,10 +52,11 @@ namespace WebCenter.Entities
         public virtual DbSet<member> members { get; set; }
         public virtual DbSet<audit_bank> audit_bank { get; set; }
         public virtual DbSet<waitdeal> waitdeals { get; set; }
+        public virtual DbSet<audit> audits { get; set; }
+        public virtual DbSet<patent> patents { get; set; }
         public virtual DbSet<reg_abroad> reg_abroad { get; set; }
         public virtual DbSet<reg_internal> reg_internal { get; set; }
         public virtual DbSet<trademark> trademarks { get; set; }
-        public virtual DbSet<patent> patents { get; set; }
-        public virtual DbSet<audit> audits { get; set; }
+        public virtual DbSet<history> histories { get; set; }
     }
 }

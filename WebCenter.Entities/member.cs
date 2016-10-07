@@ -26,6 +26,12 @@ namespace WebCenter.Entities
             this.customers = new HashSet<customer>();
             this.customers1 = new HashSet<customer>();
             this.lectures = new HashSet<lecture>();
+            this.audits = new HashSet<audit>();
+            this.audits1 = new HashSet<audit>();
+            this.audits2 = new HashSet<audit>();
+            this.audits3 = new HashSet<audit>();
+            this.audits4 = new HashSet<audit>();
+            this.audits5 = new HashSet<audit>();
             this.reg_abroad = new HashSet<reg_abroad>();
             this.reg_abroad1 = new HashSet<reg_abroad>();
             this.reg_abroad2 = new HashSet<reg_abroad>();
@@ -33,6 +39,12 @@ namespace WebCenter.Entities
             this.reg_abroad4 = new HashSet<reg_abroad>();
             this.reg_abroad5 = new HashSet<reg_abroad>();
             this.reg_abroad6 = new HashSet<reg_abroad>();
+            this.patents = new HashSet<patent>();
+            this.patents1 = new HashSet<patent>();
+            this.patents2 = new HashSet<patent>();
+            this.patents3 = new HashSet<patent>();
+            this.patents4 = new HashSet<patent>();
+            this.patents5 = new HashSet<patent>();
             this.reg_internal = new HashSet<reg_internal>();
             this.reg_internal1 = new HashSet<reg_internal>();
             this.reg_internal2 = new HashSet<reg_internal>();
@@ -46,18 +58,10 @@ namespace WebCenter.Entities
             this.trademarks3 = new HashSet<trademark>();
             this.trademarks4 = new HashSet<trademark>();
             this.trademarks5 = new HashSet<trademark>();
-            this.patents = new HashSet<patent>();
-            this.patents1 = new HashSet<patent>();
-            this.patents2 = new HashSet<patent>();
-            this.patents3 = new HashSet<patent>();
-            this.patents4 = new HashSet<patent>();
-            this.patents5 = new HashSet<patent>();
-            this.audits = new HashSet<audit>();
-            this.audits1 = new HashSet<audit>();
-            this.audits2 = new HashSet<audit>();
-            this.audits3 = new HashSet<audit>();
-            this.audits4 = new HashSet<audit>();
-            this.audits5 = new HashSet<audit>();
+            this.histories = new HashSet<history>();
+            this.histories1 = new HashSet<history>();
+            this.histories2 = new HashSet<history>();
+            this.histories3 = new HashSet<history>();
         }
     
     
@@ -135,6 +139,12 @@ namespace WebCenter.Entities
         public virtual ICollection<lecture> lectures { get; set; }
         public virtual organization organization { get; set; }
         public virtual position position { get; set; }
+        public virtual ICollection<audit> audits { get; set; }
+        public virtual ICollection<audit> audits1 { get; set; }
+        public virtual ICollection<audit> audits2 { get; set; }
+        public virtual ICollection<audit> audits3 { get; set; }
+        public virtual ICollection<audit> audits4 { get; set; }
+        public virtual ICollection<audit> audits5 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad1 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad2 { get; set; }
@@ -142,6 +152,12 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad4 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad5 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad6 { get; set; }
+        public virtual ICollection<patent> patents { get; set; }
+        public virtual ICollection<patent> patents1 { get; set; }
+        public virtual ICollection<patent> patents2 { get; set; }
+        public virtual ICollection<patent> patents3 { get; set; }
+        public virtual ICollection<patent> patents4 { get; set; }
+        public virtual ICollection<patent> patents5 { get; set; }
         public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual ICollection<reg_internal> reg_internal1 { get; set; }
         public virtual ICollection<reg_internal> reg_internal2 { get; set; }
@@ -155,17 +171,9 @@ namespace WebCenter.Entities
         public virtual ICollection<trademark> trademarks3 { get; set; }
         public virtual ICollection<trademark> trademarks4 { get; set; }
         public virtual ICollection<trademark> trademarks5 { get; set; }
-        public virtual ICollection<patent> patents { get; set; }
-        public virtual ICollection<patent> patents1 { get; set; }
-        public virtual ICollection<patent> patents2 { get; set; }
-        public virtual ICollection<patent> patents3 { get; set; }
-        public virtual ICollection<patent> patents4 { get; set; }
-        public virtual ICollection<patent> patents5 { get; set; }
-        public virtual ICollection<audit> audits { get; set; }
-        public virtual ICollection<audit> audits1 { get; set; }
-        public virtual ICollection<audit> audits2 { get; set; }
-        public virtual ICollection<audit> audits3 { get; set; }
-        public virtual ICollection<audit> audits4 { get; set; }
-        public virtual ICollection<audit> audits5 { get; set; }
+        public virtual ICollection<history> histories { get; set; }
+        public virtual ICollection<history> histories1 { get; set; }
+        public virtual ICollection<history> histories2 { get; set; }
+        public virtual ICollection<history> histories3 { get; set; }
     }
 }

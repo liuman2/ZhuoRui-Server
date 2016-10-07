@@ -40,6 +40,9 @@ namespace WebCenter.IDAL
 		IDAL.Idictionary_groupRepository dictionary_groupRepository { get; }
 	  
 
+		IDAL.IhistoryRepository historyRepository { get; }
+	  
+
 		IDAL.IincomeRepository incomeRepository { get; }
 	  
 

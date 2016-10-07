@@ -35,6 +35,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<Idictionary_groupService>().To<dictionary_groupService>().InRequestScope();
 	
+	   kernel.Bind<IhistoryService>().To<historyService>().InRequestScope();
+	
 	   kernel.Bind<IincomeService>().To<incomeService>().InRequestScope();
 	
 	   kernel.Bind<IlectureService>().To<lectureService>().InRequestScope();

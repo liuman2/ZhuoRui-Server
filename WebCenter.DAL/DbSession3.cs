@@ -25,6 +25,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.Idictionary_groupRepository dictionary_groupRepository { get { return new dictionary_groupRepository(); } }
 	
+	public IDAL.IhistoryRepository historyRepository { get { return new historyRepository(); } }
+	
 	public IDAL.IincomeRepository incomeRepository { get { return new incomeRepository(); } }
 	
 	public IDAL.IlectureRepository lectureRepository { get { return new lectureRepository(); } }

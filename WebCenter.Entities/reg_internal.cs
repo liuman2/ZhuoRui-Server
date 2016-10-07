@@ -204,6 +204,10 @@ namespace WebCenter.Entities
     
         public Nullable<int> is_annual { get; set; }
     
+    
+    
+        public Nullable<System.DateTime> annual_date { get; set; }
+    
         public virtual bank_account bank_account { get; set; }
         public virtual customer customer { get; set; }
         public virtual member member { get; set; }

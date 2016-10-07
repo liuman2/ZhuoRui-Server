@@ -26,6 +26,8 @@ namespace WebCenter.IServices
 	
 	  Idictionary_groupService Idictionary_groupService{get;set;} 
 	
+	  IhistoryService IhistoryService{get;set;} 
+	
 	  IincomeService IincomeService{get;set;} 
 	
 	  IlectureService IlectureService{get;set;} 

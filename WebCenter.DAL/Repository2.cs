@@ -52,6 +52,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class historyRepository :BaseRepository<history>,IhistoryRepository
+    {
+         
+    }
+	
 	public partial class incomeRepository :BaseRepository<income>,IincomeRepository
     {
          

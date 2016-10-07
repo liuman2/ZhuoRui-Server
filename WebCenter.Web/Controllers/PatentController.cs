@@ -233,15 +233,20 @@ namespace WebCenter.Web.Controllers
             var nowYear = DateTime.Now.Year;
             if (oldRequest.is_old == 0)
             {
+                // 新单据
                 _patent.code = GetNextOrderCode(_patent.salesman_id.Value, "ZL");
 
+                // 需要马上年检的 步骤审核流程
                 if (_patent.is_annual == 1)
                 {
-                    _patent.annual_year = nowYear - 1;
+                    _patent.date_finish = DateTime.Now;
+                    _patent.status = 4;
+                    _patent.review_status = 1;
                 }
             }
             else
             {
+                // 旧单据
                 _patent.status = 4;
                 _patent.review_status = 1;
 

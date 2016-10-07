@@ -46,6 +46,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IhistoryService:IBaseService<history>
+    {   
+    }
+	
 	public partial interface IincomeService:IBaseService<income>
     {   
     }

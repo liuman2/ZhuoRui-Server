@@ -47,10 +47,17 @@ namespace WebCenter.Web.Controllers
             } else
             {
                 var role = Uof.Irole_memberService.GetAll(m => m.member_id == _user.id).FirstOrDefault();
-                hasOpers = Uof.Irole_operationService.GetAll(o => o.role_id == role.role_id).Select(o => o.operation_id.Value).ToList();
+                if (role != null)
+                {
+                    hasOpers = Uof.Irole_operationService.GetAll(o => o.role_id == role.role_id).Select(o => o.operation_id.Value).ToList();
+                }
             }
 
-            var ops = string.Join(",", hasOpers);
+            var ops = "";
+            if (hasOpers.Count > 0)
+            {
+                ops = string.Join(",", hasOpers);
+            }
 
             FormsAuthentication.SetAuthCookie(string.Format("{0}|{1}|{2}|{3}|{4}", _user.id, _user.username, _user.organization_id, _user.name, ops), true);
             return Json(new { success = true, user = _user }, JsonRequestBehavior.AllowGet);

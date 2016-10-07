@@ -206,27 +206,33 @@ namespace WebCenter.Web.Controllers
 
             if (oldRequest.is_old == 0)
             {
+                // 新单据
                 aboad.code = GetNextOrderCode(aboad.salesman_id.Value, "ZW");
 
+                // 需要马上年检的 步骤审核流程
                 if (aboad.is_annual == 1)
                 {
-                    aboad.annual_year = nowYear - 1;
+                    aboad.date_finish = DateTime.Now;
+                    aboad.status = 4;
+                    aboad.review_status = 1;
                 }
             } else
             {
+                // 旧单据
                 aboad.status = 4;
                 aboad.review_status = 1; 
                 
                 if (oldRequest.is_already_annual == 1)
                 {
+                    // 已年检
                     aboad.annual_year = nowYear;
                 }
                 else
                 {
+                    // 未年检
                     aboad.annual_year = nowYear - 1;
                 }
             }
-            
 
             if (aboad.is_open_bank == 0)
             {
@@ -248,6 +254,26 @@ namespace WebCenter.Web.Controllers
             });
 
             return Json(new { id = newAbroad.id }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Delete(int id)
+        {
+           var abroad = Uof.Ireg_abroadService.GetById(id);
+
+            var r =  Uof.Ireg_abroadService.DeleteEntity(abroad);
+            if (r)
+            {
+               var incomes = Uof.IincomeService.GetAll(i => i.source_name == "reg_abroad" && i.source_id == id).ToList();
+                if (incomes.Count > 0)
+                {
+                    foreach (var item in incomes)
+                    {
+                        Uof.IincomeService.DeleteEntity(item);
+                    }
+                }
+            }
+
+            return SuccessResult;
         }
 
         public ActionResult Get(int id)

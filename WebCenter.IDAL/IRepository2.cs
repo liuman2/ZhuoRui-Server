@@ -42,6 +42,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IhistoryRepository :IBaseRepository<history>
+    {         
+    }
+	
     public partial interface IincomeRepository :IBaseRepository<income>
     {         
     }
