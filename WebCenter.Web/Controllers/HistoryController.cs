@@ -37,6 +37,27 @@ namespace WebCenter.Web.Controllers
                 return new HttpUnauthorizedResult();
             }
 
+            var customer_id = 0;
+            switch (_history.source)
+            {
+                case "reg_abroad":
+                    customer_id = Uof.Ireg_abroadService.GetAll(a => a.id == _history.source_id).Select(a => a.customer_id.Value).FirstOrDefault();
+                    break;
+                case "reg_internal":
+                    customer_id = Uof.Ireg_internalService.GetAll(a => a.id == _history.source_id).Select(a => a.customer_id.Value).FirstOrDefault();
+                    break;
+                case "patent":
+                    customer_id = Uof.IpatentService.GetAll(a => a.id == _history.source_id).Select(a => a.customer_id.Value).FirstOrDefault();
+                    break;
+                case "trademark":
+                    customer_id = Uof.ItrademarkService.GetAll(a => a.id == _history.source_id).Select(a => a.customer_id.Value).FirstOrDefault();
+                    break;
+                default:
+                    break;
+            }
+
+            _history.customer_id = customer_id;
+
             var userId = 0;
             var organization_id = 0;
             int.TryParse(arrs[0], out userId);
@@ -256,6 +277,212 @@ namespace WebCenter.Web.Controllers
                 }
             }
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PassAudit(int id)
+        {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var dbAudit = Uof.IhistoryService.GetById(id);
+            if (dbAudit == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var t = "";
+            var waitdeals = new List<waitdeal>();
+            if (dbAudit.status == 1)
+            {
+                dbAudit.status = 2;
+                dbAudit.review_status = 1;
+                dbAudit.finance_reviewer_id = userId;
+                dbAudit.finance_review_date = DateTime.Now;
+                dbAudit.finance_review_moment = "";
+
+                t = "财务审核";
+                waitdeals.Add(new waitdeal
+                {
+                    source = "history",
+                    source_id = dbAudit.id,
+                    user_id = dbAudit.salesman_id,
+                    router = "history_view",
+                    content = "您的变更订单已通过财务审核",
+                    read_status = 0
+                });
+
+                var ids = GetSubmitMembers();
+                if (ids.Count() > 0)
+                {
+                    foreach (var item in ids)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "history",
+                            source_id = dbAudit.id,
+                            user_id = item,
+                            router = "history_view",
+                            content = "您有变更订单需要提交审核",
+                            read_status = 0
+                        });
+                    }
+                }
+            }
+            else
+            {
+                dbAudit.status = 3;
+                dbAudit.review_status = 1;
+                dbAudit.submit_reviewer_id = userId;
+                dbAudit.submit_review_date = DateTime.Now;
+                dbAudit.submit_review_moment = "";
+
+                t = "提交的审核";
+                waitdeals.Add(new waitdeal
+                {
+                    source = "history",
+                    source_id = dbAudit.id,
+                    user_id = dbAudit.salesman_id,
+                    router = "history_view",
+                    content = "您的变更订单已通过提交审核",
+                    read_status = 0
+                });
+            }
+
+            dbAudit.date_updated = DateTime.Now;
+
+            var r = Uof.IhistoryService.UpdateEntity(dbAudit);
+
+            if (r)
+            {
+                Uof.IwaitdealService.AddEntities(waitdeals);
+
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbAudit.id,
+                    source_name = "history",
+                    title = "通过审核",
+                    content = string.Format("{0}通过了{1}", arrs[3], t)
+                });
+            }
+            return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult RefuseAudit(int id, string description)
+        {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var dbAudit = Uof.IhistoryService.GetById(id);
+            if (dbAudit == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+            var t = "";
+            var waitdeals = new List<waitdeal>();
+            if (dbAudit.status == 1)
+            {
+                dbAudit.status = 0;
+                dbAudit.review_status = 0;
+                dbAudit.finance_reviewer_id = userId;
+                dbAudit.finance_review_date = DateTime.Now;
+                dbAudit.finance_review_moment = description;
+
+                t = "驳回了财务审核";
+                waitdeals.Add(new waitdeal
+                {
+                    source = "history",
+                    source_id = dbAudit.id,
+                    user_id = dbAudit.salesman_id,
+                    router = "history_view",
+                    content = "您的变更订单未通过财务审核",
+                    read_status = 0
+                });
+            }
+            else
+            {
+                dbAudit.status = 0;
+                dbAudit.review_status = 0;
+                dbAudit.submit_reviewer_id = userId;
+                dbAudit.submit_review_date = DateTime.Now;
+                dbAudit.submit_review_moment = description;
+
+                t = "驳回了提交的审核";
+                waitdeals.Add(new waitdeal
+                {
+                    source = "history",
+                    source_id = dbAudit.id,
+                    user_id = dbAudit.salesman_id,
+                    router = "history_view",
+                    content = "您的变更订单未通过提交审核",
+                    read_status = 0
+                });
+            }
+
+            dbAudit.date_updated = DateTime.Now;
+
+            var r = Uof.IhistoryService.UpdateEntity(dbAudit);
+
+            if (r)
+            {
+                Uof.IwaitdealService.AddEntities(waitdeals);
+
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbAudit.id,
+                    source_name = "history",
+                    title = "驳回审核",
+                    content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
+                });
+            }
+
+            return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var abroad = Uof.IhistoryService.GetById(id);
+
+            var r = Uof.IhistoryService.DeleteEntity(abroad);
+            if (r)
+            {
+                var incomes = Uof.IincomeService.GetAll(i => i.source_name == "history" && i.source_id == id).ToList();
+                if (incomes.Count > 0)
+                {
+                    foreach (var item in incomes)
+                    {
+                        Uof.IincomeService.DeleteEntity(item);
+                    }
+                }
+            }
+
+            return SuccessResult;
         }
     }
 }
