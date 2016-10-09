@@ -962,27 +962,33 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (request.is_done == 1)
+            if (request.progress_type != "p")
             {
                 dbAbroad.status = 4;
                 dbAbroad.date_updated = DateTime.Now;
-                dbAbroad.date_finish = request.date_finish;
                 dbAbroad.date_setup = request.date_setup;
                 dbAbroad.reg_no = request.reg_no;
                 dbAbroad.address = request.address;
                 dbAbroad.is_open_bank = request.is_open_bank;
-                dbAbroad.progress = request.progress ?? "已完成";
+
+                if (dbAbroad.date_finish == null)
+                {
+                    dbAbroad.date_finish = request.date_finish ?? DateTime.Today;
+                }
+                
                 if (request.is_open_bank == 1)
                 {
                     dbAbroad.bank_id = request.bank_id;
                 }
             } else
             {
-                if (dbAbroad.progress == request.progress)
+                if (dbAbroad.progress == request.progress && dbAbroad.date_finish == request.date_finish)
                 {
                     return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
                 }
-
+                dbAbroad.status = 4;
+                dbAbroad.date_updated = DateTime.Now;
+                dbAbroad.date_finish = request.date_finish;
                 dbAbroad.progress = request.progress;
             }
             
@@ -990,28 +996,14 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
-                if (request.is_done == 1)
+                if (request.progress_type != "p")
                 {
-                    var h = new reg_history()
-                    {
-                        reg_id = dbAbroad.id,
-                        name_cn = dbAbroad.name_cn,
-                        name_en = dbAbroad.name_en,
-                        address = dbAbroad.address,
-                        date_setup = dbAbroad.date_setup,
-                        director = dbAbroad.director,
-                        region = dbAbroad.region,
-                        reg_no = dbAbroad.reg_no
-                    };
-
-                    Uof.Ireg_historyService.AddEntity(h);
-
                     Uof.ItimelineService.AddEntity(new timeline()
                     {
                         source_id = dbAbroad.id,
                         source_name = "reg_abroad",
-                        title = "完成订单",
-                        content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], dbAbroad.date_finish.Value.ToString("yyyy-MM-dd"))
+                        title = "完善了注册资料",
+                        content = string.Format("{0}完善了注册资料", arrs[3])
                     });
 
                     Uof.IwaitdealService.AddEntity(new waitdeal
@@ -1023,15 +1015,15 @@ namespace WebCenter.Web.Controllers
                         content = "您的境外注册订单已完成",
                         read_status = 0
                     });
-
-                } else
+                }
+                else
                 {
                     Uof.ItimelineService.AddEntity(new timeline()
                     {
                         source_id = dbAbroad.id,
                         source_name = "reg_abroad",
                         title = "更新了订单进度",
-                        content = string.Format("{0}更新了进度: {1}", arrs[3], dbAbroad.progress)
+                        content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbAbroad.progress, dbAbroad.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 
                     Uof.IwaitdealService.AddEntity(new waitdeal

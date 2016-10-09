@@ -1023,21 +1023,23 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (request.is_done == 1)
+            if (request.progress_type != "p")
             {
                 dbInternal.status = 4;
                 dbInternal.date_updated = DateTime.Now;
-                dbInternal.date_finish = request.date_finish;
                 dbInternal.date_setup = request.date_setup;
                 dbInternal.reg_no = request.reg_no;
-                //dbInternal.address = request.address;
                 dbInternal.taxpayer = request.taxpayer;
                 dbInternal.is_bookkeeping = request.is_bookkeeping;
                 dbInternal.amount_bookkeeping = request.amount_bookkeeping;
                 dbInternal.bank_id = request.bank_id;
 
                 dbInternal.is_customs = request.is_customs;
-                dbInternal.progress = request.progress ?? "已完成";
+
+                if (dbInternal.date_finish == null)
+                {
+                    dbInternal.date_finish = request.date_finish ?? DateTime.Today;
+                }
 
                 if (request.is_customs == 1)
                 {
@@ -1047,11 +1049,12 @@ namespace WebCenter.Web.Controllers
             }
             else
             {
-                if (dbInternal.progress == request.progress)
+                if (dbInternal.progress == request.progress && dbInternal.date_finish == request.date_finish)
                 {
                     return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
                 }
-
+                dbInternal.status = 4;
+                dbInternal.date_finish = request.date_finish;
                 dbInternal.progress = request.progress;
             }
 
@@ -1059,27 +1062,14 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
-                if (request.is_done == 1)
+                if (request.progress_type != "p")
                 {
-                    var h = new reg_internal_history()
-                    {
-                        reg_id = dbInternal.id,
-                        name_cn = dbInternal.name_cn,
-                        address = dbInternal.address,
-                        date_setup = dbInternal.date_setup,
-                        director = dbInternal.director,
-                        reg_no = dbInternal.reg_no,
-                        legal = dbInternal.legal
-                    };
-
-                    Uof.Ireg_internal_historyService.AddEntity(h);
-
                     Uof.ItimelineService.AddEntity(new timeline()
                     {
                         source_id = dbInternal.id,
                         source_name = "reg_internal",
-                        title = "完成订单",
-                        content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], dbInternal.date_finish.Value.ToString("yyyy-MM-dd"))
+                        title = "完善了注册资料",
+                        content = string.Format("{0}完善了注册资料", arrs[3])
                     });
 
 
@@ -1100,7 +1090,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbInternal.id,
                         source_name = "reg_internal",
                         title = "更新了订单进度",
-                        content = string.Format("{0}更新了进度: {1}", arrs[3], dbInternal.progress)
+                        content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbInternal.progress, dbInternal.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 
                     Uof.IwaitdealService.AddEntity(new waitdeal

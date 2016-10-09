@@ -9,9 +9,10 @@ namespace WebCenter.Web
     {
         public int id { get; set; }
         public int customer_id { get; set; }
-        public int is_done { get; set; }
+        //public int is_done { get; set; }
         public string progress { get; set; }
-        public DateTime? date_finish { get; set; }        
+        public DateTime? date_finish { get; set; }
+        public string progress_type { get; set; }    
     }
 
     public class RegAbroadProgressRequest: ProgressRequest

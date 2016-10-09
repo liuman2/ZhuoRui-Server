@@ -839,25 +839,29 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (request.is_done == 1)
+            if (request.progress_type != "p")
             {
                 dbtrademark.status = 4;
                 dbtrademark.date_updated = DateTime.Now;
-                dbtrademark.date_finish = request.date_finish;
-                dbtrademark.progress = request.progress ?? "已完成";
                 dbtrademark.date_accept = request.date_accept;
                 dbtrademark.date_receipt = request.date_receipt;
                 dbtrademark.date_trial = request.date_trial;
                 dbtrademark.date_regit = request.date_regit;
                 dbtrademark.date_exten = request.date_exten;
+
+                if (dbtrademark.date_finish == null)
+                {
+                    dbtrademark.date_finish = request.date_finish ?? DateTime.Today;
+                }
             }
             else
             {
-                if (dbtrademark.progress == request.progress)
+                if (dbtrademark.progress == request.progress && dbtrademark.date_finish == request.date_finish)
                 {
                     return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
                 }
-
+                dbtrademark.status = 4;
+                dbtrademark.date_finish = request.date_finish;
                 dbtrademark.progress = request.progress;
             }
 
@@ -865,14 +869,14 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
-                if (request.is_done == 1)
+                if (request.progress_type != "p")
                 {
                     Uof.ItimelineService.AddEntity(new timeline()
                     {
                         source_id = dbtrademark.id,
                         source_name = "trademark",
-                        title = "完成订单",
-                        content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], dbtrademark.date_finish.Value.ToString("yyyy-MM-dd"))
+                        title = "完善了注册资料",
+                        content = string.Format("{0}完善了注册资料", arrs[3])
                     });
                     Uof.IwaitdealService.AddEntity(new waitdeal
                     {
@@ -891,7 +895,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbtrademark.id,
                         source_name = "trademark",
                         title = "更新了订单进度",
-                        content = string.Format("{0}更新了进度: {1}", arrs[3], dbtrademark.progress)
+                        content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbtrademark.progress, dbtrademark.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 
                     Uof.IwaitdealService.AddEntity(new waitdeal

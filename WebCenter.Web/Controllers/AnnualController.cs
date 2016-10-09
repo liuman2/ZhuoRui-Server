@@ -1140,20 +1140,24 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (request.is_done == 1)
+            if (request.progress_type != "p")
             {
                 dbAnnual.status = 4;
                 dbAnnual.date_updated = DateTime.Now;
-                dbAnnual.date_finish = request.date_finish;
-                dbAnnual.progress = request.progress ?? "已完成";
+                if (dbAnnual.date_finish == null)
+                {
+                    dbAnnual.date_finish = request.date_finish ?? DateTime.Today;
+                }
             }
             else
             {
-                if (dbAnnual.progress == request.progress)
+                if (dbAnnual.progress == request.progress && dbAnnual.date_finish == request.date_finish)
                 {
                     return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
                 }
 
+                dbAnnual.status = 4;
+                dbAnnual.date_finish = request.date_finish;
                 dbAnnual.progress = request.progress;
             }
 
@@ -1161,14 +1165,14 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
-                if (request.is_done == 1)
+                if (request.progress_type != "p")
                 {
                     Uof.ItimelineService.AddEntity(new timeline()
                     {
                         source_id = dbAnnual.id,
                         source_name = "annual",
-                        title = "完成订单",
-                        content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], dbAnnual.date_finish.Value.ToString("yyyy-MM-dd"))
+                        title = "完善了注册资料",
+                        content = string.Format("{0}完善了注册资料", arrs[3])
                     });
 
                     Uof.IwaitdealService.AddEntity(new waitdeal
@@ -1188,7 +1192,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbAnnual.id,
                         source_name = "annual",
                         title = "更新了订单进度",
-                        content = string.Format("{0}更新了进度: {1}", arrs[3], dbAnnual.progress)
+                        content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbAnnual.progress, dbAnnual.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 
                     Uof.IwaitdealService.AddEntity(new waitdeal

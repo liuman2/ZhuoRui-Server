@@ -832,22 +832,25 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (request.is_done == 1)
+            if (request.progress_type != "p")
             {
                 dbPantent.status = 4;
                 dbPantent.date_updated = DateTime.Now;
-                dbPantent.date_finish = request.date_finish;
-                dbPantent.progress = request.progress ?? "已完成";
                 dbPantent.date_accept = request.date_accept;
                 dbPantent.date_empower = request.date_empower;
+                if (dbPantent.date_finish == null)
+                {
+                    dbPantent.date_finish = request.date_finish ?? DateTime.Today;
+                }
             }
             else
             {
-                if (dbPantent.progress == request.progress)
+                if (dbPantent.progress == request.progress && dbPantent.date_finish == request.date_finish)
                 {
                     return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
                 }
-
+                dbPantent.status = 4;
+                dbPantent.date_finish = request.date_finish;
                 dbPantent.progress = request.progress;
             }
 
@@ -855,14 +858,14 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
-                if (request.is_done == 1)
+                if (request.progress_type != "p")
                 {
                     Uof.ItimelineService.AddEntity(new timeline()
                     {
                         source_id = dbPantent.id,
                         source_name = "patent",
-                        title = "完成订单",
-                        content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], dbPantent.date_finish.Value.ToString("yyyy-MM-dd"))
+                        title = "完善了注册资料",
+                        content = string.Format("{0}完善了注册资料", arrs[3])
                     });
 
                     Uof.IwaitdealService.AddEntity(new waitdeal
@@ -882,7 +885,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbPantent.id,
                         source_name = "patent",
                         title = "更新了订单进度",
-                        content = string.Format("{0}更新了进度: {1}", arrs[3], dbPantent.progress)
+                        content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbPantent.progress, dbPantent.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 
                     Uof.IwaitdealService.AddEntity(new waitdeal
