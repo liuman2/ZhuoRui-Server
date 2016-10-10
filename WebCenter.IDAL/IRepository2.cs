@@ -14,6 +14,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IattachmentRepository :IBaseRepository<attachment>
+    {         
+    }
+	
     public partial interface IauditRepository :IBaseRepository<audit>
     {         
     }

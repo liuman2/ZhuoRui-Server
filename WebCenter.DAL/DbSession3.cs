@@ -11,6 +11,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.IareaRepository areaRepository { get { return new areaRepository(); } }
 	
+	public IDAL.IattachmentRepository attachmentRepository { get { return new attachmentRepository(); } }
+	
 	public IDAL.IauditRepository auditRepository { get { return new auditRepository(); } }
 	
 	public IDAL.Iaudit_bankRepository audit_bankRepository { get { return new audit_bankRepository(); } }

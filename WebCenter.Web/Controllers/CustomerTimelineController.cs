@@ -15,9 +15,24 @@ namespace WebCenter.Web.Controllers
 
         }
 
-        public ActionResult GetTimelines(int id)
+        public ActionResult GetTimelines(int id, string name)
         {
-            var list = Uof.Icustomer_timelineService.GetAll(t => t.customer_id == id).OrderByDescending(c => c.date_created).ToList();
+            Expression<Func<customer_timeline, bool>> nameQuery = c => true;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                nameQuery = c => (c.title.IndexOf(name) > -1 || c.content.IndexOf(name) > -1);
+            }
+
+            var list = Uof.Icustomer_timelineService.GetAll(t => t.customer_id == id).Where(nameQuery).Select(t=> new {
+                id = t.id,
+                customer_id = t.customer_id,
+                title = t.title,
+                content = t.content,
+                is_system = t.is_system,
+                date_business = t.date_business,
+                date_created = t.date_created,
+            }).OrderByDescending(c => c.date_created).ToList();
 
             var _customer = Uof.IcustomerService.GetAll(c => c.id == id).Select(c => new {
                 id = c.id,

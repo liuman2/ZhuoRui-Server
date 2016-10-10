@@ -23,6 +23,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IattachmentService IattachmentService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IauditService IauditService
     {
         get;

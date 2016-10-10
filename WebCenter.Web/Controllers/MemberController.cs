@@ -261,5 +261,18 @@ namespace WebCenter.Web.Controllers
             return Json(new { error = "用户名已存在" }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult ResetPwd(int id)
+        {
+            var user = Uof.ImemberService.GetAll(m => m.id == id).FirstOrDefault();
+            if (user == null)
+            {
+                return ErrorResult;
+            }
+            var newPassword = HashPassword.GetHashPassword("123456");
+
+            user.password = newPassword;
+            var r = Uof.ImemberService.UpdateEntity(user);
+            return Json(new { success = r, pwd = "123456" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

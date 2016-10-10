@@ -21,6 +21,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<IareaService>().To<areaService>().InRequestScope();
 	
+	   kernel.Bind<IattachmentService>().To<attachmentService>().InRequestScope();
+	
 	   kernel.Bind<IauditService>().To<auditService>().InRequestScope();
 	
 	   kernel.Bind<Iaudit_bankService>().To<audit_bankService>().InRequestScope();

@@ -298,9 +298,17 @@ namespace WebCenter.Web.Controllers
             if (_customer != null && _customer.source_id != null)
             {
                 source_name = Uof.IcustomerService.GetAll(c => c.id == _customer.id).Select(c => c.name).FirstOrDefault();
-
             }
 
+            var banks = Uof.Ibank_accountService.GetAll(b => b.customer_id == _customer.id).Select(b => new
+            {
+                id = b.id,
+                customer_id = b.customer_id,
+                bank = b.bank,
+                holder = b.holder,
+                account = b.account,
+            }).ToList();
+            
             return Json(new
             {
                 id = _customer.id,
@@ -321,13 +329,13 @@ namespace WebCenter.Web.Controllers
                 source = _customer.source,
                 creator_id = _customer.creator_id,
                 salesman_id = _customer.salesman_id,
-                salesman = _customer.member1.name,
-                
                 organization_id = _customer.organization_id,
                 source_id = _customer.source_id,
                 source_name = source_name,
                 description = _customer.description,
-                banks = _customer.bank_account
+                salesman = _customer.member1.name,
+                contacts = _customer.contacts,
+                banks = banks, //_customer.bank_account
 
             }, JsonRequestBehavior.AllowGet);
         }

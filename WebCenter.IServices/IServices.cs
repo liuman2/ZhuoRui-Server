@@ -18,6 +18,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IattachmentService:IBaseService<attachment>
+    {   
+    }
+	
 	public partial interface IauditService:IBaseService<audit>
     {   
     }

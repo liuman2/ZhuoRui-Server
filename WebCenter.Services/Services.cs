@@ -33,6 +33,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class attachmentService:BaseService<attachment>,IattachmentService
+    {   
+        public attachmentService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.attachmentRepository;
+        }  
+    }
+	
 	public partial class auditService:BaseService<audit>,IauditService
     {   
         public auditService()

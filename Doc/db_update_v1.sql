@@ -79,4 +79,19 @@ CREATE TABLE `history` (
 
 INSERT INTO `sequence` VALUES ('history', '0');
 
+-- 联系人
+call AddColumnUnlessExists(Database(), 'customer', 'contacts', 'text');
+
+-- 附件
+DROP TABLE IF EXISTS `attachment`;
+CREATE TABLE `attachment` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `file_url` varchar(200) DEFAULT NULL,
+  `position` varchar(30) DEFAULT NULL,
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `sequence` VALUES ('attachment', '0');
 

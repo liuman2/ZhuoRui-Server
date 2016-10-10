@@ -35,7 +35,6 @@ namespace WebCenter.Entities
         public virtual DbSet<bank_account> bank_account { get; set; }
         public virtual DbSet<customer_timeline> customer_timeline { get; set; }
         public virtual DbSet<timeline> timelines { get; set; }
-        public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<setting> settings { get; set; }
         public virtual DbSet<role_member> role_member { get; set; }
         public virtual DbSet<role_memu> role_memu { get; set; }
@@ -58,5 +57,7 @@ namespace WebCenter.Entities
         public virtual DbSet<reg_internal> reg_internal { get; set; }
         public virtual DbSet<trademark> trademarks { get; set; }
         public virtual DbSet<history> histories { get; set; }
+        public virtual DbSet<attachment> attachments { get; set; }
+        public virtual DbSet<customer> customers { get; set; }
     }
 }

@@ -12,6 +12,8 @@ namespace WebCenter.IServices
 	
 	  IareaService IareaService{get;set;} 
 	
+	  IattachmentService IattachmentService{get;set;} 
+	
 	  IauditService IauditService{get;set;} 
 	
 	  Iaudit_bankService Iaudit_bankService{get;set;} 

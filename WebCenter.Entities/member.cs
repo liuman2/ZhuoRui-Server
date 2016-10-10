@@ -23,8 +23,6 @@ namespace WebCenter.Entities
             this.annual_exam4 = new HashSet<annual_exam>();
             this.annual_exam5 = new HashSet<annual_exam>();
             this.annual_exam6 = new HashSet<annual_exam>();
-            this.customers = new HashSet<customer>();
-            this.customers1 = new HashSet<customer>();
             this.lectures = new HashSet<lecture>();
             this.audits = new HashSet<audit>();
             this.audits1 = new HashSet<audit>();
@@ -62,6 +60,8 @@ namespace WebCenter.Entities
             this.histories1 = new HashSet<history>();
             this.histories2 = new HashSet<history>();
             this.histories3 = new HashSet<history>();
+            this.customers = new HashSet<customer>();
+            this.customers1 = new HashSet<customer>();
         }
     
     
@@ -134,8 +134,6 @@ namespace WebCenter.Entities
         public virtual ICollection<annual_exam> annual_exam5 { get; set; }
         public virtual ICollection<annual_exam> annual_exam6 { get; set; }
         public virtual area area { get; set; }
-        public virtual ICollection<customer> customers { get; set; }
-        public virtual ICollection<customer> customers1 { get; set; }
         public virtual ICollection<lecture> lectures { get; set; }
         public virtual organization organization { get; set; }
         public virtual position position { get; set; }
@@ -175,5 +173,7 @@ namespace WebCenter.Entities
         public virtual ICollection<history> histories1 { get; set; }
         public virtual ICollection<history> histories2 { get; set; }
         public virtual ICollection<history> histories3 { get; set; }
+        public virtual ICollection<customer> customers { get; set; }
+        public virtual ICollection<customer> customers1 { get; set; }
     }
 }

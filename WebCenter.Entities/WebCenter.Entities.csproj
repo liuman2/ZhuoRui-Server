@@ -79,6 +79,9 @@
     <Compile Include="area.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="attachment.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="Attribute\EntityPrimKey.cs" />
     <Compile Include="audit.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>

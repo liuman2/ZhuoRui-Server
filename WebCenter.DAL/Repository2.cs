@@ -17,6 +17,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class attachmentRepository :BaseRepository<attachment>,IattachmentRepository
+    {
+         
+    }
+	
 	public partial class auditRepository :BaseRepository<audit>,IauditRepository
     {
          

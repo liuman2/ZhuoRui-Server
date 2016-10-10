@@ -12,23 +12,32 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class lecture_customer:BaseModel
+    public partial class attachment:BaseModel
     {
     
     
     
-    [EntityPrimKey("lecture_customer")]
+    [EntityPrimKey("attachment")]
         public int id { get; set; }
-    
-    
-    
-        public Nullable<int> lecture_id { get; set; }
     
     
     
         public Nullable<int> customer_id { get; set; }
     
-        public virtual lecture lecture { get; set; }
-        public virtual customer customer { get; set; }
+    
+    
+        public string file_url { get; set; }
+    
+    
+    
+        public string position { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> date_created { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> date_updated { get; set; }
     }
 }
