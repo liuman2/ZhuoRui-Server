@@ -260,6 +260,7 @@ namespace WebCenter.Web.Controllers
                 tel = _customer.tel,
                 fax = _customer.fax,
                 email = _customer.email,
+                contacts = _customer.contacts,
                 QQ = _customer.QQ,
                 wechat = _customer.wechat,
                 source = _customer.source,
