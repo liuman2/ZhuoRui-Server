@@ -86,9 +86,9 @@ call AddColumnUnlessExists(Database(), 'customer', 'contacts', 'text');
 DROP TABLE IF EXISTS `attachment`;
 CREATE TABLE `attachment` (
   `id` int(11) NOT NULL,
-  `customer_id` int(11) DEFAULT NULL,
-  `file_url` varchar(200) DEFAULT NULL,
-  `position` varchar(30) DEFAULT NULL,
+  `source_id` int(11) DEFAULT NULL,
+  `source_name` varchar(20) DEFAULT NULL,
+  `attachment_url` varchar(200) DEFAULT NULL,
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
