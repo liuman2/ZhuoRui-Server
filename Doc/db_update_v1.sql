@@ -88,10 +88,15 @@ CREATE TABLE `attachment` (
   `id` int(11) NOT NULL,
   `source_id` int(11) DEFAULT NULL,
   `source_name` varchar(20) DEFAULT NULL,
+  `name` varchar(20) DEFAULT NULL,
   `attachment_url` varchar(200) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `sequence` VALUES ('attachment', '0');
 
+call AddColumnUnlessExists(Database(), 'lecture', 'charge_id', 'int(11) DEFAULT NULL COMMENT "负责人"');
+call AddColumnUnlessExists(Database(), 'mail', 'address', 'varchar(200) DEFAULT NULL COMMENT "寄件地址"');
+call AddColumnUnlessExists(Database(), 'audit', 'turnover_currency', 'varchar(10) DEFAULT NULL COMMENT "营业额币别"');

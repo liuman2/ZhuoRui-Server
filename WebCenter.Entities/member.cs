@@ -23,13 +23,6 @@ namespace WebCenter.Entities
             this.annual_exam4 = new HashSet<annual_exam>();
             this.annual_exam5 = new HashSet<annual_exam>();
             this.annual_exam6 = new HashSet<annual_exam>();
-            this.lectures = new HashSet<lecture>();
-            this.audits = new HashSet<audit>();
-            this.audits1 = new HashSet<audit>();
-            this.audits2 = new HashSet<audit>();
-            this.audits3 = new HashSet<audit>();
-            this.audits4 = new HashSet<audit>();
-            this.audits5 = new HashSet<audit>();
             this.reg_abroad = new HashSet<reg_abroad>();
             this.reg_abroad1 = new HashSet<reg_abroad>();
             this.reg_abroad2 = new HashSet<reg_abroad>();
@@ -62,6 +55,13 @@ namespace WebCenter.Entities
             this.histories3 = new HashSet<history>();
             this.customers = new HashSet<customer>();
             this.customers1 = new HashSet<customer>();
+            this.audits = new HashSet<audit>();
+            this.audits1 = new HashSet<audit>();
+            this.audits2 = new HashSet<audit>();
+            this.audits3 = new HashSet<audit>();
+            this.audits4 = new HashSet<audit>();
+            this.audits5 = new HashSet<audit>();
+            this.lectures = new HashSet<lecture>();
         }
     
     
@@ -134,15 +134,8 @@ namespace WebCenter.Entities
         public virtual ICollection<annual_exam> annual_exam5 { get; set; }
         public virtual ICollection<annual_exam> annual_exam6 { get; set; }
         public virtual area area { get; set; }
-        public virtual ICollection<lecture> lectures { get; set; }
         public virtual organization organization { get; set; }
         public virtual position position { get; set; }
-        public virtual ICollection<audit> audits { get; set; }
-        public virtual ICollection<audit> audits1 { get; set; }
-        public virtual ICollection<audit> audits2 { get; set; }
-        public virtual ICollection<audit> audits3 { get; set; }
-        public virtual ICollection<audit> audits4 { get; set; }
-        public virtual ICollection<audit> audits5 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad1 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad2 { get; set; }
@@ -175,5 +168,12 @@ namespace WebCenter.Entities
         public virtual ICollection<history> histories3 { get; set; }
         public virtual ICollection<customer> customers { get; set; }
         public virtual ICollection<customer> customers1 { get; set; }
+        public virtual ICollection<audit> audits { get; set; }
+        public virtual ICollection<audit> audits1 { get; set; }
+        public virtual ICollection<audit> audits2 { get; set; }
+        public virtual ICollection<audit> audits3 { get; set; }
+        public virtual ICollection<audit> audits4 { get; set; }
+        public virtual ICollection<audit> audits5 { get; set; }
+        public virtual ICollection<lecture> lectures { get; set; }
     }
 }

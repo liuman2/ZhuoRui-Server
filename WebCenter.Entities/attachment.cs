@@ -22,15 +22,23 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<int> customer_id { get; set; }
+        public Nullable<int> source_id { get; set; }
     
     
     
-        public string file_url { get; set; }
+        public string source_name { get; set; }
     
     
     
-        public string position { get; set; }
+        public string name { get; set; }
+    
+    
+    
+        public string attachment_url { get; set; }
+    
+    
+    
+        public string description { get; set; }
     
     
     
