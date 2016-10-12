@@ -65,7 +65,15 @@ namespace WebCenter.Web.Controllers
                         permQuery = c => c.salesman_id == userId;
                     } else
                     {
-                        permQuery = c => c.organization_id == deptId;
+                        var ids = GetChildrenDept(deptId);
+                        if (ids.Count > 0)
+                        {
+                            permQuery = c => c.organization_id == deptId;
+                        }
+                        else
+                        {
+                            permQuery = c => ids.Contains(c.organization_id.Value);
+                        }
                     }
                 }
             }

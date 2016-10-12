@@ -30,6 +30,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IbankService:IBaseService<bank>
+    {   
+    }
+	
 	public partial interface Ibank_accountService:IBaseService<bank_account>
     {   
     }

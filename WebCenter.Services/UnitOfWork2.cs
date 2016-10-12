@@ -44,6 +44,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IbankService IbankService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  Ibank_accountService Ibank_accountService
     {
         get;

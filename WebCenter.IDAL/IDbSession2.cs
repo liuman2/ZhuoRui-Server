@@ -28,6 +28,9 @@ namespace WebCenter.IDAL
 		IDAL.Iaudit_bankRepository audit_bankRepository { get; }
 	  
 
+		IDAL.IbankRepository bankRepository { get; }
+	  
+
 		IDAL.Ibank_accountRepository bank_accountRepository { get; }
 	  
 

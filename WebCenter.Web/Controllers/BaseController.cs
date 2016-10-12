@@ -187,5 +187,43 @@ namespace WebCenter.Web.Controllers
             var orgId = Uof.ImemberService.GetAll(a => a.id == userid).Select(a => a.organization_id.Value).FirstOrDefault();
             return orgId;
         }
+
+        public List<int> GetChildrenDept(int parentId)
+        {
+            var allDept = Uof.IorganizationService.GetAll().Select(a => new DepartmentIds
+            {
+                id = a.id,
+                parent_id = a.parent_id
+            }).ToList();
+
+            var deptIds = new List<int>();
+
+            var ids = allDept.Where(a => a.parent_id == parentId).Select(a => a.id).ToList();
+            if (ids.Count > 0)
+            {
+                foreach (var id in ids)
+                {
+                    deptIds.Add(id);
+                    GetNextChildrenDept(id, allDept, deptIds);
+                }                
+            }
+
+            deptIds.Add(parentId);
+
+            return deptIds;
+        }
+
+        private void GetNextChildrenDept(int parentId, List<DepartmentIds> allDept, List<int> deptIds)
+        {
+            var ids = allDept.Where(a => a.parent_id == parentId).Select(a => a.id).ToList();
+            if (ids.Count > 0)
+            {
+                foreach (var id in ids)
+                {
+                    deptIds.Add(id);
+                    GetNextChildrenDept(id, allDept, deptIds);
+                }
+            }
+        } 
     }
 }

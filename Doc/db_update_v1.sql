@@ -102,3 +102,17 @@ call AddColumnUnlessExists(Database(), 'mail', 'address', 'varchar(200) DEFAULT 
 call AddColumnUnlessExists(Database(), 'audit', 'turnover_currency', 'varchar(10) DEFAULT NULL COMMENT "营业额币别"');
 
 ALTER TABLE lecture ADD CONSTRAINT fk_charge_id FOREIGN KEY (charge_id) REFERENCES member(id);
+
+DROP TABLE IF EXISTS `banks`;
+CREATE TABLE `banks` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) DEFAULT NULL COMMENT '开户银行',
+  `account` varchar(50) DEFAULT NULL COMMENT '银行帐号',
+  `owner` varchar(100) DEFAULT NULL COMMENT '户名',
+  `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `sequence` VALUES ('banks', '0');
+
+INSERT INTO `menu` VALUES ('30', '17', 'bank', 'fa fa-money', '公司开户行', '1');

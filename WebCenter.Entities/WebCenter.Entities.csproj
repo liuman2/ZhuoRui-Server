@@ -89,6 +89,9 @@
     <Compile Include="audit_bank.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="bank.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="bank_account.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

@@ -19,10 +19,14 @@ namespace WebCenter.Web
         /// 项目
         /// </summary>
         public string project { get; set; }
+
+        public string customer_name { get; set; }
         /// <summary>
         /// 公司名称
         /// </summary>
-        public string company { get; set; }
+        public string company_cn { get; set; }
+
+        public string company_en { get; set; }
         /// <summary>
         /// 日期
         /// </summary>

@@ -16,4 +16,10 @@ namespace WebCenter.Web
 
         public List<menu> children { get; set; }
     }
+
+    public class DepartmentIds
+    {
+        public int id { get; set; }
+        public int? parent_id { get; set; }
+    }
 }

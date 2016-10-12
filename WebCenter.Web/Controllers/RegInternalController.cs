@@ -60,7 +60,15 @@ namespace WebCenter.Web.Controllers
                     }
                     else
                     {
-                        condition = c => c.organization_id == deptId;
+                        var ids = GetChildrenDept(deptId);
+                        if (ids.Count > 0)
+                        {
+                            condition = c => c.organization_id == deptId;
+                        }
+                        else
+                        {
+                            condition = c => ids.Contains(c.organization_id.Value);
+                        }
                     }
                 }
             }

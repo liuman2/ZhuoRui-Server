@@ -18,6 +18,8 @@ namespace WebCenter.IServices
 	
 	  Iaudit_bankService Iaudit_bankService{get;set;} 
 	
+	  IbankService IbankService{get;set;} 
+	
 	  Ibank_accountService Ibank_accountService{get;set;} 
 	
 	  IcustomerService IcustomerService{get;set;} 
