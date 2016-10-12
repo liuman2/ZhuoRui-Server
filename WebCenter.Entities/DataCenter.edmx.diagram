@@ -90,9 +90,12 @@
         <AssociationConnector Association="DataCenter.Entities.timeline_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_customer" />
         <EntityTypeShape EntityType="DataCenter.Entities.attachment" Width="1.5" PointX="0.75" PointY="16.75" />
-        <EntityTypeShape EntityType="DataCenter.Entities.audit" Width="1.5" PointX="18.875" PointY="0.75" />
-        <EntityTypeShape EntityType="DataCenter.Entities.lecture" Width="1.5" PointX="13.625" PointY="11.125" />
         <EntityTypeShape EntityType="DataCenter.Entities.mail" Width="1.5" PointX="3.375" PointY="16.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.lecture" Width="2" PointX="13.625" PointY="11.125" />
+        <AssociationConnector Association="DataCenter.Entities.fk_charge_id" />
+        <AssociationConnector Association="DataCenter.Entities.lecture_ibfk_creator" />
+        <AssociationConnector Association="DataCenter.Entities.lecture_ibfk_lec" />
+        <EntityTypeShape EntityType="DataCenter.Entities.audit" Width="1.5" PointX="18.875" PointY="0.875" />
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_accountant" />
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_customer" />
@@ -100,8 +103,6 @@
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_manager" />
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_submit_reviewer" />
-        <AssociationConnector Association="DataCenter.Entities.lecture_ibfk_creator" />
-        <AssociationConnector Association="DataCenter.Entities.lecture_ibfk_lec" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

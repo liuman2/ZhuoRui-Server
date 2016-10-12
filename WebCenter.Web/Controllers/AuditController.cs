@@ -118,6 +118,7 @@ namespace WebCenter.Web.Controllers
                 review_status = c.review_status,
                 date_transaction = c.date_transaction,
                 amount_transaction = c.amount_transaction,
+                turnover_currency = c.turnover_currency,
                 amount_income = 0,
                 amount_unreceive = 0,
                 progress = c.progress,
@@ -304,7 +305,7 @@ namespace WebCenter.Web.Controllers
                 contact = a.customer.contact,
                 mobile = a.customer.mobile,
                 tel = a.customer.tel,
-
+                turnover_currency = a.turnover_currency,
                 code = a.code,
                 type = a.type,
                 name_cn = a.name_cn,
@@ -360,7 +361,7 @@ namespace WebCenter.Web.Controllers
                 contact = a.customer.contact,
                 mobile = a.customer.mobile,
                 tel = a.customer.tel,
-
+                turnover_currency = a.turnover_currency,
                 code = a.code,
                 type = a.type,
                 name_cn = a.name_cn,
@@ -475,6 +476,7 @@ namespace WebCenter.Web.Controllers
                 _audit.date_transaction == dbAudit.date_transaction &&
                 _audit.amount_transaction == dbAudit.amount_transaction &&
                 _audit.accountant_id == dbAudit.accountant_id &&
+                _audit.turnover_currency == dbAudit.turnover_currency &&
                 _audit.manager_id == dbAudit.manager_id &&
                 _audit.salesman_id == dbAudit.salesman_id &&
                 _audit.description == dbAudit.description &&
@@ -521,7 +523,8 @@ namespace WebCenter.Web.Controllers
             dbAudit.currency = _audit.currency;
             dbAudit.rate = _audit.rate;
             dbAudit.date_updated = DateTime.Now;
-
+            dbAudit.turnover_currency = _audit.turnover_currency;
+            
             var r = Uof.IauditService.UpdateEntity(dbAudit);
 
             if (r)

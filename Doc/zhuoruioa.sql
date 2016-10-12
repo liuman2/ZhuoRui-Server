@@ -539,6 +539,8 @@ CREATE TABLE `audit` (
   -- `account_period_end` datetime DEFAULT NULL COMMENT '结束账期',
   `date_year_end` datetime DEFAULT NULL COMMENT '年结日',
   `turnover` float(255,2) DEFAULT NULL COMMENT '营业额',
+  `turnover_currency` varchar(10) DEFAULT NULL COMMENT '币别',
+
   `amount_bank` float(255,2) DEFAULT NULL COMMENT '银行入账金额',
   `bill_number` int(11) NULL COMMENT '单据量',
   `accounting_standard` varchar(50) DEFAULT NULL COMMENT '会计准则',

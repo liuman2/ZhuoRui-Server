@@ -78,6 +78,7 @@ namespace WebCenter.Entities
         public Nullable<int> charge_id { get; set; }
     
         public virtual member member { get; set; }
+        public virtual member member1 { get; set; }
         public virtual ICollection<lecture_customer> lecture_customer { get; set; }
     }
 }

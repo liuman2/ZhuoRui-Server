@@ -56,8 +56,8 @@ namespace WebCenter.Entities
         public virtual DbSet<history> histories { get; set; }
         public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<attachment> attachments { get; set; }
-        public virtual DbSet<audit> audits { get; set; }
-        public virtual DbSet<lecture> lectures { get; set; }
         public virtual DbSet<mail> mails { get; set; }
+        public virtual DbSet<lecture> lectures { get; set; }
+        public virtual DbSet<audit> audits { get; set; }
     }
 }

@@ -90,6 +90,10 @@ namespace WebCenter.Entities
     
     
     
+        public string turnover_currency { get; set; }
+    
+    
+    
         public Nullable<float> amount_bank { get; set; }
     
     
@@ -195,10 +199,6 @@ namespace WebCenter.Entities
     
     
         public Nullable<int> annual_year { get; set; }
-    
-    
-    
-        public string turnover_currency { get; set; }
     
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }

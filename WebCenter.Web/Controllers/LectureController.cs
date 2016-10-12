@@ -56,6 +56,8 @@ namespace WebCenter.Web.Controllers
                     title = c.title,
                     teacher = c.teacher,
                     date_at = c.date_at,
+                    charge_id = c.charge_id,
+                    chargeman = c.member.name,
                     city = c.city,
                     address = c.address,
                     sponsor = c.sponsor,
@@ -146,7 +148,8 @@ namespace WebCenter.Web.Controllers
                 _c.date_at == c.date_at &&
                 _c.city == c.city &&
                 _c.address == c.address &&
-
+                _c.charge_id == c.charge_id &&
+                
                 _c.sponsor == c.sponsor &&
                 _c.co_sponsor == c.co_sponsor &&
                 _c.customer_target == c.customer_target
@@ -164,6 +167,7 @@ namespace WebCenter.Web.Controllers
             _c.address = c.address;
             _c.sponsor = c.sponsor;
             _c.co_sponsor = c.co_sponsor;
+            _c.charge_id = c.charge_id;
             _c.customer_target = c.customer_target;
                        
             _c.date_updated = DateTime.Now;
@@ -184,6 +188,8 @@ namespace WebCenter.Web.Controllers
                 address = l.address,
                 teacher = l.teacher,
                 date_at = l.date_at,
+                charge_id = l.charge_id,
+                chargeman = l.member.name,
                 sponsor = l.sponsor,
                 co_sponsor = l.co_sponsor,
                 customer_target = l.customer_target

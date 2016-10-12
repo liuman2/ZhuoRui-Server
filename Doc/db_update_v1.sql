@@ -100,3 +100,5 @@ INSERT INTO `sequence` VALUES ('attachment', '0');
 call AddColumnUnlessExists(Database(), 'lecture', 'charge_id', 'int(11) DEFAULT NULL COMMENT "负责人"');
 call AddColumnUnlessExists(Database(), 'mail', 'address', 'varchar(200) DEFAULT NULL COMMENT "寄件地址"');
 call AddColumnUnlessExists(Database(), 'audit', 'turnover_currency', 'varchar(10) DEFAULT NULL COMMENT "营业额币别"');
+
+ALTER TABLE lecture ADD CONSTRAINT fk_charge_id FOREIGN KEY (charge_id) REFERENCES member(id);
