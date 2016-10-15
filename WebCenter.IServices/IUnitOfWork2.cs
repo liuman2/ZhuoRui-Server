@@ -34,6 +34,8 @@ namespace WebCenter.IServices
 	
 	  IincomeService IincomeService{get;set;} 
 	
+	  IleafService IleafService{get;set;} 
+	
 	  IlectureService IlectureService{get;set;} 
 	
 	  Ilecture_customerService Ilecture_customerService{get;set;} 

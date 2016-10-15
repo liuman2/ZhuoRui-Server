@@ -33,6 +33,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.IincomeRepository incomeRepository { get { return new incomeRepository(); } }
 	
+	public IDAL.IleafRepository leafRepository { get { return new leafRepository(); } }
+	
 	public IDAL.IlectureRepository lectureRepository { get { return new lectureRepository(); } }
 	
 	public IDAL.Ilecture_customerRepository lecture_customerRepository { get { return new lecture_customerRepository(); } }

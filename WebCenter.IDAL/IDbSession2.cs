@@ -52,6 +52,9 @@ namespace WebCenter.IDAL
 		IDAL.IincomeRepository incomeRepository { get; }
 	  
 
+		IDAL.IleafRepository leafRepository { get; }
+	  
+
 		IDAL.IlectureRepository lectureRepository { get; }
 	  
 

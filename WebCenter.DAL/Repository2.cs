@@ -72,6 +72,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class leafRepository :BaseRepository<leaf>,IleafRepository
+    {
+         
+    }
+	
 	public partial class lectureRepository :BaseRepository<lecture>,IlectureRepository
     {
          

@@ -130,6 +130,9 @@
     <Compile Include="income.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="leaf.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="lecture.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

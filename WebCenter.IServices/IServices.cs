@@ -62,6 +62,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IleafService:IBaseService<leaf>
+    {   
+    }
+	
 	public partial interface IlectureService:IBaseService<lecture>
     {   
     }

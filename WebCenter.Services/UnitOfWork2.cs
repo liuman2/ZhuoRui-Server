@@ -100,6 +100,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IleafService IleafService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IlectureService IlectureService
     {
         get;

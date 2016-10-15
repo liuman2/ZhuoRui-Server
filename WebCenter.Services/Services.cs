@@ -143,6 +143,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class leafService:BaseService<leaf>,IleafService
+    {   
+        public leafService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.leafRepository;
+        }  
+    }
+	
 	public partial class lectureService:BaseService<lecture>,IlectureService
     {   
         public lectureService()

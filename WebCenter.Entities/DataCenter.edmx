@@ -84,6 +84,7 @@
           <Property Name="account_period" Type="datetime" Precision="0" />
           <Property Name="date_year_end" Type="datetime" Precision="0" />
           <Property Name="turnover" Type="float" />
+          <Property Name="turnover_currency" Type="varchar" MaxLength="10" />
           <Property Name="amount_bank" Type="float" />
           <Property Name="bill_number" Type="int" />
           <Property Name="accounting_standard" Type="varchar" MaxLength="50" />
@@ -111,7 +112,6 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="annual_year" Type="int" />
-          <Property Name="turnover_currency" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="audit_bank">
           <Key>
@@ -258,6 +258,24 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
+        <EntityType Name="leaves">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="owner_id" Type="int" />
+          <Property Name="type" Type="int" />
+          <Property Name="date_start" Type="datetime" Precision="0" />
+          <Property Name="date_end" Type="datetime" Precision="0" />
+          <Property Name="reason" Type="varchar" MaxLength="200" />
+          <Property Name="memo" Type="varchar" MaxLength="200" />
+          <Property Name="receiver_id" Type="int" />
+          <Property Name="auditor_id" Type="int" />
+          <Property Name="tel" Type="varchar" MaxLength="20" />
+          <Property Name="status" Type="int" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
         <EntityType Name="lecture">
           <Key>
             <PropertyRef Name="id" />
@@ -318,10 +336,10 @@
           <Property Name="mobile" Type="varchar" MaxLength="20" />
           <Property Name="hiredate" Type="datetime" Precision="0" />
           <Property Name="birthday" Type="datetime" Precision="0" />
+          <Property Name="url" Type="varchar" MaxLength="120" />
           <Property Name="status" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
-          <Property Name="url" Type="varchar" MaxLength="120" />
         </EntityType>
         <EntityType Name="menu">
           <Key>
@@ -988,6 +1006,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_charge_id">
+          <End Role="member" Type="Self.member" Multiplicity="0..1" />
+          <End Role="lecture" Type="Self.lecture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture">
+              <PropertyRef Name="charge_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="history_ibfk_creator">
           <End Role="member" Type="Self.member" Multiplicity="0..1" />
           <End Role="history" Type="Self.history" Multiplicity="*" />
@@ -1434,6 +1464,7 @@
           <EntitySet Name="dictionary_group" EntityType="Self.dictionary_group" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="history" EntityType="Self.history" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="income" EntityType="Self.income" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="leaves" EntityType="Self.leaves" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="lecture" EntityType="Self.lecture" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="lecture_customer" EntityType="Self.lecture_customer" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="mail" EntityType="Self.mail" Schema="zhuoruioa" store:Type="Tables" />
@@ -1563,6 +1594,10 @@
           <AssociationSet Name="customer_ibfk_lec" Association="Self.customer_ibfk_lec">
             <End Role="customer" EntitySet="customer" />
             <End Role="lecture_customer" EntitySet="lecture_customer" />
+          </AssociationSet>
+          <AssociationSet Name="fk_charge_id" Association="Self.fk_charge_id">
+            <End Role="member" EntitySet="member" />
+            <End Role="lecture" EntitySet="lecture" />
           </AssociationSet>
           <AssociationSet Name="history_ibfk_creator" Association="Self.history_ibfk_creator">
             <End Role="member" EntitySet="member" />
@@ -2005,6 +2040,7 @@
             <End Role="audit" EntitySet="audits" />
           </AssociationSet>
           <EntitySet Name="banks" EntityType="DataCenter.Entities.bank" />
+          <EntitySet Name="leaves" EntityType="DataCenter.Entities.leaf" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -3561,6 +3597,24 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
         </EntityType>
+        <EntityType Name="leaf">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="owner_id" Type="Int32" />
+          <Property Name="type" Type="Int32" />
+          <Property Name="date_start" Type="DateTime" />
+          <Property Name="date_end" Type="DateTime" />
+          <Property Name="reason" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="memo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="receiver_id" Type="Int32" />
+          <Property Name="auditor_id" Type="Int32" />
+          <Property Name="tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4257,6 +4311,25 @@
                 <ScalarProperty Name="owner" ColumnName="owner" />
                 <ScalarProperty Name="account" ColumnName="account" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="leaves">
+            <EntityTypeMapping TypeName="DataCenter.Entities.leaf">
+              <MappingFragment StoreEntitySet="leaves">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="auditor_id" ColumnName="auditor_id" />
+                <ScalarProperty Name="receiver_id" ColumnName="receiver_id" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="reason" ColumnName="reason" />
+                <ScalarProperty Name="date_end" ColumnName="date_end" />
+                <ScalarProperty Name="date_start" ColumnName="date_start" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="owner_id" ColumnName="owner_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
