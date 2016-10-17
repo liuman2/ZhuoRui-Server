@@ -58,7 +58,7 @@ namespace WebCenter.IDAL
     {         
     }
 	
-    public partial interface IleafRepository :IBaseRepository<leaf>
+    public partial interface IleaveRepository :IBaseRepository<leave>
     {         
     }
 	

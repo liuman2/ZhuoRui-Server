@@ -143,13 +143,13 @@ namespace WebCenter.Services
         }  
     }
 	
-	public partial class leafService:BaseService<leaf>,IleafService
+	public partial class leaveService:BaseService<leave>,IleaveService
     {   
-        public leafService()
+        public leaveService()
         {}
         public override void SetCurrentRepository()
         {
-            CurrentRepository = _dbSession.leafRepository;
+            CurrentRepository = _dbSession.leaveRepository;
         }  
     }
 	

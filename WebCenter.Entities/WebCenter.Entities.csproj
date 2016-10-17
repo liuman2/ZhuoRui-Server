@@ -130,7 +130,7 @@
     <Compile Include="income.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
-    <Compile Include="leaf.cs">
+    <Compile Include="leave.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
     <Compile Include="lecture.cs">

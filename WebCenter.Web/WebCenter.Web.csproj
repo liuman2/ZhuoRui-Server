@@ -231,6 +231,7 @@
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IncomeController.cs" />
+    <Compile Include="Controllers\LeaveController.cs" />
     <Compile Include="Controllers\LectureController.cs" />
     <Compile Include="Controllers\LetterController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
@@ -342,6 +343,7 @@
     <Folder Include="Views\Feedback\" />
     <Folder Include="Views\Homer\" />
     <Folder Include="Views\Income\" />
+    <Folder Include="Views\Leave\" />
     <Folder Include="Views\Lecture\" />
     <Folder Include="Views\Letter\" />
     <Folder Include="Views\Message\" />

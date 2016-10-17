@@ -258,7 +258,7 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
-        <EntityType Name="leaves">
+        <EntityType Name="leave">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -270,8 +270,10 @@
           <Property Name="reason" Type="varchar" MaxLength="200" />
           <Property Name="memo" Type="varchar" MaxLength="200" />
           <Property Name="receiver_id" Type="int" />
-          <Property Name="auditor_id" Type="int" />
           <Property Name="tel" Type="varchar" MaxLength="20" />
+          <Property Name="auditor_id" Type="int" />
+          <Property Name="audit_memo" Type="varchar" MaxLength="200" />
+          <Property Name="date_review" Type="datetime" Precision="0" />
           <Property Name="status" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
@@ -1464,7 +1466,7 @@
           <EntitySet Name="dictionary_group" EntityType="Self.dictionary_group" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="history" EntityType="Self.history" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="income" EntityType="Self.income" Schema="zhuoruioa" store:Type="Tables" />
-          <EntitySet Name="leaves" EntityType="Self.leaves" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="leave" EntityType="Self.leave" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="lecture" EntityType="Self.lecture" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="lecture_customer" EntityType="Self.lecture_customer" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="mail" EntityType="Self.mail" Schema="zhuoruioa" store:Type="Tables" />
@@ -2040,7 +2042,7 @@
             <End Role="audit" EntitySet="audits" />
           </AssociationSet>
           <EntitySet Name="banks" EntityType="DataCenter.Entities.bank" />
-          <EntitySet Name="leaves" EntityType="DataCenter.Entities.leaf" />
+          <EntitySet Name="leaves" EntityType="DataCenter.Entities.leave" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -3597,7 +3599,7 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
         </EntityType>
-        <EntityType Name="leaf">
+        <EntityType Name="leave">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -3609,8 +3611,10 @@
           <Property Name="reason" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="memo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="receiver_id" Type="Int32" />
-          <Property Name="auditor_id" Type="Int32" />
           <Property Name="tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="auditor_id" Type="Int32" />
+          <Property Name="audit_memo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="date_review" Type="DateTime" />
           <Property Name="status" Type="Int32" />
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
@@ -4316,13 +4320,15 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="leaves">
-            <EntityTypeMapping TypeName="DataCenter.Entities.leaf">
-              <MappingFragment StoreEntitySet="leaves">
+            <EntityTypeMapping TypeName="DataCenter.Entities.leave">
+              <MappingFragment StoreEntitySet="leave">
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="date_review" ColumnName="date_review" />
+                <ScalarProperty Name="audit_memo" ColumnName="audit_memo" />
                 <ScalarProperty Name="auditor_id" ColumnName="auditor_id" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
                 <ScalarProperty Name="receiver_id" ColumnName="receiver_id" />
                 <ScalarProperty Name="memo" ColumnName="memo" />
                 <ScalarProperty Name="reason" ColumnName="reason" />

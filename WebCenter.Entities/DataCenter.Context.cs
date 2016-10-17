@@ -60,6 +60,6 @@ namespace WebCenter.Entities
         public virtual DbSet<lecture> lectures { get; set; }
         public virtual DbSet<audit> audits { get; set; }
         public virtual DbSet<bank> banks { get; set; }
-        public virtual DbSet<leaf> leaves { get; set; }
+        public virtual DbSet<leave> leaves { get; set; }
     }
 }

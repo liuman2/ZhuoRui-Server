@@ -34,7 +34,7 @@ namespace WebCenter.IServices
 	
 	  IincomeService IincomeService{get;set;} 
 	
-	  IleafService IleafService{get;set;} 
+	  IleaveService IleaveService{get;set;} 
 	
 	  IlectureService IlectureService{get;set;} 
 	

@@ -12,12 +12,12 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class leaf:BaseModel
+    public partial class leave:BaseModel
     {
     
     
     
-    [EntityPrimKey("leaf")]
+    [EntityPrimKey("leave")]
         public int id { get; set; }
     
     
@@ -50,11 +50,19 @@ namespace WebCenter.Entities
     
     
     
+        public string tel { get; set; }
+    
+    
+    
         public Nullable<int> auditor_id { get; set; }
     
     
     
-        public string tel { get; set; }
+        public string audit_memo { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> date_review { get; set; }
     
     
     
