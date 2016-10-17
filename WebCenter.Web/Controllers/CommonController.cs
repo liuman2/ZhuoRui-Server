@@ -362,6 +362,47 @@ namespace WebCenter.Web.Controllers
                     getPrintDataIncome(printData, "trademark");
                     #endregion
                     break;
+                case "history":
+                    #region 商标
+                    printData = Uof.IhistoryService.GetAll(a => a.id == id).Select(a => new PrintData
+                    {
+                        print_type = "history",
+                        id = a.id,
+                        accounter = "",
+                        amount = a.amount_transaction * a.rate,
+                        attachments = 0,
+                        auditor = a.member1.name,
+                        balance = a.amount_transaction * a.rate,
+                        code = a.order_code,
+                        customer_name = "",
+                        company_cn = "",
+                        company_en = "",
+                        creator = a.member.name,
+                        date_transaction = a.date_transaction,
+                        date = "",
+                        mode = "",
+                        ordername = "",
+                        others = "",
+                        payer = "",
+                        pay_info = "",
+                        pay_way = "",
+                        project = "",
+                        reason = "注册变更",
+                        received = 0,
+                        saleman = a.member3.name,
+                        type = "",
+                        currency = a.currency,
+                        area = a.member3.area.name,
+                        rate = a.rate
+                    }).FirstOrDefault();
+
+                    printData.date = printData.date_transaction.Value.ToString("yyyy年MM月dd日");
+                    printData.project = string.Format("{0}提交", printData.area);
+
+                    getPrintDataIncome(printData, "history");
+                    #endregion
+
+                    break;
                 default:
                     break;
             }

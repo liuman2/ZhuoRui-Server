@@ -113,6 +113,11 @@ namespace WebCenter.Web.Controllers
 
                 var role = Uof.Irole_memberService.GetAll(m => m.member_id == user.id).FirstOrDefault();
 
+                if (role == null)
+                {
+                    return Json(new { success = true, user = user, menus = getUserMenus(memberMenus), opers = opers }, JsonRequestBehavior.AllowGet);
+                }
+
                 var hasMenus = Uof.Irole_memuService.GetAll(m => m.role_id == role.role_id).ToList();
 
                 var hasOpers = Uof.Irole_operationService.GetAll(o => o.role_id == role.role_id).Select(o => o.operation_id.Value).ToList();
