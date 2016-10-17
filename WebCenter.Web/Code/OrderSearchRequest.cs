@@ -36,4 +36,34 @@ namespace WebCenter.Web
         public DateTime? start_time { get; set; }
         public DateTime? end_time { get; set; }
     }
+
+    public class LeaveSearchRequest
+    {
+        public int index { get; set; }
+        public int size { get; set; }
+        public int? status { get; set; }
+        public DateTime? start_time { get; set; }
+        public DateTime? end_time { get; set; }
+    }
+
+    public class LeaveResponse
+    {
+        public int id { get; set; }
+        public int? owner_id { get; set; }
+        public string owner_name { get; set; }
+        public int? type { get; set; }
+        public DateTime? date_start { get; set; }
+        public DateTime? date_end { get; set; }
+        public string reason { get; set; }
+        public string memo { get; set; }
+        public int? receiver_id { get; set; }
+        public string receiver_name { get; set; }
+        public string tel { get; set; }
+        public int? auditor_id { get; set; }
+        public string auditor_name { get; set; }
+        public string audit_memo { get; set; }
+        public DateTime? date_review { get; set; }
+        public int? status { get; set; }
+        public DateTime? date_created { get; set; }
+    }
 }

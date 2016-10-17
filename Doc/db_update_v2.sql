@@ -12,7 +12,7 @@ CREATE TABLE `leave` (
   `auditor_id` int(11) NULL COMMENT '审核人',
   `audit_memo` varchar(200) DEFAULT NULL COMMENT '驳回原因',
   `date_review` datetime DEFAULT NULL COMMENT '审核时间',
-  `status` int(11) NULL COMMENT '状态 0-带审批，1：通过审批， 2：驳回，-1：作废',
+  `status` int(11) NULL COMMENT '状态 0-待审批，1：通过审批， 2：驳回，-1：作废',
   `date_created` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
