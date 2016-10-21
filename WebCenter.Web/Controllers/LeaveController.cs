@@ -17,6 +17,7 @@ namespace WebCenter.Web.Controllers
 
         }
 
+        [HttpPost]
         public ActionResult Add(leave _leave)
         {
             _leave.status = 0;
@@ -29,7 +30,7 @@ namespace WebCenter.Web.Controllers
                     source = "leave",
                     source_id = dbLeave.id,
                     user_id = dbLeave.auditor_id,
-                    router = "leave_view",
+                    router = "audit_leave_view",
                     content = "您有新的假单需要审批",
                     read_status = 0
                 });
@@ -236,7 +237,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PassLeave(int id)
+        public ActionResult Pass(int id)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
@@ -266,10 +267,37 @@ namespace WebCenter.Web.Controllers
 
             var result = Uof.IleaveService.UpdateEntity(dbLeave);
 
+            if (result)
+            {
+                var waitdeals = new List<waitdeal>();
+                waitdeals.Add(new waitdeal
+                {
+                    source = "leave",
+                    source_id = dbLeave.id,
+                    user_id = dbLeave.owner_id,
+                    router = "my_leave_view",
+                    content = "您的假单已批准",
+                    read_status = 0
+                });
+
+                var owner = Uof.ImemberService.GetAll(m => m.id == dbLeave.owner_id).Select(m => m.name).FirstOrDefault();
+                waitdeals.Add(new waitdeal
+                {
+                    source = "leave",
+                    source_id = dbLeave.id,
+                    user_id = dbLeave.receiver_id,
+                    router = "leave_view",
+                    content = string.Format("您被{0}指定了请假区间的工作交接人", owner),
+                    read_status = 0
+                });
+
+                Uof.IwaitdealService.AddEntities(waitdeals);
+            }
+
             return Json(new { success = result, id = dbLeave.id }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult RefuseLeave(int id, string memo)
+        public ActionResult Refuse(int id, string memo)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
@@ -300,10 +328,23 @@ namespace WebCenter.Web.Controllers
 
             var result = Uof.IleaveService.UpdateEntity(dbLeave);
 
+            if (result)
+            {
+                Uof.IwaitdealService.AddEntity(new waitdeal
+                {
+                    source = "leave",
+                    source_id = dbLeave.id,
+                    user_id = dbLeave.owner_id,
+                    router = "my_leave_view",
+                    content = "您的假单已被驳回",
+                    read_status = 0
+                });
+            }
+
             return Json(new { success = result, id = dbLeave.id }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AbandonLeave(int id)
+        public ActionResult Abandon(int id)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
@@ -338,6 +379,70 @@ namespace WebCenter.Web.Controllers
             Uof.IleaveService.UpdateEntity(u);
 
             return SuccessResult;
+        }
+
+        public ActionResult Get(int id)
+        {
+            var dbLeave = Uof.IleaveService.GetAll(l => l.id == id).Select(l => new LeaveResponse
+            {
+                id = l.id,
+                auditor_id = l.auditor_id,
+                auditor_name = "",
+                audit_memo = l.audit_memo,
+                date_created = l.date_created,
+                date_end = l.date_end,
+                date_review = l.date_review,
+                date_start = l.date_start,
+                memo = l.memo,
+                owner_id = l.owner_id,
+                owner_name = "",
+                reason = l.reason,
+                receiver_id = l.receiver_id,
+                receiver_name = "",
+                status = l.status,
+                status_name = "",
+                tel = l.tel,
+                type = l.type,
+                type_name = ""
+            }).FirstOrDefault();
+
+            if (dbLeave == null)
+            {
+                return ErrorResult;
+            }
+            // LeaveResponse
+            //var leaver_ids = list.Select(l => l.owner_id).Distinct();
+            var members = Uof.ImemberService.GetAll(m => m.id == dbLeave.receiver_id || m.id == dbLeave.auditor_id || m.id == dbLeave.owner_id).Select(m => new
+            {
+                id = m.id,
+                name = m.name,
+                department = m.organization.name,
+                position = m.position.name
+            }).ToList();
+            if (members.Count > 0)
+            {
+                var m1 = members.Where(a => a.id == dbLeave.receiver_id).FirstOrDefault();
+                if (m1 != null)
+                {
+                    dbLeave.receiver_name = m1.name;
+                }
+
+                var m2 = members.Where(a => a.id == dbLeave.auditor_id).FirstOrDefault();
+                if (m2 != null)
+                {
+                    dbLeave.auditor_name = m2.name;
+                }
+
+                var m3 = members.Where(a => a.id == dbLeave.owner_id).FirstOrDefault();
+                if (m3 != null)
+                {
+                    dbLeave.owner_name = m3.name;
+                    dbLeave.department = m3.department;
+                    dbLeave.position = m3.position;
+                }
+            }
+
+            return Json(dbLeave, JsonRequestBehavior.AllowGet);
         }
     }
 }

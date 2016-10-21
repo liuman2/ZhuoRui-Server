@@ -22,8 +22,7 @@ INSERT INTO `sequence` VALUES ('leave', '0');
 -- ----------------------------
 -- Records of 职员人事
 -- ----------------------------
-INSERT INTO `menu` VALUES ('31', '0', '', 'fa fa-cog', '职员人事', '7');
-INSERT INTO `menu` VALUES ('32', '31', 'attendance_bill', 'fa fa-cog', '请假申请单', '1');
-INSERT INTO `menu` VALUES ('33', '31', '', 'fa fa-cog', '年假申请单', '2');
-INSERT INTO `menu` VALUES ('34', '31', '', 'fa fa-cog', '我的假单查询', '3');
-INSERT INTO `menu` VALUES ('35', '31', '', 'fa fa-cog', '假单审批', '4');
+INSERT INTO `menu` VALUES ('31', '0', '', 'fa fa-calendar-check-o', '考勤管理', '7');
+INSERT INTO `menu` VALUES ('32', '31', 'attendance_bill', 'fa fa-file-o', '请假申请单', '1');
+INSERT INTO `menu` VALUES ('33', '31', 'attendance_mine', 'fa fa-search', '我的假单查询', '3');
+INSERT INTO `menu` VALUES ('34', '31', 'attendance_audit', 'fa fa-pencil-square-o', '假单审批', '4');

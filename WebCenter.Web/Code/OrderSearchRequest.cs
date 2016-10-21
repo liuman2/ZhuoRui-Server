@@ -52,6 +52,7 @@ namespace WebCenter.Web
         public int? owner_id { get; set; }
         public string owner_name { get; set; }
         public int? type { get; set; }
+        public string type_name { get; set; }
         public DateTime? date_start { get; set; }
         public DateTime? date_end { get; set; }
         public string reason { get; set; }
@@ -64,6 +65,10 @@ namespace WebCenter.Web
         public string audit_memo { get; set; }
         public DateTime? date_review { get; set; }
         public int? status { get; set; }
+        public string status_name { get; set; }
         public DateTime? date_created { get; set; }
+
+        public string department { get; set; }
+        public string position { get; set; }
     }
 }
