@@ -25,7 +25,7 @@ namespace WebCenter.Web.Controllers
         {
             string pwd = HashPassword.GetHashPassword(password);
 
-            var _user = Uof.ImemberService.GetAll(a => a.username == username && a.password == pwd).Select(u => new
+            var _user = Uof.ImemberService.GetAll(a => a.username == username && a.password == pwd).Select(u => new User
             {
                 id = u.id,
                 name = u.name,
@@ -86,7 +86,7 @@ namespace WebCenter.Web.Controllers
                 }
 
                 var username = arrs[1];
-                var user = Uof.ImemberService.GetAll(m => m.username == username).Select(m => new
+                var user = Uof.ImemberService.GetAll(m => m.username == username).Select(m => new User
                 {
                     id = m.id,
                     username = m.username,
