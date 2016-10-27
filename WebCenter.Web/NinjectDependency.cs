@@ -55,6 +55,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<ImenuService>().To<menuService>().InRequestScope();
 	
+	   kernel.Bind<InoticeService>().To<noticeService>().InRequestScope();
+	
 	   kernel.Bind<IoperationService>().To<operationService>().InRequestScope();
 	
 	   kernel.Bind<IorganizationService>().To<organizationService>().InRequestScope();

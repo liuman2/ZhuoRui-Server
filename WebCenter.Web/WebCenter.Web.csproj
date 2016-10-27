@@ -236,6 +236,7 @@
     <Compile Include="Controllers\LectureController.cs" />
     <Compile Include="Controllers\LetterController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
+    <Compile Include="Controllers\NoticeController.cs" />
     <Compile Include="Controllers\OrderCheckController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Controllers\PatentController.cs" />

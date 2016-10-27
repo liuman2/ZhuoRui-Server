@@ -148,6 +148,9 @@
     <Compile Include="menu.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="notice.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="operation.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

@@ -354,6 +354,20 @@
           <Property Name="name" Type="varchar" MaxLength="50" />
           <Property Name="order" Type="tinyint" />
         </EntityType>
+        <EntityType Name="notice">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="creator_id" Type="int" />
+          <Property Name="title" Type="varchar" MaxLength="50" />
+          <Property Name="code" Type="varchar" MaxLength="20" />
+          <Property Name="type" Type="int" />
+          <Property Name="content" Type="text" />
+          <Property Name="status" Type="int" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
         <EntityType Name="operation">
           <Key>
             <PropertyRef Name="id" />
@@ -1472,6 +1486,7 @@
           <EntitySet Name="mail" EntityType="Self.mail" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="member" EntityType="Self.member" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="menu" EntityType="Self.menu" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="notice" EntityType="Self.notice" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="operation" EntityType="Self.operation" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="organization" EntityType="Self.organization" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="patent" EntityType="Self.patent" Schema="zhuoruioa" store:Type="Tables" />
@@ -2043,6 +2058,7 @@
           </AssociationSet>
           <EntitySet Name="banks" EntityType="DataCenter.Entities.bank" />
           <EntitySet Name="leaves" EntityType="DataCenter.Entities.leave" />
+          <EntitySet Name="notices" EntityType="DataCenter.Entities.notice" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -3619,6 +3635,20 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
         </EntityType>
+        <EntityType Name="notice">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="creator_id" Type="Int32" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="Int32" />
+          <Property Name="content" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4336,6 +4366,21 @@
                 <ScalarProperty Name="date_start" ColumnName="date_start" />
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="owner_id" ColumnName="owner_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="notices">
+            <EntityTypeMapping TypeName="DataCenter.Entities.notice">
+              <MappingFragment StoreEntitySet="notice">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

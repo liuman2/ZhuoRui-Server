@@ -86,6 +86,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface InoticeService:IBaseService<notice>
+    {   
+    }
+	
 	public partial interface IoperationService:IBaseService<operation>
     {   
     }

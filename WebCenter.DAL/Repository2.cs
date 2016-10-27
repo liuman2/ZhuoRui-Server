@@ -102,6 +102,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class noticeRepository :BaseRepository<notice>,InoticeRepository
+    {
+         
+    }
+	
 	public partial class operationRepository :BaseRepository<operation>,IoperationRepository
     {
          

@@ -82,6 +82,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface InoticeRepository :IBaseRepository<notice>
+    {         
+    }
+	
     public partial interface IoperationRepository :IBaseRepository<operation>
     {         
     }

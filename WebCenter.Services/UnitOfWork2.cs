@@ -142,6 +142,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  InoticeService InoticeService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IoperationService IoperationService
     {
         get;

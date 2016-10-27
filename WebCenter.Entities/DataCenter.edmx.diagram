@@ -105,6 +105,7 @@
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_submit_reviewer" />
         <EntityTypeShape EntityType="DataCenter.Entities.bank" Width="1.5" PointX="5.375" PointY="17.5" />
         <EntityTypeShape EntityType="DataCenter.Entities.leave" Width="1.5" PointX="7.375" PointY="18.25" />
+        <EntityTypeShape EntityType="DataCenter.Entities.notice" Width="1.5" PointX="9.375" PointY="18.375" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

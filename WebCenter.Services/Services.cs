@@ -203,6 +203,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class noticeService:BaseService<notice>,InoticeService
+    {   
+        public noticeService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.noticeRepository;
+        }  
+    }
+	
 	public partial class operationService:BaseService<operation>,IoperationService
     {   
         public operationService()

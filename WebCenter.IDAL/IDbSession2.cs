@@ -70,6 +70,9 @@ namespace WebCenter.IDAL
 		IDAL.ImenuRepository menuRepository { get; }
 	  
 
+		IDAL.InoticeRepository noticeRepository { get; }
+	  
+
 		IDAL.IoperationRepository operationRepository { get; }
 	  
 

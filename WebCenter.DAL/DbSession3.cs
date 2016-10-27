@@ -45,6 +45,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.ImenuRepository menuRepository { get { return new menuRepository(); } }
 	
+	public IDAL.InoticeRepository noticeRepository { get { return new noticeRepository(); } }
+	
 	public IDAL.IoperationRepository operationRepository { get { return new operationRepository(); } }
 	
 	public IDAL.IorganizationRepository organizationRepository { get { return new organizationRepository(); } }

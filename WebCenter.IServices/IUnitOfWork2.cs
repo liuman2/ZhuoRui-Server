@@ -46,6 +46,8 @@ namespace WebCenter.IServices
 	
 	  ImenuService ImenuService{get;set;} 
 	
+	  InoticeService InoticeService{get;set;} 
+	
 	  IoperationService IoperationService{get;set;} 
 	
 	  IorganizationService IorganizationService{get;set;} 
