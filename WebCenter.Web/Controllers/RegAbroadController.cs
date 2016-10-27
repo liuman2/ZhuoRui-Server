@@ -940,7 +940,8 @@ namespace WebCenter.Web.Controllers
                 date_setup = r.date_setup,
                 reg_no = r.reg_no,
                 is_open_bank = r.is_open_bank,
-                bank_id = r.bank_id
+                bank_id = r.bank_id,
+                bank_name = r.bank_account.bank
 
             }).FirstOrDefault();
 
