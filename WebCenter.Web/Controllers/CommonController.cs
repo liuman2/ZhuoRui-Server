@@ -33,6 +33,7 @@ namespace WebCenter.Web.Controllers
             }
 
             var fileName = files[0].FileName;
+            var _fileName = files[0].FileName;
 
             byte[] fileData = null;
             using (var binaryReader = new BinaryReader(files[0].InputStream))
@@ -83,7 +84,7 @@ namespace WebCenter.Web.Controllers
             {
                 var fileArr = fileName.Split('.');
                 var _name = DateTime.Now.ToString("yyyyMMddHHmmss");
-                fileName = _name + "." + fileArr[1];
+                fileName = _name + "." + fileArr[fileArr.Length - 1];
             }
 
             uploadFile = Path.Combine(folderDir, fileName);
@@ -111,7 +112,7 @@ namespace WebCenter.Web.Controllers
                 photoUrl = string.Format("{0}://{1}:{2}/Uploads/{3}/thumbnail/{4}", Request.Url.Scheme, Request.Url.Host, Request.Url.Port, folder, fileName);
             }
 
-            return Json(new { result = true, url = photoUrl }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = true, url = photoUrl, name = _fileName }, JsonRequestBehavior.AllowGet);
         }
 
 

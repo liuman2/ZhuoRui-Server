@@ -65,7 +65,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(customer c)
+        public ActionResult Add(Notice c)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
@@ -81,186 +81,114 @@ namespace WebCenter.Web.Controllers
             }
 
             var userId = 0;
-            var organization_id = 0;
-            int.TryParse(arrs[0], out userId);
-            int.TryParse(arrs[2], out organization_id);
-
-
-            //c.salesman_id = userId;
-            c.organization_id = organization_id;
+            
+            c.creator_id = userId;
             c.status = 1;
-
-            c.code = GetNextCustomerCode(c.salesman_id.Value);
-
-            var _c = Uof.IcustomerService.AddEntity(c);
-
-            if (_c != null)
+            
+            var _c = Uof.InoticeService.AddEntity(new notice
             {
-                var newCustomer = Uof.Icustomer_timelineService.AddEntity(new customer_timeline
-                {
-                    title = "建立客户资料",
-                    customer_id = _c.id,
-                    content = string.Format("建立了客户资料, 操作人：{0}", arrs[3]),
-                    date_business = DateTime.Now,
-                    date_created = DateTime.Now,
-                    is_system = 1
-                });
+                creator_id = c.creator_id,
+                title = c.title,
+                code = c.code,
+                type = c.type,
+                content = c.content,
+                status = 1
+            });
 
-                return Json(new { id = newCustomer.id }, JsonRequestBehavior.AllowGet);
+            if (_c != null && c.attachments.Count > 0)
+            {
+                var atts = new List<attachment>();
+                foreach (var item in c.attachments)
+                {
+                    atts.Add(new attachment
+                    {
+                        source_id = _c.id,
+                        source_name = "notice",
+                        name = item.name ?? "",
+                        attachment_url = item.attachment_url,
+                    });
+                }
+                var newCustomer = Uof.IattachmentService.AddEntities(atts);
             }
 
-            return ErrorResult;
+            return SuccessResult;
         }
 
-        public ActionResult Update(customer c)
+        public ActionResult Update(Notice c)
         {
-            var isAuth = HttpContext.User.Identity.IsAuthenticated;
-            if (!isAuth)
-            {
-                return new HttpUnauthorizedResult();
-            }
+            var _c = Uof.InoticeService.GetById(c.id);
 
-            var identityName = HttpContext.User.Identity.Name;
-            var arrs = identityName.Split('|');
-            if (arrs.Length == 0)
-            {
-                return new HttpUnauthorizedResult();
-            }
-
-            var _c = Uof.IcustomerService.GetById(c.id);
-
-            if (_c.name == c.name &&
-                _c.address == c.address &&
-                _c.city == c.city &&
-                _c.contact == c.contact &&
-                _c.county == c.county &&
-                _c.description == c.description &&
-                _c.email == c.email &&
-                _c.fax == c.fax &&
-                _c.industry == c.industry &&
-                _c.mobile == c.mobile &&
-                _c.province == c.province &&
-                _c.QQ == c.QQ &&
-                _c.source == c.source &&
-                _c.source_id == c.source_id &&
-                _c.salesman_id == c.salesman_id &&
-                _c.tel == c.tel &&
-                _c.wechat == c.wechat
-                )
-            {
-                return Json(new { id = _c.id }, JsonRequestBehavior.AllowGet);
-            }
-
-            _c.name = c.name;
-            _c.address = c.address;
-            _c.city = c.city;
-            _c.contact = c.contact;
-            _c.county = c.county;
-            _c.description = c.description;
-            _c.email = c.email;
-            _c.fax = c.fax;
-            _c.industry = c.industry;
-            _c.mobile = c.mobile;
-            _c.province = c.province;
-            _c.QQ = c.QQ;
-            _c.source = c.source;
-            _c.salesman_id = c.salesman_id;
-
-            if (c.source != "客户介绍")
-            {
-                _c.source_id = null;
-            }
-            else
-            {
-                _c.source_id = c.source_id;
-            }
-
-            _c.tel = c.tel;
-            _c.wechat = c.wechat;
+            _c.title = c.title;
+            _c.code = c.code;
+            _c.content = c.content;
             _c.date_updated = DateTime.Now;
 
-            var r = Uof.IcustomerService.UpdateEntity(_c);
+            var r = Uof.InoticeService.UpdateEntity(_c);
 
-            if (r)
+            if (r && c.attachments.Count > 0)
             {
-                Uof.Icustomer_timelineService.AddEntity(new customer_timeline
+                var newAtts = new List<attachment>();
+                var attIds = Uof.IattachmentService.GetAll(a => a.source_id == _c.id && a.source_name == "notice").Select(a => a.id).ToList();
+                if (attIds.Count > 0)
                 {
-                    title = "修改客户资料",
-                    customer_id = _c.id,
-                    content = string.Format("{0}修改了客户资料", arrs[3], _c.source),
-                    date_business = DateTime.Now,
-                    date_created = DateTime.Now,
-                    is_system = 1
-                });
+                    newAtts = c.attachments.Where(a => !attIds.Contains(a.id)).ToList();
+                }
+                else
+                {
+                    newAtts = c.attachments;
+                }
 
-                return Json(new { id = _c.id }, JsonRequestBehavior.AllowGet);
+                if (newAtts.Count > 0)
+                {
+                    foreach (var item in newAtts)
+                    {
+                        item.source_id = _c.id;
+                        item.source_name = "notice";
+                    }
+                    Uof.IattachmentService.AddEntities(newAtts);
+                }
             }
 
-            return ErrorResult;
+            return SuccessResult;
         }
 
         public ActionResult Get(int id)
         {
-            var _customer = Uof.IcustomerService.GetById(id);
+            var _notice = Uof.InoticeService.GetById(id);
 
-            var source_name = "";
-            if (_customer != null && _customer.source_id != null)
+            var noticeResponse = new Notice();
+            if (_notice != null)
             {
-                source_name = Uof.IcustomerService.GetAll(c => c.id == _customer.id).Select(c => c.name).FirstOrDefault();
+                var atts = Uof.IattachmentService.GetAll(a => a.source_id == _notice.id && a.source_name == "notice").ToList();
+                noticeResponse.attachments = atts;
+
+                noticeResponse.id = _notice.id;
+                noticeResponse.creator_id = _notice.creator_id;
+                noticeResponse.title = _notice.title;
+                noticeResponse.code = _notice.code;
+                noticeResponse.type = _notice.type;
+                noticeResponse.content = _notice.content;
+                noticeResponse.status = _notice.status;
+                noticeResponse.date_created = _notice.date_created.Value.ToString("YYYY-MM-DD HH:mm:ss");
             }
-
-            var banks = Uof.Ibank_accountService.GetAll(b => b.customer_id == _customer.id).Select(b => new
-            {
-                id = b.id,
-                customer_id = b.customer_id,
-                bank = b.bank,
-                holder = b.holder,
-                account = b.account,
-            }).ToList();
-
-            return Json(new
-            {
-                id = _customer.id,
-                code = _customer.code,
-                name = _customer.name,
-                industry = _customer.industry,
-                province = _customer.province,
-                city = _customer.city,
-                county = _customer.county,
-                address = _customer.address,
-                contact = _customer.contact,
-                mobile = _customer.mobile,
-                tel = _customer.tel,
-                fax = _customer.fax,
-                email = _customer.email,
-                QQ = _customer.QQ,
-                wechat = _customer.wechat,
-                source = _customer.source,
-                creator_id = _customer.creator_id,
-                salesman_id = _customer.salesman_id,
-                organization_id = _customer.organization_id,
-                source_id = _customer.source_id,
-                source_name = source_name,
-                description = _customer.description,
-                salesman = _customer.member1.name,
-                contacts = _customer.contacts,
-                banks = banks, //_customer.bank_account
-
-            }, JsonRequestBehavior.AllowGet);
+                        
+            return Json(noticeResponse, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Delete(int id)
+        public ActionResult Cancel(int id)
         {
-            var c = Uof.IcustomerService.GetById(id);
+            var c = Uof.InoticeService.GetById(id);
             if (c == null)
             {
                 return ErrorResult;
             }
 
-            var r = Uof.IcustomerService.DeleteEntity(c);
+            c.status = 2;
+            c.date_updated = DateTime.Now;
+
+            var r = Uof.InoticeService.UpdateEntity(c);
 
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }
-
     }
 }
