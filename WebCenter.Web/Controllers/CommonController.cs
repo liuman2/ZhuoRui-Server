@@ -112,7 +112,7 @@ namespace WebCenter.Web.Controllers
                 photoUrl = string.Format("{0}://{1}:{2}/Uploads/{3}/thumbnail/{4}", Request.Url.Scheme, Request.Url.Host, Request.Url.Port, folder, fileName);
             }
 
-            return Json(new { result = true, url = photoUrl, name = _fileName.Substring(0, 20) }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = true, url = photoUrl, name = _fileName.Length > 20 ? _fileName.Substring(0, 20) : _fileName }, JsonRequestBehavior.AllowGet);
         }
 
 

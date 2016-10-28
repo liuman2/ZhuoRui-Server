@@ -95,14 +95,14 @@ namespace WebCenter.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Add(lecture l)
+        public ActionResult Add(lecture lect, List<attachment> attachments)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
             {
                 return new HttpUnauthorizedResult();
             }
-
+            
             var identityName = HttpContext.User.Identity.Name;
             var arrs = identityName.Split('|');
             if (arrs.Length == 0)
@@ -116,15 +116,31 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[2], out organization_id);
 
 
-            l.creator_id = userId;
-            l.date_created = DateTime.Now;
+            lect.creator_id = userId;
+            lect.date_created = DateTime.Now;
             
-            var _l = Uof.IlectureService.AddEntity(l);
+            var _l = Uof.IlectureService.AddEntity(lect);
+
+            if (_l != null && attachments.Count > 0)
+            {
+                var atts = new List<attachment>();
+                foreach (var item in attachments)
+                {
+                    atts.Add(new attachment
+                    {
+                        source_id = _l.id,
+                        source_name = "lecture",
+                        name = item.name ?? "",
+                        attachment_url = item.attachment_url,
+                    });
+                }
+                Uof.IattachmentService.AddEntities(atts);
+            }
             return Json(new { id = _l.id }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult Update(lecture c)
+        public ActionResult Update(lecture lect, List<attachment> attachments)
         {
             var isAuth = HttpContext.User.Identity.IsAuthenticated;
             if (!isAuth)
@@ -139,40 +155,64 @@ namespace WebCenter.Web.Controllers
                 return new HttpUnauthorizedResult();
             }
 
-            var _c = Uof.IlectureService.GetById(c.id);
+            var _c = Uof.IlectureService.GetById(lect.id);
 
-            if (_c.title == c.title &&
-                _c.form == c.form &&
-                _c.city == c.city &&
-                _c.teacher == c.teacher &&
-                _c.date_at == c.date_at &&
-                _c.city == c.city &&
-                _c.address == c.address &&
-                _c.charge_id == c.charge_id &&
+            //if (_c.title == c.title &&
+            //    _c.form == c.form &&
+            //    _c.city == c.city &&
+            //    _c.teacher == c.teacher &&
+            //    _c.date_at == c.date_at &&
+            //    _c.city == c.city &&
+            //    _c.address == c.address &&
+            //    _c.charge_id == c.charge_id &&
                 
-                _c.sponsor == c.sponsor &&
-                _c.co_sponsor == c.co_sponsor &&
-                _c.customer_target == c.customer_target
+            //    _c.sponsor == c.sponsor &&
+            //    _c.co_sponsor == c.co_sponsor &&
+            //    _c.customer_target == c.customer_target
 
-                )
-            {
-                return SuccessResult;
-            }
+            //    )
+            //{
+            //    return SuccessResult;
+            //}
 
-            _c.title = c.title;
-            _c.form = c.form;
-            _c.city = c.city;
-            _c.teacher = c.teacher;
-            _c.date_at = c.date_at;
-            _c.address = c.address;
-            _c.sponsor = c.sponsor;
-            _c.co_sponsor = c.co_sponsor;
-            _c.charge_id = c.charge_id;
-            _c.customer_target = c.customer_target;
+            _c.title = lect.title;
+            _c.form = lect.form;
+            _c.city = lect.city;
+            _c.teacher = lect.teacher;
+            _c.date_at = lect.date_at;
+            _c.address = lect.address;
+            _c.sponsor = lect.sponsor;
+            _c.co_sponsor = lect.co_sponsor;
+            _c.charge_id = lect.charge_id;
+            _c.customer_target = lect.customer_target;
                        
             _c.date_updated = DateTime.Now;
 
             var r = Uof.IlectureService.UpdateEntity(_c);
+
+            if (r && attachments.Count > 0)
+            {
+                var newAtts = new List<attachment>();
+                var attIds = Uof.IattachmentService.GetAll(a => a.source_id == _c.id && a.source_name == "lecture").Select(a => a.id).ToList();
+                if (attIds.Count > 0)
+                {
+                    newAtts = attachments.Where(a => !attIds.Contains(a.id)).ToList();
+                }
+                else
+                {
+                    newAtts = attachments;
+                }
+
+                if (newAtts.Count > 0)
+                {
+                    foreach (var item in newAtts)
+                    {
+                        item.source_id = _c.id;
+                        item.source_name = "lecture";
+                    }
+                    Uof.IattachmentService.AddEntities(newAtts);
+                }
+            }
 
             return Json(new { success = r, id = _c.id }, JsonRequestBehavior.AllowGet);
         }
@@ -195,7 +235,13 @@ namespace WebCenter.Web.Controllers
                 customer_target = l.customer_target
             }).FirstOrDefault();
 
-            return Json(_l, JsonRequestBehavior.AllowGet);
+            var atts = new List<attachment>();
+            if (_l != null)
+            {
+                atts = Uof.IattachmentService.GetAll(a => a.source_id == _l.id && a.source_name == "lecture").ToList();
+            }
+
+            return Json( new { lect = _l, attachments = atts }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetDetails(int id, int size, int index)
