@@ -81,7 +81,7 @@ namespace WebCenter.Web.Controllers
             }
 
             var userId = 0;
-            
+            int.TryParse(arrs[0], out userId);
             c.creator_id = userId;
             c.status = 1;
             
@@ -169,7 +169,7 @@ namespace WebCenter.Web.Controllers
                 noticeResponse.type = _notice.type;
                 noticeResponse.content = _notice.content;
                 noticeResponse.status = _notice.status;
-                noticeResponse.date_created = _notice.date_created.Value.ToString("YYYY-MM-DD HH:mm:ss");
+                noticeResponse.date_created = _notice.date_created.Value.ToString("yyyy-MM-dd HH:mm:ss");
             }
                         
             return Json(noticeResponse, JsonRequestBehavior.AllowGet);
@@ -189,6 +189,93 @@ namespace WebCenter.Web.Controllers
             var r = Uof.InoticeService.UpdateEntity(c);
 
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Release(int id)
+        {
+            var c = Uof.InoticeService.GetById(id);
+            if (c == null)
+            {
+                return ErrorResult;
+            }
+
+            c.status = 1;
+            c.date_updated = DateTime.Now;
+
+            var r = Uof.InoticeService.UpdateEntity(c);
+
+            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var c = Uof.InoticeService.GetById(id);
+            if (c == null)
+            {
+                return ErrorResult;
+            }
+
+            var r = Uof.InoticeService.DeleteEntity(c);
+
+            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetTop3()
+        {
+            var list = Uof.InoticeService.GetAll(n => n.status == 1).Select(n => new
+            {
+                id = n.id,
+                title = n.title
+            }).OrderByDescending(n => n.id).Take(3).ToList();
+
+           var total = Uof.InoticeService.GetAll(n => n.status == 1).Count();
+
+
+            return Json( new { list = list, total = total }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Views(int index = 1, int size = 10, string name = "")
+        {
+            Expression<Func<notice, bool>> condition = c => c.status == 1;
+            Expression<Func<notice, bool>> nameQuery = c => true;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                nameQuery = c => (c.title.IndexOf(name) > -1 || c.code.IndexOf(name) > -1);
+            }
+
+            var list = Uof.InoticeService.GetAll(condition)
+                .Where(nameQuery)
+                .OrderByDescending(item => item.id).Select(c => new
+                {
+                    id = c.id,
+                    code = c.code,
+                    title = c.title,
+                    date_created = c.date_created
+                }).ToPagedList(index, size).ToList();
+
+            var totalRecord = Uof.InoticeService.GetAll(condition).Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + size - 1) / size;
+            }
+            var page = new
+            {
+                current_index = index,
+                current_size = size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+
+            var result = new
+            {
+                page = page,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }
