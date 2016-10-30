@@ -95,7 +95,7 @@ namespace WebCenter.Web.Controllers
                 status = 1
             });
 
-            if (_c != null && c.attachments.Count > 0)
+            if (_c != null && c.attachments != null && c.attachments.Count > 0)
             {
                 var atts = new List<attachment>();
                 foreach (var item in c.attachments)
@@ -125,7 +125,7 @@ namespace WebCenter.Web.Controllers
 
             var r = Uof.InoticeService.UpdateEntity(_c);
 
-            if (r && c.attachments.Count > 0)
+            if (r && c.attachments != null && c.attachments.Count > 0)
             {
                 var newAtts = new List<attachment>();
                 var attIds = Uof.IattachmentService.GetAll(a => a.source_id == _c.id && a.source_name == "notice").Select(a => a.id).ToList();
