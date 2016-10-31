@@ -179,39 +179,39 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Add(patent _patent, oldRequest oldRequest)
         {
-            if (_patent.customer_id == null)
-            {
-                return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(_patent.name))
-            {
-                return Json(new { success = false, message = "请填写专利名称" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(_patent.applicant))
-            {
-                return Json(new { success = false, message = "请填写申请人" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(_patent.address))
-            {
-                return Json(new { success = false, message = "请填写申请人地址" }, JsonRequestBehavior.AllowGet);
-            }
-            if (_patent.date_transaction == null)
-            {
-                return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
-            }
-            if (_patent.amount_transaction == null)
-            {
-                return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
-            }
-            if (_patent.salesman_id == null)
-            {
-                return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (_patent.customer_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(_patent.name))
+            //{
+            //    return Json(new { success = false, message = "请填写专利名称" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(_patent.applicant))
+            //{
+            //    return Json(new { success = false, message = "请填写申请人" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(_patent.address))
+            //{
+            //    return Json(new { success = false, message = "请填写申请人地址" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (_patent.date_transaction == null)
+            //{
+            //    return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (_patent.amount_transaction == null)
+            //{
+            //    return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (_patent.salesman_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
+            //}
 
-            if (_patent.waiter_id == null)
-            {
-                return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (_patent.waiter_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
+            //}
 
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)

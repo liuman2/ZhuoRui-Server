@@ -163,44 +163,44 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Add(audit _audit, oldRequest oldRequest)
         {
-            if (_audit.customer_id == null)
-            {
-                return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
-            }
-            //if (string.IsNullOrEmpty(_audit.name_cn))
+            //if (_audit.customer_id == null)
             //{
-            //    return Json(new { success = false, message = "请填写公司中文名称" }, JsonRequestBehavior.AllowGet);
+            //    return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
             //}
-            if (string.IsNullOrEmpty(_audit.name_en))
-            {
-                return Json(new { success = false, message = "请填写公司英文名称" }, JsonRequestBehavior.AllowGet);
-            }
-            if (_audit.date_setup == null)
-            {
-                return Json(new { success = false, message = "请填写公司成立日期" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(_audit.address))
-            {
-                return Json(new { success = false, message = "请填写公司注册地址" }, JsonRequestBehavior.AllowGet);
-            }
-            if (_audit.date_transaction == null)
-            {
-                return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
-            }
-            if (_audit.amount_transaction == null)
-            {
-                return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
-            }
+            ////if (string.IsNullOrEmpty(_audit.name_cn))
+            ////{
+            ////    return Json(new { success = false, message = "请填写公司中文名称" }, JsonRequestBehavior.AllowGet);
+            ////}
+            //if (string.IsNullOrEmpty(_audit.name_en))
+            //{
+            //    return Json(new { success = false, message = "请填写公司英文名称" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (_audit.date_setup == null)
+            //{
+            //    return Json(new { success = false, message = "请填写公司成立日期" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(_audit.address))
+            //{
+            //    return Json(new { success = false, message = "请填写公司注册地址" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (_audit.date_transaction == null)
+            //{
+            //    return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (_audit.amount_transaction == null)
+            //{
+            //    return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
+            //}
 
-            if (_audit.salesman_id == null)
-            {
-                return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (_audit.salesman_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
+            //}
 
-            if (_audit.accountant_id == null)
-            {
-                return Json(new { success = false, message = "请选择会计" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (_audit.accountant_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择会计" }, JsonRequestBehavior.AllowGet);
+            //}
 
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)

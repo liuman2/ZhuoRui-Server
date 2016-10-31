@@ -176,42 +176,42 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Add(trademark trade, oldRequest oldRequest)
         {
-            if (trade.customer_id == null)
-            {
-                return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(trade.name))
-            {
-                return Json(new { success = false, message = "请填写商标名称" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(trade.applicant))
-            {
-                return Json(new { success = false, message = "请填写申请人" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(trade.region))
-            {
-                return Json(new { success = false, message = "请填写商标地区" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(trade.address))
-            {
-                return Json(new { success = false, message = "请填写申请人地址" }, JsonRequestBehavior.AllowGet);
-            }
-            if (trade.date_transaction == null)
-            {
-                return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
-            }
-            if (trade.amount_transaction == null)
-            {
-                return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
-            }
-            if (trade.salesman_id == null)
-            {
-                return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
-            }
-            if (trade.waiter_id == null)
-            {
-                return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (trade.customer_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(trade.name))
+            //{
+            //    return Json(new { success = false, message = "请填写商标名称" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(trade.applicant))
+            //{
+            //    return Json(new { success = false, message = "请填写申请人" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(trade.region))
+            //{
+            //    return Json(new { success = false, message = "请填写商标地区" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(trade.address))
+            //{
+            //    return Json(new { success = false, message = "请填写申请人地址" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (trade.date_transaction == null)
+            //{
+            //    return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (trade.amount_transaction == null)
+            //{
+            //    return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (trade.salesman_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (trade.waiter_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
+            //}
 
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)

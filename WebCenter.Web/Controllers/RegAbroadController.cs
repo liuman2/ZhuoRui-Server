@@ -160,32 +160,32 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Add(reg_abroad aboad, oldRequest oldRequest)
         {
-            if (aboad.customer_id == null)
-            {
-                return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (aboad.customer_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
+            //}
 
-            if (string.IsNullOrEmpty(aboad.name_en))
-            {
-                return Json(new { success = false, message = "请填写公司英文名称" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (string.IsNullOrEmpty(aboad.name_en))
+            //{
+            //    return Json(new { success = false, message = "请填写公司英文名称" }, JsonRequestBehavior.AllowGet);
+            //}
             
-            if (aboad.date_transaction == null)
-            {
-                return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
-            }
-            if (aboad.amount_transaction == null)
-            {
-                return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
-            }
-            if (aboad.waiter_id == null)
-            {
-                return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
-            }
-            if (aboad.salesman_id == null)
-            {
-                return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (aboad.date_transaction == null)
+            //{
+            //    return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (aboad.amount_transaction == null)
+            //{
+            //    return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (aboad.waiter_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (aboad.salesman_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
+            //}
 
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)

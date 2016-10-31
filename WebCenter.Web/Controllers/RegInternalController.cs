@@ -161,14 +161,14 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Add(reg_internal reginternal, oldRequest oldRequest)
         {
-            if (reginternal.customer_id == null)
-            {
-                return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
-            }
-            if (string.IsNullOrEmpty(reginternal.name_cn))
-            {
-                return Json(new { success = false, message = "请填写公司中文名称" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (reginternal.customer_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择客户" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (string.IsNullOrEmpty(reginternal.name_cn))
+            //{
+            //    return Json(new { success = false, message = "请填写公司中文名称" }, JsonRequestBehavior.AllowGet);
+            //}
             //if (reginternal.date_setup == null)
             //{
             //    return Json(new { success = false, message = "请填写公司成立日期" }, JsonRequestBehavior.AllowGet);
@@ -177,26 +177,26 @@ namespace WebCenter.Web.Controllers
             //{
             //    return Json(new { success = false, message = "请填写统一信用编号" }, JsonRequestBehavior.AllowGet);
             //}
-            if (string.IsNullOrEmpty(reginternal.address))
-            {
-                return Json(new { success = false, message = "请填写公司注册地址" }, JsonRequestBehavior.AllowGet);
-            }
-            if (reginternal.date_transaction == null)
-            {
-                return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
-            }
-            if (reginternal.amount_transaction == null)
-            {
-                return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
-            }
-            if (reginternal.salesman_id == null)
-            {
-                return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
-            }
-            if (reginternal.waiter_id == null)
-            {
-                return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
-            }
+            //if (string.IsNullOrEmpty(reginternal.address))
+            //{
+            //    return Json(new { success = false, message = "请填写公司注册地址" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (reginternal.date_transaction == null)
+            //{
+            //    return Json(new { success = false, message = "请填写成交日期" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (reginternal.amount_transaction == null)
+            //{
+            //    return Json(new { success = false, message = "请填写成交金额" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (reginternal.salesman_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择业务员" }, JsonRequestBehavior.AllowGet);
+            //}
+            //if (reginternal.waiter_id == null)
+            //{
+            //    return Json(new { success = false, message = "请选择年检客服" }, JsonRequestBehavior.AllowGet);
+            //}
 
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
