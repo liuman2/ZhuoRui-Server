@@ -5,6 +5,8 @@ using WebCenter.IServices;
 using Common;
 using System.Web.Security;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using WebCenter.Entities;
 
 namespace WebCenter.Web.Controllers
 {
@@ -44,6 +46,38 @@ namespace WebCenter.Web.Controllers
             }
 
             return Json(codingObj, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetPeriod()
+        {
+            var param = Uof.IsettingService.GetAll(s => s.name == "PATENT_PERIOD" || s.name == "TRADEMARK_PERIOD").ToList();
+            var obj = new ParamSetting();
+            obj.patent_period = "10";
+            obj.trademark_period = "10";
+            if (param.Count > 0)
+            {
+                obj.patent_period = param.Where(s => s.name == "PATENT_PERIOD").Select(s => s.value).FirstOrDefault();
+                obj.trademark_period = param.Where(s => s.name == "TRADEMARK_PERIOD").Select(s => s.value).FirstOrDefault();
+            }
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult PeriodUpdate(ParamSetting param)
+        {
+            var patentPeriod = Uof.IsettingService.GetAll(s => s.name == "PATENT_PERIOD").FirstOrDefault();
+            var trademarkPeriod = Uof.IsettingService.GetAll(s => s.name == "TRADEMARK_PERIOD").FirstOrDefault();
+
+            patentPeriod.value = param.patent_period;
+            trademarkPeriod.value = param.trademark_period;
+
+            var ss = new List<setting>();
+            ss.Add(patentPeriod);
+            ss.Add(trademarkPeriod);
+            var r = Uof.IsettingService.UpdateEntities(ss);
+
+            return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

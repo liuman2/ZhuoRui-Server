@@ -11,4 +11,10 @@ namespace WebCenter.Web
 
         public List<RoleOpers> opers { get; set; }
     }
+
+    public class ParamSetting
+    {
+       public string  patent_period { get; set; }
+        public string trademark_period { get; set; }
+    }
 }
