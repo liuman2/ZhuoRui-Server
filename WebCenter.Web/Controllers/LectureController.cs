@@ -121,7 +121,7 @@ namespace WebCenter.Web.Controllers
             
             var _l = Uof.IlectureService.AddEntity(lect);
 
-            if (_l != null && attachments.Count > 0)
+            if (_l != null && attachments != null && attachments.Count > 0)
             {
                 var atts = new List<attachment>();
                 foreach (var item in attachments)
@@ -190,7 +190,7 @@ namespace WebCenter.Web.Controllers
 
             var r = Uof.IlectureService.UpdateEntity(_c);
 
-            if (r && attachments.Count > 0)
+            if (r && attachments != null && attachments.Count > 0)
             {
                 var newAtts = new List<attachment>();
                 var attIds = Uof.IattachmentService.GetAll(a => a.source_id == _c.id && a.source_name == "lecture").Select(a => a.id).ToList();
