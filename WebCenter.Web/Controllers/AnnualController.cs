@@ -95,7 +95,7 @@ namespace WebCenter.Web.Controllers
             
             #region 境外注册
             Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 && 
-            ((c.annual_date == null && Month1 >= (c.date_finish.Value.Month - 1) && nowYear > c.date_finish.Value.Year) || 
+            ((c.annual_date == null && Month1 >= (c.date_setup.Value.Month - 1) && nowYear > c.date_setup.Value.Year) || 
             (c.annual_date != null && Month1 >= (c.annual_date.Value.Month - 1) && nowYear > c.annual_date.Value.Year) || 
             (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
             Expression<Func<reg_abroad, bool>> customerQuery1 = c => true;
@@ -166,7 +166,7 @@ namespace WebCenter.Web.Controllers
             if (internalMonth >= 3 && internalMonth <= 6)
             {
                 Expression<Func<reg_internal, bool>> condition2 = c => c.status == 4 &&
-                ((c.annual_date == null && Month1 >= (c.date_finish.Value.Month - 1) && nowYear > c.date_finish.Value.Year) ||
+                ((c.annual_date == null && Month1 >= (c.date_setup.Value.Month - 1) && nowYear > c.date_setup.Value.Year) ||
                 (c.annual_date != null && Month1 >= (c.annual_date.Value.Month - 1) && nowYear > c.annual_date.Value.Year) ||
                 (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
 
@@ -243,7 +243,7 @@ namespace WebCenter.Web.Controllers
             int.TryParse(trademarkPeriodSetting, out trademarkPeriod);
 
             Expression<Func<trademark, bool>> condition3 = c => c.status == 4 &&
-            ((c.annual_date == null && Month1 >= (c.date_finish.Value.Month - 1) && (nowYear - trademarkPeriod) == c.date_finish.Value.Year) ||
+            ((c.annual_date == null && Month1 >= (c.date_trial.Value.Month - 1) && (nowYear - trademarkPeriod) == c.date_trial.Value.Year) ||
             (c.annual_date != null && Month1 >= (c.annual_date.Value.Month - 1) && (nowYear - trademarkPeriod) == c.annual_date.Value.Year) ||
             (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
 
@@ -318,7 +318,7 @@ namespace WebCenter.Web.Controllers
             int.TryParse(patentPeriodSetting, out patentPeriod);
 
             Expression<Func<patent, bool>> condition4 = c => c.status == 4 &&
-            ((c.annual_date == null && Month1 >= (c.date_finish.Value.Month - 1) && (nowYear - patentPeriod) == c.date_finish.Value.Year) ||
+            ((c.annual_date == null && Month1 >= (c.date_empower.Value.Month - 1) && (nowYear - patentPeriod) == c.date_empower.Value.Year) ||
             (c.annual_date != null && Month1 >= (c.annual_date.Value.Month - 1) && (nowYear - patentPeriod) == c.annual_date.Value.Year) ||
             (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
 
