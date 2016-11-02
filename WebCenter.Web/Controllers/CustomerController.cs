@@ -205,7 +205,7 @@ namespace WebCenter.Web.Controllers
                     is_system = 1
                 });
 
-                return Json(new { id = newCustomer.id }, JsonRequestBehavior.AllowGet);
+                return Json(new { id = c.id }, JsonRequestBehavior.AllowGet);
             }
 
             return ErrorResult;
