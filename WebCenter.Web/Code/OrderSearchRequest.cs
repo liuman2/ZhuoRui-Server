@@ -44,6 +44,8 @@ namespace WebCenter.Web
         public int? status { get; set; }
         public DateTime? start_time { get; set; }
         public DateTime? end_time { get; set; }
+        public int? member_id { get; set; }
+        public int? type { get; set; }
     }
 
     public class LeaveResponse
@@ -70,5 +72,7 @@ namespace WebCenter.Web
 
         public string department { get; set; }
         public string position { get; set; }
+
+        public double hours { get; set; }
     }
 }

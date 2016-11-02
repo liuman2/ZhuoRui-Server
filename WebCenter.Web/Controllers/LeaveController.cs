@@ -444,5 +444,93 @@ namespace WebCenter.Web.Controllers
 
             return Json(dbLeave, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult Statistics(LeaveSearchRequest request)
+        {
+            //member_id: '',
+            //type: '',
+            //start_time: '',
+            //end_time:''
+
+            Expression<Func<leave, bool>> condition = c => true;
+            if (request.member_id != null && request.member_id.Value > 0)
+            {
+                condition = c => (c.owner_id == request.member_id.Value);
+            }
+
+            Expression<Func<leave, bool>> typeQuery = c => true;
+            if (request.type != null)
+            {
+                typeQuery = c => (c.type == request.type.Value);
+            }
+
+            Expression<Func<leave, bool>> dateQuery = c => true;
+            if (request.start_time != null && request.end_time != null)
+            {
+                var endTime = request.end_time.Value.AddDays(1);
+                dateQuery = c => ((c.date_start >= request.start_time.Value || c.date_end < endTime));
+            }            
+            if (request.start_time != null && request.end_time == null)
+            {
+                dateQuery = c => (c.date_start >= request.start_time.Value);
+            }
+            if (request.start_time == null && request.end_time != null)
+            {
+                var endTime = request.end_time.Value.AddDays(1);
+                dateQuery = c => (c.date_end < endTime);
+            }
+
+            var list = Uof.IleaveService.GetAll(condition)
+                .Where(typeQuery)
+                .Where(dateQuery)
+                .OrderByDescending(item => item.id).Select(c => new LeaveResponse
+                {
+                    id = c.id,
+                    auditor_id = c.auditor_id,
+                    auditor_name = "",
+                    owner_id = c.owner_id,
+                    owner_name = "",
+                    date_created = c.date_created,
+                    date_start = c.date_start,
+                    date_end = c.date_end,
+                    date_review = c.date_review,
+                    type = c.type
+
+                }).ToPagedList(request.index, request.size).ToList();
+
+            var totalRecord = Uof.IleaveService.GetAll(condition)
+                .Where(typeQuery)
+                .Where(dateQuery).Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + request.size - 1) / request.size;
+            }
+
+            if (list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    var ds = item.date_end - item.date_start;
+                    item.hours = Math.Round(ds.Value.TotalHours, 2);
+                }
+            }
+            var page = new
+            {
+                current_index = request.index,
+                current_size = request.size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+
+            var result = new
+            {
+                page = page,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

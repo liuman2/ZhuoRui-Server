@@ -21,4 +21,4 @@ INSERT INTO `menu` VALUES ('35', '0', '', 'fa fa-bullhorn', '公告管理', '8')
 INSERT INTO `menu` VALUES ('36', '35', 'notice', 'fa fa-file-o', '通知公告', '1');
 INSERT INTO `menu` VALUES ('37', '35', 'conference', 'fa fa-file-o', '会议纪要', '2');
 
-INSERT INTO `menu` VALUES ('38', '27', 'settings', 'fa fa-file-o', '参数设定', '2');
+INSERT INTO `menu` VALUES ('38', '27', 'settings', 'fa fa-cogs', '参数设定', '2');
