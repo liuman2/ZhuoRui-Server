@@ -130,7 +130,8 @@ namespace WebCenter.Web.Controllers
                     salesman_id = c.salesman_id,
                     salesman_name = c.member3.name,
                     finance_review_moment = c.finance_review_moment,
-                    submit_review_moment = c.submit_review_moment
+                    submit_review_moment = c.submit_review_moment,
+                    date_setup = c.date_setup
 
                 }).ToPagedList(request.index, request.size).ToList();
 

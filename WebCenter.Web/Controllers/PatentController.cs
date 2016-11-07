@@ -91,7 +91,7 @@ namespace WebCenter.Web.Controllers
                 else
                 {
                     statusQuery = c => (c.status == request.status.Value);
-                }                
+                }
             }
 
             // 成交开始日期
@@ -128,28 +128,29 @@ namespace WebCenter.Web.Controllers
                 .Where(nameQuery)
                 .Where(applicantQuery)
                 .OrderByDescending(item => item.id).Select(c => new
-            {
-                id = c.id,
-                code = c.code,
-                customer_id = c.customer_id,
-                customer_name = c.customer.name,
-                type = c.type,
-                name = c.name,
-                applicant = c.applicant,
-                address = c.address,
-                patent_type = c.patent_type,
-                reg_mode = c.reg_mode,
-                progress = c.progress,
-                status = c.status,
-                review_status = c.review_status,
-                date_transaction = c.date_transaction,
-                amount_transaction = c.amount_transaction,
-                amount_income = 0,
-                amount_unreceive = 0,
-                salesman_id = c.salesman_id,
-                salesman_name = c.member3.name,
-                finance_review_moment = c.finance_review_moment,
-                submit_review_moment = c.submit_review_moment
+                {
+                    id = c.id,
+                    code = c.code,
+                    customer_id = c.customer_id,
+                    customer_name = c.customer.name,
+                    type = c.type,
+                    name = c.name,
+                    applicant = c.applicant,
+                    address = c.address,
+                    patent_type = c.patent_type,
+                    reg_mode = c.reg_mode,
+                    progress = c.progress,
+                    status = c.status,
+                    review_status = c.review_status,
+                    date_transaction = c.date_transaction,
+                    amount_transaction = c.amount_transaction,
+                    amount_income = 0,
+                    amount_unreceive = 0,
+                    salesman_id = c.salesman_id,
+                    salesman_name = c.member3.name,
+                    finance_review_moment = c.finance_review_moment,
+                    submit_review_moment = c.submit_review_moment,
+                    date_empower = c.date_empower
 
                 }).ToPagedList(request.index, request.size).ToList();
 
