@@ -112,7 +112,7 @@ namespace WebCenter.Web.Controllers
                 .Where(statusQuery)
                 .Where(date1Query)
                 .Where(date2Query)
-                .OrderByDescending(item => item.id).Select(c => new
+                .OrderByDescending(item => item.code).Select(c => new
                 {
                     id = c.id,
                     code = c.code,

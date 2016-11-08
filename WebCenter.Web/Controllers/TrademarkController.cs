@@ -123,7 +123,7 @@ namespace WebCenter.Web.Controllers
                 .Where(date2Query)
                 .Where(nameQuery)
                 .Where(applicantQuery)
-                .OrderByDescending(item => item.id).Select(c => new
+                .OrderByDescending(item => item.code).Select(c => new
                 {
                     id = c.id,
                     code = c.code,
