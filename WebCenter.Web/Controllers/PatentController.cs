@@ -147,7 +147,11 @@ namespace WebCenter.Web.Controllers
                     amount_income = 0,
                     amount_unreceive = 0,
                     salesman_id = c.salesman_id,
-                    salesman_name = c.member3.name,
+                    salesman_name = c.member4.name,
+
+                    assistant_id = c.assistant_id,
+                    assistant_name = c.member.name,
+
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment,
                     date_empower = c.date_empower
@@ -326,9 +330,12 @@ namespace WebCenter.Web.Controllers
                 salesman_id = a.salesman_id,
                 salesman = a.member4.name,
                 waiter_id = a.waiter_id,
-                waiter_name = a.member5.name,
+                waiter_name = a.member6.name,
                 manager_id = a.manager_id,
-                manager_name = a.member2.name,
+                manager_name = a.member3.name,
+
+                assistant_id = a.assistant_id,
+                assistant_name = a.member.name,
 
                 status = a.status,
                 review_status = a.review_status
@@ -379,9 +386,12 @@ namespace WebCenter.Web.Controllers
                 salesman_id = a.salesman_id,
                 salesman = a.member4.name,
                 waiter_id = a.waiter_id,
-                waiter_name = a.member5.name,
+                waiter_name = a.member6.name,
                 manager_id = a.manager_id,
-                manager_name = a.member2.name,
+                manager_name = a.member3.name,
+
+                assistant_id = a.assistant_id,
+                assistant_name = a.member.name,
 
                 status = a.status,
                 review_status = a.review_status,
@@ -455,7 +465,8 @@ namespace WebCenter.Web.Controllers
                 _patent.manager_id == dbPatent.manager_id && 
                 _patent.description == dbPatent.description &&
                 _patent.currency == dbPatent.currency &&
-                _patent.rate == dbPatent.rate
+                _patent.rate == dbPatent.rate &&
+                _patent.assistant_id == dbPatent.assistant_id
                 )
             {
                 return Json(new { id = _patent.id }, JsonRequestBehavior.AllowGet);
@@ -489,6 +500,7 @@ namespace WebCenter.Web.Controllers
             dbPatent.progress = _patent.progress;
 
             dbPatent.salesman_id = _patent.salesman_id;
+            dbPatent.assistant_id = _patent.assistant_id;
             dbPatent.waiter_id = _patent.waiter_id;
             dbPatent.manager_id = _patent.manager_id;
             dbPatent.description = _patent.description;
@@ -613,6 +625,18 @@ namespace WebCenter.Web.Controllers
                     content = "您的专利订单已通过财务审核",
                     read_status = 0
                 });
+                if (dbPatent.assistant_id != null && dbPatent.assistant_id != dbPatent.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "patent",
+                        source_id = dbPatent.id,
+                        user_id = dbPatent.assistant_id,
+                        router = "patent_view",
+                        content = "您的专利订单已通过财务审核",
+                        read_status = 0
+                    });
+                }
 
                 var ids = GetSubmitMembers();
                 if (ids.Count() > 0)
@@ -623,7 +647,7 @@ namespace WebCenter.Web.Controllers
                         {
                             source = "patent",
                             source_id = dbPatent.id,
-                            user_id = dbPatent.salesman_id,
+                            user_id = item,
                             router = "patent_view",
                             content = "您有专利订单需要提交审核",
                             read_status = 0
@@ -649,6 +673,19 @@ namespace WebCenter.Web.Controllers
                     content = "您的专利订单已通过提交审核",
                     read_status = 0
                 });
+
+                if (dbPatent.assistant_id != null && dbPatent.assistant_id != dbPatent.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "patent",
+                        source_id = dbPatent.id,
+                        user_id = dbPatent.assistant_id,
+                        router = "patent_view",
+                        content = "您的专利订单已通过提交审核",
+                        read_status = 0
+                    });
+                }
             }
 
             dbPatent.date_updated = DateTime.Now;
@@ -715,6 +752,18 @@ namespace WebCenter.Web.Controllers
                     content = "您的专利订单未通过财务审核",
                     read_status = 0
                 });
+                if (dbPatent.assistant_id != null && dbPatent.assistant_id != dbPatent.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "patent",
+                        source_id = dbPatent.id,
+                        user_id = dbPatent.assistant_id,
+                        router = "patent_view",
+                        content = "您的专利订单未通过财务审核",
+                        read_status = 0
+                    });
+                }
             }
             else
             {
@@ -734,6 +783,18 @@ namespace WebCenter.Web.Controllers
                     content = "您的专利订单未通过提交审核",
                     read_status = 0
                 });
+                if (dbPatent.assistant_id != null && dbPatent.assistant_id != dbPatent.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "patent",
+                        source_id = dbPatent.id,
+                        user_id = dbPatent.assistant_id,
+                        router = "patent_view",
+                        content = "您的专利订单未通过提交审核",
+                        read_status = 0
+                    });
+                }
             }
 
             dbPatent.date_updated = DateTime.Now;
@@ -797,7 +858,29 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
                 });
 
-                // TODO 通知 业务员
+                var waitdeals = new List<waitdeal>();
+                waitdeals.Add(new waitdeal
+                {
+                    source = "patent",
+                    source_id = dbPatent.id,
+                    user_id = dbPatent.salesman_id,
+                    router = "patent_view",
+                    content = "您的专利订单已完成",
+                    read_status = 0
+                });
+                if (dbPatent.assistant_id != null && dbPatent.assistant_id != dbPatent.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "patent",
+                        source_id = dbPatent.id,
+                        user_id = dbPatent.assistant_id,
+                        router = "patent_view",
+                        content = "您的专利订单已完成",
+                        read_status = 0
+                    });
+                }
+                Uof.IwaitdealService.AddEntities(waitdeals);
             }
 
             return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
@@ -877,7 +960,8 @@ namespace WebCenter.Web.Controllers
                         content = string.Format("{0}完善了注册资料", arrs[3])
                     });
 
-                    Uof.IwaitdealService.AddEntity(new waitdeal
+                    var waitdeals = new List<waitdeal>();
+                    waitdeals.Add(new waitdeal
                     {
                         source = "patent",
                         source_id = dbPantent.id,
@@ -886,6 +970,20 @@ namespace WebCenter.Web.Controllers
                         content = "您的专利订单已完成",
                         read_status = 0
                     });
+                    if (dbPantent.assistant_id != null && dbPantent.assistant_id != dbPantent.salesman_id)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "patent",
+                            source_id = dbPantent.id,
+                            user_id = dbPantent.assistant_id,
+                            router = "patent_view",
+                            content = "您的专利订单已完成",
+                            read_status = 0
+                        });
+                    }
+
+                    Uof.IwaitdealService.AddEntities(waitdeals);
                 }
                 else
                 {
@@ -897,7 +995,8 @@ namespace WebCenter.Web.Controllers
                         content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbPantent.progress, dbPantent.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 
-                    Uof.IwaitdealService.AddEntity(new waitdeal
+                    var waitdeals = new List<waitdeal>();
+                    waitdeals.Add(new waitdeal
                     {
                         source = "patent",
                         source_id = dbPantent.id,
@@ -906,6 +1005,20 @@ namespace WebCenter.Web.Controllers
                         content = "您的专利订单更新了进度",
                         read_status = 0
                     });
+                    if (dbPantent.assistant_id != null && dbPantent.assistant_id != dbPantent.salesman_id)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "patent",
+                            source_id = dbPantent.id,
+                            user_id = dbPantent.assistant_id,
+                            router = "patent_view",
+                            content = "您的专利订单更新了进度",
+                            read_status = 0
+                        });
+                    }
+
+                    Uof.IwaitdealService.AddEntities(waitdeals);
                 }
             }
             

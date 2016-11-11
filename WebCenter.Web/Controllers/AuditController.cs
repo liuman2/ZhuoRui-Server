@@ -114,26 +114,30 @@ namespace WebCenter.Web.Controllers
                 .Where(date1Query)
                 .Where(date2Query)
                 .OrderByDescending(item => item.id).Select(c => new
-            {
-                id = c.id,
-                code = c.code,
-                type = c.type,
-                customer_id = c.customer_id,
-                customer_name = c.customer.name,
-                name_cn = c.name_cn,
-                name_en = c.name_en,
-                status = c.status,
-                review_status = c.review_status,
-                date_transaction = c.date_transaction,
-                amount_transaction = c.amount_transaction,
-                turnover_currency = c.turnover_currency,
-                amount_income = 0,
-                amount_unreceive = 0,
-                progress = c.progress,
-                salesman_id = c.salesman_id,
-                salesman_name = c.member3.name,
-                finance_review_moment = c.finance_review_moment,
-                submit_review_moment = c.submit_review_moment
+                {
+                    id = c.id,
+                    code = c.code,
+                    type = c.type,
+                    customer_id = c.customer_id,
+                    customer_name = c.customer.name,
+                    name_cn = c.name_cn,
+                    name_en = c.name_en,
+                    status = c.status,
+                    review_status = c.review_status,
+                    date_transaction = c.date_transaction,
+                    amount_transaction = c.amount_transaction,
+                    turnover_currency = c.turnover_currency,
+                    amount_income = 0,
+                    amount_unreceive = 0,
+                    progress = c.progress,
+                    salesman_id = c.salesman_id,
+                    salesman_name = c.member4.name,
+
+                    assistant_id = c.assistant_id,
+                    assistant_name = c.member6.name,
+
+                    finance_review_moment = c.finance_review_moment,
+                    submit_review_moment = c.submit_review_moment
 
                 }).ToPagedList(request.index, request.size).ToList();
 
@@ -344,7 +348,10 @@ namespace WebCenter.Web.Controllers
                 accountant_id = a.accountant_id,
                 accountant_name = a.member.name,
                 manager_id = a.manager_id,
-                manager_name = a.member2.name,
+                manager_name = a.member3.name,
+
+                assistant_id = a.assistant_id,
+                assistant_name = a.member6.name,
 
                 status = a.status,
                 review_status = a.review_status
@@ -400,7 +407,10 @@ namespace WebCenter.Web.Controllers
                 accountant_id = a.accountant_id,
                 accountant_name = a.member.name,
                 manager_id = a.manager_id,
-                manager_name = a.member2.name,
+                manager_name = a.member3.name,
+
+                assistant_id = a.assistant_id,
+                assistant_name = a.member6.name,
 
                 status = a.status,
                 review_status = a.review_status,
@@ -489,7 +499,8 @@ namespace WebCenter.Web.Controllers
                 _audit.salesman_id == dbAudit.salesman_id &&
                 _audit.description == dbAudit.description &&
                 _audit.currency == dbAudit.currency &&
-                _audit.rate == dbAudit.rate
+                _audit.rate == dbAudit.rate &&
+                _audit.assistant_id == dbAudit.assistant_id
                 )
             {
                 return Json(new { id = _audit.id }, JsonRequestBehavior.AllowGet);
@@ -532,7 +543,8 @@ namespace WebCenter.Web.Controllers
             dbAudit.rate = _audit.rate;
             dbAudit.date_updated = DateTime.Now;
             dbAudit.turnover_currency = _audit.turnover_currency;
-            
+            dbAudit.assistant_id = _audit.assistant_id;
+
             var r = Uof.IauditService.UpdateEntity(dbAudit);
 
             if (r)
@@ -654,6 +666,19 @@ namespace WebCenter.Web.Controllers
                     read_status = 0
                 });
 
+                if (dbAudit.assistant_id != null && dbAudit.assistant_id != dbAudit.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "audit",
+                        source_id = dbAudit.id,
+                        user_id = dbAudit.assistant_id,
+                        router = "audit_view",
+                        content = "您的审计订单已通过财务审核",
+                        read_status = 0
+                    });
+                }
+
                 var ids = GetSubmitMembers();
                 if (ids.Count() > 0)
                 {
@@ -689,6 +714,19 @@ namespace WebCenter.Web.Controllers
                     content = "您的审计订单已通过提交审核",
                     read_status = 0
                 });
+
+                if (dbAudit.assistant_id != null && dbAudit.assistant_id != dbAudit.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "audit",
+                        source_id = dbAudit.id,
+                        user_id = dbAudit.assistant_id,
+                        router = "audit_view",
+                        content = "您的审计订单已通过提交审核",
+                        read_status = 0
+                    });
+                }
             }
 
             dbAudit.date_updated = DateTime.Now;
@@ -754,6 +792,19 @@ namespace WebCenter.Web.Controllers
                     content = "您的审计订单未通过财务审核",
                     read_status = 0
                 });
+
+                if (dbAudit.assistant_id != null && dbAudit.assistant_id != dbAudit.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "audit",
+                        source_id = dbAudit.id,
+                        user_id = dbAudit.assistant_id,
+                        router = "audit_view",
+                        content = "您的审计订单未通过财务审核",
+                        read_status = 0
+                    });
+                }
             }
             else
             {
@@ -773,6 +824,18 @@ namespace WebCenter.Web.Controllers
                     content = "您的审计订单未通过提交审核",
                     read_status = 0
                 });
+                if (dbAudit.assistant_id != null && dbAudit.assistant_id != dbAudit.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "audit",
+                        source_id = dbAudit.id,
+                        user_id = dbAudit.assistant_id,
+                        router = "audit_view",
+                        content = "您的审计订单未通过提交审核",
+                        read_status = 0
+                    });
+                }
             }
 
             dbAudit.date_updated = DateTime.Now;
@@ -835,7 +898,29 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
                 });
 
-                // TODO 通知 业务员
+                var waitdeals = new List<waitdeal>();
+                waitdeals.Add(new waitdeal
+                {
+                    source = "annual",
+                    source_id = dbAudit.id,
+                    user_id = dbAudit.salesman_id,
+                    router = "annual_view",
+                    content = "您的审计订单已完成",
+                    read_status = 0
+                });
+                if (dbAudit.assistant_id != null && dbAudit.assistant_id != dbAudit.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "annual",
+                        source_id = dbAudit.id,
+                        user_id = dbAudit.assistant_id,
+                        router = "annual_view",
+                        content = "您的审计订单已完成",
+                        read_status = 0
+                    });
+                }
+                Uof.IwaitdealService.AddEntities(waitdeals);
             }
 
             return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
@@ -912,8 +997,9 @@ namespace WebCenter.Web.Controllers
                         title = "完善了注册资料",
                         content = string.Format("{0}完善了注册资料", arrs[3])
                     });
-                   
-                    Uof.IwaitdealService.AddEntity(new waitdeal
+
+                    var waitdeals = new List<waitdeal>();
+                    waitdeals.Add(new waitdeal
                     {
                         source = "audit",
                         source_id = dbAudit.id,
@@ -922,6 +1008,20 @@ namespace WebCenter.Web.Controllers
                         content = "您的审计订单已完成",
                         read_status = 0
                     });
+                    if (dbAudit.assistant_id != null && dbAudit.assistant_id != dbAudit.salesman_id)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "audit",
+                            source_id = dbAudit.id,
+                            user_id = dbAudit.assistant_id,
+                            router = "audit_view",
+                            content = "您的审计订单已完成",
+                            read_status = 0
+                        });
+                    }
+
+                    Uof.IwaitdealService.AddEntities(waitdeals);
                 }
                 else
                 {
@@ -933,7 +1033,8 @@ namespace WebCenter.Web.Controllers
                         content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbAudit.progress, dbAudit.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 
-                    Uof.IwaitdealService.AddEntity(new waitdeal
+                    var waitdeals = new List<waitdeal>();
+                    waitdeals.Add(new waitdeal
                     {
                         source = "audit",
                         source_id = dbAudit.id,
@@ -942,6 +1043,21 @@ namespace WebCenter.Web.Controllers
                         content = "您的审计订单更新了进度",
                         read_status = 0
                     });
+                    if (dbAudit.assistant_id != null && dbAudit.assistant_id != dbAudit.salesman_id)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "audit",
+                            source_id = dbAudit.id,
+                            user_id = dbAudit.assistant_id,
+                            router = "audit_view",
+                            content = "您的审计订单更新了进度",
+                            read_status = 0
+                        });
+                    }
+
+                    Uof.IwaitdealService.AddEntities(waitdeals);
+
                 }
             }
             
@@ -1106,7 +1222,7 @@ namespace WebCenter.Web.Controllers
                         date_finish = i.date_finish,
                         date_setup = i.date_setup,
                         address = i.address,
-                        salement = i.member4.name
+                        salesman = i.member5.name
                     }).FirstOrDefault();
 
                     return Json(internals, JsonRequestBehavior.AllowGet);
@@ -1132,7 +1248,7 @@ namespace WebCenter.Web.Controllers
                         date_finish = i.date_finish,
                         date_setup = i.date_setup,
                         address = i.address,
-                        salement = i.member4.name
+                        salesman = i.member4.name
                     }).FirstOrDefault();
 
                     return Json(abroads, JsonRequestBehavior.AllowGet);

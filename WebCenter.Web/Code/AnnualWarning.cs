@@ -17,9 +17,11 @@ namespace WebCenter.Web
         public string order_type_name { get; set; }
         public string saleman { get; set; }
         public string waiter { get; set; }
+        public string assistant_name { get; set; }
 
         public DateTime? submit_review_date { get; set; }
         public DateTime? date_finish { get; set; }
+        public DateTime? date_setup { get; set; }
     }
 
     public class FinanceCheck

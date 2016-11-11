@@ -1,0 +1,74 @@
+reg_internal:
+0 assistant_id
+1 creator  
+2 finance_reviewer
+3 manager
+4 outworker
+5 salesman
+6 submit_reviewer
+7 waiter
+
+reg_abroad
+0 creator
+1 finance_reviewer
+2 manager
+3 outworker
+4 salesman
+5 submit_reviewer
+6 waiter
+7 assistant
+
+annual_exam
+0 accountant
+1 creator
+2 finance_reviewer
+3 manager
+4 salesman
+5 submit_reviewer
+6 waiter
+7 assistant
+
+audit
+0 accountant
+1 creator
+2 finance_reviewer
+3 manager
+4 salesman
+5 submit_reviewer
+6 assistant
+
+patent
+0 assistant
+1 creator
+2 finance_reviewer
+3 manager
+4 salesman
+5 submit_reviewer
+6 waiter
+
+trademark
+0 assistant
+1 creator
+2 finance_reviewer
+3 manager
+4 salesman
+5 submit_reviewer
+6 waiter
+
+assistant_id = c.assistant_id,
+assistant_name = c.member6.name,
+
+var waitdeals = new List<waitdeal>();
+
+if (dbAudit.assistant_id != null && dbAudit.assistant_id != dbAudit.salesman_id)
+{
+    waitdeals.Add(new waitdeal
+    {
+        source = "audit",
+        source_id = dbAudit.id,
+        user_id = dbAudit.assistant_id,
+        router = "audit_view",
+        content = "您的审计订单已通过提交审核",
+        read_status = 0
+    });
+}

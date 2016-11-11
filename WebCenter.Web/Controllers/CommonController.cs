@@ -252,13 +252,13 @@ namespace WebCenter.Web.Controllers
                         accounter = "",
                         amount = a.amount_transaction * a.rate,
                         attachments = 0,
-                        auditor = a.member1.name,
+                        auditor = a.member2.name,
                         balance = a.amount_transaction * a.rate,
                         code = a.code,
                         customer_name = a.customer.name,
                         company_cn = a.name_cn,
                         company_en = "",
-                        creator = a.member.name,
+                        creator = a.member1.name,
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "",
@@ -270,10 +270,10 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "国内注册",
                         received = 0,
-                        saleman = a.member4.name,
+                        saleman = a.member5.name,
                         type = "",
                         currency = a.currency,
-                        area = a.member4.area.name,
+                        area = a.member5.area.name,
                         rate = a.rate
                     }).FirstOrDefault();
 
@@ -292,13 +292,13 @@ namespace WebCenter.Web.Controllers
                         accounter = "",
                         amount = a.amount_transaction * a.rate,
                         attachments = 0,
-                        auditor = a.member1.name,
+                        auditor = a.member2.name,
                         balance = a.amount_transaction * a.rate,
                         code = a.code,
                         customer_name = a.customer.name,
                         company_cn = a.customer.name,
                         company_en = "",
-                        creator = a.member.name,
+                        creator = a.member1.name,
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = a.reg_mode,
@@ -310,10 +310,10 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "专利注册",
                         received = 0,
-                        saleman = a.member3.name,
+                        saleman = a.member4.name,
                         type = a.patent_type,
                         currency = a.currency,
-                        area = a.member3.area.name,
+                        area = a.member4.area.name,
                         rate = a.rate
                     }).FirstOrDefault();
 
@@ -332,13 +332,13 @@ namespace WebCenter.Web.Controllers
                         accounter = "",
                         amount = a.amount_transaction * a.rate,
                         attachments = 0,
-                        auditor = a.member1.name,
+                        auditor = a.member2.name,
                         balance = a.amount_transaction * a.rate,
                         code = a.code,
                         customer_name = a.customer.name,
                         company_cn = a.customer.name,
                         company_en = "",
-                        creator = a.member.name,
+                        creator = a.member1.name,
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = a.reg_mode,
@@ -350,10 +350,10 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "商标注册",
                         received = 0,
-                        saleman = a.member3.name,
+                        saleman = a.member4.name,
                         type = a.trademark_type,
                         currency = a.currency,
-                        area = a.member3.area.name,
+                        area = a.member4.area.name,
                         rate = a.rate
                     }).FirstOrDefault();
 
@@ -364,7 +364,7 @@ namespace WebCenter.Web.Controllers
                     #endregion
                     break;
                 case "history":
-                    #region 商标
+                    #region 变更
                     printData = Uof.IhistoryService.GetAll(a => a.id == id).Select(a => new PrintData
                     {
                         print_type = "history",

@@ -129,7 +129,11 @@ namespace WebCenter.Web.Controllers
                     amount_unreceive = 0,
                     progress = c.progress,
                     salesman_id = c.salesman_id,
-                    salesman_name = c.member3.name,
+                    salesman_name = c.member5.name,
+
+                    assistant_id = c.assistant_id,
+                    assistant_name = c.member.name,
+
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment,
                     date_setup = c.date_setup
@@ -333,13 +337,16 @@ namespace WebCenter.Web.Controllers
                 invoice_account = a.invoice_account,
 
                 salesman_id = a.salesman_id,
-                salesman = a.member4.name,
+                salesman = a.member5.name,
                 waiter_id = a.waiter_id,
-                waiter_name = a.member6.name,
+                waiter_name = a.member7.name,
                 manager_id = a.manager_id,
-                manager_name = a.member2.name,
+                manager_name = a.member3.name,
                 outworker_id = a.outworker_id,
-                outworker_name = a.member3.name,
+                outworker_name = a.member4.name,
+
+                assistant_id = a.assistant_id,
+                assistant_name = a.member.name,
 
                 status = a.status,
                 review_status = a.review_status
@@ -397,13 +404,16 @@ namespace WebCenter.Web.Controllers
                 invoice_account = a.invoice_account,
 
                 salesman_id = a.salesman_id,
-                salesman = a.member4.name,
+                salesman = a.member5.name,
                 waiter_id = a.waiter_id,
-                waiter_name = a.member6.name,
+                waiter_name = a.member7.name,
                 manager_id = a.manager_id,
-                manager_name = a.member2.name,
+                manager_name = a.member3.name,
                 outworker_id = a.outworker_id,
-                outworker_name = a.member3.name,
+                outworker_name = a.member4.name,
+
+                assistant_id = a.assistant_id,
+                assistant_name = a.member.name,
 
                 status = a.status,
                 review_status = a.review_status,
@@ -484,7 +494,8 @@ namespace WebCenter.Web.Controllers
                 reg.outworker_id == dbReg.outworker_id &&
                 reg.description == dbReg.description &&
                 reg.rate == dbReg.rate &&
-                reg.currency == dbReg.currency
+                reg.currency == dbReg.currency &&
+                reg.assistant_id == dbReg.assistant_id
                 )
             {
                 return Json(new { success = true, id = reg.id }, JsonRequestBehavior.AllowGet);
@@ -531,6 +542,7 @@ namespace WebCenter.Web.Controllers
             dbReg.salesman_id = reg.salesman_id;
             dbReg.manager_id = reg.manager_id;
             dbReg.description = reg.description;
+            dbReg.assistant_id = reg.assistant_id;
 
             dbReg.date_updated = DateTime.Now;
 
@@ -691,6 +703,19 @@ namespace WebCenter.Web.Controllers
                     content = "您的国内注册订单已通过提交审核",
                     read_status = 0
                 });
+
+                if (dbReg.assistant_id != null && dbReg.assistant_id != dbReg.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "reg_internal",
+                        source_id = dbReg.id,
+                        user_id = dbReg.assistant_id,
+                        router = "internal_view",
+                        content = "您的国内注册订单已通过提交审核",
+                        read_status = 0
+                    });
+                }
             }
 
             dbReg.date_updated = DateTime.Now;
@@ -737,6 +762,7 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
             var t = "";
+            var waitdeals = new List<waitdeal>();
             if (dbReg.status == 1)
             {
                 dbReg.status = 0;
@@ -746,7 +772,27 @@ namespace WebCenter.Web.Controllers
                 dbReg.finance_review_moment = description;
 
                 t = "驳回了财务审核";
-                // TODO 通知 业务员
+                waitdeals.Add(new waitdeal
+                {
+                    source = "reg_internal",
+                    source_id = dbReg.id,
+                    user_id = dbReg.salesman_id,
+                    router = "internal_view",
+                    content = "您的国内注册订单未通过财务审核",
+                    read_status = 0
+                });
+                if (dbReg.assistant_id != null && dbReg.assistant_id != dbReg.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "reg_internal",
+                        source_id = dbReg.id,
+                        user_id = dbReg.assistant_id,
+                        router = "internal_view",
+                        content = "您的国内注册订单未通过财务审核",
+                        read_status = 0
+                    });
+                }
             }
             else
             {
@@ -757,7 +803,27 @@ namespace WebCenter.Web.Controllers
                 dbReg.submit_review_moment = description;
 
                 t = "驳回了提交的审核";
-                // TODO 通知 业务员
+                waitdeals.Add(new waitdeal
+                {
+                    source = "reg_internal",
+                    source_id = dbReg.id,
+                    user_id = dbReg.salesman_id,
+                    router = "internal_view",
+                    content = "您的国内注册订单未通过提交审核",
+                    read_status = 0
+                });
+                if (dbReg.assistant_id != null && dbReg.assistant_id != dbReg.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "reg_internal",
+                        source_id = dbReg.id,
+                        user_id = dbReg.assistant_id,
+                        router = "internal_view",
+                        content = "您的国内注册订单未通过提交审核",
+                        read_status = 0
+                    });
+                }
             }
 
             dbReg.date_updated = DateTime.Now;
@@ -1080,9 +1146,9 @@ namespace WebCenter.Web.Controllers
                         title = "完善了注册资料",
                         content = string.Format("{0}完善了注册资料", arrs[3])
                     });
-
-
-                    Uof.IwaitdealService.AddEntity(new waitdeal
+                    
+                    var waitdeals = new List<waitdeal>();
+                    waitdeals.Add(new waitdeal
                     {
                         source = "reg_internal",
                         source_id = dbInternal.id,
@@ -1091,6 +1157,19 @@ namespace WebCenter.Web.Controllers
                         content = "您的国内注册订单已完成",
                         read_status = 0
                     });
+                    if (dbInternal.assistant_id != null && dbInternal.assistant_id != dbInternal.salesman_id)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "reg_internal",
+                            source_id = dbInternal.id,
+                            user_id = dbInternal.salesman_id,
+                            router = "internal_view",
+                            content = "您的国内注册订单已完成",
+                            read_status = 0
+                        });
+                    }
+                    Uof.IwaitdealService.AddEntities(waitdeals);
                 }
                 else
                 {
@@ -1102,7 +1181,8 @@ namespace WebCenter.Web.Controllers
                         content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbInternal.progress, dbInternal.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 
-                    Uof.IwaitdealService.AddEntity(new waitdeal
+                    var waitdeals = new List<waitdeal>();
+                    waitdeals.Add(new waitdeal
                     {
                         source = "reg_internal",
                         source_id = dbInternal.id,
@@ -1111,6 +1191,19 @@ namespace WebCenter.Web.Controllers
                         content = "您的国内注册订单更新了进度",
                         read_status = 0
                     });
+                    if (dbInternal.assistant_id != null && dbInternal.assistant_id != dbInternal.salesman_id)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "reg_internal",
+                            source_id = dbInternal.id,
+                            user_id = dbInternal.assistant_id,
+                            router = "internal_view",
+                            content = "您的国内注册订单更新了进度",
+                            read_status = 0
+                        });
+                    }
+                    Uof.IwaitdealService.AddEntities(waitdeals);
                 }
             }
 

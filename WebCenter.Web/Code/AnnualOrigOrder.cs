@@ -17,5 +17,13 @@ namespace WebCenter.Web
         public string customer_code { get; set; }
         public string customer_name { get; set; }
 
+        public DateTime? date_setup { get; set; }
+
+        public int? salesman_id { get; set; }
+        public string salesman { get; set; }
+
+        public int? assistant_id { get; set; }
+        public string assistant_name { get; set; }
+
     }
 }

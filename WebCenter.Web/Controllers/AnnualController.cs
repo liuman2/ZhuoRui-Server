@@ -35,7 +35,7 @@ namespace WebCenter.Web.Controllers
                         date_finish = i.date_finish,
                         date_setup = i.date_setup,
                         address = i.address,
-                        salement = i.member4.name
+                        salesman = i.member5.name,
                     }).ToList();
 
                     return Json(internals, JsonRequestBehavior.AllowGet);
@@ -50,7 +50,7 @@ namespace WebCenter.Web.Controllers
                         date_finish = i.date_finish,
                         date_setup = i.date_setup,
                         address = i.address,
-                        salement = i.member4.name
+                        salesman = i.member4.name
                     }).ToList();
 
                     return Json(abroads, JsonRequestBehavior.AllowGet);
@@ -91,7 +91,7 @@ namespace WebCenter.Web.Controllers
 
             var items = new List<AnnualWarning>();
             var nowYear = DateTime.Now.Year;
-            var Month1 = DateTime.Now.AddMonths(1).Month; // DateTime.Now.AddMonths(-13).Month;
+            var Month1 = DateTime.Now.AddMonths(2).Month; // DateTime.Now.AddMonths(-13).Month;
             var Month2 = DateTime.Now.Month;
 
             #region 境外注册
@@ -152,8 +152,10 @@ namespace WebCenter.Web.Controllers
                 order_type_name = "境外注册",
                 saleman = a.member4.name,
                 waiter = a.member6.name,
+                assistant_name = a.member7.name,
                 submit_review_date = a.submit_review_date,
-                date_finish = a.date_finish
+                date_finish = a.date_finish,
+                date_setup = a.date_setup,
             }).ToList();
 
             if (abroads.Count() > 0)
@@ -223,10 +225,12 @@ namespace WebCenter.Web.Controllers
                     order_name = a.name_cn,
                     order_type = "reg_internal",
                     order_type_name = "境内注册",
-                    saleman = a.member4.name,
-                    waiter = a.member6.name,
+                    saleman = a.member5.name,
+                    waiter = a.member7.name,
+                    assistant_name = a.member.name,
                     submit_review_date = a.submit_review_date,
-                    date_finish = a.date_finish
+                    date_finish = a.date_finish,
+                    date_setup = a.date_setup,
                 }).ToList();
 
                 if (internas.Count() > 0)
@@ -299,10 +303,12 @@ namespace WebCenter.Web.Controllers
                 order_name = a.name,
                 order_type = "trademark",
                 order_type_name = "商标注册",
-                saleman = a.member3.name,
-                waiter = a.member5.name,
+                saleman = a.member4.name,
+                waiter = a.member6.name,
+                assistant_name = a.member.name,
                 submit_review_date = a.submit_review_date,
-                date_finish = a.date_finish
+                date_finish = a.date_finish,
+                date_setup = a.date_trial,
             }).ToList();
 
             if (trademarks.Count() > 0)
@@ -375,10 +381,12 @@ namespace WebCenter.Web.Controllers
                 order_name = a.name,
                 order_type = "patent",
                 order_type_name = "专利注册",
-                saleman = a.member3.name,
-                waiter = a.member5.name,
+                saleman = a.member4.name,
+                waiter = a.member6.name,
+                assistant_name = a.member.name,
                 submit_review_date = a.submit_review_date,
-                date_finish = a.date_finish
+                date_finish = a.date_finish,
+                date_setup = a.date_empower,
             }).ToList();
 
             if (patents.Count() > 0)
@@ -405,13 +413,74 @@ namespace WebCenter.Web.Controllers
                     {
                         order_id = a.id,
                         order_code = a.code,
-                        order_type_name = "海外注册",
+                        order_type_name = "境外注册",
                         name_cn = a.name_cn,
                         name_en = a.name_en,
 
                         customer_id = a.customer_id,
                         customer_code = a.customer.code,
-                        customer_name = a.customer.name
+                        customer_name = a.customer.name,
+                        date_setup = a.date_setup,
+                        salesman_id = a.salesman_id,
+                        salesman = a.member4.name,
+                        assistant_id = a.assistant_id,
+                        assistant_name = a.member7.name,
+                    }).FirstOrDefault();
+                    break;
+                case "reg_internal":
+                    annualOrigOrder = Uof.Ireg_internalService.GetAll(a => a.id == orderId).Select(a => new AnnualOrigOrder
+                    {
+                        order_id = a.id,
+                        order_code = a.code,
+                        order_type_name = "境内注册",
+                        name_cn = a.name_cn,
+                        name_en = "",
+                        customer_id = a.customer_id,
+                        customer_code = a.customer.code,
+                        customer_name = a.customer.name,
+                        date_setup = a.date_setup,
+                        salesman_id = a.salesman_id,
+                        salesman = a.member5.name,
+                        assistant_id = a.assistant_id,
+                        assistant_name = a.member.name,
+                    }).FirstOrDefault();
+                    break;
+                case "trademark":
+                    annualOrigOrder = Uof.ItrademarkService.GetAll(a => a.id == orderId).Select(a => new AnnualOrigOrder
+                    {
+                        order_id = a.id,
+                        order_code = a.code,
+                        order_type_name = "商标注册",
+                        name_cn = a.name,
+                        name_en = "",
+                        customer_id = a.customer_id,
+                        customer_code = a.customer.code,
+                        customer_name = a.customer.name,
+                        date_setup = a.date_trial,
+
+                        salesman_id = a.salesman_id,
+                        salesman = a.member4.name,
+                        assistant_id = a.assistant_id,
+                        assistant_name = a.member.name,
+                    }).FirstOrDefault();
+                    break;
+                case "patent":
+                    annualOrigOrder = Uof.IpatentService.GetAll(a => a.id == orderId).Select(a => new AnnualOrigOrder
+                    {
+                        order_id = a.id,
+                        order_code = a.code,
+                        order_type_name = "专利注册",
+                        name_cn = a.name,
+                        name_en = "",
+                        customer_id = a.customer_id,
+                        customer_code = a.customer.code,
+                        customer_name = a.customer.name,
+                        date_setup = a.date_empower,
+
+                        salesman_id = a.salesman_id,
+                        salesman = a.member4.name,
+                        assistant_id = a.assistant_id,
+                        assistant_name = a.member.name,
                     }).FirstOrDefault();
                     break;
                 default:
@@ -513,8 +582,8 @@ namespace WebCenter.Web.Controllers
                 exam.rate == dbExam.rate &&
                 exam.currency == dbExam.currency &&
                 exam.salesman_id == dbExam.salesman_id &&
-                exam.accountant_id == dbExam.accountant_id
-               
+                exam.accountant_id == dbExam.accountant_id &&
+                exam.assistant_id == dbExam.assistant_id
                 )
             {
                 return Json(new { success = true, id = dbExam.id }, JsonRequestBehavior.AllowGet);
@@ -537,6 +606,7 @@ namespace WebCenter.Web.Controllers
             dbExam.currency = exam.currency;
             dbExam.salesman_id = exam.salesman_id;
             dbExam.accountant_id = exam.accountant_id;
+            dbExam.assistant_id = exam.assistant_id;
 
             var r = Uof.Iannual_examService.UpdateEntity(dbExam);
 
@@ -595,6 +665,9 @@ namespace WebCenter.Web.Controllers
 
                 accountant_id = a.accountant_id,
                 accountant_name = a.member.name,
+
+                assistant_id = a.assistant_id,
+                assistant_name = a.member7.name,
 
                 status = a.status,
                 review_status = a.review_status
@@ -719,7 +792,11 @@ namespace WebCenter.Web.Controllers
                     amount_unreceive = 0,
                     progress = c.progress,
                     salesman_id = c.salesman_id,
-                    salesman_name = c.member3.name,
+                    salesman_name = c.member4.name,
+
+                    assistant_id = c.assistant_id,
+                    assistant_name = c.member7.name,
+
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment
 
@@ -774,6 +851,10 @@ namespace WebCenter.Web.Controllers
                 waiter_name = a.member6.name,
                 accountant_id = a.accountant_id,
                 accountant_name = a.member.name,
+
+                assistant_id = a.assistant_id,
+                assistant_name = a.member7.name,
+
                 date_finish = a.date_finish,
                 
                 status = a.status,
@@ -914,6 +995,18 @@ namespace WebCenter.Web.Controllers
                     content = "您的年检订单已通过财务审核",
                     read_status = 0
                 });
+                if (dbAnnual.assistant_id != null && dbAnnual.assistant_id!= dbAnnual.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "annual",
+                        source_id = dbAnnual.id,
+                        user_id = dbAnnual.assistant_id,
+                        router = "annual_view",
+                        content = "您的年检订单已通过财务审核",
+                        read_status = 0
+                    });
+                }
 
                 var ids = GetSubmitMembers();
                 if (ids.Count() > 0)
@@ -950,6 +1043,19 @@ namespace WebCenter.Web.Controllers
                     content = "您的年检订单已通过提交审核",
                     read_status = 0
                 });
+
+                if (dbAnnual.assistant_id != null && dbAnnual.assistant_id != dbAnnual.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "annual",
+                        source_id = dbAnnual.id,
+                        user_id = dbAnnual.assistant_id,
+                        router = "annual_view",
+                        content = "您的年检订单已通过提交审核",
+                        read_status = 0
+                    });
+                }
             }
 
             dbAnnual.date_updated = DateTime.Now;
@@ -1016,6 +1122,19 @@ namespace WebCenter.Web.Controllers
                     content = "您的年检订单未通过财务审核",
                     read_status = 0
                 });
+
+                if (dbAnnual.assistant_id != null && dbAnnual.assistant_id != dbAnnual.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "annual",
+                        source_id = dbAnnual.id,
+                        user_id = dbAnnual.assistant_id,
+                        router = "annual_view",
+                        content = "您的年检订单未通过财务审核",
+                        read_status = 0
+                    });
+                }
             }
             else
             {
@@ -1036,6 +1155,19 @@ namespace WebCenter.Web.Controllers
                     content = "您的年检订单未通过提交审核",
                     read_status = 0
                 });
+
+                if (dbAnnual.assistant_id != null && dbAnnual.assistant_id != dbAnnual.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "annual",
+                        source_id = dbAnnual.id,
+                        user_id = dbAnnual.assistant_id,
+                        router = "annual_view",
+                        content = "您的年检订单未通过提交审核",
+                        read_status = 0
+                    });
+                }
             }
 
             dbAnnual.date_updated = DateTime.Now;
@@ -1098,7 +1230,8 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
                 });
 
-                Uof.IwaitdealService.AddEntity(new waitdeal
+                var waitdeals = new List<waitdeal>();
+                waitdeals.Add(new waitdeal
                 {
                     source = "annual",
                     source_id = dbAnnual.id,
@@ -1106,7 +1239,20 @@ namespace WebCenter.Web.Controllers
                     router = "annual_view",
                     content = "您的年检订单已完成",
                     read_status = 0
-                });
+                });                
+                if (dbAnnual.assistant_id != null && dbAnnual.assistant_id != dbAnnual.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "annual",
+                        source_id = dbAnnual.id,
+                        user_id = dbAnnual.assistant_id,
+                        router = "annual_view",
+                        content = "您的年检订单已完成",
+                        read_status = 0
+                    });
+                }
+                Uof.IwaitdealService.AddEntities(waitdeals);
             }
 
             return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
@@ -1204,7 +1350,8 @@ namespace WebCenter.Web.Controllers
                         content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbAnnual.progress, dbAnnual.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 
-                    Uof.IwaitdealService.AddEntity(new waitdeal
+                    var waitdeals = new List<waitdeal>();
+                    waitdeals.Add(new waitdeal
                     {
                         source = "annual",
                         source_id = dbAnnual.id,
@@ -1213,6 +1360,20 @@ namespace WebCenter.Web.Controllers
                         content = "您的年检订单更新了进度",
                         read_status = 0
                     });
+                    
+                    if (dbAnnual.assistant_id != null && dbAnnual.assistant_id != dbAnnual.salesman_id)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "annual",
+                            source_id = dbAnnual.id,
+                            user_id = dbAnnual.assistant_id,
+                            router = "annual_view",
+                            content = "您的年检订单更新了进度",
+                            read_status = 0
+                        });
+                    }
+                    Uof.IwaitdealService.AddEntities(waitdeals);
                 }
             }
 

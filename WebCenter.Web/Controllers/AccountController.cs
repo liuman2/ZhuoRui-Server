@@ -100,7 +100,7 @@ namespace WebCenter.Web.Controllers
 
                 }).FirstOrDefault();
 
-                var menus = Uof.ImenuService.GetAll().ToList();
+                var menus = Uof.ImenuService.GetAll().OrderBy(m=>m.order).ToList();
                 var opers = new List<int>();
                 if (user.username == "admin")
                 {
@@ -285,7 +285,7 @@ namespace WebCenter.Web.Controllers
                 return new List<UserMenus>();
             }
 
-            var parents = ms.Where(m => m.parent_id == 0).OrderBy(m => m.id).ToList();
+            var parents = ms.Where(m => m.parent_id == 0).OrderBy(m => m.order).ToList();
 
             if (parents.Count() == 0)
             {

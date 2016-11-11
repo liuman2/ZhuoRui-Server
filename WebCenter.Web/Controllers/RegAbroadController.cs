@@ -128,7 +128,11 @@ namespace WebCenter.Web.Controllers
                     amount_unreceive = 0,
                     progress = c.progress,
                     salesman_id = c.salesman_id,
-                    salesman_name = c.member3.name,
+                    salesman_name = c.member4.name,
+
+                    assistant_id = c.assistant_id,
+                    assistant_name = c.member7.name,
+
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment,
                     date_setup = c.date_setup
@@ -335,6 +339,9 @@ namespace WebCenter.Web.Controllers
                 manager_id = a.manager_id,
                 manager_name = a.member2.name,
 
+                assistant_id = a.assistant_id,
+                assistant_name = a.member7.name,
+
                 status = a.status,
                 review_status = a.review_status
 
@@ -392,6 +399,10 @@ namespace WebCenter.Web.Controllers
                 waiter_name = a.member6.name,
                 manager_id = a.manager_id,
                 manager_name = a.member2.name,
+
+                assistant_id = a.assistant_id,
+                assistant_name = a.member7.name,
+
                 status = a.status,
                 review_status = a.review_status,
                 finance_review_moment = a.finance_review_moment,
@@ -467,8 +478,8 @@ namespace WebCenter.Web.Controllers
                 reg.manager_id == dbReg.manager_id && 
                 reg.description == dbReg.description &&
                 reg.currency == dbReg.currency && 
-                reg.rate == dbReg.rate
-                
+                reg.rate == dbReg.rate &&
+                reg.assistant_id == dbReg.assistant_id
                 )
             {
                 return Json(new { id = reg.id }, JsonRequestBehavior.AllowGet);
@@ -508,6 +519,7 @@ namespace WebCenter.Web.Controllers
             dbReg.description = reg.description;
             dbReg.currency = reg.currency;
             dbReg.rate = reg.rate;
+            dbReg.assistant_id = reg.assistant_id;
 
             if (reg.is_open_bank == 0)
             {
@@ -637,6 +649,19 @@ namespace WebCenter.Web.Controllers
                     read_status = 0
                 });
 
+                if (dbReg.assistant_id != null && dbReg.assistant_id != dbReg.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "reg_abroad",
+                        source_id = dbReg.id,
+                        user_id = dbReg.assistant_id,
+                        router = "abroad_view",
+                        content = "您的境外注册订单已通过财务审核",
+                        read_status = 0
+                    });
+                }
+
                 var ids = GetSubmitMembers();
                 if (ids.Count() > 0)
                 {
@@ -672,6 +697,18 @@ namespace WebCenter.Web.Controllers
                     content = "您的境外注册订单已通过提交审核",
                     read_status = 0
                 });
+                if (dbReg.assistant_id != null && dbReg.assistant_id != dbReg.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "reg_abroad",
+                        source_id = dbReg.id,
+                        user_id = dbReg.assistant_id,
+                        router = "abroad_view",
+                        content = "您的境外注册订单已通过提交审核",
+                        read_status = 0
+                    });
+                }
             }
 
             dbReg.date_updated = DateTime.Now;
@@ -738,6 +775,18 @@ namespace WebCenter.Web.Controllers
                     content = "您的境外注册订单未通过财务审核",
                     read_status = 0
                 });
+                if (dbReg.assistant_id != null && dbReg.assistant_id != dbReg.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "reg_abroad",
+                        source_id = dbReg.id,
+                        user_id = dbReg.assistant_id,
+                        router = "abroad_view",
+                        content = "您的境外注册订单未通过财务审核",
+                        read_status = 0
+                    });
+                }
             }
             else
             {
@@ -758,6 +807,18 @@ namespace WebCenter.Web.Controllers
                     content = "您的境外注册订单未通过提交审核",
                     read_status = 0
                 });
+                if (dbReg.assistant_id != null && dbReg.assistant_id != dbReg.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "reg_abroad",
+                        source_id = dbReg.id,
+                        user_id = dbReg.assistant_id,
+                        router = "abroad_view",
+                        content = "您的境外注册订单未通过提交审核",
+                        read_status = 0
+                    });
+                }
             }
 
             dbReg.date_updated = DateTime.Now;
@@ -1016,7 +1077,8 @@ namespace WebCenter.Web.Controllers
                         content = string.Format("{0}完善了注册资料", arrs[3])
                     });
 
-                    Uof.IwaitdealService.AddEntity(new waitdeal
+                    var waitdeals = new List<waitdeal>();
+                    waitdeals.Add(new waitdeal
                     {
                         source = "reg_abroad",
                         source_id = dbAbroad.id,
@@ -1025,6 +1087,19 @@ namespace WebCenter.Web.Controllers
                         content = "您的境外注册订单已完成",
                         read_status = 0
                     });
+                    if (dbAbroad.assistant_id != null && dbAbroad.assistant_id != dbAbroad.salesman_id)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "reg_abroad",
+                            source_id = dbAbroad.id,
+                            user_id = dbAbroad.assistant_id,
+                            router = "abroad_view",
+                            content = "您的境外注册订单已完成",
+                            read_status = 0
+                        });
+                    }
+                    Uof.IwaitdealService.AddEntities(waitdeals);
                 }
                 else
                 {
@@ -1036,7 +1111,8 @@ namespace WebCenter.Web.Controllers
                         content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbAbroad.progress, dbAbroad.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 
-                    Uof.IwaitdealService.AddEntity(new waitdeal
+                   var waitdeals = new List<waitdeal>();
+                    waitdeals.Add(new waitdeal
                     {
                         source = "reg_abroad",
                         source_id = dbAbroad.id,
@@ -1045,6 +1121,19 @@ namespace WebCenter.Web.Controllers
                         content = "您的境外注册订单更新了进度",
                         read_status = 0
                     });
+                    if (dbAbroad.assistant_id != null && dbAbroad.assistant_id != dbAbroad.salesman_id)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "reg_abroad",
+                            source_id = dbAbroad.id,
+                            user_id = dbAbroad.assistant_id,
+                            router = "abroad_view",
+                            content = "您的境外注册订单更新了进度",
+                            read_status = 0
+                        });
+                    }
+                    Uof.IwaitdealService.AddEntities(waitdeals);
                 }
             }
 

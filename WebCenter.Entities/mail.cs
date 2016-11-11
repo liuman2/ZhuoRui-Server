@@ -67,5 +67,11 @@ namespace WebCenter.Entities
     
     
         public string address { get; set; }
+    
+    
+    
+        public Nullable<int> audit_id { get; set; }
+    
+        public virtual member member { get; set; }
     }
 }

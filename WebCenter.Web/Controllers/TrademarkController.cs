@@ -144,7 +144,9 @@ namespace WebCenter.Web.Controllers
                     amount_income = 0,
                     amount_unreceive = 0,
                     salesman_id = c.salesman_id,
-                    salesman_name = c.member3.name,
+                    salesman_name = c.member4.name,
+                    assistant_id = c.assistant_id,
+                    assistant_name = c.member.name,
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment,
                     date_trial = c.date_trial
@@ -326,9 +328,12 @@ namespace WebCenter.Web.Controllers
                 salesman_id = a.salesman_id,
                 salesman = a.member4.name,
                 waiter_id = a.waiter_id,
-                waiter_name = a.member5.name,
+                waiter_name = a.member6.name,
                 manager_id = a.manager_id,
-                manager_name = a.member2.name,
+                manager_name = a.member3.name,
+
+                assistant_id = a.assistant_id,
+                assistant_name = a.member.name,
 
                 status = a.status,
                 review_status = a.review_status
@@ -378,9 +383,12 @@ namespace WebCenter.Web.Controllers
                 salesman_id = a.salesman_id,
                 salesman = a.member4.name,
                 waiter_id = a.waiter_id,
-                waiter_name = a.member5.name,
+                waiter_name = a.member6.name,
                 manager_id = a.manager_id,
-                manager_name = a.member2.name,
+                manager_name = a.member3.name,
+
+                assistant_id = a.assistant_id,
+                assistant_name = a.member.name,
 
                 status = a.status,
                 review_status = a.review_status,
@@ -456,7 +464,8 @@ namespace WebCenter.Web.Controllers
                 trade.manager_id == dbTrade.manager_id && 
                 trade.description == dbTrade.description &&
                 trade.currency == dbTrade.currency &&
-                trade.rate == dbTrade.rate
+                trade.rate == dbTrade.rate &&
+                trade.assistant_id == dbTrade.assistant_id
                 )
             {
                 return Json(new { id = trade.id }, JsonRequestBehavior.AllowGet);
@@ -483,6 +492,7 @@ namespace WebCenter.Web.Controllers
             dbTrade.amount_transaction = trade.amount_transaction;
             dbTrade.currency = trade.currency;
             dbTrade.rate = trade.rate;
+            dbTrade.assistant_id = trade.assistant_id;
 
             //dbTrade.date_receipt = trade.date_receipt;
             //dbTrade.date_accept = trade.date_accept;
@@ -619,6 +629,19 @@ namespace WebCenter.Web.Controllers
                     read_status = 0
                 });
 
+                if (dbTrade.assistant_id != null && dbTrade.assistant_id != dbTrade.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "trademark",
+                        source_id = dbTrade.id,
+                        user_id = dbTrade.assistant_id,
+                        router = "trademark_view",
+                        content = "您的商标订单已通过财务审核",
+                        read_status = 0
+                    });
+                }
+
                 var ids = GetSubmitMembers();
                 if (ids.Count() > 0)
                 {
@@ -654,6 +677,19 @@ namespace WebCenter.Web.Controllers
                     content = "您的商标订单已通过提交审核",
                     read_status = 0
                 });
+
+                if (dbTrade.assistant_id != null && dbTrade.assistant_id != dbTrade.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "trademark",
+                        source_id = dbTrade.id,
+                        user_id = dbTrade.assistant_id,
+                        router = "trademark_view",
+                        content = "您的商标订单已通过提交审核",
+                        read_status = 0
+                    });
+                }
             }
 
             dbTrade.date_updated = DateTime.Now;
@@ -719,6 +755,19 @@ namespace WebCenter.Web.Controllers
                     content = "您的商标订单未通过财务审核",
                     read_status = 0
                 });
+
+                if (dbTrade.assistant_id != null && dbTrade.assistant_id != dbTrade.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "trademark",
+                        source_id = dbTrade.id,
+                        user_id = dbTrade.assistant_id,
+                        router = "trademark_view",
+                        content = "您的商标订单未通过财务审核",
+                        read_status = 0
+                    });
+                }
             }
             else
             {
@@ -738,6 +787,19 @@ namespace WebCenter.Web.Controllers
                     content = "您的商标订单未通过提交审核",
                     read_status = 0
                 });
+
+                if (dbTrade.assistant_id != null && dbTrade.assistant_id != dbTrade.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "trademark",
+                        source_id = dbTrade.id,
+                        user_id = dbTrade.assistant_id,
+                        router = "trademark_view",
+                        content = "您的商标订单未通过提交审核",
+                        read_status = 0
+                    });
+                }
             }
 
             dbTrade.date_updated = DateTime.Now;
@@ -887,7 +949,9 @@ namespace WebCenter.Web.Controllers
                         title = "完善了注册资料",
                         content = string.Format("{0}完善了注册资料", arrs[3])
                     });
-                    Uof.IwaitdealService.AddEntity(new waitdeal
+
+                    var waitdeals = new List<waitdeal>();
+                    waitdeals.Add(new waitdeal
                     {
                         source = "trademark",
                         source_id = dbtrademark.id,
@@ -896,6 +960,19 @@ namespace WebCenter.Web.Controllers
                         content = "您的商标订单已完成",
                         read_status = 0
                     });
+                    if (dbtrademark.assistant_id != null && dbtrademark.assistant_id != dbtrademark.salesman_id)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "trademark",
+                            source_id = dbtrademark.id,
+                            user_id = dbtrademark.assistant_id,
+                            router = "trademark_view",
+                            content = "您的商标订单已完成",
+                            read_status = 0
+                        });
+                    }
+                    Uof.IwaitdealService.AddEntities(waitdeals);
                 }
                 else
                 {
@@ -907,7 +984,8 @@ namespace WebCenter.Web.Controllers
                         content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbtrademark.progress, dbtrademark.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 
-                    Uof.IwaitdealService.AddEntity(new waitdeal
+                    var waitdeals = new List<waitdeal>();
+                    waitdeals.Add(new waitdeal
                     {
                         source = "trademark",
                         source_id = dbtrademark.id,
@@ -916,6 +994,19 @@ namespace WebCenter.Web.Controllers
                         content = "您的商标订单更新了进度",
                         read_status = 0
                     });
+                    if (dbtrademark.assistant_id != null && dbtrademark.assistant_id != dbtrademark.salesman_id)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "trademark",
+                            source_id = dbtrademark.id,
+                            user_id = dbtrademark.salesman_id,
+                            router = "trademark_view",
+                            content = "您的商标订单更新了进度",
+                            read_status = 0
+                        });
+                    }
+                    Uof.IwaitdealService.AddEntities(waitdeals);
                 }
             }
 
