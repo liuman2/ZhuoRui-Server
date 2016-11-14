@@ -13,6 +13,7 @@ namespace WebCenter.Web
         public string customer_code { get; set; }
         public string order_code  { get; set; }
         public string order_name  { get; set; }
+        public string order_name_en { get; set; }
         public string order_type { get; set; }
         public string order_type_name { get; set; }
         public string saleman { get; set; }

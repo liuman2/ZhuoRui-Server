@@ -147,7 +147,8 @@ namespace WebCenter.Web.Controllers
                 customer_name = a.customer.name,
                 customer_code = a.customer.code,
                 order_code = a.code,
-                order_name = a.name_cn,
+                order_name = a.name_cn ?? a.name_en,
+                //order_name_en = a.name_en,
                 order_type = "reg_abroad",
                 order_type_name = "境外注册",
                 saleman = a.member4.name,
@@ -414,7 +415,7 @@ namespace WebCenter.Web.Controllers
                         order_id = a.id,
                         order_code = a.code,
                         order_type_name = "境外注册",
-                        name_cn = a.name_cn,
+                        name_cn = a.name_cn ?? a.name_en,
                         name_en = a.name_en,
 
                         customer_id = a.customer_id,

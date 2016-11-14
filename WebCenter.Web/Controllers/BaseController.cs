@@ -106,27 +106,28 @@ namespace WebCenter.Web.Controllers
             var codeStr = codingObj.order.code.Where(a => a.module == moduleCode).Select(a => a.value).FirstOrDefault();
 
             var dbCode = "";
+            var preCode = string.Format("{0}{1}", areaCodeStr, codeStr);
             switch (moduleCode)
             {
                 // 境外注册
                 case "ZW":
-                   dbCode = Uof.Ireg_abroadService.GetAll().OrderByDescending(a=>a.id).Select(a => a.code).FirstOrDefault();
+                   dbCode = Uof.Ireg_abroadService.GetAll(r=>r.code.Contains(preCode)).OrderByDescending(a=>a.code).Select(a => a.code).FirstOrDefault();
                     break;
                 // 境内注册
                 case "ZN":
-                    dbCode = Uof.Ireg_internalService.GetAll().OrderByDescending(a => a.id).Select(a => a.code).FirstOrDefault();
+                    dbCode = Uof.Ireg_internalService.GetAll(r => r.code.Contains(preCode)).OrderByDescending(a => a.code).Select(a => a.code).FirstOrDefault();
                     break;
                 // 审计
                 case "SJ":
-                    dbCode = Uof.IauditService.GetAll().OrderByDescending(a => a.id).Select(a => a.code).FirstOrDefault();
+                    dbCode = Uof.IauditService.GetAll(r => r.code.Contains(preCode)).OrderByDescending(a => a.code).Select(a => a.code).FirstOrDefault();
                     break;
                 // 商标
                 case "SB":
-                    dbCode = Uof.ItrademarkService.GetAll().OrderByDescending(a => a.id).Select(a => a.code).FirstOrDefault();
+                    dbCode = Uof.ItrademarkService.GetAll(r => r.code.Contains(preCode)).OrderByDescending(a => a.code).Select(a => a.code).FirstOrDefault();
                     break;
                 // 专利
                 case "ZL":
-                    dbCode = Uof.IpatentService.GetAll().OrderByDescending(a => a.id).Select(a => a.code).FirstOrDefault();
+                    dbCode = Uof.IpatentService.GetAll(r => r.code.Contains(preCode)).OrderByDescending(a => a.code).Select(a => a.code).FirstOrDefault();
                     break;
                 //年审
                 case "NS":
@@ -140,7 +141,7 @@ namespace WebCenter.Web.Controllers
                 return string.Format("{0}{1}{2}", areaCodeStr, codeStr, 1.ToString().PadLeft(suffix, '0'));
             }
 
-            var indexStr = dbCode.Replace(codeStr, "").Replace("0", "");
+            var indexStr = dbCode.Replace(preCode, "").Replace("0", "");
 
             var index = 0;
             int.TryParse(indexStr, out index);
