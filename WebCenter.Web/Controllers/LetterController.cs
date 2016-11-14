@@ -59,6 +59,8 @@ namespace WebCenter.Web.Controllers
                     merchant = c.merchant,
                     address = c.address,
                     letter_type = c.letter_type,
+                    audit_id = c.audit_id,
+                    audit_name = c.member.name,
                     type = c.type
                 }).ToPagedList(request.index, request.size).ToList();
 
@@ -131,7 +133,8 @@ namespace WebCenter.Web.Controllers
                 _c.date_at == c.date_at &&
                 _c.address == c.address &&
                 _c.description == c.description &&
-                _c.file_url == c.file_url
+                _c.file_url == c.file_url &&
+                _c.audit_id == c.audit_id
 
                 )
             {
@@ -148,6 +151,7 @@ namespace WebCenter.Web.Controllers
             _c.date_at = c.date_at;
             _c.description = c.description;
             _c.address = c.address;
+            _c.audit_id = c.audit_id;
             _c.date_updated = DateTime.Now;
 
             var r = Uof.ImailService.UpdateEntity(_c);
@@ -168,6 +172,8 @@ namespace WebCenter.Web.Controllers
                 address = c.address,
                 merchant = c.merchant,
                 letter_type = c.letter_type,
+                audit_id = c.audit_id,
+                audit_name = c.member.name,
                 type = c.type
             }).FirstOrDefault();
 

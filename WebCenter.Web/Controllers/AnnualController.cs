@@ -121,7 +121,7 @@ namespace WebCenter.Web.Controllers
                         userQuery1 = c => c.organization_id == deptId;
                     } else
                     {
-                        userQuery1 = c => c.salesman_id == userId;
+                        userQuery1 = c => (c.salesman_id == userId || c.assistant_id == userId);
                     }
                 }                
             } else
@@ -196,7 +196,7 @@ namespace WebCenter.Web.Controllers
                         }
                         else
                         {
-                            userQuery2 = c => c.salesman_id == userId;
+                            userQuery2 = c => (c.salesman_id == userId || c.assistant_id == userId);
                         }
                     }
                 }
@@ -274,7 +274,7 @@ namespace WebCenter.Web.Controllers
                     }
                     else
                     {
-                        userQuery3 = c => c.salesman_id == userId;
+                        userQuery3 = c => (c.salesman_id == userId || c.assistant_id == userId);
                     }
                 }
             }
@@ -351,7 +351,7 @@ namespace WebCenter.Web.Controllers
                     }
                     else
                     {
-                        userQuery3 = c => c.salesman_id == userId;
+                        userQuery3 = c => (c.salesman_id == userId || c.assistant_id == userId);
                     }
                 }
             }
