@@ -107,11 +107,41 @@ namespace WebCenter.Web.Controllers
                 date2Query = c => (c.date_transaction < endTime);
             }
 
+            // 录入开始日期
+            Expression<Func<reg_abroad, bool>> date1Created = c => true;
+            Expression<Func<reg_abroad, bool>> date2Created = c => true;
+            if (request.start_create != null)
+            {
+                date1Created = c => (c.date_created >= request.start_create.Value);
+            }
+            // 录入结束日期
+            if (request.end_create != null)
+            {
+                var endTime = request.end_create.Value.AddDays(1);
+                date2Created = c => (c.date_created < endTime);
+            }
+
+            Expression<Func<reg_abroad, bool>> nameQuery = c => true;
+            if (!string.IsNullOrEmpty(request.name))
+            {
+                nameQuery = c => (c.name_cn.ToLower().Contains(request.name.ToLower()) || c.name_en.ToLower().Contains(request.name.ToLower()));
+            }
+
+            Expression<Func<reg_abroad, bool>> codeQuery = c => true;
+            if (!string.IsNullOrEmpty(request.code))
+            {
+                codeQuery = c => c.code.ToLower().Contains(request.code.ToLower());
+            }
+
             var list = Uof.Ireg_abroadService.GetAll(condition)
                 .Where(customerQuery)
                 .Where(statusQuery)
                 .Where(date1Query)
                 .Where(date2Query)
+                .Where(date1Created)
+                .Where(date2Created)
+                .Where(nameQuery)
+                .Where(codeQuery)
                 .OrderByDescending(item => item.code).Select(c => new
                 {
                     id = c.id,
@@ -129,7 +159,7 @@ namespace WebCenter.Web.Controllers
                     progress = c.progress,
                     salesman_id = c.salesman_id,
                     salesman_name = c.member4.name,
-
+                    date_created = c.date_created,
                     assistant_id = c.assistant_id,
                     assistant_name = c.member7.name,
 

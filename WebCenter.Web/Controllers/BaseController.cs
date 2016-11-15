@@ -93,6 +93,33 @@ namespace WebCenter.Web.Controllers
             return string.Format("{0}{1}", codeStr, (index + 1).ToString().PadLeft(suffix, '0'));
         }
 
+        public string GetNextLetterCode(string type)
+        {
+            var codeStr = "OT";
+            if (codeStr == "收件")
+            {
+                codeStr = "IN";
+            }
+
+            var c = Uof.ImailService.GetAll(a => a.code.Contains(codeStr)).Select(a => new
+            {
+                id = a.id,
+                code = a.code,
+            }).OrderByDescending(a => a.code).FirstOrDefault();
+
+            if (c == null)
+            {
+                return string.Format("{0}{1}", codeStr, 1.ToString().PadLeft(5, '0'));
+            }
+
+            var indexStr = c.code.Replace(codeStr, "").Replace("0", "");
+
+            var index = 0;
+            int.TryParse(indexStr, out index);
+
+            return string.Format("{0}{1}", codeStr, (index + 1).ToString().PadLeft(5, '0'));
+        }
+
         public string GetNextOrderCode(int userId, string moduleCode)
         {
             var areaId = Uof.ImemberService.GetAll(m => m.id == userId).Select(m => m.area_id).FirstOrDefault();

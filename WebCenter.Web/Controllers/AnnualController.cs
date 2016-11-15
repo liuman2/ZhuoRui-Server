@@ -506,7 +506,7 @@ namespace WebCenter.Web.Controllers
                         salesman_id = a.salesman_id,
                         salesman = a.member4.name,
                         assistant_id = a.assistant_id,
-                        assistant_name = a.member7.name,
+                        assistant_name = a.member7.name
                     }).FirstOrDefault();
                     break;
                 case "reg_internal":
@@ -789,7 +789,7 @@ namespace WebCenter.Web.Controllers
             var ops = arrs[4].Split(',');
             if (ops.Count() == 0)
             {
-                condition = c => c.salesman_id == userId;
+                condition = c => (c.salesman_id == userId || c.waiter_id == userId || c.creator_id == userId);
             }
             else
             {
@@ -799,7 +799,7 @@ namespace WebCenter.Web.Controllers
                 {
                     if (hasDepart == null)
                     {
-                        condition = c => c.salesman_id == userId;
+                        condition = c => (c.salesman_id == userId || c.waiter_id == userId || c.creator_id == userId);
                     }
                     else
                     {

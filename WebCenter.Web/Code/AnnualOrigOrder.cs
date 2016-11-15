@@ -25,5 +25,7 @@ namespace WebCenter.Web
         public int? assistant_id { get; set; }
         public string assistant_name { get; set; }
 
+        public int? waiter_id { get; set; }
+        public string waiter_name { get; set; }
     }
 }

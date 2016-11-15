@@ -134,6 +134,10 @@ namespace WebCenter.Entities
     
         public string contacts { get; set; }
     
+    
+    
+        public Nullable<int> assistant_id { get; set; }
+    
         public virtual ICollection<bank_account> bank_account { get; set; }
         public virtual ICollection<lecture_customer> lecture_customer { get; set; }
         public virtual ICollection<income> incomes { get; set; }

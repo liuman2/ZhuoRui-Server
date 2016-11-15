@@ -61,7 +61,11 @@ namespace WebCenter.Web.Controllers
                     letter_type = c.letter_type,
                     audit_id = c.audit_id,
                     audit_name = c.member.name,
-                    type = c.type
+                    type = c.type,
+                    order_id = c.order_id,
+                    order_name = c.order_name,
+                    order_source = c.order_source,
+                    order_code = c.order_code,
                 }).ToPagedList(request.index, request.size).ToList();
 
             var totalRecord = Uof.ImailService
@@ -114,8 +118,26 @@ namespace WebCenter.Web.Controllers
 
             l.creator_id = userId;
             l.date_created = DateTime.Now;
-
+            l.code = GetNextLetterCode(l.type);
             var _l = Uof.ImailService.AddEntity(l);
+
+            if (_l != null && _l.order_id != null)
+            {
+                try
+                {
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = _l.order_id,
+                        source_name = _l.order_source,
+                        title = string.Format("新增{0}记录", _l.type),
+                        content = string.Format("{0}新建了一笔{1}记录, 单号: {2}", arrs[3], _l.type, _l.code)
+                    });
+                }
+                catch (Exception)
+                {
+                }
+            }
+
             return Json(new { id = _l.id }, JsonRequestBehavior.AllowGet);
         }
 

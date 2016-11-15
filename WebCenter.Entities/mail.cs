@@ -72,6 +72,22 @@ namespace WebCenter.Entities
     
         public Nullable<int> audit_id { get; set; }
     
+    
+    
+        public string order_name { get; set; }
+    
+    
+    
+        public string order_source { get; set; }
+    
+    
+    
+        public Nullable<int> order_id { get; set; }
+    
+    
+    
+        public string order_code { get; set; }
+    
         public virtual member member { get; set; }
     }
 }

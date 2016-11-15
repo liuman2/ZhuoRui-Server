@@ -39,7 +39,6 @@ namespace WebCenter.Entities
             this.audits4 = new HashSet<audit>();
             this.audits5 = new HashSet<audit>();
             this.audits6 = new HashSet<audit>();
-            this.mails = new HashSet<mail>();
             this.reg_abroad = new HashSet<reg_abroad>();
             this.reg_abroad1 = new HashSet<reg_abroad>();
             this.reg_abroad2 = new HashSet<reg_abroad>();
@@ -70,6 +69,7 @@ namespace WebCenter.Entities
             this.trademarks4 = new HashSet<trademark>();
             this.trademarks5 = new HashSet<trademark>();
             this.trademarks6 = new HashSet<trademark>();
+            this.mails = new HashSet<mail>();
         }
     
     
@@ -160,7 +160,6 @@ namespace WebCenter.Entities
         public virtual ICollection<audit> audits4 { get; set; }
         public virtual ICollection<audit> audits5 { get; set; }
         public virtual ICollection<audit> audits6 { get; set; }
-        public virtual ICollection<mail> mails { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad1 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad2 { get; set; }
@@ -191,5 +190,6 @@ namespace WebCenter.Entities
         public virtual ICollection<trademark> trademarks4 { get; set; }
         public virtual ICollection<trademark> trademarks5 { get; set; }
         public virtual ICollection<trademark> trademarks6 { get; set; }
+        public virtual ICollection<mail> mails { get; set; }
     }
 }

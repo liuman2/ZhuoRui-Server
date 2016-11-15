@@ -1,3 +1,9 @@
+reg_abroad
+reg_internal
+audit
+patent
+trademark
+
 reg_internal:
 0 assistant_id
 1 creator  
