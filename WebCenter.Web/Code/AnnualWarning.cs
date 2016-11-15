@@ -24,10 +24,8 @@ namespace WebCenter.Web
         public DateTime? date_finish { get; set; }
         public DateTime? date_setup { get; set; }
 
-        public DateTime? annual_date { get; set; }
-        public int? is_annual { get; set; }
         public int? annual_year { get; set; }
-
+        public int? month { get; set; }
     }
 
     public class FinanceCheck

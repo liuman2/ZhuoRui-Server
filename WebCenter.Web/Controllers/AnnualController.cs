@@ -22,7 +22,7 @@ namespace WebCenter.Web.Controllers
         {
             var year = DateTime.Now.Year;
 
-            switch(type)
+            switch (type)
             {
                 case "境内":
                     var internals = Uof.Ireg_internalService.GetAll(i => i.customer_id == customer_id && (i.annual_year == null || i.annual_year < year)).Select(i => new
@@ -83,7 +83,7 @@ namespace WebCenter.Web.Controllers
             var deptId = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out deptId);
-            
+
             var ops = arrs[4].Split(',');
             var hasInspect = ops.Where(o => o == "5").FirstOrDefault();
             var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
@@ -97,8 +97,8 @@ namespace WebCenter.Web.Controllers
 
             #region 境外注册
             Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 &&
-            ((c.annual_date == null && (Month1 == (c.date_setup.Value.Month) || Month2 == (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear > c.date_setup.Value.Year) ||
-            (c.annual_date != null && (Month1 == (c.date_setup.Value.Month) || Month2 == (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear > c.annual_date.Value.Year) ||
+            ((c.annual_date == null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear > c.date_setup.Value.Year) ||
+            (c.annual_date != null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear > c.annual_date.Value.Year) ||
             (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
             Expression<Func<reg_abroad, bool>> customerQuery1 = c => true;
             if (customer_id != null && customer_id.Value > 0)
@@ -150,7 +150,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<reg_abroad, bool>> nameQuery1 = c => true;
             if (!string.IsNullOrEmpty(name))
             {
-                nameQuery1 = c => (c.name_cn.Contains(name)  || c.name_en.Contains(name));
+                nameQuery1 = c => (c.name_cn.Contains(name) || c.name_en.Contains(name));
             }
             Expression<Func<reg_abroad, bool>> areaQuery1 = c => true;
             if (!string.IsNullOrEmpty(area))
@@ -164,22 +164,24 @@ namespace WebCenter.Web.Controllers
                 .Where(nameQuery1)
                 .Where(areaQuery1)
                 .Select(a => new AnnualWarning
-            {
-                id = a.id,
-                customer_id = a.customer_id,
-                customer_name = a.customer.name,
-                customer_code = a.customer.code,
-                order_code = a.code,
-                order_name = a.name_cn ?? a.name_en,
-                order_type = "reg_abroad",
-                order_type_name = "境外注册",
-                saleman = a.member4.name,
-                waiter = a.member6.name,
-                assistant_name = a.member7.name,
-                submit_review_date = a.submit_review_date,
-                date_finish = a.date_finish,
-                date_setup = a.date_setup,
-            }).ToList();
+                {
+                    id = a.id,
+                    customer_id = a.customer_id,
+                    customer_name = a.customer.name,
+                    customer_code = a.customer.code,
+                    order_code = a.code,
+                    order_name = a.name_cn ?? a.name_en,
+                    order_type = "reg_abroad",
+                    order_type_name = "境外注册",
+                    saleman = a.member4.name,
+                    waiter = a.member6.name,
+                    assistant_name = a.member7.name,
+                    submit_review_date = a.submit_review_date,
+                    date_finish = a.date_finish,
+                    date_setup = a.date_setup,
+                    annual_year = a.annual_year,
+                    month = DateTime.Today.Month - a.date_setup.Value.Month,
+                }).ToList();
 
             if (abroads.Count() > 0)
             {
@@ -192,8 +194,8 @@ namespace WebCenter.Web.Controllers
             if (internalMonth >= 3 && internalMonth <= 6)
             {
                 Expression<Func<reg_internal, bool>> condition2 = c => c.status == 4 &&
-                ((c.annual_date == null && (Month1 == (c.date_setup.Value.Month) || Month2 == (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear > c.date_setup.Value.Year) ||
-                (c.annual_date != null && (Month1 == (c.date_setup.Value.Month) || Month2 == (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear > c.annual_date.Value.Year) ||
+                ((c.annual_date == null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear > c.date_setup.Value.Year) ||
+                (c.annual_date != null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear > c.annual_date.Value.Year) ||
                 (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
 
                 Expression<Func<reg_internal, bool>> customerQuery2 = c => true;
@@ -260,22 +262,24 @@ namespace WebCenter.Web.Controllers
                     .Where(nameQuery2)
                     .Where(areaQuery2)
                     .Select(a => new AnnualWarning
-                {
-                    id = a.id,
-                    customer_id = a.customer_id,
-                    customer_name = a.customer.name,
-                    customer_code = a.customer.code,
-                    order_code = a.code,
-                    order_name = a.name_cn,
-                    order_type = "reg_internal",
-                    order_type_name = "境内注册",
-                    saleman = a.member5.name,
-                    waiter = a.member7.name,
-                    assistant_name = a.member.name,
-                    submit_review_date = a.submit_review_date,
-                    date_finish = a.date_finish,
-                    date_setup = a.date_setup,
-                }).ToList();
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name_cn,
+                        order_type = "reg_internal",
+                        order_type_name = "境内注册",
+                        saleman = a.member5.name,
+                        waiter = a.member7.name,
+                        assistant_name = a.member.name,
+                        submit_review_date = a.submit_review_date,
+                        date_finish = a.date_finish,
+                        date_setup = a.date_setup,
+                        annual_year = a.annual_year,
+                        month = DateTime.Today.Month - a.date_setup.Value.Month,
+                    }).ToList();
 
                 if (internas.Count() > 0)
                 {
@@ -292,8 +296,8 @@ namespace WebCenter.Web.Controllers
             int.TryParse(trademarkPeriodSetting, out trademarkPeriod);
 
             Expression<Func<trademark, bool>> condition3 = c => c.status == 4 &&
-            ((c.annual_date == null && (Month1 == (c.date_regit.Value.Month) || Month2 == (c.date_regit.Value.Month) || Month3 == (c.date_regit.Value.Month)) && (nowYear - trademarkPeriod) == c.date_regit.Value.Year) ||
-            (c.annual_date != null && (Month1 == (c.date_regit.Value.Month) || Month2 == (c.date_regit.Value.Month) || Month3 == (c.date_regit.Value.Month)) && (nowYear - trademarkPeriod) == c.annual_date.Value.Year) ||
+            ((c.annual_date == null && c.annual_year.Value < (nowYear - trademarkPeriod) && (Month1 == (c.date_regit.Value.Month) || Month2 >= (c.date_regit.Value.Month) || Month3 == (c.date_regit.Value.Month)) && (nowYear - trademarkPeriod) == c.date_regit.Value.Year) ||
+            (c.annual_date != null && c.annual_year.Value < (nowYear - trademarkPeriod) && (Month1 == (c.date_regit.Value.Month) || Month2 >= (c.date_regit.Value.Month) || Month3 == (c.date_regit.Value.Month)) && (nowYear - trademarkPeriod) == c.annual_date.Value.Year) ||
             (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
 
             Expression<Func<trademark, bool>> customerQuery3 = c => true;
@@ -359,22 +363,24 @@ namespace WebCenter.Web.Controllers
                 .Where(nameQuery3)
                 .Where(areaQuery3)
                 .Select(a => new AnnualWarning
-            {
-                id = a.id,
-                customer_id = a.customer_id,
-                customer_name = a.customer.name,
-                customer_code = a.customer.code,
-                order_code = a.code,
-                order_name = a.name,
-                order_type = "trademark",
-                order_type_name = "商标注册",
-                saleman = a.member4.name,
-                waiter = a.member6.name,
-                assistant_name = a.member.name,
-                submit_review_date = a.submit_review_date,
-                date_finish = a.date_finish,
-                date_setup = a.date_trial,
-            }).ToList();
+                {
+                    id = a.id,
+                    customer_id = a.customer_id,
+                    customer_name = a.customer.name,
+                    customer_code = a.customer.code,
+                    order_code = a.code,
+                    order_name = a.name,
+                    order_type = "trademark",
+                    order_type_name = "商标注册",
+                    saleman = a.member4.name,
+                    waiter = a.member6.name,
+                    assistant_name = a.member.name,
+                    submit_review_date = a.submit_review_date,
+                    date_finish = a.date_finish,
+                    date_setup = a.date_regit,
+                    annual_year = a.annual_year,
+                    month = (a.date_regit != null) ? (DateTime.Today.Month - a.date_regit.Value.Month) : 0,
+                }).ToList();
 
             if (trademarks.Count() > 0)
             {
@@ -388,8 +394,8 @@ namespace WebCenter.Web.Controllers
             int.TryParse(patentPeriodSetting, out patentPeriod);
 
             Expression<Func<patent, bool>> condition4 = c => c.status == 4 &&
-            ((c.annual_date == null && (Month1 == (c.date_empower.Value.Month) || Month2 == (c.date_empower.Value.Month) || Month3 == (c.date_empower.Value.Month)) && (nowYear - patentPeriod) == c.date_empower.Value.Year) ||
-            (c.annual_date != null && (Month1 == (c.date_empower.Value.Month) || Month2 == (c.date_empower.Value.Month) || Month3 == (c.date_empower.Value.Month)) && (nowYear - patentPeriod) == c.annual_date.Value.Year) ||
+            ((c.annual_date == null && c.annual_year.Value < (nowYear - patentPeriod) && (Month1 == (c.date_empower.Value.Month) || Month2 >= (c.date_empower.Value.Month) || Month3 == (c.date_empower.Value.Month)) && (nowYear - patentPeriod) == c.date_empower.Value.Year) ||
+            (c.annual_date != null && c.annual_year.Value < (nowYear - patentPeriod) && (Month1 == (c.date_empower.Value.Month) || Month2 >= (c.date_empower.Value.Month) || Month3 == (c.date_empower.Value.Month)) && (nowYear - patentPeriod) == c.annual_date.Value.Year) ||
             (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
 
             Expression<Func<patent, bool>> customerQuery4 = c => true;
@@ -455,22 +461,24 @@ namespace WebCenter.Web.Controllers
                 .Where(nameQuery4)
                 .Where(areaQuery4)
                 .Select(a => new AnnualWarning
-            {
-                id = a.id,
-                customer_id = a.customer_id,
-                customer_name = a.customer.name,
-                customer_code = a.customer.code,
-                order_code = a.code,
-                order_name = a.name,
-                order_type = "patent",
-                order_type_name = "专利注册",
-                saleman = a.member4.name,
-                waiter = a.member6.name,
-                assistant_name = a.member.name,
-                submit_review_date = a.submit_review_date,
-                date_finish = a.date_finish,
-                date_setup = a.date_empower,
-            }).ToList();
+                {
+                    id = a.id,
+                    customer_id = a.customer_id,
+                    customer_name = a.customer.name,
+                    customer_code = a.customer.code,
+                    order_code = a.code,
+                    order_name = a.name,
+                    order_type = "patent",
+                    order_type_name = "专利注册",
+                    saleman = a.member4.name,
+                    waiter = a.member6.name,
+                    assistant_name = a.member.name,
+                    submit_review_date = a.submit_review_date,
+                    date_finish = a.date_finish,
+                    date_setup = a.date_empower,
+                    annual_year = a.annual_year,
+                    month = (a.date_empower != null) ? (DateTime.Today.Month - a.date_empower.Value.Month) : 0,
+                }).ToList();
 
             if (patents.Count() > 0)
             {
@@ -598,7 +606,7 @@ namespace WebCenter.Web.Controllers
             exam.review_status = -1;
             exam.creator_id = userId;
             exam.organization_id = organization_id;
-            
+
             var newExam = Uof.Iannual_examService.AddEntity(exam);
             if (newExam == null)
             {
@@ -623,7 +631,7 @@ namespace WebCenter.Web.Controllers
                     break;
                 case "audit":
                     var dbAudit = Uof.IauditService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
-                    dbAudit.annual_year = DateTime.Now.Year;                    
+                    dbAudit.annual_year = DateTime.Now.Year;
                     Uof.IauditService.UpdateEntity(dbAudit);
                     break;
                 case "patent":
@@ -756,10 +764,10 @@ namespace WebCenter.Web.Controllers
                 review_status = a.review_status
 
             }).FirstOrDefault();
-                        
+
             return Json(annua, JsonRequestBehavior.AllowGet);
         }
-        
+
         public ActionResult Search(OrderSearchRequest request)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
@@ -939,7 +947,7 @@ namespace WebCenter.Web.Controllers
                 assistant_name = a.member7.name,
 
                 date_finish = a.date_finish,
-                
+
                 status = a.status,
                 review_status = a.review_status,
                 finance_review_moment = a.finance_review_moment,
@@ -986,7 +994,7 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { order = annua, incomes = incomes }, JsonRequestBehavior.AllowGet);
         }
-        
+
         public ActionResult Submit(int id)
         {
             var dbAnnual = Uof.Iannual_examService.GetById(id);
@@ -1068,7 +1076,7 @@ namespace WebCenter.Web.Controllers
                 dbAnnual.finance_review_date = DateTime.Now;
                 dbAnnual.finance_review_moment = "";
 
-                t = "财务审核";                
+                t = "财务审核";
                 waitdeals.Add(new waitdeal
                 {
                     source = "annual",
@@ -1078,7 +1086,7 @@ namespace WebCenter.Web.Controllers
                     content = "您的年检订单已通过财务审核",
                     read_status = 0
                 });
-                if (dbAnnual.assistant_id != null && dbAnnual.assistant_id!= dbAnnual.salesman_id)
+                if (dbAnnual.assistant_id != null && dbAnnual.assistant_id != dbAnnual.salesman_id)
                 {
                     waitdeals.Add(new waitdeal
                     {
@@ -1116,7 +1124,7 @@ namespace WebCenter.Web.Controllers
                 dbAnnual.submit_review_date = DateTime.Now;
                 dbAnnual.submit_review_moment = "";
 
-                t = "提交的审核";                
+                t = "提交的审核";
                 waitdeals.Add(new waitdeal
                 {
                     source = "annual",
@@ -1322,7 +1330,7 @@ namespace WebCenter.Web.Controllers
                     router = "annual_view",
                     content = "您的年检订单已完成",
                     read_status = 0
-                });                
+                });
                 if (dbAnnual.assistant_id != null && dbAnnual.assistant_id != dbAnnual.salesman_id)
                 {
                     waitdeals.Add(new waitdeal
@@ -1443,7 +1451,7 @@ namespace WebCenter.Web.Controllers
                         content = "您的年检订单更新了进度",
                         read_status = 0
                     });
-                    
+
                     if (dbAnnual.assistant_id != null && dbAnnual.assistant_id != dbAnnual.salesman_id)
                     {
                         waitdeals.Add(new waitdeal
