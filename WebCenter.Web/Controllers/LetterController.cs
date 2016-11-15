@@ -118,7 +118,7 @@ namespace WebCenter.Web.Controllers
 
             l.creator_id = userId;
             l.date_created = DateTime.Now;
-            l.code = GetNextLetterCode(l.type);
+            l.code = DateTime.Now.ToString("yyyyMMddHHMMss"); // GetNextLetterCode(l.type);
             var _l = Uof.ImailService.AddEntity(l);
 
             if (_l != null && _l.order_id != null)
