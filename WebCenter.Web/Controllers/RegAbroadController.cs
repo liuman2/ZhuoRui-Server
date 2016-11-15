@@ -165,7 +165,8 @@ namespace WebCenter.Web.Controllers
 
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment,
-                    date_setup = c.date_setup
+                    date_setup = c.date_setup,
+                    is_annual = c.is_annual ?? 0
 
                 }).ToPagedList(request.index, request.size).ToList();
 
@@ -250,15 +251,7 @@ namespace WebCenter.Web.Controllers
             if (oldRequest.is_old == 0)
             {
                 // 新单据
-                aboad.code = GetNextOrderCode(aboad.salesman_id.Value, "ZW");
-
-                // 需要马上年检的 步骤审核流程
-                if (aboad.is_annual == 1)
-                {
-                    aboad.date_finish = DateTime.Now;
-                    aboad.status = 4;
-                    aboad.review_status = 1;
-                }
+                aboad.code = GetNextOrderCode(aboad.salesman_id.Value, "ZW");                
             } else
             {
                 // 旧单据
@@ -275,6 +268,16 @@ namespace WebCenter.Web.Controllers
                     // 未年检
                     aboad.annual_year = nowYear - 1;
                 }
+            }
+            // 需要马上年检的 不走审核流程
+            if (aboad.is_annual == 1)
+            {
+                aboad.date_finish = DateTime.Now;
+                aboad.status = 4;
+                aboad.review_status = 1;
+            } else
+            {
+                aboad.is_annual = 0;
             }
 
             if (aboad.is_open_bank == 0)
@@ -373,7 +376,8 @@ namespace WebCenter.Web.Controllers
                 assistant_name = a.member7.name,
 
                 status = a.status,
-                review_status = a.review_status
+                review_status = a.review_status,
+                is_annual = a.is_annual ?? 0,
 
             }).FirstOrDefault();
 
@@ -436,7 +440,8 @@ namespace WebCenter.Web.Controllers
                 status = a.status,
                 review_status = a.review_status,
                 finance_review_moment = a.finance_review_moment,
-                submit_review_moment = a.submit_review_moment
+                submit_review_moment = a.submit_review_moment,
+                is_annual = a.is_annual ?? 0,
 
             }).FirstOrDefault();
 
@@ -509,7 +514,8 @@ namespace WebCenter.Web.Controllers
                 reg.description == dbReg.description &&
                 reg.currency == dbReg.currency && 
                 reg.rate == dbReg.rate &&
-                reg.assistant_id == dbReg.assistant_id
+                reg.assistant_id == dbReg.assistant_id && 
+                reg.is_annual == dbReg.is_annual
                 )
             {
                 return Json(new { id = reg.id }, JsonRequestBehavior.AllowGet);
@@ -554,6 +560,22 @@ namespace WebCenter.Web.Controllers
             if (reg.is_open_bank == 0)
             {
                 dbReg.bank_id = null;
+            }
+
+            // 需要马上年检的 不走审核流程
+            if (reg.is_annual == 1 && dbReg.is_annual != 1)
+            {
+                dbReg.date_finish = DateTime.Now;
+                dbReg.status = 4;
+                dbReg.review_status = 1;
+                dbReg.is_annual = 1;
+            }
+            if (reg.is_annual == 0 && dbReg.is_annual == 1)
+            {
+                dbReg.date_finish = null;
+                dbReg.status = 0;
+                dbReg.review_status = -1;
+                dbReg.is_annual = 0;
             }
 
             dbReg.date_updated = DateTime.Now;
