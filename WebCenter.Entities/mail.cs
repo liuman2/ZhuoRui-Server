@@ -88,6 +88,26 @@ namespace WebCenter.Entities
     
         public string order_code { get; set; }
     
+    
+    
+        public string receiver { get; set; }
+    
+    
+    
+        public string tel { get; set; }
+    
+    
+    
+        public Nullable<sbyte> review_status { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> review_date { get; set; }
+    
+    
+    
+        public string review_moment { get; set; }
+    
         public virtual member member { get; set; }
     }
 }

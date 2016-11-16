@@ -244,7 +244,8 @@ namespace WebCenter.Web.Controllers
                 _c.source_id == c.source_id &&
                 _c.salesman_id == c.salesman_id &&
                 _c.tel == c.tel &&
-                _c.wechat == c.wechat
+                _c.wechat == c.wechat &&
+                _c.contacts == c.contacts
                 )
             {
                 return Json(new { id = _c.id }, JsonRequestBehavior.AllowGet);
@@ -264,6 +265,7 @@ namespace WebCenter.Web.Controllers
             _c.QQ = c.QQ;
             _c.source = c.source;
             _c.salesman_id = c.salesman_id;
+            _c.contacts = c.contacts;
 
             if (c.source != "客户介绍")
             {

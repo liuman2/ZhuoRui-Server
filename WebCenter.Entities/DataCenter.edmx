@@ -330,6 +330,11 @@
           <Property Name="order_source" Type="varchar" MaxLength="20" />
           <Property Name="order_id" Type="int" />
           <Property Name="order_code" Type="varchar" MaxLength="20" />
+          <Property Name="receiver" Type="varchar" MaxLength="30" />
+          <Property Name="tel" Type="varchar" MaxLength="20" />
+          <Property Name="review_status" Type="tinyint" />
+          <Property Name="review_date" Type="datetime" Precision="0" />
+          <Property Name="review_moment" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="member">
           <Key>
@@ -3897,6 +3902,11 @@
           <Property Name="order_source" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="order_id" Type="Int32" />
           <Property Name="order_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="receiver" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="review_status" Type="SByte" />
+          <Property Name="review_date" Type="DateTime" />
+          <Property Name="review_moment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="member" Relationship="DataCenter.Entities.fk_mail_audit_id" FromRole="mail" ToRole="member" />
         </EntityType>
         <Association Name="fk_mail_audit_id">
@@ -4638,6 +4648,11 @@
           <EntitySetMapping Name="mails">
             <EntityTypeMapping TypeName="DataCenter.Entities.mail">
               <MappingFragment StoreEntitySet="mail">
+                <ScalarProperty Name="review_moment" ColumnName="review_moment" />
+                <ScalarProperty Name="review_date" ColumnName="review_date" />
+                <ScalarProperty Name="review_status" ColumnName="review_status" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="receiver" ColumnName="receiver" />
                 <ScalarProperty Name="order_code" ColumnName="order_code" />
                 <ScalarProperty Name="order_id" ColumnName="order_id" />
                 <ScalarProperty Name="order_source" ColumnName="order_source" />
