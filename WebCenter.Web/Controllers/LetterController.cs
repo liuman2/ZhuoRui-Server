@@ -20,8 +20,8 @@ namespace WebCenter.Web.Controllers
         {
             Expression<Func<mail, bool>> ownerQuery = c => true;
             if (!string.IsNullOrEmpty(request.name))
-            {
-                ownerQuery = c => (c.owner.IndexOf(request.name) > -1);
+            {                
+                ownerQuery = c => c.order_name.Contains(request.name);
             }
 
             Expression<Func<mail, bool>> condition = c => true;
@@ -204,6 +204,12 @@ namespace WebCenter.Web.Controllers
             _c.address = c.address;
             _c.audit_id = c.audit_id;
             _c.date_updated = DateTime.Now;
+            _c.order_code = c.order_code;
+            _c.order_id = c.order_id;
+            _c.order_name = c.order_name;
+            _c.order_source = c.order_source;
+            _c.receiver = c.receiver;
+            _c.review_status = c.review_status;
 
             var r = Uof.ImailService.UpdateEntity(_c);
 
@@ -257,12 +263,12 @@ namespace WebCenter.Web.Controllers
                 review_moment = c.review_moment,
                 review_status = c.review_status,
                 tel = c.tel,
+                creator_id = c.creator_id,
             }).FirstOrDefault();
 
             return Json(_l, JsonRequestBehavior.AllowGet);
         }
-
-
+        
         public ActionResult PassAudit(int id)
         {
             var u = HttpContext.User.Identity.IsAuthenticated;
@@ -364,5 +370,185 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
         }
 
+
+        public ActionResult SearchOrder(LetterOrderRequest request)
+        {
+            var page = new
+            {
+                current_index = request.index,
+                current_size = request.size,
+                total_size = 0,
+                total_page = 0
+            };
+
+            var totalRecord = 0;
+            var totalPages = 0;
+
+            var result = new
+            {
+                page = page,
+                items = new List<LetterOrder>()
+            };
+
+            if (string.IsNullOrEmpty(request.type))
+            {
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            //reg_abroad
+            //reg_internal
+            //audit
+            //patent
+            //trademark
+            var list = new List<LetterOrder>();
+            switch (request.type)
+            {
+                case "reg_abroad":
+                    Expression<Func<reg_abroad, bool>> condition1 = c => true;
+                    if (!string.IsNullOrEmpty(request.name))
+                    {
+                        condition1 = c => (c.name_cn.Contains(request.name) || c.name_en.Contains(request.name) || c.code.Contains(request.name));
+                    }
+                    list = Uof.Ireg_abroadService.GetAll(condition1).OrderBy(item => item.code).Select(a => new LetterOrder
+                    {
+                        order_code = a.code,
+                        order_id = a.id,
+                        order_name = a.name_en ?? a.name_cn,
+                        order_source = "reg_abroad",
+                    }).ToPagedList(request.index, request.size).ToList();
+
+
+                    totalRecord = Uof.Ireg_abroadService.GetAll(condition1).Count();
+                    if (totalRecord > 0)
+                    {
+                        totalPages = (totalRecord + request.size - 1) / request.size;
+                    }
+                    page = new
+                    {
+                        current_index = request.index,
+                        current_size = request.size,
+                        total_size = totalRecord,
+                        total_page = totalPages
+                    };
+                    break;
+                case "reg_internal":
+                    Expression<Func<reg_internal, bool>> condition2 = c => true;
+                    if (!string.IsNullOrEmpty(request.name))
+                    {
+                        condition2 = c => (c.name_cn.Contains(request.name) || c.code.Contains(request.name));
+                    }
+                    list = Uof.Ireg_internalService.GetAll(condition2).OrderBy(item => item.code).Select(a => new LetterOrder
+                    {
+                        order_code = a.code,
+                        order_id = a.id,
+                        order_name = a.name_cn,
+                        order_source = "reg_internal",
+                    }).ToPagedList(request.index, request.size).ToList();
+                    
+                    totalRecord = Uof.Ireg_internalService.GetAll(condition2).Count();
+                    if (totalRecord > 0)
+                    {
+                        totalPages = (totalRecord + request.size - 1) / request.size;
+                    }
+                    page = new
+                    {
+                        current_index = request.index,
+                        current_size = request.size,
+                        total_size = totalRecord,
+                        total_page = totalPages
+                    };
+                    break;
+                case "audit":
+                    Expression<Func<audit, bool>> condition3 = c => true;
+                    if (!string.IsNullOrEmpty(request.name))
+                    {
+                        condition3 = c => (c.name_cn.Contains(request.name) || c.code.Contains(request.name));
+                    }
+                    list = Uof.IauditService.GetAll(condition3).OrderBy(item => item.code).Select(a => new LetterOrder
+                    {
+                        order_code = a.code,
+                        order_id = a.id,
+                        order_name = a.name_cn ?? a.name_en,
+                        order_source = "audit",
+                    }).ToPagedList(request.index, request.size).ToList();
+
+                    totalRecord = Uof.IauditService.GetAll(condition3).Count();
+                    if (totalRecord > 0)
+                    {
+                        totalPages = (totalRecord + request.size - 1) / request.size;
+                    }
+                    page = new
+                    {
+                        current_index = request.index,
+                        current_size = request.size,
+                        total_size = totalRecord,
+                        total_page = totalPages
+                    };
+                    break;
+                case "patent":
+                    Expression<Func<patent, bool>> condition4 = c => true;
+                    if (!string.IsNullOrEmpty(request.name))
+                    {
+                        condition4 = c => (c.name.Contains(request.name) || c.code.Contains(request.name));
+                    }
+                    list = Uof.IpatentService.GetAll(condition4).OrderBy(item => item.code).Select(a => new LetterOrder
+                    {
+                        order_code = a.code,
+                        order_id = a.id,
+                        order_name = a.name,
+                        order_source = "patent",
+                    }).ToPagedList(request.index, request.size).ToList();
+
+                    totalRecord = Uof.IpatentService.GetAll(condition4).Count();
+                    if (totalRecord > 0)
+                    {
+                        totalPages = (totalRecord + request.size - 1) / request.size;
+                    }
+                    page = new
+                    {
+                        current_index = request.index,
+                        current_size = request.size,
+                        total_size = totalRecord,
+                        total_page = totalPages
+                    };
+                    break;
+                case "trademark":
+                    Expression<Func<trademark, bool>> condition5 = c => true;
+                    if (!string.IsNullOrEmpty(request.name))
+                    {
+                        condition5 = c => (c.name.Contains(request.name) || c.code.Contains(request.name));
+                    }
+                    list = Uof.ItrademarkService.GetAll(condition5).OrderBy(item => item.code).Select(a => new LetterOrder
+                    {
+                        order_code = a.code,
+                        order_id = a.id,
+                        order_name = a.name,
+                        order_source = "trademark",
+                    }).ToPagedList(request.index, request.size).ToList();
+
+                    totalRecord = Uof.ItrademarkService.GetAll(condition5).Count();
+                    if (totalRecord > 0)
+                    {
+                        totalPages = (totalRecord + request.size - 1) / request.size;
+                    }
+                    page = new
+                    {
+                        current_index = request.index,
+                        current_size = request.size,
+                        total_size = totalRecord,
+                        total_page = totalPages
+                    };
+                    break;
+                default:
+                    break;
+            }
+
+            result = new
+            {
+                page = page,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

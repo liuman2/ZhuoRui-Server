@@ -78,4 +78,20 @@ namespace WebCenter.Web
 
         public double hours { get; set; }
     }
+
+    public class LetterOrderRequest
+    {
+        public int index { get; set; }
+        public int size { get; set; }
+        public string type { get; set; }
+        public string name { get; set; }
+    }
+
+    public class LetterOrder
+    {
+        public int order_id { get; set; }
+        public string order_source { get; set; }
+        public string order_code { get; set; }
+        public string order_name { get; set; }
+    }
 }

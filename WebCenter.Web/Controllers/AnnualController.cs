@@ -99,7 +99,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 &&
             ((c.annual_date == null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear > c.date_setup.Value.Year) ||
             (c.annual_date != null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear > c.annual_date.Value.Year) ||
-            (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
+            (c.is_annual == 1 && ((c.annual_year == null) || (c.annual_year != null && c.annual_year.Value < nowYear))));
             Expression<Func<reg_abroad, bool>> customerQuery1 = c => true;
             if (customer_id != null && customer_id.Value > 0)
             {
@@ -196,7 +196,7 @@ namespace WebCenter.Web.Controllers
                 Expression<Func<reg_internal, bool>> condition2 = c => c.status == 4 &&
                 ((c.annual_date == null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear > c.date_setup.Value.Year) ||
                 (c.annual_date != null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear > c.annual_date.Value.Year) ||
-                (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
+                (c.is_annual == 1 && ((c.annual_year == null) || (c.annual_year != null && c.annual_year.Value < nowYear))));
 
                 Expression<Func<reg_internal, bool>> customerQuery2 = c => true;
 
@@ -298,7 +298,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<trademark, bool>> condition3 = c => c.status == 4 &&
             ((c.annual_date == null && c.annual_year.Value < (nowYear - trademarkPeriod) && (Month1 == (c.date_regit.Value.Month) || Month2 >= (c.date_regit.Value.Month) || Month3 == (c.date_regit.Value.Month)) && (nowYear - trademarkPeriod) == c.date_regit.Value.Year) ||
             (c.annual_date != null && c.annual_year.Value < (nowYear - trademarkPeriod) && (Month1 == (c.date_regit.Value.Month) || Month2 >= (c.date_regit.Value.Month) || Month3 == (c.date_regit.Value.Month)) && (nowYear - trademarkPeriod) == c.annual_date.Value.Year) ||
-            (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
+            (c.is_annual == 1 && ((c.annual_year == null) || (c.annual_year != null && c.annual_year.Value < nowYear))));
 
             Expression<Func<trademark, bool>> customerQuery3 = c => true;
             if (customer_id != null && customer_id.Value > 0)
@@ -396,7 +396,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<patent, bool>> condition4 = c => c.status == 4 &&
             ((c.annual_date == null && c.annual_year.Value < (nowYear - patentPeriod) && (Month1 == (c.date_empower.Value.Month) || Month2 >= (c.date_empower.Value.Month) || Month3 == (c.date_empower.Value.Month)) && (nowYear - patentPeriod) == c.date_empower.Value.Year) ||
             (c.annual_date != null && c.annual_year.Value < (nowYear - patentPeriod) && (Month1 == (c.date_empower.Value.Month) || Month2 >= (c.date_empower.Value.Month) || Month3 == (c.date_empower.Value.Month)) && (nowYear - patentPeriod) == c.annual_date.Value.Year) ||
-            (c.is_annual == 1 && (c.annual_year == null || c.annual_date == null)));
+            (c.is_annual == 1 && ((c.annual_year == null) || (c.annual_year != null && c.annual_year.Value < nowYear))));
 
             Expression<Func<patent, bool>> customerQuery4 = c => true;
             if (customer_id != null && customer_id.Value > 0)
