@@ -168,7 +168,7 @@ namespace WebCenter.Web.Controllers
                 return string.Format("{0}{1}{2}", areaCodeStr, codeStr, 1.ToString().PadLeft(suffix, '0'));
             }
 
-            var indexStr = dbCode.Replace(preCode, "").Replace("0", "");
+            var indexStr = dbCode.Replace(preCode, "");
 
             var index = 0;
             int.TryParse(indexStr, out index);
