@@ -94,4 +94,14 @@ namespace WebCenter.Web
         public string order_code { get; set; }
         public string order_name { get; set; }
     }
+
+    public class PassInbox
+    {
+        public int id { get; set; }
+        public int order_id { get; set; }
+        public string order_source { get; set; }
+        public string order_code { get; set; }
+        public string order_name { get; set; }
+        public string letter_type { get; set; }
+    }
 }

@@ -74,10 +74,6 @@ namespace WebCenter.Entities
     
     
     
-        public string order_name { get; set; }
-    
-    
-    
         public string order_source { get; set; }
     
     
@@ -87,6 +83,10 @@ namespace WebCenter.Entities
     
     
         public string order_code { get; set; }
+    
+    
+    
+        public string order_name { get; set; }
     
     
     
@@ -107,6 +107,10 @@ namespace WebCenter.Entities
     
     
         public string review_moment { get; set; }
+    
+    
+    
+        public string paymode { get; set; }
     
         public virtual member member { get; set; }
     }

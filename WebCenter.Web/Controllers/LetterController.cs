@@ -71,6 +71,7 @@ namespace WebCenter.Web.Controllers
                     review_moment = c.review_moment,
                     review_status = c.review_status,
                     tel = c.tel,
+                    paymode = c.paymode,
 
                 }).ToPagedList(request.index, request.size).ToList();
 
@@ -124,7 +125,6 @@ namespace WebCenter.Web.Controllers
 
             l.creator_id = userId;
             l.date_created = DateTime.Now;
-            l.code = DateTime.Now.ToString("yyyyMMddHHMMss"); // GetNextLetterCode(l.type);
             l.review_status = 0;
 
             var _l = Uof.ImailService.AddEntity(l);
@@ -138,8 +138,8 @@ namespace WebCenter.Web.Controllers
                         source = "mail",
                         source_id = l.id,
                         user_id = l.audit_id,
-                        router = "letter_view",
-                        content = string.Format("您有一笔信件资料需要审核, 编号：{0}", _l.code),
+                        router = l.type == "寄件" ? "letter_view" : "inbox_view",
+                        content = string.Format("您有一笔信件资料需要审核, 信件单号：{0}", _l.code),
                         read_status = 0
                     });
 
@@ -150,7 +150,7 @@ namespace WebCenter.Web.Controllers
                             source_id = _l.order_id,
                             source_name = _l.order_source,
                             title = string.Format("新增{0}记录", _l.type),
-                            content = string.Format("{0}新建了一笔{1}记录, 编号: {2}", arrs[3], _l.type, _l.code)
+                            content = string.Format("新建了一笔{0}记录, 信件单号: {1}", _l.type, _l.code)
                         });
                     }
                 }
@@ -176,22 +176,6 @@ namespace WebCenter.Web.Controllers
                 needReview = true;
             }
 
-            //if (_c.type == c.type &&
-            //    _c.owner == c.owner &&
-            //    _c.letter_type == c.letter_type &&
-            //    _c.merchant == c.merchant &&
-            //    _c.date_at == c.date_at &&
-            //    _c.code == c.code &&
-            //    _c.date_at == c.date_at &&
-            //    _c.address == c.address &&
-            //    _c.description == c.description &&
-            //    _c.file_url == c.file_url &&
-            //    _c.audit_id == c.audit_id
-            //    )
-            //{
-            //    return SuccessResult;
-            //}
-
             _c.type = c.type;
             _c.owner = c.owner;
             _c.letter_type = c.letter_type;
@@ -210,6 +194,7 @@ namespace WebCenter.Web.Controllers
             _c.order_source = c.order_source;
             _c.receiver = c.receiver;
             _c.review_status = c.review_status;
+            _c.paymode = c.paymode;
 
             var r = Uof.ImailService.UpdateEntity(_c);
 
@@ -224,8 +209,8 @@ namespace WebCenter.Web.Controllers
                             source = "mail",
                             source_id = _c.id,
                             user_id = newAutid,
-                            router = "letter_view",
-                            content = string.Format("您有一笔信件资料需要审核, 编号：{0}", _c.code),
+                            router = _c.type == "寄件" ? "letter_view" : "inbox_view",
+                            content = string.Format("您有一笔信件资料需要审核, 信件单号：{0}", _c.code),
                             read_status = 0
                         });
                     }
@@ -264,6 +249,7 @@ namespace WebCenter.Web.Controllers
                 review_status = c.review_status,
                 tel = c.tel,
                 creator_id = c.creator_id,
+                paymode = c.paymode
             }).FirstOrDefault();
 
             return Json(_l, JsonRequestBehavior.AllowGet);
@@ -303,7 +289,7 @@ namespace WebCenter.Web.Controllers
                 source = "mail",
                 source_id = dbMail.id,
                 user_id = dbMail.creator_id,
-                router = "letter_view",
+                router = dbMail.type == "寄件" ? "letter_view" : "inbox_view",
                 content = string.Format("您的笔信件资料通过审核, 编号：{0}", dbMail.code),
                 read_status = 0
             });
@@ -354,7 +340,8 @@ namespace WebCenter.Web.Controllers
                 source = "mail",
                 source_id = dbMail.id,
                 user_id = dbMail.creator_id,
-                router = "letter_view",
+                //router = "letter_view",
+                router = dbMail.type == "寄件" ? "letter_view" : "inbox_view",
                 content = string.Format("您的笔信件资料通过审核, 编号：{0}", dbMail.code),
                 read_status = 0
             });
@@ -549,6 +536,83 @@ namespace WebCenter.Web.Controllers
             };
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult PassInbox(PassInbox passInbox)
+        {
+            var _c = Uof.ImailService.GetById(passInbox.id);
+
+            _c.review_status = 1;
+            _c.letter_type = passInbox.letter_type;
+            _c.order_code = passInbox.order_code;
+            _c.order_id = passInbox.order_id;
+            _c.order_name = passInbox.order_name;
+            _c.order_source = passInbox.order_source;
+            
+            var r = Uof.ImailService.UpdateEntity(_c);
+
+            if (r)
+            {
+                try
+                {
+                    if (_c.order_id != null)
+                    {
+                        Uof.ItimelineService.AddEntity(new timeline()
+                        {
+                            source_id = _c.order_id,
+                            source_name = _c.order_source,
+                            title = string.Format("新增{0}记录", _c.type),
+                            content = string.Format("新建了一笔{0}记录, 信件单号: {1}", _c.type, _c.code)
+                        });
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            return Json(new { success = r, id = _c.id }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetLetterForAudit()
+        {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var list = Uof.ImailService.GetAll(m => m.review_status == 0 && m.audit_id == userId).Select(c => new
+            {
+                id = c.id,
+                code = c.code,
+                date_at = c.date_at,
+                description = c.description,
+                letter_type = c.letter_type,
+                audit_id = c.audit_id,
+                audit_name = c.member.name,
+                type = c.type,
+                order_id = c.order_id,
+                order_name = c.order_name,
+                order_source = c.order_source,
+                order_code = c.order_code,               
+                review_date = c.review_date,
+                review_moment = c.review_moment,
+                review_status = c.review_status,
+                creator_id = c.creator_id,
+            }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
     }
 }
