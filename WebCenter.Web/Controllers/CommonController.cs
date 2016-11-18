@@ -157,7 +157,7 @@ namespace WebCenter.Web.Controllers
                         rate = a.rate
                     }).FirstOrDefault();
 
-                    printData.date = printData.date_transaction.Value.ToString("yyyy年MM月dd日");
+                    printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}提交", printData.area);
 
                     getPrintDataIncome(printData, "reg_abroad");
@@ -197,7 +197,8 @@ namespace WebCenter.Web.Controllers
                         rate = a.rate
                     }).FirstOrDefault();
 
-                    printData.date = printData.date_transaction.Value.ToString("yyyy年MM月dd日");
+                    printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
+
                     printData.project = string.Format("{0}年报", printData.area);
 
                     getPrintDataIncome(printData, "annual");
@@ -237,7 +238,7 @@ namespace WebCenter.Web.Controllers
                         rate = a.rate
                     }).FirstOrDefault();
 
-                    printData.date = printData.date_transaction.Value.ToString("yyyy年MM月dd日");
+                    printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}审计", printData.area);
 
                     getPrintDataIncome(printData, "audit");
@@ -317,7 +318,7 @@ namespace WebCenter.Web.Controllers
                         rate = a.rate
                     }).FirstOrDefault();
 
-                    printData.date = printData.date_transaction.Value.ToString("yyyy年MM月dd日");
+                    printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}提交", printData.area);
 
                     getPrintDataIncome(printData, "patent");
@@ -357,7 +358,7 @@ namespace WebCenter.Web.Controllers
                         rate = a.rate
                     }).FirstOrDefault();
 
-                    printData.date = printData.date_transaction.Value.ToString("yyyy年MM月dd日");
+                    printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}提交", printData.area);
 
                     getPrintDataIncome(printData, "trademark");
@@ -397,7 +398,7 @@ namespace WebCenter.Web.Controllers
                         rate = a.rate
                     }).FirstOrDefault();
 
-                    printData.date = printData.date_transaction.Value.ToString("yyyy年MM月dd日");
+                    printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}提交", printData.area);
 
                     getPrintDataIncome(printData, "history");

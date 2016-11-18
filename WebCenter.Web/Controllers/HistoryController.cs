@@ -86,6 +86,50 @@ namespace WebCenter.Web.Controllers
             return Json(new { id = newHistory.id }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Update(history _history)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+
+            var userId = 0;
+            var organization_id = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out organization_id);
+
+
+            var dbHistory = Uof.IhistoryService.GetAll(h => h.id == _history.id).FirstOrDefault();
+            if (dbHistory == null)
+            {
+                return Json(new { success = false, message = "找不到该条数据" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbHistory.value = _history.value;
+            dbHistory.salesman_id = _history.salesman_id;
+            dbHistory.date_transaction = _history.date_transaction;
+            dbHistory.amount_transaction = _history.amount_transaction;
+            dbHistory.currency = _history.currency;
+            dbHistory.rate = _history.rate;
+
+            var result = Uof.IhistoryService.UpdateEntity(dbHistory);
+            if (!result)
+            {
+                return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { success = result, id = dbHistory.id }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult List(int source_id, string source, int index, int size)
         {
             var list = Uof.IhistoryService.GetAll(c=>c.source == source && c.source_id == source_id)

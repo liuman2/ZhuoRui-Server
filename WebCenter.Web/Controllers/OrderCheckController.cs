@@ -339,7 +339,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult SubmitCheck(int? customer_id, int? salesman_id, int? order_status, string order_type)
+        public ActionResult SubmitCheck(int? customer_id, int? salesman_id, int? order_status, string order_type, string name)
         {
             var items = new List<FinanceCheck>();
 
@@ -370,14 +370,25 @@ namespace WebCenter.Web.Controllers
                     orderTypeQuery1 = c => c.status > 2;
                 }
 
-                var abroads = Uof.Ireg_abroadService.GetAll().Where(customerQuery1).Where(salesmanQuery1).Where(orderTypeQuery1).Select(a => new FinanceCheck
+                Expression<Func<reg_abroad, bool>> nameQuery1 = c => true;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    nameQuery1 = c => (c.name_cn.ToLower().Contains(name.ToLower()) || c.name_en.ToLower().Contains(name.ToLower()) || c.code.ToLower().Contains(name.ToLower()));
+                }
+
+                var abroads = Uof.Ireg_abroadService.GetAll()
+                    .Where(customerQuery1)
+                    .Where(salesmanQuery1)
+                    .Where(orderTypeQuery1)
+                    .Where(nameQuery1)
+                    .Select(a => new FinanceCheck
                 {
                     id = a.id,
                     customer_id = a.customer_id,
                     customer_name = a.customer.name,
                     customer_code = a.customer.code,
                     order_code = a.code,
-                    order_name = a.name_cn,
+                    order_name = a.name_cn ?? a.name_en,
                     order_type = "reg_abroad",
                     order_type_name = "境外注册",
                     review_status = a.review_status,
@@ -398,31 +409,42 @@ namespace WebCenter.Web.Controllers
             #region 国内注册
             if (string.IsNullOrEmpty(order_type) || order_type == "reg_internal")
             {
-                Expression<Func<reg_internal, bool>> customerQuery1 = c => true;
+                Expression<Func<reg_internal, bool>> customerQuery2 = c => true;
                 if (customer_id != null && customer_id.Value > 0)
                 {
-                    customerQuery1 = c => (c.customer_id == customer_id);
+                    customerQuery2 = c => (c.customer_id == customer_id);
                 }
 
-                Expression<Func<reg_internal, bool>> salesmanQuery1 = c => true;
+                Expression<Func<reg_internal, bool>> salesmanQuery2 = c => true;
                 if (salesman_id != null && salesman_id.Value > 0)
                 {
-                    salesmanQuery1 = c => (c.salesman_id == salesman_id);
+                    salesmanQuery2 = c => (c.salesman_id == salesman_id);
                 }
 
-                Expression<Func<reg_internal, bool>> orderTypeQuery1 = c => c.status >= 2;
+                Expression<Func<reg_internal, bool>> orderTypeQuery2 = c => c.status >= 2;
                 if (order_status == 0)
                 {
                     // 未审核
-                    orderTypeQuery1 = c => c.status == 2 && c.review_status == 1;
+                    orderTypeQuery2 = c => c.status == 2 && c.review_status == 1;
                 }
                 else if (order_status == 1)
                 {
                     // 已审核
-                    orderTypeQuery1 = c => c.status > 2;
+                    orderTypeQuery2 = c => c.status > 2;
                 }
 
-                var internas = Uof.Ireg_internalService.GetAll().Where(customerQuery1).Where(salesmanQuery1).Where(orderTypeQuery1).Select(a => new FinanceCheck
+                Expression<Func<reg_internal, bool>> nameQuery2 = c => true;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    nameQuery2 = c => (c.name_cn.ToLower().Contains(name.ToLower()) || c.code.ToLower().Contains(name.ToLower()));
+                }
+
+                var internas = Uof.Ireg_internalService.GetAll()
+                    .Where(customerQuery2)
+                    .Where(salesmanQuery2)
+                    .Where(orderTypeQuery2)
+                    .Where(nameQuery2)
+                    .Select(a => new FinanceCheck
                 {
                     id = a.id,
                     customer_id = a.customer_id,
@@ -449,32 +471,43 @@ namespace WebCenter.Web.Controllers
             #region 商标注册
             if (string.IsNullOrEmpty(order_type) || order_type == "trademark")
             {
-                Expression<Func<trademark, bool>> customerQuery1 = c => true;
+                Expression<Func<trademark, bool>> customerQuery3 = c => true;
                 if (customer_id != null && customer_id.Value > 0)
                 {
-                    customerQuery1 = c => (c.customer_id == customer_id);
+                    customerQuery3 = c => (c.customer_id == customer_id);
                 }
 
-                Expression<Func<trademark, bool>> salesmanQuery1 = c => true;
+                Expression<Func<trademark, bool>> salesmanQuery3 = c => true;
                 if (salesman_id != null && salesman_id.Value > 0)
                 {
-                    salesmanQuery1 = c => (c.salesman_id == salesman_id);
+                    salesmanQuery3 = c => (c.salesman_id == salesman_id);
                 }
 
-                Expression<Func<trademark, bool>> orderTypeQuery1 = c => c.status >= 2;
+                Expression<Func<trademark, bool>> orderTypeQuery3 = c => c.status >= 2;
                 if (order_status == 0)
                 {
                     // 未审核
-                    orderTypeQuery1 = c => c.status == 2 && c.review_status == 1;
+                    orderTypeQuery3 = c => c.status == 2 && c.review_status == 1;
                 }
                 else if (order_status == 1)
                 {
                     // 已审核
-                    orderTypeQuery1 = c => c.status > 2;
+                    orderTypeQuery3 = c => c.status > 2;
+                }
+
+                Expression<Func<trademark, bool>> nameQuery3 = c => true;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    nameQuery3 = c => (c.name.ToLower().Contains(name.ToLower()) || c.code.ToLower().Contains(name.ToLower()));
                 }
 
                 var test = Uof.ItrademarkService.GetAll().ToList();
-                var trademarks = Uof.ItrademarkService.GetAll().Where(customerQuery1).Where(salesmanQuery1).Where(orderTypeQuery1).Select(a => new FinanceCheck
+                var trademarks = Uof.ItrademarkService.GetAll()
+                    .Where(customerQuery3)
+                    .Where(salesmanQuery3)
+                    .Where(orderTypeQuery3)
+                    .Where(nameQuery3)
+                    .Select(a => new FinanceCheck
                 {
                     id = a.id,
                     customer_id = a.customer_id,
@@ -501,31 +534,42 @@ namespace WebCenter.Web.Controllers
             #region 专利注册
             if (string.IsNullOrEmpty(order_type) || order_type == "patent")
             {
-                Expression<Func<patent, bool>> customerQuery1 = c => true;
+                Expression<Func<patent, bool>> customerQuery4 = c => true;
                 if (customer_id != null && customer_id.Value > 0)
                 {
-                    customerQuery1 = c => (c.customer_id == customer_id);
+                    customerQuery4 = c => (c.customer_id == customer_id);
                 }
 
-                Expression<Func<patent, bool>> salesmanQuery1 = c => true;
+                Expression<Func<patent, bool>> salesmanQuery4 = c => true;
                 if (salesman_id != null && salesman_id.Value > 0)
                 {
-                    salesmanQuery1 = c => (c.salesman_id == salesman_id);
+                    salesmanQuery4 = c => (c.salesman_id == salesman_id);
                 }
 
-                Expression<Func<patent, bool>> orderTypeQuery1 = c => c.status >= 2;
+                Expression<Func<patent, bool>> orderTypeQuery4 = c => c.status >= 2;
                 if (order_status == 0)
                 {
                     // 未审核
-                    orderTypeQuery1 = c => c.status == 2 && c.review_status == 1;
+                    orderTypeQuery4 = c => c.status == 2 && c.review_status == 1;
                 }
                 else if (order_status == 1)
                 {
                     // 已审核
-                    orderTypeQuery1 = c => c.status > 2;
+                    orderTypeQuery4 = c => c.status > 2;
                 }
 
-                var patents = Uof.IpatentService.GetAll().Where(customerQuery1).Where(salesmanQuery1).Where(orderTypeQuery1).Select(a => new FinanceCheck
+                Expression<Func<patent, bool>> nameQuery4 = c => true;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    nameQuery4 = c => (c.name.ToLower().Contains(name.ToLower()) || c.code.ToLower().Contains(name.ToLower()));
+                }
+
+                var patents = Uof.IpatentService.GetAll()
+                    .Where(customerQuery4)
+                    .Where(salesmanQuery4)
+                    .Where(orderTypeQuery4)
+                    .Where(nameQuery4)
+                    .Select(a => new FinanceCheck
                 {
                     id = a.id,
                     customer_id = a.customer_id,
@@ -552,38 +596,49 @@ namespace WebCenter.Web.Controllers
             #region 审计
             if (string.IsNullOrEmpty(order_type) || order_type == "audit")
             {
-                Expression<Func<audit, bool>> customerQuery1 = c => true;
+                Expression<Func<audit, bool>> customerQuery5 = c => true;
                 if (customer_id != null && customer_id.Value > 0)
                 {
-                    customerQuery1 = c => (c.customer_id == customer_id);
+                    customerQuery5 = c => (c.customer_id == customer_id);
                 }
 
-                Expression<Func<audit, bool>> salesmanQuery1 = c => true;
+                Expression<Func<audit, bool>> salesmanQuery5 = c => true;
                 if (salesman_id != null && salesman_id.Value > 0)
                 {
-                    salesmanQuery1 = c => (c.salesman_id == salesman_id);
+                    salesmanQuery5 = c => (c.salesman_id == salesman_id);
                 }
 
-                Expression<Func<audit, bool>> orderTypeQuery1 = c => c.status >= 2;
+                Expression<Func<audit, bool>> orderTypeQuery5 = c => c.status >= 2;
                 if (order_status == 0)
                 {
                     // 未审核
-                    orderTypeQuery1 = c => c.status == 2 && c.review_status == 1;
+                    orderTypeQuery5 = c => c.status == 2 && c.review_status == 1;
                 }
                 else if (order_status == 1)
                 {
                     // 已审核
-                    orderTypeQuery1 = c => c.status > 2;
+                    orderTypeQuery5 = c => c.status > 2;
                 }
 
-                var audits = Uof.IauditService.GetAll().Where(customerQuery1).Where(salesmanQuery1).Where(orderTypeQuery1).Select(a => new FinanceCheck
+                Expression<Func<audit, bool>> nameQuery5 = c => true;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    nameQuery5 = c => (c.name_cn.ToLower().Contains(name.ToLower()) || c.name_en.ToLower().Contains(name.ToLower()) || c.code.ToLower().Contains(name.ToLower()));
+                }
+
+                var audits = Uof.IauditService.GetAll()
+                    .Where(customerQuery5)
+                    .Where(salesmanQuery5)
+                    .Where(orderTypeQuery5)
+                    .Where(nameQuery5)
+                    .Select(a => new FinanceCheck
                 {
                     id = a.id,
                     customer_id = a.customer_id,
                     customer_name = a.customer.name,
                     customer_code = a.customer.code,
                     order_code = a.code,
-                    order_name = a.name_cn,
+                    order_name = a.name_cn ?? a.name_en,
                     order_type = "audit",
                     order_type_name = "审计",
                     review_status = a.review_status,
@@ -603,38 +658,49 @@ namespace WebCenter.Web.Controllers
             #region 年检
             if (string.IsNullOrEmpty(order_type) || order_type == "annual_exam")
             {
-                Expression<Func<annual_exam, bool>> customerQuery1 = c => true;
+                Expression<Func<annual_exam, bool>> customerQuery6 = c => true;
                 if (customer_id != null && customer_id.Value > 0)
                 {
-                    customerQuery1 = c => (c.customer_id == customer_id);
+                    customerQuery6 = c => (c.customer_id == customer_id);
                 }
 
-                Expression<Func<annual_exam, bool>> salesmanQuery1 = c => true;
+                Expression<Func<annual_exam, bool>> salesmanQuery6 = c => true;
                 if (salesman_id != null && salesman_id.Value > 0)
                 {
-                    salesmanQuery1 = c => (c.waiter_id == salesman_id);
+                    salesmanQuery6 = c => (c.waiter_id == salesman_id);
                 }
 
-                Expression<Func<annual_exam, bool>> orderTypeQuery1 = c => c.status >= 2;
+                Expression<Func<annual_exam, bool>> orderTypeQuery6 = c => c.status >= 2;
                 if (order_status == 0)
                 {
                     // 未审核
-                    orderTypeQuery1 = c => c.status == 2 && c.review_status == 1;
+                    orderTypeQuery6 = c => c.status == 2 && c.review_status == 1;
                 }
                 else if (order_status == 1)
                 {
                     // 已审核
-                    orderTypeQuery1 = c => c.status > 2;
+                    orderTypeQuery6 = c => c.status > 2;
                 }
 
-                var audits = Uof.Iannual_examService.GetAll().Where(customerQuery1).Where(salesmanQuery1).Where(orderTypeQuery1).Select(a => new FinanceCheck
+                Expression<Func<annual_exam, bool>> nameQuery6 = c => true;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    nameQuery6 = c => (c.name_cn.ToLower().Contains(name.ToLower()) || c.name_en.ToLower().Contains(name.ToLower()) || c.code.ToLower().Contains(name.ToLower()));
+                }
+
+                var audits = Uof.Iannual_examService.GetAll()
+                    .Where(customerQuery6)
+                    .Where(salesmanQuery6)
+                    .Where(orderTypeQuery6)
+                    .Where(nameQuery6)
+                    .Select(a => new FinanceCheck
                 {
                     id = a.id,
                     customer_id = a.customer_id,
                     customer_name = a.customer.name,
                     customer_code = a.customer.code,
                     order_code = a.code,
-                    order_name = a.name_cn,
+                    order_name = a.name_cn ?? a.name_en,
                     order_type = "annual_exam",
                     order_type_name = "年检",
                     review_status = a.review_status,
