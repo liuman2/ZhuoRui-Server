@@ -394,8 +394,8 @@ namespace WebCenter.Web.Controllers
             int.TryParse(patentPeriodSetting, out patentPeriod);
 
             Expression<Func<patent, bool>> condition4 = c => c.status == 4 &&
-            ((c.annual_date == null && c.annual_year.Value < (nowYear - patentPeriod) && (Month1 == (c.date_empower.Value.Month) || Month2 >= (c.date_empower.Value.Month) || Month3 == (c.date_empower.Value.Month)) && (nowYear - patentPeriod) == c.date_empower.Value.Year) ||
-            (c.annual_date != null && c.annual_year.Value < (nowYear - patentPeriod) && (Month1 == (c.date_empower.Value.Month) || Month2 >= (c.date_empower.Value.Month) || Month3 == (c.date_empower.Value.Month)) && (nowYear - patentPeriod) == c.annual_date.Value.Year) ||
+            ((c.annual_date == null && c.annual_year.Value < (nowYear - patentPeriod) && (Month1 == (c.date_regit.Value.Month) || Month2 >= (c.date_regit.Value.Month) || Month3 == (c.date_regit.Value.Month)) && (nowYear - patentPeriod) == c.date_empower.Value.Year) ||
+            (c.annual_date != null && c.annual_year.Value < (nowYear - patentPeriod) && (Month1 == (c.date_regit.Value.Month) || Month2 >= (c.date_regit.Value.Month) || Month3 == (c.date_regit.Value.Month)) && (nowYear - patentPeriod) == c.annual_date.Value.Year) ||
             (c.is_annual == 1 && ((c.annual_year == null) || (c.annual_year != null && c.annual_year.Value < nowYear))));
 
             Expression<Func<patent, bool>> customerQuery4 = c => true;
@@ -475,9 +475,9 @@ namespace WebCenter.Web.Controllers
                     assistant_name = a.member.name,
                     submit_review_date = a.submit_review_date,
                     date_finish = a.date_finish,
-                    date_setup = a.date_empower,
+                    date_setup = a.date_regit,
                     annual_year = a.annual_year,
-                    month = (a.date_empower != null) ? (DateTime.Today.Month - a.date_empower.Value.Month) : 0,
+                    month = (a.date_regit != null) ? (DateTime.Today.Month - a.date_regit.Value.Month) : 0,
                 }).ToList();
 
             if (patents.Count() > 0)

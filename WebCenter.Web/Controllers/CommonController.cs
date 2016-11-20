@@ -129,7 +129,8 @@ namespace WebCenter.Web.Controllers
                     {
                         print_type = "abroad",
                         id = a.id,
-                        accounter = "",
+                        accounter = a.member5.name, // 会计
+                        cashier = a.member1.name, // 出纳
                         amount = a.amount_transaction,
                         balance = a.amount_transaction,
                         attachments = 0,
@@ -143,7 +144,7 @@ namespace WebCenter.Web.Controllers
                         date = "",
                         mode = "",
                         ordername = a.name_en,
-                        others = "",
+                        others = a.description,
                         payer = "",
                         pay_info = "",
                         pay_way = "",
@@ -169,7 +170,8 @@ namespace WebCenter.Web.Controllers
                     {
                         print_type = "annual",
                         id = a.id,
-                        accounter = "",
+                        accounter = a.member5.name,
+                        cashier = a.member2.name, // 出纳
                         amount = a.amount_transaction,
                         attachments = 0,
                         auditor = a.member2.name,
@@ -183,7 +185,7 @@ namespace WebCenter.Web.Controllers
                         date = "",
                         mode = "",
                         ordername = a.name_cn,
-                        others = "",
+                        others =  a.description,
                         payer = "",
                         pay_info = "",
                         pay_way = "",
@@ -210,7 +212,8 @@ namespace WebCenter.Web.Controllers
                     {
                         print_type = "audit",
                         id = a.id,
-                        accounter = "",
+                        accounter = a.member5.name,
+                        cashier = a.member2.name, // 出纳
                         amount = a.amount_transaction * a.rate,
                         attachments = 0,
                         auditor = a.member2.name,
@@ -224,7 +227,7 @@ namespace WebCenter.Web.Controllers
                         date = "",
                         mode = "",
                         ordername = a.name_cn,
-                        others = "",
+                        others = a.description,
                         payer = "",
                         pay_info = "",
                         pay_way = "",
@@ -250,7 +253,8 @@ namespace WebCenter.Web.Controllers
                     {
                         print_type = "internal",
                         id = a.id,
-                        accounter = "",
+                        accounter = a.member6.name,
+                        cashier = a.member2.name, // 出纳
                         amount = a.amount_transaction * a.rate,
                         attachments = 0,
                         auditor = a.member2.name,
@@ -264,7 +268,7 @@ namespace WebCenter.Web.Controllers
                         date = "",
                         mode = "",
                         ordername = a.name_cn,
-                        others = "",
+                        others = a.description,
                         payer = "",
                         pay_info = "",
                         pay_way = "",
@@ -290,21 +294,22 @@ namespace WebCenter.Web.Controllers
                     {
                         print_type = "patent",
                         id = a.id,
-                        accounter = "",
+                        accounter = a.member5.name,
+                        cashier = a.member2.name, // 出纳
                         amount = a.amount_transaction * a.rate,
                         attachments = 0,
                         auditor = a.member2.name,
                         balance = a.amount_transaction * a.rate,
                         code = a.code,
                         customer_name = a.customer.name,
-                        company_cn = a.customer.name,
+                        company_cn = a.applicant,
                         company_en = "",
                         creator = a.member1.name,
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = a.reg_mode,
                         ordername = a.name,
-                        others = "",
+                        others = a.description,
                         payer = "",
                         pay_info = "",
                         pay_way = "",
@@ -330,21 +335,22 @@ namespace WebCenter.Web.Controllers
                     {
                         print_type = "trademark",
                         id = a.id,
-                        accounter = "",
+                        accounter = a.member5.name,
+                        cashier = a.member2.name, // 出纳
                         amount = a.amount_transaction * a.rate,
                         attachments = 0,
                         auditor = a.member2.name,
                         balance = a.amount_transaction * a.rate,
                         code = a.code,
                         customer_name = a.customer.name,
-                        company_cn = a.customer.name,
+                        company_cn = a.applicant,
                         company_en = "",
                         creator = a.member1.name,
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = a.reg_mode,
                         ordername = a.name,
-                        others = "",
+                        others = a.description,
                         payer = "",
                         pay_info = "",
                         pay_way = "",
@@ -370,7 +376,11 @@ namespace WebCenter.Web.Controllers
                     {
                         print_type = "history",
                         id = a.id,
-                        accounter = "",
+                        accounter = a.member3.name,
+                        cashier = a.member1.name, // 出纳
+                        source = a.source,
+                        source_id = a.source_id,
+
                         amount = a.amount_transaction * a.rate,
                         attachments = 0,
                         auditor = a.member1.name,
@@ -401,6 +411,8 @@ namespace WebCenter.Web.Controllers
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}提交", printData.area);
 
+                    getCompanyName(printData);
+
                     getPrintDataIncome(printData, "history");
                     #endregion
 
@@ -410,6 +422,71 @@ namespace WebCenter.Web.Controllers
             }
 
             return Json(printData, JsonRequestBehavior.AllowGet);
+        }
+
+        private void getCompanyName(PrintData printData)
+        {
+            switch (printData.source)
+            {
+                case "reg_abroad":
+                    var abroad = Uof.Ireg_abroadService.GetAll(a => a.id == printData.source_id).Select(a=> new
+                    {
+                        id = a.id,
+                        name_cn = a.name_cn,
+                        name_en = a.name_en,
+
+                    }).FirstOrDefault();
+                    if (abroad != null)
+                    {
+                        printData.company_cn = abroad.name_cn;
+                        printData.company_en = abroad.name_en;
+                    }
+                    break;
+                case "reg_internal":
+                    var inter = Uof.Ireg_internalService.GetAll(a => a.id == printData.source_id).Select(a => new
+                    {
+                        id = a.id,
+                        name_cn = a.name_cn,
+                        name_en = "",
+
+                    }).FirstOrDefault();
+                    if (inter != null)
+                    {
+                        printData.company_cn = inter.name_cn;
+                        printData.company_en = inter.name_en;
+                    }
+                    break;
+                case "patent":
+                    var paten = Uof.IpatentService.GetAll(a => a.id == printData.source_id).Select(a => new
+                    {
+                        id = a.id,
+                        name_cn = a.applicant,
+                        name_en = "",
+
+                    }).FirstOrDefault();
+                    if (paten != null)
+                    {
+                        printData.company_cn = paten.name_cn;
+                        printData.company_en = paten.name_en;
+                    }
+                    break;
+                case "trademark":
+                    var trademar = Uof.ItrademarkService.GetAll(a => a.id == printData.source_id).Select(a => new
+                    {
+                        id = a.id,
+                        name_cn = a.applicant,
+                        name_en = "",
+
+                    }).FirstOrDefault();
+                    if (trademar != null)
+                    {
+                        printData.company_cn = trademar.name_cn;
+                        printData.company_en = trademar.name_en;
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void getPrintDataIncome(PrintData pd, string source_name)

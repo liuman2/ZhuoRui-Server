@@ -154,7 +154,8 @@ namespace WebCenter.Web.Controllers
 
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment,
-                    date_empower = c.date_empower
+                    date_empower = c.date_empower,
+                    date_regit = c.date_regit,
 
                 }).ToPagedList(request.index, request.size).ToList();
 
@@ -338,7 +339,9 @@ namespace WebCenter.Web.Controllers
                 assistant_name = a.member.name,
 
                 status = a.status,
-                review_status = a.review_status
+                review_status = a.review_status,
+                description = a.description,
+                date_regit = a.date_regit
 
             }).FirstOrDefault();
 
@@ -396,7 +399,9 @@ namespace WebCenter.Web.Controllers
                 status = a.status,
                 review_status = a.review_status,
                 finance_review_moment = a.finance_review_moment,
-                submit_review_moment = a.submit_review_moment
+                submit_review_moment = a.submit_review_moment,
+                description = a.description,
+                date_regit = a.date_regit
 
             }).FirstOrDefault();
 
@@ -466,6 +471,7 @@ namespace WebCenter.Web.Controllers
                 _patent.description == dbPatent.description &&
                 _patent.currency == dbPatent.currency &&
                 _patent.rate == dbPatent.rate &&
+                _patent.date_regit == dbPatent.date_regit &&
                 _patent.assistant_id == dbPatent.assistant_id
                 )
             {
@@ -505,7 +511,7 @@ namespace WebCenter.Web.Controllers
             dbPatent.manager_id = _patent.manager_id;
             dbPatent.description = _patent.description;
             dbPatent.date_updated = DateTime.Now;
-            
+            dbPatent.date_regit = _patent.date_regit;
             var r = Uof.IpatentService.UpdateEntity(dbPatent);
 
             if (r)
@@ -930,6 +936,7 @@ namespace WebCenter.Web.Controllers
                 dbPantent.date_updated = DateTime.Now;
                 dbPantent.date_accept = request.date_accept;
                 dbPantent.date_empower = request.date_empower;
+                dbPantent.date_regit = request.date_regit;
                 if (dbPantent.date_finish == null)
                 {
                     dbPantent.date_finish = request.date_finish ?? DateTime.Today;

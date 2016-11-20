@@ -354,7 +354,8 @@ namespace WebCenter.Web.Controllers
                 assistant_name = a.member6.name,
 
                 status = a.status,
-                review_status = a.review_status
+                review_status = a.review_status,
+                description = a.description
 
             }).FirstOrDefault();
 
@@ -415,7 +416,8 @@ namespace WebCenter.Web.Controllers
                 status = a.status,
                 review_status = a.review_status,
                 finance_review_moment = a.finance_review_moment,
-                submit_review_moment = a.submit_review_moment
+                submit_review_moment = a.submit_review_moment,
+                description = a.description
 
             }).FirstOrDefault();
 

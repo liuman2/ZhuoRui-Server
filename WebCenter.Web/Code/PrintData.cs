@@ -108,6 +108,11 @@ namespace WebCenter.Web
         public string accounter { get; set; }
 
         /// <summary>
+        /// 会计
+        /// </summary>
+        public string cashier { get; set; }
+
+        /// <summary>
         /// 写票人
         /// </summary>
         public string creator { get; set; }
@@ -115,5 +120,11 @@ namespace WebCenter.Web
         public string currency { get; set; }
 
         public float? rate { get; set; }
+
+        public string source { get; set; }
+
+        public int? source_id { get; set; }
+
+        
     }
 }

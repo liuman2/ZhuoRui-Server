@@ -166,7 +166,8 @@ namespace WebCenter.Web.Controllers
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment,
                     date_setup = c.date_setup,
-                    is_annual = c.is_annual ?? 0
+                    is_annual = c.is_annual ?? 0,
+                    description = c.description
 
                 }).ToPagedList(request.index, request.size).ToList();
 
@@ -378,6 +379,8 @@ namespace WebCenter.Web.Controllers
                 status = a.status,
                 review_status = a.review_status,
                 is_annual = a.is_annual ?? 0,
+                description = a.description,
+                shareholder = a.shareholder,
 
             }).FirstOrDefault();
 
@@ -442,6 +445,8 @@ namespace WebCenter.Web.Controllers
                 finance_review_moment = a.finance_review_moment,
                 submit_review_moment = a.submit_review_moment,
                 is_annual = a.is_annual ?? 0,
+                description = a.description,
+                shareholder = a.shareholder,
 
             }).FirstOrDefault();
 
@@ -515,7 +520,8 @@ namespace WebCenter.Web.Controllers
                 reg.currency == dbReg.currency && 
                 reg.rate == dbReg.rate &&
                 reg.assistant_id == dbReg.assistant_id && 
-                reg.is_annual == dbReg.is_annual
+                reg.is_annual == dbReg.is_annual &&
+                reg.shareholder == dbReg.shareholder
                 )
             {
                 return Json(new { id = reg.id }, JsonRequestBehavior.AllowGet);
@@ -556,6 +562,7 @@ namespace WebCenter.Web.Controllers
             dbReg.currency = reg.currency;
             dbReg.rate = reg.rate;
             dbReg.assistant_id = reg.assistant_id;
+            dbReg.shareholder = reg.shareholder;
 
             if (reg.is_open_bank == 0)
             {

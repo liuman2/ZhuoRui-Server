@@ -44,6 +44,7 @@ namespace WebCenter.Web
     {
         public DateTime? date_accept { get; set; }
         public DateTime? date_empower { get; set; }
+        public DateTime? date_regit { get; set; }
     }
 
     public class TtrademarkProgressRequest : ProgressRequest

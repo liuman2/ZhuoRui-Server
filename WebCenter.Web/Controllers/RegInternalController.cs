@@ -349,8 +349,10 @@ namespace WebCenter.Web.Controllers
                 assistant_name = a.member.name,
 
                 status = a.status,
-                review_status = a.review_status
-
+                review_status = a.review_status,
+                description = a.description,
+                is_annual = a.is_annual ?? 0,
+                shareholder = a.shareholder,
             }).FirstOrDefault();
 
             return Json(reg, JsonRequestBehavior.AllowGet);
@@ -418,7 +420,10 @@ namespace WebCenter.Web.Controllers
                 status = a.status,
                 review_status = a.review_status,
                 finance_review_moment = a.finance_review_moment,
-                submit_review_moment = a.submit_review_moment
+                submit_review_moment = a.submit_review_moment,
+                description = a.description,
+                is_annual = a.is_annual ?? 0,
+                shareholder = a.shareholder,
 
             }).FirstOrDefault();
 
@@ -495,7 +500,8 @@ namespace WebCenter.Web.Controllers
                 reg.description == dbReg.description &&
                 reg.rate == dbReg.rate &&
                 reg.currency == dbReg.currency &&
-                reg.assistant_id == dbReg.assistant_id
+                reg.assistant_id == dbReg.assistant_id &&
+                reg.shareholder == dbReg.shareholder
                 )
             {
                 return Json(new { success = true, id = reg.id }, JsonRequestBehavior.AllowGet);
@@ -545,6 +551,7 @@ namespace WebCenter.Web.Controllers
             dbReg.assistant_id = reg.assistant_id;
 
             dbReg.date_updated = DateTime.Now;
+            dbReg.shareholder = reg.shareholder;
 
             var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
