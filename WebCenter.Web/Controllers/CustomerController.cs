@@ -570,5 +570,44 @@ namespace WebCenter.Web.Controllers
 
             return Json(orders, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetShortInfo(int customer_id)
+        {
+            var _customer = Uof.IcustomerService.GetAll(c => c.id == customer_id).FirstOrDefault();
+
+            var source_name = "";
+            if (_customer != null && _customer.source_id != null)
+            {
+                source_name = Uof.IcustomerService.GetAll(c => c.id == _customer.id).Select(c => c.name).FirstOrDefault();
+            }
+
+            return Json(new
+            {
+                id = _customer.id,
+                //code = _customer.code,
+                name = _customer.name,
+                industry = _customer.industry,
+                province = _customer.province,
+                city = _customer.city,
+                county = _customer.county,
+                address = _customer.address,
+                contact = _customer.contact,
+                mobile = _customer.mobile,
+                tel = _customer.tel,
+                fax = _customer.fax,
+                email = _customer.email,
+                QQ = _customer.QQ,
+                wechat = _customer.wechat,
+                source = _customer.source,
+                creator_id = _customer.creator_id,
+                salesman_id = _customer.salesman_id,
+                organization_id = _customer.organization_id,
+                source_id = _customer.source_id,
+                source_name = source_name,
+                description = _customer.description,
+                salesman = _customer.member1.name,
+                contacts = _customer.contacts,
+            }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -1470,5 +1470,36 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public ActionResult DoneThisYear(string orderType, int orderId)
+        {
+            switch (orderType)
+            {
+                case "reg_abroad":
+                    var a = Uof.Ireg_abroadService.GetAll(r => r.id == orderId).FirstOrDefault();
+                    a.annual_year = DateTime.Today.Year;
+                    Uof.Ireg_abroadService.UpdateEntity(a);
+                    break;
+                case "reg_internal":
+                    var b = Uof.Ireg_internalService.GetAll(r => r.id == orderId).FirstOrDefault();
+                    b.annual_year = DateTime.Today.Year;
+                    Uof.Ireg_internalService.UpdateEntity(b);
+                    break;
+                case "trademark":
+                    var c = Uof.ItrademarkService.GetAll(r => r.id == orderId).FirstOrDefault();
+                    c.annual_year = DateTime.Today.Year;
+                    Uof.ItrademarkService.UpdateEntity(c);
+                    break;
+                case "patent":
+                    var d = Uof.IpatentService.GetAll(r => r.id == orderId).FirstOrDefault();
+                    d.annual_year = DateTime.Today.Year;
+                    Uof.IpatentService.UpdateEntity(d);
+                    break;
+                default:
+                    break;
+            }
+
+            return SuccessResult;
+        }
     }
 }
