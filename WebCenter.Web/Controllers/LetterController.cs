@@ -145,12 +145,14 @@ namespace WebCenter.Web.Controllers
 
                     if (_l.order_id != null)
                     {
+                        var auditor = Uof.ImemberService.GetAll(m => m.id == _l.audit_id).Select(m => m.name).FirstOrDefault();
+
                         Uof.ItimelineService.AddEntity(new timeline()
                         {
                             source_id = _l.order_id,
                             source_name = _l.order_source,
                             title = string.Format("新增{0}记录", _l.type),
-                            content = string.Format("新建了一笔{0}记录, 信件单号: {1}", _l.type, _l.code)
+                            content = string.Format("{0}新建了一笔{1}记录, 审核人{2}, 信件单号: {3}", arrs[3], _l.type, auditor, _l.code)
                         });
                     }
                 }
@@ -165,6 +167,19 @@ namespace WebCenter.Web.Controllers
         [HttpPost]
         public ActionResult Update(mail c)
         {
+            var au = HttpContext.User.Identity.IsAuthenticated;
+            if (!au)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var newAutid = c.audit_id;
             var _c = Uof.ImailService.GetById(c.id);
             var oldAutid = _c.audit_id;
@@ -195,6 +210,7 @@ namespace WebCenter.Web.Controllers
             _c.receiver = c.receiver;
             _c.review_status = c.review_status;
             _c.paymode = c.paymode;
+            _c.tel = c.tel;
 
             var r = Uof.ImailService.UpdateEntity(_c);
 
@@ -214,6 +230,15 @@ namespace WebCenter.Web.Controllers
                             read_status = 0
                         });
                     }
+
+                    var auditor = Uof.ImemberService.GetAll(m => m.id == newAutid).Select(m => m.name).FirstOrDefault();
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = _c.order_id,
+                        source_name = _c.order_source,
+                        title = string.Format("修改{0}记录", _c.type),
+                        content = string.Format("{0}修改了一笔{1}记录, 审核人{2}, 信件单号: {3}", arrs[3], _c.type, auditor, _c.code)
+                    });
                 }
                 catch (Exception)
                 {
@@ -558,12 +583,19 @@ namespace WebCenter.Web.Controllers
                 {
                     if (_c.order_id != null)
                     {
+                        var m1 = Uof.ImemberService.GetAll(m => m.id == _c.creator_id).Select(m => m.name).FirstOrDefault();
+                        var creator = "";
+                        if (m1 != null)
+                        {
+                            creator = m1;
+                        }
+
                         Uof.ItimelineService.AddEntity(new timeline()
                         {
                             source_id = _c.order_id,
                             source_name = _c.order_source,
                             title = string.Format("新增{0}记录", _c.type),
-                            content = string.Format("新建了一笔{0}记录, 信件单号: {1}", _c.type, _c.code)
+                            content = string.Format("{0}新建了一笔{1}记录, 审核人{2}, 信件单号: {3}", creator, _c.type,  _c.member.name, _c.code)
                         });
                     }
                 }
