@@ -47,5 +47,6 @@ namespace WebCenter.Web
 
         public DateTime? date_transaction { get; set; }
         public DateTime? date_created { get; set; }
+        public DateTime? date_setup { get; set; }
     }
 }

@@ -509,73 +509,142 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetBusinessByCustomerId(int customerId)
         {
-            var orders = new List<CustomerOrder>();
+            var orders = new List<FinanceCheck>();
 
-            var regAborads = Uof.Ireg_abroadService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
+            var regAborads = Uof.Ireg_abroadService
+                .GetAll(a => a.customer_id == customerId)
+                .OrderByDescending(a => a.code)
+                .Select(a => new FinanceCheck
+                {
+                    id = a.id,
+                    order_code = a.code,
+                    order_name = a.name_cn ?? a.name_en,
+                    order_name_en = a.name_en,
+                    order_type = "reg_abroad",
+                    order_type_name = "境外注册",
+                    review_status = a.review_status,
+                    status = a.status,
+                    salesman = a.member4.name,
+                    waitor = a.member6.name,
+                    date_created = a.date_created,
+                    date_setup = a.date_setup,
+                }).ToList();
+
             if (regAborads.Count() > 0)
             {
-                orders.Add(new CustomerOrder
-                {
-                    count = regAborads.Count(),
-                    last_date = regAborads.FirstOrDefault(),
-                    order_name = "境外注册"
-                });
+                orders.AddRange(regAborads);
             }
 
-            var regInterals = Uof.Ireg_internalService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
+            var regInterals = Uof.Ireg_internalService
+                .GetAll(a => a.customer_id == customerId)
+                .OrderByDescending(a => a.code)
+                .Select(a => new FinanceCheck
+                {
+                    id = a.id,
+                    order_code = a.code,
+                    order_name = a.name_cn,
+                    order_type = "reg_internal",
+                    order_type_name = "境内注册",
+                    review_status = a.review_status,
+                    status = a.status,
+                    salesman = a.member4.name,
+                    waitor = a.member6.name,
+                    amount_transaction = a.amount_transaction,
+                    date_transaction = a.date_transaction,
+                    date_created = a.date_created,
+                    date_setup = a.date_setup,
+                }).ToList();
+
             if (regInterals.Count() > 0)
             {
-                orders.Add(new CustomerOrder
-                {
-                    count = regInterals.Count(),
-                    last_date = regInterals.FirstOrDefault(),
-                    order_name = "境内注册"
-                });
+                orders.AddRange(regInterals);
             }
 
-            var trademarks = Uof.ItrademarkService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
+            var trademarks = Uof.ItrademarkService
+                .GetAll(a => a.customer_id == customerId)
+                .OrderByDescending(a => a.code)
+                .Select(a => new FinanceCheck
+                {
+                    id = a.id,                    
+                    order_code = a.code,
+                    order_name = a.name,
+                    order_type = "trademark",
+                    order_type_name = "商标",
+                    review_status = a.review_status,
+                    status = a.status,
+                    salesman = a.member3.name,
+                    waitor = a.member5.name,
+                    amount_transaction = a.amount_transaction,
+                    date_transaction = a.date_transaction,
+                    date_created = a.date_created,
+                    date_setup = a.date_regit,
+                }).ToList();
+
             if (trademarks.Count() > 0)
             {
-                orders.Add(new CustomerOrder
-                {
-                    count = trademarks.Count(),
-                    last_date = trademarks.FirstOrDefault(),
-                    order_name = "商标"
-                });
+                orders.AddRange(trademarks);
             }
 
-            var patents = Uof.IpatentService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
+            var patents = Uof.IpatentService
+                .GetAll(a => a.customer_id == customerId)
+                .OrderByDescending(a => a.code)
+                .Select(a => new FinanceCheck
+                {
+                    id = a.id,
+                    order_code = a.code,
+                    order_name = a.name,
+                    order_name_en = "",
+                    order_type = "patent",
+                    order_type_name = "专利",
+                    review_status = a.review_status,
+                    status = a.status,
+                    salesman = a.member3.name,
+                    waitor = a.member5.name,
+                    amount_transaction = a.amount_transaction,
+                    date_transaction = a.date_transaction,
+                    date_created = a.date_created,
+                    date_setup = a.date_regit,
+                }).ToList();
+
             if (patents.Count() > 0)
             {
-                orders.Add(new CustomerOrder
-                {
-                    count = patents.Count(),
-                    last_date = patents.FirstOrDefault(),
-                    order_name = "专利"
-                });
+                orders.AddRange(patents);
             }
 
-            var audits = Uof.IauditService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
+            var audits = Uof.IauditService
+                .GetAll(a => a.customer_id == customerId)
+                .OrderByDescending(a => a.code)
+                .Select(a => new FinanceCheck
+                {
+                    id = a.id,
+                    order_code = a.code,
+                    order_name = a.name_cn,
+                    order_type = "audit",
+                    order_type_name = "审计",
+                    review_status = a.review_status,
+                    status = a.status,
+                    salesman = a.member4.name,
+                    waitor = "-",
+                    amount_transaction = a.amount_transaction,
+                    date_transaction = a.date_transaction,
+                    date_created = a.date_created,
+                    date_setup = a.date_setup,
+                }).ToList();
             if (audits.Count() > 0)
             {
-                orders.Add(new CustomerOrder
-                {
-                    count = audits.Count(),
-                    last_date = audits.FirstOrDefault(),
-                    order_name = "审计"
-                });
+                orders.AddRange(audits);
             }
 
-            var annuals = Uof.Iannual_examService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
-            if (annuals.Count() > 0)
-            {
-                orders.Add(new CustomerOrder
-                {
-                    count = annuals.Count(),
-                    last_date = annuals.FirstOrDefault(),
-                    order_name = "年检"
-                });
-            }
+            //var annuals = Uof.Iannual_examService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
+            //if (annuals.Count() > 0)
+            //{
+            //    orders.Add(new CustomerOrder
+            //    {
+            //        count = annuals.Count(),
+            //        last_date = annuals.FirstOrDefault(),
+            //        order_name = "年检"
+            //    });
+            //}
 
             return Json(orders, JsonRequestBehavior.AllowGet);
         }
