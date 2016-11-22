@@ -53,7 +53,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<customer, bool>> permQuery = c => true;
             if (ops.Count() == 0)
             {
-                permQuery = c => c.salesman_id == userId;
+                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId);
             } else
             {
                 var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
@@ -62,7 +62,7 @@ namespace WebCenter.Web.Controllers
                 {
                     if (hasDepart == null)
                     {
-                        permQuery = c => c.salesman_id == userId;
+                        permQuery = c => (c.salesman_id == userId || c.assistant_id == userId);
                     } else
                     {
                         var ids = GetChildrenDept(deptId);
@@ -190,7 +190,8 @@ namespace WebCenter.Web.Controllers
                 _c.salesman_id == c.salesman_id &&
                 _c.tel == c.tel &&
                 _c.wechat == c.wechat &&
-                _c.contacts == c.contacts
+                _c.contacts == c.contacts &&
+                _c.assistant_id == c.assistant_id
                 )
             {
                 return ErrorResult;
@@ -211,6 +212,7 @@ namespace WebCenter.Web.Controllers
             _c.source = c.source;
             _c.salesman_id = c.salesman_id;
             _c.contacts = c.contacts;
+            _c.assistant_id = c.assistant_id;
 
             if (c.source != "客户介绍")
             {
@@ -250,10 +252,14 @@ namespace WebCenter.Web.Controllers
             var _customer = Uof.IcustomerService.GetById(id);
 
             var source_name = "";
+            var assistant_name = "";
             if (_customer != null && _customer.source_id != null)
             {
                 source_name = Uof.IcustomerService.GetAll(c => c.id == _customer.id).Select(c => c.name).FirstOrDefault();
-
+            }
+            if (_customer != null && _customer.assistant_id != null)
+            {
+                assistant_name = Uof.ImemberService.GetAll(c => c.id == _customer.assistant_id).Select(c => c.name).FirstOrDefault();
             }
 
             return Json(new
@@ -280,7 +286,9 @@ namespace WebCenter.Web.Controllers
                 organization_id = _customer.organization_id,
                 source_id = _customer.source_id,
                 source_name = source_name,
-                description = _customer.description
+                description = _customer.description,
+                assistant_id = _customer.assistant_id,
+                assistant_name = assistant_name
 
             }, JsonRequestBehavior.AllowGet);
         }
