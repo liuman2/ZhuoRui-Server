@@ -46,5 +46,6 @@ namespace WebCenter.Web
         public string waitor { get; set; }
 
         public DateTime? date_transaction { get; set; }
+        public DateTime? date_created { get; set; }
     }
 }

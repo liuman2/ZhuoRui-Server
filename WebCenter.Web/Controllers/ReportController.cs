@@ -18,6 +18,7 @@ namespace WebCenter.Web.Controllers
 
         }
 
+        [HttpPost]
         public ActionResult OrderSummary(OrderSummaryRequest request)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
@@ -64,9 +65,10 @@ namespace WebCenter.Web.Controllers
                 if (request.salesman_id != null && request.salesman_id.Value > 0)
                 {
                     salesmanQuery1 = c => (c.salesman_id == request.salesman_id);
-                } else
+                }
+                else
                 {
-                    if(request.range == 1)
+                    if (request.range == 1)
                     {
                         salesmanQuery1 = c => (c.organization_id == deptId);
                     }
@@ -114,6 +116,25 @@ namespace WebCenter.Web.Controllers
                     endDateQuery1 = c => c.date_transaction.Value < end;
                 }
 
+                // 录入开始日期
+                Expression<Func<reg_abroad, bool>> date1Created = c => true;
+                Expression<Func<reg_abroad, bool>> date2Created = c => true;
+                if (request.start_create != null)
+                {
+                    date1Created = c => (c.date_created >= request.start_create.Value);
+                }
+                // 录入结束日期
+                if (request.end_create != null)
+                {
+                    var endTime = request.end_create.Value.AddDays(1);
+                    date2Created = c => (c.date_created < endTime);
+                }
+
+                Expression<Func<reg_abroad, bool>> nameQuery = c => true;
+                if (!string.IsNullOrEmpty(request.name))
+                {
+                    nameQuery = c => (c.code.ToLower().Contains(request.name.ToLower()) || c.name_cn.ToLower().Contains(request.name.ToLower()) || c.name_en.ToLower().Contains(request.name.ToLower()));
+                }
 
                 var abroads = Uof.Ireg_abroadService.GetAll()
                     .Where(customerQuery1)
@@ -121,6 +142,9 @@ namespace WebCenter.Web.Controllers
                     .Where(orderTypeQuery1)
                     .Where(startDateQuery1)
                     .Where(endDateQuery1)
+                    .Where(date1Created)
+                    .Where(date2Created)
+                    .Where(nameQuery)
                     .Select(a => new FinanceCheck
                     {
                         id = a.id,
@@ -137,7 +161,8 @@ namespace WebCenter.Web.Controllers
                         salesman = a.member4.name,
                         waitor = a.member6.name,
                         amount_transaction = a.amount_transaction,
-                        date_transaction = a.date_transaction
+                        date_transaction = a.date_transaction,
+                        date_created = a.date_created,
 
                     }).ToList();
 
@@ -213,6 +238,25 @@ namespace WebCenter.Web.Controllers
                     endDateQuery1 = c => c.date_transaction.Value < end;
                 }
 
+                // 录入开始日期
+                Expression<Func<reg_internal, bool>> date1Created = c => true;
+                Expression<Func<reg_internal, bool>> date2Created = c => true;
+                if (request.start_create != null)
+                {
+                    date1Created = c => (c.date_created >= request.start_create.Value);
+                }
+                // 录入结束日期
+                if (request.end_create != null)
+                {
+                    var endTime = request.end_create.Value.AddDays(1);
+                    date2Created = c => (c.date_created < endTime);
+                }
+
+                Expression<Func<reg_internal, bool>> nameQuery = c => true;
+                if (!string.IsNullOrEmpty(request.name))
+                {
+                    nameQuery = c => (c.code.ToLower().Contains(request.name.ToLower()) || c.name_cn.ToLower().Contains(request.name.ToLower()));
+                }
 
                 var internas = Uof.Ireg_internalService.GetAll()
                     .Where(customerQuery1)
@@ -220,22 +264,26 @@ namespace WebCenter.Web.Controllers
                     .Where(orderTypeQuery1)
                     .Where(startDateQuery1)
                     .Where(endDateQuery1)
+                    .Where(date1Created)
+                    .Where(date2Created)
+                    .Where(nameQuery)
                     .Select(a => new FinanceCheck
-                {
-                    id = a.id,
-                    customer_id = a.customer_id,
-                    customer_name = a.customer.name,
-                    customer_code = a.customer.code,
-                    order_code = a.code,
-                    order_name = a.name_cn,
-                    order_type = "reg_internal",
-                    order_type_name = "境内注册",
-                    review_status = a.review_status,
-                    status = a.status,
-                    salesman = a.member4.name,
-                    waitor = a.member6.name,
-                    amount_transaction = a.amount_transaction,
-                    date_transaction = a.date_transaction
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name_cn,
+                        order_type = "reg_internal",
+                        order_type_name = "境内注册",
+                        review_status = a.review_status,
+                        status = a.status,
+                        salesman = a.member4.name,
+                        waitor = a.member6.name,
+                        amount_transaction = a.amount_transaction,
+                        date_transaction = a.date_transaction,
+                        date_created = a.date_created,
 
                     }).ToList();
 
@@ -271,7 +319,7 @@ namespace WebCenter.Web.Controllers
                         salesmanQuery1 = c => (c.salesman_id == userId);
                     }
                 }
-                
+
                 Expression<Func<trademark, bool>> orderTypeQuery1 = c => true;
                 switch (request.order_status)
                 {
@@ -310,6 +358,26 @@ namespace WebCenter.Web.Controllers
                     endDateQuery1 = c => c.date_transaction.Value < end;
                 }
 
+                // 录入开始日期
+                Expression<Func<trademark, bool>> date1Created = c => true;
+                Expression<Func<trademark, bool>> date2Created = c => true;
+                if (request.start_create != null)
+                {
+                    date1Created = c => (c.date_created >= request.start_create.Value);
+                }
+                // 录入结束日期
+                if (request.end_create != null)
+                {
+                    var endTime = request.end_create.Value.AddDays(1);
+                    date2Created = c => (c.date_created < endTime);
+                }
+
+                Expression<Func<trademark, bool>> nameQuery = c => true;
+                if (!string.IsNullOrEmpty(request.name))
+                {
+                    nameQuery = c => (c.code.ToLower().Contains(request.name.ToLower()) || c.name.ToLower().Contains(request.name.ToLower()));
+                }
+
                 var test = Uof.ItrademarkService.GetAll().ToList();
                 var trademarks = Uof.ItrademarkService.GetAll()
                     .Where(customerQuery1)
@@ -317,22 +385,26 @@ namespace WebCenter.Web.Controllers
                     .Where(orderTypeQuery1)
                     .Where(startDateQuery1)
                     .Where(endDateQuery1)
+                    .Where(date1Created)
+                    .Where(date2Created)
+                    .Where(nameQuery)
                     .Select(a => new FinanceCheck
-                {
-                    id = a.id,
-                    customer_id = a.customer_id,
-                    customer_name = a.customer.name,
-                    customer_code = a.customer.code,
-                    order_code = a.code,
-                    order_name = a.name,
-                    order_type = "trademark",
-                    order_type_name = "商标",
-                    review_status = a.review_status,
-                    status = a.status,
-                    salesman = a.member3.name,
-                    waitor = a.member5.name,
-                    amount_transaction = a.amount_transaction,
-                    date_transaction = a.date_transaction
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name,
+                        order_type = "trademark",
+                        order_type_name = "商标",
+                        review_status = a.review_status,
+                        status = a.status,
+                        salesman = a.member3.name,
+                        waitor = a.member5.name,
+                        amount_transaction = a.amount_transaction,
+                        date_transaction = a.date_transaction,
+                        date_created = a.date_created,
 
                     }).ToList();
 
@@ -407,29 +479,53 @@ namespace WebCenter.Web.Controllers
                     endDateQuery1 = c => c.date_transaction.Value < end;
                 }
 
+                // 录入开始日期
+                Expression<Func<patent, bool>> date1Created = c => true;
+                Expression<Func<patent, bool>> date2Created = c => true;
+                if (request.start_create != null)
+                {
+                    date1Created = c => (c.date_created >= request.start_create.Value);
+                }
+                // 录入结束日期
+                if (request.end_create != null)
+                {
+                    var endTime = request.end_create.Value.AddDays(1);
+                    date2Created = c => (c.date_created < endTime);
+                }
+
+                Expression<Func<patent, bool>> nameQuery = c => true;
+                if (!string.IsNullOrEmpty(request.name))
+                {
+                    nameQuery = c => (c.code.ToLower().Contains(request.name.ToLower()) || c.name.ToLower().Contains(request.name.ToLower()));
+                }
+
                 var patents = Uof.IpatentService.GetAll()
                     .Where(customerQuery1)
                     .Where(salesmanQuery1)
                     .Where(orderTypeQuery1)
                     .Where(startDateQuery1)
                     .Where(endDateQuery1)
+                    .Where(date1Created)
+                    .Where(date2Created)
+                    .Where(nameQuery)
                     .Select(a => new FinanceCheck
-                {
-                    id = a.id,
-                    customer_id = a.customer_id,
-                    customer_name = a.customer.name,
-                    customer_code = a.customer.code,
-                    order_code = a.code,
-                    order_name = a.name,
-                    order_name_en = "",
-                    order_type = "patent",
-                    order_type_name = "专利",
-                    review_status = a.review_status,
-                    status = a.status,
-                    salesman = a.member3.name,
-                    waitor = a.member5.name,
-                    amount_transaction = a.amount_transaction,
-                    date_transaction = a.date_transaction
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name,
+                        order_name_en = "",
+                        order_type = "patent",
+                        order_type_name = "专利",
+                        review_status = a.review_status,
+                        status = a.status,
+                        salesman = a.member3.name,
+                        waitor = a.member5.name,
+                        amount_transaction = a.amount_transaction,
+                        date_transaction = a.date_transaction,
+                        date_created = a.date_created,
 
                     }).ToList();
 
@@ -505,28 +601,52 @@ namespace WebCenter.Web.Controllers
                     endDateQuery1 = c => c.date_transaction.Value < end;
                 }
 
+                // 录入开始日期
+                Expression<Func<audit, bool>> date1Created = c => true;
+                Expression<Func<audit, bool>> date2Created = c => true;
+                if (request.start_create != null)
+                {
+                    date1Created = c => (c.date_created >= request.start_create.Value);
+                }
+                // 录入结束日期
+                if (request.end_create != null)
+                {
+                    var endTime = request.end_create.Value.AddDays(1);
+                    date2Created = c => (c.date_created < endTime);
+                }
+
+                Expression<Func<audit, bool>> nameQuery = c => true;
+                if (!string.IsNullOrEmpty(request.name))
+                {
+                    nameQuery = c => (c.code.ToLower().Contains(request.name.ToLower()) || c.name_cn.ToLower().Contains(request.name.ToLower()) || c.name_en.ToLower().Contains(request.name.ToLower()));
+                }
+
                 var audits = Uof.IauditService.GetAll()
                     .Where(customerQuery1)
                     .Where(salesmanQuery1)
                     .Where(orderTypeQuery1)
                     .Where(startDateQuery1)
                     .Where(endDateQuery1)
+                    .Where(date1Created)
+                    .Where(date2Created)
+                    .Where(nameQuery)
                     .Select(a => new FinanceCheck
-                {
-                    id = a.id,
-                    customer_id = a.customer_id,
-                    customer_name = a.customer.name,
-                    customer_code = a.customer.code,
-                    order_code = a.code,
-                    order_name = a.name_cn,
-                    order_type = "audit",
-                    order_type_name = "审计",
-                    review_status = a.review_status,
-                    status = a.status,
-                    salesman = a.member4.name,
-                    waitor = "-",
-                    amount_transaction = a.amount_transaction,
-                    date_transaction = a.date_transaction
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name_cn,
+                        order_type = "audit",
+                        order_type_name = "审计",
+                        review_status = a.review_status,
+                        status = a.status,
+                        salesman = a.member4.name,
+                        waitor = "-",
+                        amount_transaction = a.amount_transaction,
+                        date_transaction = a.date_transaction,
+                        date_created = a.date_created,
 
                     }).ToList();
 
@@ -601,19 +721,42 @@ namespace WebCenter.Web.Controllers
                     endDateQuery1 = c => c.date_transaction.Value < end;
                 }
 
+                // 录入开始日期
+                Expression<Func<annual_exam, bool>> date1Created = c => true;
+                Expression<Func<annual_exam, bool>> date2Created = c => true;
+                if (request.start_create != null)
+                {
+                    date1Created = c => (c.date_created >= request.start_create.Value);
+                }
+                // 录入结束日期
+                if (request.end_create != null)
+                {
+                    var endTime = request.end_create.Value.AddDays(1);
+                    date2Created = c => (c.date_created < endTime);
+                }
+
+                Expression<Func<annual_exam, bool>> nameQuery = c => true;
+                if (!string.IsNullOrEmpty(request.name))
+                {
+                    nameQuery = c => (c.code.ToLower().Contains(request.name.ToLower()) || c.name_cn.ToLower().Contains(request.name.ToLower()) || c.name_en.ToLower().Contains(request.name.ToLower()));
+                }
+
                 var audits = Uof.Iannual_examService.GetAll()
                     .Where(customerQuery1)
                     .Where(salesmanQuery1)
                     .Where(orderTypeQuery1)
                     .Where(startDateQuery1)
                     .Where(endDateQuery1)
+                    .Where(date1Created)
+                    .Where(date2Created)
+                    .Where(nameQuery)
                     .Select(a => new FinanceCheck
                     {
                         id = a.id,
                         customer_id = a.customer_id,
                         customer_name = a.customer.name,
                         customer_code = a.customer.code,
-                        order_code = a.code,
+                        order_code = "", //a.code,
                         order_name = a.name_cn ?? a.name_en,
                         order_name_en = a.name_en,
                         order_type = "annual_exam",
@@ -623,7 +766,8 @@ namespace WebCenter.Web.Controllers
                         salesman = "-",
                         waitor = a.member6.name,
                         amount_transaction = a.amount_transaction,
-                        date_transaction = a.date_transaction
+                        date_transaction = a.date_transaction,
+                        date_created = a.date_created,
 
                     }).ToList();
 
@@ -642,6 +786,5 @@ namespace WebCenter.Web.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-
     }
 }

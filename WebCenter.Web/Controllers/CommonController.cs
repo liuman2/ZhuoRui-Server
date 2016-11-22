@@ -155,9 +155,15 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate
+                        rate = a.rate,
+                        region = a.region
                     }).FirstOrDefault();
 
+                    if (!string.IsNullOrEmpty(printData.region))
+                    {
+                        printData.others = string.Format("{0}  注册地区:{1}", printData.others, printData.region);
+                    }
+                    
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}提交", printData.area);
 
@@ -361,8 +367,14 @@ namespace WebCenter.Web.Controllers
                         type = a.trademark_type,
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate
+                        rate = a.rate,
+                        region = a.region
                     }).FirstOrDefault();
+
+                    if (!string.IsNullOrEmpty(printData.region))
+                    {
+                        printData.others = string.Format("{0}  注册地区:{1}", printData.others, printData.region);
+                    }
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}提交", printData.area);

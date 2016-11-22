@@ -13,7 +13,10 @@ namespace WebCenter.Web
         public DateTime? start_time { get; set; }
         public DateTime? end_time { get; set; }
         public string order_type { get; set; }
+        public string name { get; set; }
         public int range { get; set; }
+        public DateTime? start_create { get; set; }
+        public DateTime? end_create { get; set; }
 
     }
 }

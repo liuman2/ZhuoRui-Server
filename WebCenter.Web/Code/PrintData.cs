@@ -125,6 +125,6 @@ namespace WebCenter.Web
 
         public int? source_id { get; set; }
 
-        
+        public string region { get; set; }
     }
 }
