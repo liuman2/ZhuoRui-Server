@@ -107,11 +107,41 @@ namespace WebCenter.Web.Controllers
                 date2Query = c => (c.date_transaction < endTime);
             }
 
+            // 录入开始日期
+            Expression<Func<reg_internal, bool>> date1Created = c => true;
+            Expression<Func<reg_internal, bool>> date2Created = c => true;
+            if (request.start_create != null)
+            {
+                date1Created = c => (c.date_created >= request.start_create.Value);
+            }
+            // 录入结束日期
+            if (request.end_create != null)
+            {
+                var endTime = request.end_create.Value.AddDays(1);
+                date2Created = c => (c.date_created < endTime);
+            }
+
+            Expression<Func<reg_internal, bool>> nameQuery = c => true;
+            if (!string.IsNullOrEmpty(request.name))
+            {
+                nameQuery = c => (c.name_cn.ToLower().Contains(request.name.ToLower()));
+            }
+
+            Expression<Func<reg_internal, bool>> codeQuery = c => true;
+            if (!string.IsNullOrEmpty(request.code))
+            {
+                codeQuery = c => c.code.ToLower().Contains(request.code.ToLower());
+            }
+
             var list = Uof.Ireg_internalService.GetAll(condition)
                 .Where(customerQuery)
                 .Where(statusQuery)
                 .Where(date1Query)
                 .Where(date2Query)
+                .Where(date1Created)
+                .Where(date2Created)
+                .Where(nameQuery)
+                .Where(codeQuery)
                 .OrderByDescending(item => item.code).Select(c => new
                 {
                     id = c.id,
@@ -136,11 +166,21 @@ namespace WebCenter.Web.Controllers
 
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment,
-                    date_setup = c.date_setup
+                    date_setup = c.date_setup,
+                    date_created = c.date_created
 
                 }).ToPagedList(request.index, request.size).ToList();
 
-            var totalRecord = Uof.Ireg_internalService.GetAll(condition).Count();
+            var totalRecord = Uof.Ireg_internalService.GetAll(condition)
+                .Where(customerQuery)
+                .Where(statusQuery)
+                .Where(date1Query)
+                .Where(date2Query)
+                .Where(date1Created)
+                .Where(date2Created)
+                .Where(nameQuery)
+                .Where(codeQuery)
+                .Count();
 
             var totalPages = 0;
             if (totalRecord > 0)

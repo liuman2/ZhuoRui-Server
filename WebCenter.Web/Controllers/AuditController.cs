@@ -108,11 +108,41 @@ namespace WebCenter.Web.Controllers
                 date2Query = c => (c.date_transaction < endTime);
             }
 
+            // 录入开始日期
+            Expression<Func<audit, bool>> date1Created = c => true;
+            Expression<Func<audit, bool>> date2Created = c => true;
+            if (request.start_create != null)
+            {
+                date1Created = c => (c.date_created >= request.start_create.Value);
+            }
+            // 录入结束日期
+            if (request.end_create != null)
+            {
+                var endTime = request.end_create.Value.AddDays(1);
+                date2Created = c => (c.date_created < endTime);
+            }
+
+            Expression<Func<audit, bool>> nameQuery = c => true;
+            if (!string.IsNullOrEmpty(request.name))
+            {
+                nameQuery = c => (c.name_cn.ToLower().Contains(request.name.ToLower()) || c.name_en.ToLower().Contains(request.name.ToLower()));
+            }
+
+            Expression<Func<audit, bool>> codeQuery = c => true;
+            if (!string.IsNullOrEmpty(request.code))
+            {
+                codeQuery = c => c.code.ToLower().Contains(request.code.ToLower());
+            }
+
             var list = Uof.IauditService.GetAll(condition)
                 .Where(customerQuery)
                 .Where(statusQuery)
                 .Where(date1Query)
                 .Where(date2Query)
+                .Where(date1Created)
+                .Where(date2Created)
+                .Where(nameQuery)
+                .Where(codeQuery)
                 .OrderByDescending(item => item.id).Select(c => new
                 {
                     id = c.id,
@@ -137,11 +167,20 @@ namespace WebCenter.Web.Controllers
                     assistant_name = c.member6.name,
 
                     finance_review_moment = c.finance_review_moment,
-                    submit_review_moment = c.submit_review_moment
+                    submit_review_moment = c.submit_review_moment,
+                    date_created = c.date_created
 
                 }).ToPagedList(request.index, request.size).ToList();
 
-            var totalRecord = Uof.IauditService.GetAll(condition).Count();
+            var totalRecord = Uof.IauditService.GetAll(condition)
+                .Where(customerQuery)
+                .Where(statusQuery)
+                .Where(date1Query)
+                .Where(date2Query)
+                .Where(date1Created)
+                .Where(date2Created)
+                .Where(nameQuery)
+                .Where(codeQuery).Count();
 
             var totalPages = 0;
             if (totalRecord > 0)

@@ -171,7 +171,16 @@ namespace WebCenter.Web.Controllers
 
                 }).ToPagedList(request.index, request.size).ToList();
 
-            var totalRecord = Uof.Ireg_abroadService.GetAll(condition).Count();
+            var totalRecord = Uof.Ireg_abroadService.GetAll(condition)
+                .Where(customerQuery)
+                .Where(statusQuery)
+                .Where(date1Query)
+                .Where(date2Query)
+                .Where(date1Created)
+                .Where(date2Created)
+                .Where(nameQuery)
+                .Where(codeQuery)
+                .Count();
 
             var totalPages = 0;
             if (totalRecord > 0)

@@ -120,6 +120,26 @@ namespace WebCenter.Web.Controllers
                 applicantQuery = c => (c.applicant.Contains(request.applicant));
             }
 
+            // 录入开始日期
+            Expression<Func<patent, bool>> date1Created = c => true;
+            Expression<Func<patent, bool>> date2Created = c => true;
+            if (request.start_create != null)
+            {
+                date1Created = c => (c.date_created >= request.start_create.Value);
+            }
+            // 录入结束日期
+            if (request.end_create != null)
+            {
+                var endTime = request.end_create.Value.AddDays(1);
+                date2Created = c => (c.date_created < endTime);
+            }
+
+            Expression<Func<patent, bool>> codeQuery = c => true;
+            if (!string.IsNullOrEmpty(request.code))
+            {
+                codeQuery = c => c.code.ToLower().Contains(request.code.ToLower());
+            }
+
             var list = Uof.IpatentService.GetAll(condition)
                 .Where(customerQuery)
                 .Where(statusQuery)
@@ -127,6 +147,9 @@ namespace WebCenter.Web.Controllers
                 .Where(date2Query)
                 .Where(nameQuery)
                 .Where(applicantQuery)
+                .Where(date1Created)
+                .Where(date2Created)
+                .Where(codeQuery)
                 .OrderByDescending(item => item.code).Select(c => new
                 {
                     id = c.id,
@@ -156,10 +179,20 @@ namespace WebCenter.Web.Controllers
                     submit_review_moment = c.submit_review_moment,
                     date_empower = c.date_empower,
                     date_regit = c.date_regit,
+                    date_created = c.date_created
 
                 }).ToPagedList(request.index, request.size).ToList();
 
-            var totalRecord = Uof.IpatentService.GetAll(condition).Count();
+            var totalRecord = Uof.IpatentService.GetAll(condition)
+                .Where(customerQuery)
+                .Where(statusQuery)
+                .Where(date1Query)
+                .Where(date2Query)
+                .Where(nameQuery)
+                .Where(applicantQuery)
+                .Where(date1Created)
+                .Where(date2Created)
+                .Where(codeQuery).Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
