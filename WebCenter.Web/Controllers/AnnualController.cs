@@ -181,13 +181,15 @@ namespace WebCenter.Web.Controllers
                     submit_review_date = a.submit_review_date,
                     date_finish = a.date_finish,
                     date_setup = a.date_setup,
+                    annual_date = a.annual_date,
                     annual_year = a.annual_year,
                     month = DateTime.Today.Month - a.date_setup.Value.Month,
                 }).ToList();
 
             if (abroads.Count() > 0)
             {
-                items.AddRange(abroads);
+                var newList = abroads.Where(a => a.annual_date == null || (a.annual_date != null && a.annual_date.Value.AddMonths(10) <= DateTime.Today)).ToList();
+                items.AddRange(newList);
             }
             #endregion
 
