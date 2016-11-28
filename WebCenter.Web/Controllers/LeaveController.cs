@@ -484,7 +484,7 @@ namespace WebCenter.Web.Controllers
                 .Where(condition)
                 .Where(typeQuery)
                 .Where(dateQuery)
-                .OrderByDescending(item => item.id).Select(c => new LeaveResponse
+                .OrderByDescending(item => item.owner_id).Select(c => new LeaveResponse
                 {
                     id = c.id,
                     auditor_id = c.auditor_id,
@@ -507,14 +507,21 @@ namespace WebCenter.Web.Controllers
             var totalPages = 0;
             if (totalRecord > 0)
             {
-                totalPages = (totalRecord + request.size - 1) / request.size;
+                totalPages = (totalRecord + request.size - 1) / request.size;                
             }
 
             if (list.Count > 0)
             {
+                var memberIds = list.Select(l => l.owner_id).ToList();
+
+                var owners =  Uof.ImemberService.GetAll(m => memberIds.Contains(m.id)).ToList();
+
                 foreach (var item in list)
                 {
                     var ds = item.date_end - item.date_start;
+
+                    var name = owners.Where(o => o.id == item.owner_id).Select(m => m.name).FirstOrDefault();
+                    item.owner_name = name;
                     item.hours = Math.Round(ds.Value.TotalHours, 2);
                 }
             }

@@ -165,6 +165,81 @@ namespace WebCenter.Web.Controllers
         }
 
         [HttpPost]
+        public ActionResult Insert(mail l, List<int> auditIds)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            l.creator_id = userId;
+            l.date_created = DateTime.Now;
+            l.review_status = 0;
+
+            var mails = new List<mail>();
+            foreach (var auditId in auditIds)
+            {
+                mails.Add(new mail
+                {
+                    letter_type = l.letter_type,
+                    type = l.type,
+                    address = l.address,
+                    audit_id = auditId,
+                    code = l.code,
+                    creator_id = l.creator_id,
+                    date_at = l.date_at,
+                    description = l.description,
+                    file_url = l.file_url,
+                    owner = l.owner,
+                    merchant = l.merchant,
+                    paymode = l.paymode,
+                    review_status = 0
+                });
+            }
+
+            var count = Uof.ImailService.AddEntities(mails);
+
+            if (count > 0)
+            {
+                try
+                {
+                    var dbMails = Uof.ImailService.GetAll(m => m.code == l.code).ToList();
+                    var waitdeals = new List<waitdeal>();
+
+                    foreach (var item in dbMails)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "mail",
+                            source_id = item.id,
+                            user_id = item.audit_id,
+                            router = "inbox_view",
+                            content = string.Format("您有一笔信件资料需要审核, 信件单号：{0}", item.code),
+                            read_status = 0
+                        });
+                    }
+                    Uof.IwaitdealService.AddEntities(waitdeals);
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            return SuccessResult;
+        }
+
+        [HttpPost]
         public ActionResult Update(mail c)
         {
             var au = HttpContext.User.Identity.IsAuthenticated;
