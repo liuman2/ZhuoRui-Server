@@ -64,8 +64,12 @@ namespace WebCenter.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult PeriodUpdate(ParamSetting param)
+        public ActionResult PeriodUpdate(List<ParamSetting> paramList)
         {
+            foreach (var item in paramList)
+            {
+
+            }
             var patentPeriod = Uof.IsettingService.GetAll(s => s.name == "PATENT_PERIOD").FirstOrDefault();
             var trademarkPeriod = Uof.IsettingService.GetAll(s => s.name == "TRADEMARK_PERIOD").FirstOrDefault();
 
