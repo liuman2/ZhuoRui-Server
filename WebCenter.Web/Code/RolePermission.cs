@@ -14,7 +14,10 @@ namespace WebCenter.Web
 
     public class ParamSetting
     {
-       public string  patent_period { get; set; }
-        public string trademark_period { get; set; }
+       //public string  patent_period { get; set; }
+       // public string trademark_period { get; set; }
+
+        public string name { get; set; }
+        public string value { get; set; }
     }
 }

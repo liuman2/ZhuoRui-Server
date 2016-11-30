@@ -48,39 +48,34 @@ namespace WebCenter.Web.Controllers
             return Json(codingObj, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPeriod()
+        public ActionResult GetParams()
         {
-            var param = Uof.IsettingService.GetAll(s => s.name == "PATENT_PERIOD" || s.name == "TRADEMARK_PERIOD").ToList();
-            var obj = new ParamSetting();
-            obj.patent_period = "10";
-            obj.trademark_period = "10";
-            if (param.Count > 0)
+            var param = Uof.IsettingService.GetAll(s => s.name != "CODING").Select(s=> new ParamSetting
             {
-                obj.patent_period = param.Where(s => s.name == "PATENT_PERIOD").Select(s => s.value).FirstOrDefault();
-                obj.trademark_period = param.Where(s => s.name == "TRADEMARK_PERIOD").Select(s => s.value).FirstOrDefault();
-            }
-
-            return Json(obj, JsonRequestBehavior.AllowGet);
+                name = s.name,
+                value = s.value
+            }).ToList();
+            
+            return Json(param, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult PeriodUpdate(List<ParamSetting> paramList)
         {
-            foreach (var item in paramList)
+            var keys = paramList.Select(p => p.name).ToList();
+            var dbSettings = Uof.IsettingService.GetAll(s => keys.Contains(s.name)).ToList();
+
+            //var trademarkPeriod = Uof.IsettingService.GetAll(s => s.name == "TRADEMARK_PERIOD").FirstOrDefault();
+
+            foreach (var item in dbSettings)
             {
-
+                var param = paramList.Where(p => p.name == item.name).FirstOrDefault();
+                if (param != null)
+                {
+                    item.value = param.value;
+                }
             }
-            var patentPeriod = Uof.IsettingService.GetAll(s => s.name == "PATENT_PERIOD").FirstOrDefault();
-            var trademarkPeriod = Uof.IsettingService.GetAll(s => s.name == "TRADEMARK_PERIOD").FirstOrDefault();
-
-            patentPeriod.value = param.patent_period;
-            trademarkPeriod.value = param.trademark_period;
-
-            var ss = new List<setting>();
-            ss.Add(patentPeriod);
-            ss.Add(trademarkPeriod);
-            var r = Uof.IsettingService.UpdateEntities(ss);
-
+            var r = Uof.IsettingService.UpdateEntities(dbSettings);
             return Json(new { success = r, message = r ? "" : "保存失败" }, JsonRequestBehavior.AllowGet);
         }
 

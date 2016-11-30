@@ -304,27 +304,27 @@ namespace WebCenter.Web.Controllers
             {
                 case "reg_abroad":
                     var abroad = Uof.Ireg_abroadService.GetAll(a => a.id == _audit.source_id).FirstOrDefault();
-                    abroad.annual_date = DateTime.Today;
-                    abroad.annual_year = DateTime.Today.Year;
-                    Uof.Ireg_abroadService.UpdateEntity(abroad);
+                    //abroad.annual_date = DateTime.Today;
+                    //abroad.annual_year = DateTime.Today.Year;
+                    //Uof.Ireg_abroadService.UpdateEntity(abroad);
                     break;
                 case "reg_internal":
                     var intern = Uof.Ireg_internalService.GetAll(i => i.id == _audit.source_id).FirstOrDefault();
-                    intern.annual_date = DateTime.Today;
-                    intern.annual_year = DateTime.Today.Year;
-                    Uof.Ireg_internalService.UpdateEntity(intern);
+                    //intern.annual_date = DateTime.Today;
+                    //intern.annual_year = DateTime.Today.Year;
+                    //Uof.Ireg_internalService.UpdateEntity(intern);
                     break;
                 case "patent":
                     var p = Uof.IpatentService.GetAll(i => i.id == _audit.source_id).FirstOrDefault();
-                    p.annual_date = DateTime.Today;
-                    p.annual_year = DateTime.Today.Year;
-                    Uof.IpatentService.UpdateEntity(p);
+                    //p.annual_date = DateTime.Today;
+                    //p.annual_year = DateTime.Today.Year;
+                    //Uof.IpatentService.UpdateEntity(p);
                     break;
                 case "trademark":
                     var t = Uof.ItrademarkService.GetAll(i => i.id == _audit.source_id).FirstOrDefault();
-                    t.annual_date = DateTime.Today;
-                    t.annual_year = DateTime.Today.Year;
-                    Uof.ItrademarkService.UpdateEntity(t);
+                    //t.annual_date = DateTime.Today;
+                    //t.annual_year = DateTime.Today.Year;
+                    //Uof.ItrademarkService.UpdateEntity(t);
                     break;
                 default:
                     break;

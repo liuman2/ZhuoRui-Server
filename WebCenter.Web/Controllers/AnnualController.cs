@@ -25,7 +25,7 @@ namespace WebCenter.Web.Controllers
             switch (type)
             {
                 case "境内":
-                    var internals = Uof.Ireg_internalService.GetAll(i => i.customer_id == customer_id && (i.annual_year == null || i.annual_year < year)).Select(i => new
+                    var internals = Uof.Ireg_internalService.GetAll(i => i.customer_id == customer_id).Select(i => new
                     {
                         id = i.id,
                         name_cn = i.name_cn,
@@ -40,7 +40,7 @@ namespace WebCenter.Web.Controllers
 
                     return Json(internals, JsonRequestBehavior.AllowGet);
                 case "境外":
-                    var abroads = Uof.Ireg_abroadService.GetAll(i => i.customer_id == customer_id && (i.annual_year == null || i.annual_year < year)).Select(i => new
+                    var abroads = Uof.Ireg_abroadService.GetAll(i => i.customer_id == customer_id).Select(i => new
                     {
                         id = i.id,
                         name_cn = i.name_cn,
