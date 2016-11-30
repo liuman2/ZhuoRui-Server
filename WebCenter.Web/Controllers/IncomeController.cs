@@ -70,8 +70,54 @@ namespace WebCenter.Web.Controllers
                 content = string.Format("{0}新增了收款, 金额{1}", arrs[3], dbInc.amount)
             });
 
+            var auditor_id = GetAuditorByKey("CW_ID");
+            if (auditor_id != null)
+            {
+                Uof.IwaitdealService.AddEntity(new waitdeal
+                {
+                    source = _inc.source_name,
+                    source_id = _inc.source_id,
+                    user_id = auditor_id,
+                    router = GetRouter(_inc.source_name),
+                    content = string.Format("{0}新增了一笔{1}收款, 金额{2}", arrs[3], GetOrderName(_inc), dbInc.amount),
+                    read_status = 0
+                });
+            }
+
             return SuccessResult;
 
+        }
+
+        private object GetOrderName(income _inc)
+        {
+            var name = "";
+            switch (_inc.source_name)
+            {
+                case "reg_abroad":
+                    name = "境外注册订单";
+                    break;
+                case "reg_internal":
+                    name = "境内注册订单";
+                    break;
+                case "trademark":
+                    name = "商标注册订单";
+                    break;
+                case "patent":
+                    name = "专利注册订单";
+                    break;
+                case "history":
+                    name = "变更记录订单";
+                    break;
+                case "audit":
+                    name = "审计订单";
+                    break;
+                case "annual":
+                    name = "年检订单";
+                    break;
+                default:
+                    break;
+            }
+            return name;
         }
 
         public ActionResult Get(int id)
@@ -184,6 +230,38 @@ namespace WebCenter.Web.Controllers
             }
 
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetRouter(string source)
+        {
+            var router = "";
+            switch (source)
+            {
+                case "reg_abroad":
+                    router = "abroad_view";
+                    break;
+                case "reg_internal":
+                    router = "internal_view";
+                    break;
+                case "trademark":
+                    router = "trademark_view";
+                    break;
+                case "patent":
+                    router = "patent_view";
+                    break;
+                case "history":
+                    router = "history_view";
+                    break;
+                case "audit":
+                    router = "audit_view";
+                    break;
+                case "annual":
+                    router = "annual_view";
+                    break;
+                default:
+                    break;
+            }
+            return router;
         }
     }
 }

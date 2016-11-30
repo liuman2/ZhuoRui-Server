@@ -1030,22 +1030,19 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("提交给财务审核")
                 });
 
-                var ids = GetFinanceMembers();
-                if (ids.Count() > 0)
+                var auditor_id = GetAuditorByKey("CW_ID");
+                if (auditor_id != null)
                 {
                     var waitdeals = new List<waitdeal>();
-                    foreach (var item in ids)
+                    waitdeals.Add(new waitdeal
                     {
-                        waitdeals.Add(new waitdeal
-                        {
-                            source = "annual",
-                            source_id = dbAnnual.id,
-                            user_id = item,
-                            router = "annual_view",
-                            content = "您有年检订单需要财务审核",
-                            read_status = 0
-                        });
-                    }
+                        source = "annual",
+                        source_id = dbAnnual.id,
+                        user_id = auditor_id,
+                        router = "annual_view",
+                        content = "您有年检订单需要财务审核",
+                        read_status = 0
+                    });
 
                     Uof.IwaitdealService.AddEntities(waitdeals);
                 }

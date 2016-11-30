@@ -180,19 +180,36 @@ namespace WebCenter.Web.Controllers
         /// 获取财务审核人员
         /// </summary>
         /// <returns></returns>
-        public List<int> GetFinanceMembers()
-        {
-            var roleIds = Uof.Irole_operationService.GetAll(r => r.operation_id == 3).Select(r => r.role_id).ToList();
+        //public List<int> GetFinanceMembers()
+        //{
+        //    var roleIds = Uof.Irole_operationService.GetAll(r => r.operation_id == 3).Select(r => r.role_id).ToList();
 
-            if (roleIds.Count() == 0)
+        //    if (roleIds.Count() == 0)
+        //    {
+        //        return new List<int>();
+        //    }
+
+        //    var ids = Uof.Irole_memberService.GetAll(m => roleIds.Contains(m.role_id)).Select(m => m.member_id.Value).ToList();
+        //    return ids;
+        //}
+
+        /// <summary>
+        /// 获取审核人
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public int? GetAuditorByKey(string key)
+        {
+            var auditor = Uof.IsettingService.GetAll(s => s.name == key).FirstOrDefault();
+            if (auditor == null)
             {
-                return new List<int>();
+                return null;
             }
 
-            var ids = Uof.Irole_memberService.GetAll(m => roleIds.Contains(m.role_id)).Select(m => m.member_id.Value).ToList();
-            return ids;
+            int id = 0;
+            int.TryParse(auditor.value, out id);
+            return id;
         }
-
         /// <summary>
         /// 获取提交审核人员
         /// </summary>

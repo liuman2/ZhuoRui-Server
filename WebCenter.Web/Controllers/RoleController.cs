@@ -139,7 +139,7 @@ namespace WebCenter.Web.Controllers
             // 菜单
             var roleMenus = Uof.Irole_memuService.GetAll(m => m.role_id == roleId).Select(m => m.memu_id).ToList();
 
-            var menus = Uof.ImenuService.GetAll().Select(m => new RoleMenus {
+            var menus = Uof.ImenuService.GetAll().OrderBy(m => m.order).Select(m => new RoleMenus {
                 id = m.id,
                 check = false,
                 icon = m.icon,

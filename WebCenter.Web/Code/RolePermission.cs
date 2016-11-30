@@ -19,5 +19,6 @@ namespace WebCenter.Web
 
         public string name { get; set; }
         public string value { get; set; }
+        public string memo { get; set; }
     }
 }

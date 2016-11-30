@@ -53,14 +53,15 @@ namespace WebCenter.Web.Controllers
             var param = Uof.IsettingService.GetAll(s => s.name != "CODING").Select(s=> new ParamSetting
             {
                 name = s.name,
-                value = s.value
+                value = s.value,
+                memo = s.memo
             }).ToList();
             
             return Json(param, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult PeriodUpdate(List<ParamSetting> paramList)
+        public ActionResult ParamUpdate(List<ParamSetting> paramList)
         {
             var keys = paramList.Select(p => p.name).ToList();
             var dbSettings = Uof.IsettingService.GetAll(s => keys.Contains(s.name)).ToList();
@@ -73,6 +74,7 @@ namespace WebCenter.Web.Controllers
                 if (param != null)
                 {
                     item.value = param.value;
+                    item.memo = param.memo;
                 }
             }
             var r = Uof.IsettingService.UpdateEntities(dbSettings);

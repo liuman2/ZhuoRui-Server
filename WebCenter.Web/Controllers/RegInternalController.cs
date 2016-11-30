@@ -323,7 +323,7 @@ namespace WebCenter.Web.Controllers
                 source_id = newInternal.id,
                 source_name = "reg_internal",
                 title = "新建订单",
-                content = string.Format("{0}新建了订单, 单号{1}", arrs[3], newInternal.code)
+                content = string.Format("{0}新建了订单, 档案号{1}", arrs[3], newInternal.code)
             });
 
             return Json(new { id = newInternal.id }, JsonRequestBehavior.AllowGet);
@@ -648,22 +648,20 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("提交给财务审核")
                 });
 
-                var ids = GetFinanceMembers();
-                if (ids.Count() > 0)
+                //var ids = GetFinanceMembers();
+                var auditor_id = GetAuditorByKey("CW_ID");
+                if (auditor_id != null)
                 {
                     var waitdeals = new List<waitdeal>();
-                    foreach (var item in ids)
+                    waitdeals.Add(new waitdeal
                     {
-                        waitdeals.Add(new waitdeal
-                        {
-                            source = "reg_internal",
-                            source_id = dbReg.id,
-                            user_id = item,
-                            router = "internal_view",
-                            content = "您有国内注册订单需要财务审核",
-                            read_status = 0
-                        });
-                    }
+                        source = "reg_internal",
+                        source_id = dbReg.id,
+                        user_id = auditor_id,
+                        router = "internal_view",
+                        content = "您有国内注册订单需要财务审核",
+                        read_status = 0
+                    });
 
                     Uof.IwaitdealService.AddEntities(waitdeals);
                 }

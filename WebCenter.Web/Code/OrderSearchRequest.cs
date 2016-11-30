@@ -38,6 +38,7 @@ namespace WebCenter.Web
         public string name { get; set; }
         public DateTime? start_time { get; set; }
         public DateTime? end_time { get; set; }
+        public int? status { get; set; }
     }
 
     public class LeaveSearchRequest

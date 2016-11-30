@@ -300,44 +300,29 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
             }
 
-            switch (_audit.source)
+            var timelines = new List<timeline>();
+            timelines.Add(new timeline
             {
-                case "reg_abroad":
-                    var abroad = Uof.Ireg_abroadService.GetAll(a => a.id == _audit.source_id).FirstOrDefault();
-                    //abroad.annual_date = DateTime.Today;
-                    //abroad.annual_year = DateTime.Today.Year;
-                    //Uof.Ireg_abroadService.UpdateEntity(abroad);
-                    break;
-                case "reg_internal":
-                    var intern = Uof.Ireg_internalService.GetAll(i => i.id == _audit.source_id).FirstOrDefault();
-                    //intern.annual_date = DateTime.Today;
-                    //intern.annual_year = DateTime.Today.Year;
-                    //Uof.Ireg_internalService.UpdateEntity(intern);
-                    break;
-                case "patent":
-                    var p = Uof.IpatentService.GetAll(i => i.id == _audit.source_id).FirstOrDefault();
-                    //p.annual_date = DateTime.Today;
-                    //p.annual_year = DateTime.Today.Year;
-                    //Uof.IpatentService.UpdateEntity(p);
-                    break;
-                case "trademark":
-                    var t = Uof.ItrademarkService.GetAll(i => i.id == _audit.source_id).FirstOrDefault();
-                    //t.annual_date = DateTime.Today;
-                    //t.annual_year = DateTime.Today.Year;
-                    //Uof.ItrademarkService.UpdateEntity(t);
-                    break;
-                default:
-                    break;
-            }
+                source_id = _audit.source_id,
+                source_name = _audit.source,
+                title = "新建审计",
+                content = string.Format("{0}新建了审计订单, 审计档案号{1}", arrs[3], _audit.code)
+            });
 
-            Uof.ItimelineService.AddEntity(new timeline()
+            timelines.Add(new timeline
             {
                 source_id = newAbroad.id,
                 source_name = "audit",
                 title = "新建订单",
-                content = string.Format("{0}新建了订单, 单号{1}", arrs[3], _audit.code)
+                content = string.Format("{0}新建了订单, 档案号{1}", arrs[3], _audit.code)
             });
-
+            try
+            {
+                Uof.ItimelineService.AddEntities(timelines);
+            }
+            catch (Exception)
+            {
+            }
             return Json(new { id = newAbroad.id }, JsonRequestBehavior.AllowGet);
         }
 
@@ -640,22 +625,20 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("提交给财务审核")
                 });
 
-                var ids = GetFinanceMembers();
-                if (ids.Count() > 0)
+                //var ids = GetFinanceMembers();
+                var auditor_id = GetAuditorByKey("CW_ID");
+                if (auditor_id != null)
                 {
                     var waitdeals = new List<waitdeal>();
-                    foreach (var item in ids)
+                    waitdeals.Add(new waitdeal
                     {
-                        waitdeals.Add(new waitdeal
-                        {
-                            source = "audit",
-                            source_id = dbAudit.id,
-                            user_id = item,
-                            router = "audit_view",
-                            content = "您有审计订单需要财务审核",
-                            read_status = 0
-                        });
-                    }
+                        source = "audit",
+                        source_id = dbAudit.id,
+                        user_id = auditor_id,
+                        router = "audit_view",
+                        content = "您有审计订单需要财务审核",
+                        read_status = 0
+                    });
                     Uof.IwaitdealService.AddEntities(waitdeals);
                 }
             }

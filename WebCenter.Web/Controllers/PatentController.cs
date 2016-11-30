@@ -318,7 +318,7 @@ namespace WebCenter.Web.Controllers
                 source_id = newPatent.id,
                 source_name = "patent",
                 title = "新建订单",
-                content = string.Format("{0}新建了订单, 单号{1}", arrs[3], newPatent.code)
+                content = string.Format("{0}新建了订单, 档案号{1}", arrs[3], newPatent.code)
             });
 
             return Json(new { id = newPatent.id }, JsonRequestBehavior.AllowGet);
@@ -599,22 +599,20 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("提交给财务审核")
                 });
 
-                var ids = GetFinanceMembers();
-                if (ids.Count() > 0)
+                //var ids = GetFinanceMembers();
+                var auditor_id = GetAuditorByKey("CW_ID");
+                if (auditor_id != null)
                 {
                     var waitdeals = new List<waitdeal>();
-                    foreach (var item in ids)
+                    waitdeals.Add(new waitdeal
                     {
-                        waitdeals.Add(new waitdeal
-                        {
-                            source = "patent",
-                            source_id = dbPatent.id,
-                            user_id = item,
-                            router = "patent_view",
-                            content = "您有专利订单需要财务审核",
-                            read_status = 0
-                        });
-                    }
+                        source = "patent",
+                        source_id = dbPatent.id,
+                        user_id = auditor_id,
+                        router = "patent_view",
+                        content = "您有专利订单需要财务审核",
+                        read_status = 0
+                    });
                     Uof.IwaitdealService.AddEntities(waitdeals);
                 }
             }

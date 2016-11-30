@@ -300,22 +300,20 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("提交给财务审核")
                 });
 
-                var ids = GetFinanceMembers();
-                if (ids.Count() > 0)
+                //var ids = GetFinanceMembers();
+                var auditor_id = GetAuditorByKey("CW_ID");
+                if (auditor_id != null)
                 {
                     var waitdeals = new List<waitdeal>();
-                    foreach (var item in ids)
+                    waitdeals.Add(new waitdeal
                     {
-                        waitdeals.Add(new waitdeal
-                        {
-                            source = "history",
-                            source_id = dbReg.id,
-                            user_id = item,
-                            router = "history_view",
-                            content = "您有数据变更订单需要财务审核",
-                            read_status = 0
-                        });
-                    }
+                        source = "history",
+                        source_id = dbReg.id,
+                        user_id = auditor_id,
+                        router = "history_view",
+                        content = "您有数据变更订单需要财务审核",
+                        read_status = 0
+                    });
 
                     Uof.IwaitdealService.AddEntities(waitdeals);
                 }

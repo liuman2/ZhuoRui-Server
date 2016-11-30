@@ -295,7 +295,7 @@ namespace WebCenter.Web.Controllers
             var userMenus = new List<UserMenus>();
             foreach (var parent in parents)
             {
-                var children = ms.Where(m => m.parent_id == parent.id).ToList();
+                var children = ms.Where(m => m.parent_id == parent.id).OrderBy(m => m.order).ToList();
                 userMenus.Add(new UserMenus()
                 {
                     id = parent.id,

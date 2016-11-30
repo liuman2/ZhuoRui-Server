@@ -27,5 +27,9 @@ namespace WebCenter.Entities
     
     
         public string value { get; set; }
+    
+    
+    
+        public string memo { get; set; }
     }
 }

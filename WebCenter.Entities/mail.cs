@@ -113,5 +113,6 @@ namespace WebCenter.Entities
         public string paymode { get; set; }
     
         public virtual member member { get; set; }
+        public virtual member member1 { get; set; }
     }
 }

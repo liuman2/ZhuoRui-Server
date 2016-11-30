@@ -18,10 +18,48 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Search(LetterRequest request)
         {
-            Expression<Func<mail, bool>> ownerQuery = c => true;
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            var deptId = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out deptId);
+
+            var ops = arrs[4].Split(',');
+            var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+
+            Expression<Func<mail, bool>> userQuery = c => true;
+            if (hasCompany == null)
+            {
+                userQuery = c => (c.creator_id == userId || c.audit_id == userId);
+            }
+
+            Expression<Func<mail, bool>> statusQuery = c => true;
+            if (request.status != null)
+            {
+                statusQuery = c => c.review_status == request.status;
+            }
+
+            Expression<Func<mail, bool>> nameQuery = c => true;
             if (!string.IsNullOrEmpty(request.name))
-            {                
-                ownerQuery = c => c.order_name.Contains(request.name);
+            {
+                nameQuery = c => (c.order_name.Contains(request.name) || c.order_code.Contains(request.name) || c.code.Contains(request.name));
             }
 
             Expression<Func<mail, bool>> condition = c => true;
@@ -44,10 +82,12 @@ namespace WebCenter.Web.Controllers
                 date2Query = c => (c.date_at < endTime);
             }
             
-            var list = Uof.ImailService.GetAll(condition)
-                .Where(ownerQuery)
+            var list = Uof.ImailService.GetAll(condition)                
+                .Where(statusQuery)
+                .Where(nameQuery)
                 .Where(date1Query)
                 .Where(date2Query)
+                .Where(userQuery)
                 .OrderByDescending(item => item.id).Select(c => new
                 {
                     id = c.id,
@@ -72,14 +112,19 @@ namespace WebCenter.Web.Controllers
                     review_status = c.review_status,
                     tel = c.tel,
                     paymode = c.paymode,
+                    creator_id = c.creator_id,
+                    creator_name = c.member1.name,
+                    deleteable = c.creator_id == userId && c.review_status != 1,
 
                 }).ToPagedList(request.index, request.size).ToList();
 
             var totalRecord = Uof.ImailService
                 .GetAll(condition)
-                .Where(ownerQuery)
+                .Where(statusQuery)
+                .Where(nameQuery)
                 .Where(date1Query)
                 .Where(date2Query)
+                .Where(userQuery)
                 .Count();
 
             var totalPages = 0;
@@ -323,6 +368,19 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, id = _c.id }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Delete(int id)
+        {
+            var c = Uof.ImailService.GetById(id);
+            if (c == null)
+            {
+                return ErrorResult;
+            }
+
+            var r = Uof.ImailService.DeleteEntity(c);
+
+            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Get(int id)
         {
             var _l = Uof.ImailService.GetAll(l => l.id == id).Select(c => new
@@ -349,6 +407,7 @@ namespace WebCenter.Web.Controllers
                 review_status = c.review_status,
                 tel = c.tel,
                 creator_id = c.creator_id,
+                creator_name = c.member1.name,
                 paymode = c.paymode
             }).FirstOrDefault();
 
