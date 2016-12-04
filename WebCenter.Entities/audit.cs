@@ -82,15 +82,11 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<System.DateTime> date_year_end { get; set; }
+        public string date_year_end { get; set; }
     
     
     
         public Nullable<float> turnover { get; set; }
-    
-    
-    
-        public string turnover_currency { get; set; }
     
     
     
@@ -202,15 +198,23 @@ namespace WebCenter.Entities
     
     
     
+        public string turnover_currency { get; set; }
+    
+    
+    
         public Nullable<int> assistant_id { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> account_period2 { get; set; }
     
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
+        public virtual customer customer { get; set; }
         public virtual member member2 { get; set; }
         public virtual member member3 { get; set; }
         public virtual member member4 { get; set; }
         public virtual member member5 { get; set; }
         public virtual member member6 { get; set; }
-        public virtual customer customer { get; set; }
     }
 }

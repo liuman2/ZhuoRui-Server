@@ -253,6 +253,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class receiptService:BaseService<receipt>,IreceiptService
+    {   
+        public receiptService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.receiptRepository;
+        }  
+    }
+	
 	public partial class reg_abroadService:BaseService<reg_abroad>,Ireg_abroadService
     {   
         public reg_abroadService()

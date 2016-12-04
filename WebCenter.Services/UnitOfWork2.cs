@@ -177,6 +177,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IreceiptService IreceiptService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  Ireg_abroadService Ireg_abroadService
     {
         get;

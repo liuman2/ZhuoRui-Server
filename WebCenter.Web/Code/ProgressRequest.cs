@@ -12,7 +12,8 @@ namespace WebCenter.Web
         //public int is_done { get; set; }
         public string progress { get; set; }
         public DateTime? date_finish { get; set; }
-        public string progress_type { get; set; }    
+        public string progress_type { get; set; }  
+        public int? accountant_id { get; set; }
     }
 
     public class RegAbroadProgressRequest: ProgressRequest

@@ -55,6 +55,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.IpositionRepository positionRepository { get { return new positionRepository(); } }
 	
+	public IDAL.IreceiptRepository receiptRepository { get { return new receiptRepository(); } }
+	
 	public IDAL.Ireg_abroadRepository reg_abroadRepository { get { return new reg_abroadRepository(); } }
 	
 	public IDAL.Ireg_historyRepository reg_historyRepository { get { return new reg_historyRepository(); } }

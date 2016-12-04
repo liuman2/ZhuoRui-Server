@@ -102,6 +102,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IreceiptRepository :IBaseRepository<receipt>
+    {         
+    }
+	
     public partial interface Ireg_abroadRepository :IBaseRepository<reg_abroad>
     {         
     }

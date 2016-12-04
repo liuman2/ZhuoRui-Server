@@ -127,6 +127,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class receiptRepository :BaseRepository<receipt>,IreceiptRepository
+    {
+         
+    }
+	
 	public partial class reg_abroadRepository :BaseRepository<reg_abroad>,Ireg_abroadRepository
     {
          

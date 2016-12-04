@@ -127,4 +127,45 @@ namespace WebCenter.Web
 
         public string region { get; set; }
     }
+
+    public class ReceiptPrintData
+    {
+        public int id { get; set; }
+
+        public string no { get; set; }
+
+        public string customer_name { get; set; }
+
+        public string memo { get; set; }
+
+        public string print_type { get; set; }
+
+        /// <summary>
+        /// 付款方式
+        /// </summary>
+        public string pay_way { get; set; }
+        /// <summary>
+        /// 已收金额
+        /// </summary>
+        public float? received { get; set; }
+
+        public float? rate { get; set; }
+
+        /// <summary>
+        /// 经办人
+        /// </summary>
+        public string saleman { get; set; }
+
+        /// <summary>
+        /// 会计 - 打印人
+        /// </summary>
+        public string creator { get; set; }
+
+        /// <summary>
+        /// 出纳 - 财务审核人
+        /// </summary>
+        public string finance_reviewer { get; set; }
+
+        public string date { get; set; }
+    }
 }

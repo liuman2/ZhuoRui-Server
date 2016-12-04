@@ -352,6 +352,7 @@ namespace WebCenter.Web.Controllers
                 has_parent = a.has_parent,
                 account_number = a.account_number,
                 account_period = a.account_period,
+                account_period2 = a.account_period2,
                 date_year_end = a.date_year_end,
                 turnover = a.turnover,
                 amount_bank = a.amount_bank,
@@ -379,7 +380,8 @@ namespace WebCenter.Web.Controllers
 
                 status = a.status,
                 review_status = a.review_status,
-                description = a.description
+                description = a.description,
+                source_code = a.source_code,
 
             }).FirstOrDefault();
 
@@ -412,6 +414,7 @@ namespace WebCenter.Web.Controllers
                 has_parent = a.has_parent,
                 account_number = a.account_number,
                 account_period = a.account_period,
+                account_period2 = a.account_period2,
                 date_year_end = a.date_year_end,
                 turnover = a.turnover,
                 amount_bank = a.amount_bank,
@@ -510,6 +513,7 @@ namespace WebCenter.Web.Controllers
                 _audit.has_parent == dbAudit.has_parent &&
                 _audit.account_number == dbAudit.account_number &&
                 _audit.account_period == dbAudit.account_period &&
+                _audit.account_period2 == dbAudit.account_period2 &&
                 _audit.date_year_end == dbAudit.date_year_end &&
                 _audit.turnover == dbAudit.turnover &&
                 _audit.amount_bank == dbAudit.amount_bank &&
@@ -552,6 +556,7 @@ namespace WebCenter.Web.Controllers
             dbAudit.has_parent = _audit.has_parent;
             dbAudit.account_number = _audit.account_number;
             dbAudit.account_period = _audit.account_period;
+            dbAudit.account_period2 = _audit.account_period2;
             dbAudit.date_year_end = _audit.date_year_end;
             dbAudit.turnover = _audit.turnover;
             dbAudit.amount_bank = _audit.amount_bank;
@@ -958,7 +963,9 @@ namespace WebCenter.Web.Controllers
                 customer_id = r.customer_id,
                 is_done = r.status == 4 ? 1 : 0,
                 date_finish = r.date_finish,
-                progress = r.progress
+                progress = r.progress,
+                accountant_id = r.accountant_id,
+                accountant_name = r.member.name
 
             }).FirstOrDefault();
 
@@ -999,13 +1006,14 @@ namespace WebCenter.Web.Controllers
             }
             else
             {
-                if (dbAudit.progress == request.progress && dbAudit.date_finish == request.date_finish)
+                if (dbAudit.progress == request.progress && dbAudit.date_finish == request.date_finish && dbAudit.accountant_id == request.accountant_id)
                 {
                     return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
                 }
                 dbAudit.status = 4;
                 dbAudit.date_finish = request.date_finish;
                 dbAudit.progress = request.progress;
+                dbAudit.accountant_id = request.accountant_id;
             }
 
             var r = Uof.IauditService.UpdateEntity(dbAudit);

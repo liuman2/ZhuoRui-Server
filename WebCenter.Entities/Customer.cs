@@ -17,7 +17,6 @@ namespace WebCenter.Entities
         public customer()
         {
             this.annual_exam = new HashSet<annual_exam>();
-            this.audits = new HashSet<audit>();
             this.bank_account = new HashSet<bank_account>();
             this.lecture_customer = new HashSet<lecture_customer>();
             this.incomes = new HashSet<income>();
@@ -26,6 +25,7 @@ namespace WebCenter.Entities
             this.reg_abroad = new HashSet<reg_abroad>();
             this.patents = new HashSet<patent>();
             this.reg_internal = new HashSet<reg_internal>();
+            this.audits = new HashSet<audit>();
         }
     
     
@@ -139,7 +139,6 @@ namespace WebCenter.Entities
         public Nullable<int> assistant_id { get; set; }
     
         public virtual ICollection<annual_exam> annual_exam { get; set; }
-        public virtual ICollection<audit> audits { get; set; }
         public virtual ICollection<bank_account> bank_account { get; set; }
         public virtual ICollection<lecture_customer> lecture_customer { get; set; }
         public virtual ICollection<income> incomes { get; set; }
@@ -150,5 +149,6 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual ICollection<patent> patents { get; set; }
         public virtual ICollection<reg_internal> reg_internal { get; set; }
+        public virtual ICollection<audit> audits { get; set; }
     }
 }

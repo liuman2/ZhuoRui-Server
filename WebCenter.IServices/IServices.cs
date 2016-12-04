@@ -106,6 +106,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IreceiptService:IBaseService<receipt>
+    {   
+    }
+	
 	public partial interface Ireg_abroadService:IBaseService<reg_abroad>
     {   
     }

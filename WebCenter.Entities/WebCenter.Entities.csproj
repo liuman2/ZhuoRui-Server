@@ -164,6 +164,9 @@
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="receipt.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="reg_abroad.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

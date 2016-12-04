@@ -14,3 +14,32 @@ INSERT INTO `settings` VALUES ('9', 'ZL_ID', null, null);
 INSERT INTO `settings` VALUES ('10', 'CW_ID', null, null);
 
 
+call AddColumnUnlessExists(Database(), 'audit', 'account_period2', 'datetime DEFAULT NULL COMMENT "账期"');
+alter table audit modify column date_year_end varchar(6);
+
+call AddColumnUnlessExists(Database(), 'audit', 'source', 'varchar(30) DEFAULT NULL');
+call AddColumnUnlessExists(Database(), 'audit', 'source_id', 'int(11) DEFAULT NULL');
+call AddColumnUnlessExists(Database(), 'audit', 'source_code', 'varchar(20) DEFAULT NULL COMMENT "来源单号"');
+
+
+
+DROP TABLE IF EXISTS `receipt`;
+CREATE TABLE `receipt` (
+  `id` int(11) NOT NULL,
+  `code` varchar(6) DEFAULT NULL COMMENT '流水号',
+  `order_source` varchar(20) DEFAULT NULL COMMENT '订单来源',
+  `order_id` int(11) DEFAULT NULL COMMENT '订单id',
+  `creator_id` int(11) DEFAULT NULL COMMENT '创建者',
+  `date_created` datetime DEFAULT NULL,
+  `memo` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_receipt_creator_id` (`creator_id`),
+  CONSTRAINT `receipt_ibfk_creator` FOREIGN KEY (`creator_id`) REFERENCES `member` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `sequence` VALUES ('receipt', '1');
+INSERT INTO `dictionary_group` VALUES ('15', '收款事由', '收款事由');
+
+
+
+

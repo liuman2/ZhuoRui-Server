@@ -85,6 +85,9 @@ namespace WebCenter.IDAL
 		IDAL.IpositionRepository positionRepository { get; }
 	  
 
+		IDAL.IreceiptRepository receiptRepository { get; }
+	  
+
 		IDAL.Ireg_abroadRepository reg_abroadRepository { get; }
 	  
 

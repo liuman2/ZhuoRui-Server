@@ -65,6 +65,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<IpositionService>().To<positionService>().InRequestScope();
 	
+	   kernel.Bind<IreceiptService>().To<receiptService>().InRequestScope();
+	
 	   kernel.Bind<Ireg_abroadService>().To<reg_abroadService>().InRequestScope();
 	
 	   kernel.Bind<Ireg_historyService>().To<reg_historyService>().InRequestScope();
