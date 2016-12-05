@@ -92,9 +92,9 @@ namespace WebCenter.Web.Controllers
                         print_type = "abroad",
                         id = a.id,
                         customer_name = a.name_cn ?? a.name_en,
-                        saleman = a.member4.name,
-                        finance_reviewer = a.member1.name,
-                        rate = a.rate,
+                        saleman = a.member4.english_name,
+                        finance_reviewer = a.member1.english_name,
+                        rate = a.rate ?? 1,
                     }).FirstOrDefault();
                                         
                     GetPrintDataIncome(printData, "reg_abroad");
@@ -107,9 +107,9 @@ namespace WebCenter.Web.Controllers
                         print_type = "annual",
                         id = a.id,
                         customer_name = a.name_cn ?? a.name_en,
-                        saleman = a.member4.name,
-                        finance_reviewer = a.member2.name,
-                        rate = a.rate,
+                        saleman = a.member4.english_name,
+                        finance_reviewer = a.member2.english_name,
+                        rate = a.rate ?? 1,
                     }).FirstOrDefault();
                     
                     GetPrintDataIncome(printData, "annual");
@@ -122,9 +122,9 @@ namespace WebCenter.Web.Controllers
                         print_type = "audit",
                         id = a.id,
                         customer_name = a.name_cn ?? a.name_en,
-                        saleman = a.member4.name,
-                        finance_reviewer = a.member2.name,
-                        rate = a.rate,
+                        saleman = a.member4.english_name,
+                        finance_reviewer = a.member2.english_name,
+                        rate = a.rate ?? 1,
                     }).FirstOrDefault();
                     
                     GetPrintDataIncome(printData, "audit");
@@ -137,9 +137,9 @@ namespace WebCenter.Web.Controllers
                         print_type = "internal",
                         id = a.id,
                         customer_name = a.name_cn,
-                        saleman = a.member5.name,
-                        finance_reviewer = a.member2.name,
-                        rate = a.rate,
+                        saleman = a.member5.english_name,
+                        finance_reviewer = a.member2.english_name,
+                        rate = a.rate ?? 1,
                     }).FirstOrDefault();
                     
                     GetPrintDataIncome(printData, "internal");
@@ -152,9 +152,9 @@ namespace WebCenter.Web.Controllers
                         print_type = "patent",
                         id = a.id,
                         customer_name = a.customer.name,
-                        saleman = a.member4.name,
-                        finance_reviewer = a.member2.name,
-                        rate = a.rate,
+                        saleman = a.member4.english_name,
+                        finance_reviewer = a.member2.english_name,
+                        rate = a.rate ?? 1,
                     }).FirstOrDefault();
                     
                     GetPrintDataIncome(printData, "patent");
@@ -167,9 +167,9 @@ namespace WebCenter.Web.Controllers
                         print_type = "trademark",
                         id = a.id,
                         customer_name = a.customer.name,
-                        saleman = a.member4.name,
-                        finance_reviewer = a.member2.name,
-                        rate = a.rate,
+                        saleman = a.member4.english_name,
+                        finance_reviewer = a.member2.english_name,
+                        rate = a.rate ?? 1,
                     }).FirstOrDefault();
                     
                     GetPrintDataIncome(printData, "trademark");
@@ -182,9 +182,9 @@ namespace WebCenter.Web.Controllers
                     printData.print_type = "history";
                     printData.id = dbHistory.id;
                     printData.customer_name = "";
-                    printData.saleman = dbHistory.member2.name;
-                    printData.finance_reviewer = dbHistory.member1.name;
-                    printData.rate = dbHistory.rate;
+                    printData.saleman = dbHistory.member2.english_name;
+                    printData.finance_reviewer = dbHistory.member1.english_name;
+                    printData.rate = dbHistory.rate ?? 1;
                     
                     GetHistorySource(dbHistory, printData);
 
@@ -195,12 +195,12 @@ namespace WebCenter.Web.Controllers
                     break;
             }
 
-            printData.date = DateTime.Today.ToString("yyyy-MM-dd");
+            printData.date = DateTime.Today.ToString("yyyy年MM月dd日");
             var dbReceipt = Uof.IreceiptService.GetAll(r => r.order_id == order_id && r.order_source == name).FirstOrDefault();
             printData.no = dbReceipt.date_created.Value.ToString("yyyyMMdd") + dbReceipt.code;
 
             printData.memo = dbReceipt.memo;
-            var creator = Uof.ImemberService.GetAll(m => m.id == dbReceipt.creator_id).Select(m => m.name).FirstOrDefault();
+            var creator = Uof.ImemberService.GetAll(m => m.id == dbReceipt.creator_id).Select(m => m.english_name).FirstOrDefault();
             printData.creator = creator;
 
             return Json(printData, JsonRequestBehavior.AllowGet);
