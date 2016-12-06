@@ -36,7 +36,7 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
 
             _receipt.date_created = DateTime.Today;
-            _receipt.creator_id = userId;
+            _receipt.creator_id = GetAuditorByKey("SJ_ID"); // userId;
             var code = GetCodeByDate(DateTime.Today);
             _receipt.code = code;
 
