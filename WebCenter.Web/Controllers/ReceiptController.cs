@@ -100,7 +100,7 @@ namespace WebCenter.Web.Controllers
                     GetPrintDataIncome(printData, "reg_abroad");
                     #endregion
                     break;
-                case "reg_annual":
+                case "annual":
                     #region 年检                    
                     printData = Uof.Iannual_examService.GetAll(a => a.id == order_id).Select(a => new ReceiptPrintData
                     {

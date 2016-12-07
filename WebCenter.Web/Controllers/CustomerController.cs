@@ -310,7 +310,7 @@ namespace WebCenter.Web.Controllers
             var assistant_name = "";
             if (_customer != null && _customer.source_id != null)
             {
-                source_name = Uof.IcustomerService.GetAll(c => c.id == _customer.id).Select(c => c.name).FirstOrDefault();
+                source_name = Uof.IcustomerService.GetAll(c => c.id == _customer.source_id).Select(c => c.name).FirstOrDefault();
             }
             if (_customer != null && _customer.assistant_id != null)
             {
