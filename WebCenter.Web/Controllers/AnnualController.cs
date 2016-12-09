@@ -99,7 +99,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 &&
             ((c.annual_date == null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear >= c.date_setup.Value.Year) ||
             (c.annual_date != null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear >= c.annual_date.Value.Year) ||
-            (c.annual_year == null && (Month1 == (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear >= c.date_setup.Value.Year) ||
+            (c.annual_year == null && nowYear >= c.date_setup.Value.Year) ||
             (c.annual_year != null && c.annual_year == nowYear && (Month1 == (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear >= c.date_setup.Value.Year) ||
             (c.is_annual == 1 && ((c.annual_year == null) || (c.annual_year != null && c.annual_year.Value < nowYear))));
             Expression<Func<reg_abroad, bool>> customerQuery1 = c => true;
@@ -188,7 +188,7 @@ namespace WebCenter.Web.Controllers
 
             if (abroads.Count() > 0)
             {
-                var newList = abroads.Where(a => a.annual_date == null || (a.annual_date != null && a.annual_date.Value.AddMonths(10) <= DateTime.Today)).ToList();
+                var newList = abroads.Where(a => (a.annual_date == null || new DateTime(DateTime.Now.Year, a.date_setup.Value.Month, a.date_setup.Value.Day).AddMonths(10) <= DateTime.Today) || (a.annual_date != null && a.annual_date.Value.AddMonths(10) <= DateTime.Today)).ToList();
                 items.AddRange(newList);
             }
             #endregion
@@ -399,7 +399,7 @@ namespace WebCenter.Web.Controllers
             }
             #endregion
 
-            #region 专利注册            
+            #region 专利注册
             var patentPeriodSetting = Uof.IsettingService.GetAll(s => s.name == "PATENT_PERIOD").Select(s => s.value).FirstOrDefault();
             int patentPeriod = 0;
             int.TryParse(patentPeriodSetting, out patentPeriod);
