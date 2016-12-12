@@ -227,6 +227,19 @@ namespace WebCenter.Web.Controllers
             return ids;
         }
 
+        public int? GetSubmitMemberByKey(string key)
+        {
+            var auditor = Uof.IsettingService.GetAll(s => s.name == key).FirstOrDefault();
+            if (auditor == null)
+            {
+                return null;
+            }
+
+            int id = 0;
+            int.TryParse(auditor.value, out id);
+            return id;
+        }
+
         public int GetOrgIdByUserId(int userid)
         {
             var orgId = Uof.ImemberService.GetAll(a => a.id == userid).Select(a => a.organization_id.Value).FirstOrDefault();

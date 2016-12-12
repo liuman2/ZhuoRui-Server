@@ -45,9 +45,11 @@ namespace WebCenter.Web
         public int? review_status { get; set; }
         public string salesman { get; set; }
         public string waitor { get; set; }
+        public string source { get; set; }
 
         public DateTime? date_transaction { get; set; }
         public DateTime? date_created { get; set; }
         public DateTime? date_setup { get; set; }
+        public string type { get; set; }
     }
 }

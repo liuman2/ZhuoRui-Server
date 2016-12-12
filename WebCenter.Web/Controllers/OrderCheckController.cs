@@ -330,6 +330,63 @@ namespace WebCenter.Web.Controllers
             }
             #endregion
 
+            #region 变更记录
+            if (string.IsNullOrEmpty(order_type) || order_type == "history")
+            {
+                Expression<Func<history, bool>> customerQuery1 = c => true;
+                if (customer_id != null && customer_id.Value > 0)
+                {
+                    customerQuery1 = c => (c.customer_id == customer_id);
+                }
+
+                Expression<Func<history, bool>> salesmanQuery1 = c => true;
+                if (salesman_id != null && salesman_id.Value > 0)
+                {
+                    salesmanQuery1 = c => (c.salesman_id == salesman_id);
+                }
+
+                Expression<Func<history, bool>> orderTypeQuery1 = c => c.status > 0;
+                if (order_status == 0)
+                {
+                    // 未审核
+                    orderTypeQuery1 = c => c.status == 1;
+                }
+                else if (order_status == 1)
+                {
+                    // 已审核
+                    orderTypeQuery1 = c => c.status > 1;
+                }
+
+                var historys = Uof.IhistoryService.GetAll().Where(customerQuery1).Where(salesmanQuery1).Where(orderTypeQuery1).Select(a => new FinanceCheck
+                {
+                    id = a.id,
+                    customer_id = a.customer_id,
+                    //customer_name = a.customer.name,
+                    //customer_code = a.customer.code,
+                    order_code = a.order_code,
+                    order_name = "",
+                    order_type = "history",
+                    order_type_name = "",
+                    source = a.source,
+                    review_status = a.review_status,
+                    status = a.status,
+                    salesman = a.member2.name,
+                    amount_transaction = a.amount_transaction
+
+                }).ToList();
+
+                if (historys.Count() > 0)
+                {
+                    foreach (var item in historys)
+                    {
+                        item.order_type_name = GetHistorySourceName(item.source);
+                    }
+                    items.AddRange(historys);
+                }
+            }
+
+            #endregion
+
 
             var result = new
             {
@@ -341,10 +398,33 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult SubmitCheck(int? customer_id, int? salesman_id, int? order_status, string order_type, string name)
         {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var userId = arrs[0];
+            // int.TryParse(arrs[0], out userId);
+            var ops = arrs[4].Split(',');
+            var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+
             var items = new List<FinanceCheck>();
 
+            var settings = Uof.IsettingService.GetAll(s => s.name == "JW_ID" || s.name == "GN_ID" || s.name == "JWSJ_ID" || s.name == "GNSJ_ID" || s.name == "SB_ID" || s.name == "ZL_ID").ToList();
+
             #region 境外注册
-            if (string.IsNullOrEmpty(order_type) || order_type == "reg_abroad")
+            var jwId = settings.Where(s => name == "JW_ID").Select(s => s.value).FirstOrDefault();
+            if ((string.IsNullOrEmpty(order_type) || order_type == "reg_abroad") && (hasCompany != null || jwId == userId))
             {
                 Expression<Func<reg_abroad, bool>> customerQuery1 = c => true;
                 if (customer_id != null && customer_id.Value > 0)
@@ -382,21 +462,21 @@ namespace WebCenter.Web.Controllers
                     .Where(orderTypeQuery1)
                     .Where(nameQuery1)
                     .Select(a => new FinanceCheck
-                {
-                    id = a.id,
-                    customer_id = a.customer_id,
-                    customer_name = a.customer.name,
-                    customer_code = a.customer.code,
-                    order_code = a.code,
-                    order_name = a.name_cn ?? a.name_en,
-                    order_type = "reg_abroad",
-                    order_type_name = "境外注册",
-                    review_status = a.review_status,
-                    status = a.status,
-                    salesman = a.member4.name,
-                    amount_transaction = a.amount_transaction
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name_cn ?? a.name_en,
+                        order_type = "reg_abroad",
+                        order_type_name = "境外注册",
+                        review_status = a.review_status,
+                        status = a.status,
+                        salesman = a.member4.name,
+                        amount_transaction = a.amount_transaction
 
-                }).ToList();
+                    }).ToList();
 
                 if (abroads.Count() > 0)
                 {
@@ -407,7 +487,8 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 国内注册
-            if (string.IsNullOrEmpty(order_type) || order_type == "reg_internal")
+            var gnId = settings.Where(s => name == "GN_ID").Select(s => s.value).FirstOrDefault();
+            if ((string.IsNullOrEmpty(order_type) || order_type == "reg_internal") && (hasCompany != null || userId == gnId))
             {
                 Expression<Func<reg_internal, bool>> customerQuery2 = c => true;
                 if (customer_id != null && customer_id.Value > 0)
@@ -445,21 +526,21 @@ namespace WebCenter.Web.Controllers
                     .Where(orderTypeQuery2)
                     .Where(nameQuery2)
                     .Select(a => new FinanceCheck
-                {
-                    id = a.id,
-                    customer_id = a.customer_id,
-                    customer_name = a.customer.name,
-                    customer_code = a.customer.code,
-                    order_code = a.code,
-                    order_name = a.name_cn,
-                    order_type = "reg_internal",
-                    order_type_name = "境内注册",
-                    review_status = a.review_status,
-                    status = a.status,
-                    salesman = a.member5.name,
-                    amount_transaction = a.amount_transaction
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name_cn,
+                        order_type = "reg_internal",
+                        order_type_name = "境内注册",
+                        review_status = a.review_status,
+                        status = a.status,
+                        salesman = a.member5.name,
+                        amount_transaction = a.amount_transaction
 
-                }).ToList();
+                    }).ToList();
 
                 if (internas.Count() > 0)
                 {
@@ -469,7 +550,8 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 商标注册
-            if (string.IsNullOrEmpty(order_type) || order_type == "trademark")
+            var sbId = settings.Where(s => name == "SB_ID").Select(s => s.value).FirstOrDefault();
+            if ((string.IsNullOrEmpty(order_type) || order_type == "trademark") && (hasCompany != null || userId == sbId))
             {
                 Expression<Func<trademark, bool>> customerQuery3 = c => true;
                 if (customer_id != null && customer_id.Value > 0)
@@ -508,21 +590,21 @@ namespace WebCenter.Web.Controllers
                     .Where(orderTypeQuery3)
                     .Where(nameQuery3)
                     .Select(a => new FinanceCheck
-                {
-                    id = a.id,
-                    customer_id = a.customer_id,
-                    customer_name = a.customer.name,
-                    customer_code = a.customer.code,
-                    order_code = a.code,
-                    order_name = a.name,
-                    order_type = "trademark",
-                    order_type_name = "商标",
-                    review_status = a.review_status,
-                    status = a.status,
-                    salesman = a.member4.name,
-                    amount_transaction = a.amount_transaction
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name,
+                        order_type = "trademark",
+                        order_type_name = "商标",
+                        review_status = a.review_status,
+                        status = a.status,
+                        salesman = a.member4.name,
+                        amount_transaction = a.amount_transaction
 
-                }).ToList();
+                    }).ToList();
 
                 if (trademarks.Count() > 0)
                 {
@@ -532,7 +614,8 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 专利注册
-            if (string.IsNullOrEmpty(order_type) || order_type == "patent")
+            var zlId = settings.Where(s => name == "ZL_ID").Select(s => s.value).FirstOrDefault();
+            if ((string.IsNullOrEmpty(order_type) || order_type == "patent") && (hasCompany != null || userId != zlId))
             {
                 Expression<Func<patent, bool>> customerQuery4 = c => true;
                 if (customer_id != null && customer_id.Value > 0)
@@ -570,21 +653,21 @@ namespace WebCenter.Web.Controllers
                     .Where(orderTypeQuery4)
                     .Where(nameQuery4)
                     .Select(a => new FinanceCheck
-                {
-                    id = a.id,
-                    customer_id = a.customer_id,
-                    customer_name = a.customer.name,
-                    customer_code = a.customer.code,
-                    order_code = a.code,
-                    order_name = a.name,
-                    order_type = "patent",
-                    order_type_name = "专利",
-                    review_status = a.review_status,
-                    status = a.status,
-                    salesman = a.member4.name,
-                    amount_transaction = a.amount_transaction
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name,
+                        order_type = "patent",
+                        order_type_name = "专利",
+                        review_status = a.review_status,
+                        status = a.status,
+                        salesman = a.member4.name,
+                        amount_transaction = a.amount_transaction
 
-                }).ToList();
+                    }).ToList();
 
                 if (patents.Count() > 0)
                 {
@@ -594,8 +677,24 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 审计
-            if (string.IsNullOrEmpty(order_type) || order_type == "audit")
+            var jwSjId = settings.Where(s => name == "JWSJ_ID").Select(s => s.value).FirstOrDefault();
+            var gnSjId = settings.Where(s => name == "GNSJ_ID").Select(s => s.value).FirstOrDefault();
+
+            if ((string.IsNullOrEmpty(order_type) || order_type == "audit") && (hasCompany != null || jwSjId == userId || gnSjId == userId))
             {
+                Expression<Func<audit, bool>> typeQuery5 = c => true;
+                if (hasCompany == null && jwSjId != gnSjId)
+                {
+                    if (jwSjId == userId)
+                    {
+                        typeQuery5 = c => (c.type == "境外");
+                    }
+                    if (gnSjId == userId)
+                    {
+                        typeQuery5 = c => (c.type == "境内");
+                    }
+                }
+
                 Expression<Func<audit, bool>> customerQuery5 = c => true;
                 if (customer_id != null && customer_id.Value > 0)
                 {
@@ -631,25 +730,31 @@ namespace WebCenter.Web.Controllers
                     .Where(salesmanQuery5)
                     .Where(orderTypeQuery5)
                     .Where(nameQuery5)
+                    .Where(typeQuery5)
                     .Select(a => new FinanceCheck
-                {
-                    id = a.id,
-                    customer_id = a.customer_id,
-                    customer_name = a.customer.name,
-                    customer_code = a.customer.code,
-                    order_code = a.code,
-                    order_name = a.name_cn ?? a.name_en,
-                    order_type = "audit",
-                    order_type_name = "审计",
-                    review_status = a.review_status,
-                    status = a.status,
-                    salesman = a.member4.name,
-                    amount_transaction = a.amount_transaction
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name_cn ?? a.name_en,
+                        order_type = "audit",
+                        order_type_name = "",
+                        review_status = a.review_status,
+                        type = a.type,
+                        status = a.status,
+                        salesman = a.member4.name,
+                        amount_transaction = a.amount_transaction
 
-                }).ToList();
+                    }).ToList();
 
                 if (audits.Count() > 0)
                 {
+                    foreach (var item in audits)
+                    {
+                        item.order_type_name = item.type == "境外" ? "境外审计" : "国内审计";
+                    }
                     items.AddRange(audits);
                 }
             }
@@ -694,21 +799,21 @@ namespace WebCenter.Web.Controllers
                     .Where(orderTypeQuery6)
                     .Where(nameQuery6)
                     .Select(a => new FinanceCheck
-                {
-                    id = a.id,
-                    customer_id = a.customer_id,
-                    customer_name = a.customer.name,
-                    customer_code = a.customer.code,
-                    order_code = a.code,
-                    order_name = a.name_cn ?? a.name_en,
-                    order_type = "annual_exam",
-                    order_type_name = "年检",
-                    review_status = a.review_status,
-                    status = a.status,
-                    salesman = a.member4.name,
-                    amount_transaction = a.amount_transaction
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name_cn ?? a.name_en,
+                        order_type = "annual_exam",
+                        order_type_name = "年检",
+                        review_status = a.review_status,
+                        status = a.status,
+                        salesman = a.member4.name,
+                        amount_transaction = a.amount_transaction
 
-                }).ToList();
+                    }).ToList();
 
                 if (audits.Count() > 0)
                 {
@@ -717,6 +822,73 @@ namespace WebCenter.Web.Controllers
             }
             #endregion
 
+            #region 变更记录
+            if (string.IsNullOrEmpty(order_type) || order_type == "history")
+            {
+                Expression<Func<history, bool>> customerQuery1 = c => true;
+                if (customer_id != null && customer_id.Value > 0)
+                {
+                    customerQuery1 = c => (c.customer_id == customer_id);
+                }
+
+                Expression<Func<history, bool>> salesmanQuery1 = c => true;
+                if (salesman_id != null && salesman_id.Value > 0)
+                {
+                    salesmanQuery1 = c => (c.salesman_id == salesman_id);
+                }
+
+                Expression<Func<history, bool>> orderTypeQuery1 = c => c.status >= 2;
+                if (order_status == 0)
+                {
+                    // 未审核
+                    orderTypeQuery1 = c => c.status == 2 && c.review_status == 1;
+                }
+                else if (order_status == 1)
+                {
+                    // 已审核
+                    orderTypeQuery1 = c => c.status > 2;
+                }
+
+                Expression<Func<history, bool>> nameQuery1 = c => true;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    nameQuery1 = c => (c.order_code.ToLower().Contains(name.ToLower()));
+                }
+
+                var historys = Uof.IhistoryService.GetAll()
+                    .Where(customerQuery1)
+                    .Where(salesmanQuery1)
+                    .Where(orderTypeQuery1)
+                    .Where(nameQuery1)
+                    .Select(a => new FinanceCheck
+                    {
+                        id = a.id,
+                        //customer_id = a.customer_id,
+                        //customer_name = a.customer.name,
+                        //customer_code = a.customer.code,
+                        order_code = a.order_code,
+                        //order_name = a.name_cn ?? a.name_en,
+                        order_type = "history",
+                        order_type_name = "",
+                        review_status = a.review_status,
+                        status = a.status,
+                        source = a.source,
+                        salesman = a.member2.name,
+                        amount_transaction = a.amount_transaction
+
+                    }).ToList();
+
+                if (historys.Count() > 0)
+                {
+                    foreach (var item in historys)
+                    {
+                        item.order_type_name = GetHistorySourceName(item.source);
+                    }
+                    items.AddRange(historys);
+                }
+            }
+
+            #endregion
 
             var result = new
             {
@@ -724,6 +896,23 @@ namespace WebCenter.Web.Controllers
             };
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetHistorySourceName(string source)
+        {
+            switch (source)
+            {
+                case "reg_abroad":
+                    return "境外注册变更";
+                case "reg_internal":
+                    return "境内注册变更";
+                case "trademark":
+                    return "商标变更";
+                case "patent":
+                    return "专利变更";
+                default:
+                    return "";
+            }
         }
     }
 }

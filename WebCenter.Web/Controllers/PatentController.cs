@@ -675,22 +675,36 @@ namespace WebCenter.Web.Controllers
                     });
                 }
 
-                var ids = GetSubmitMembers();
-                if (ids.Count() > 0)
+                var jwId = GetSubmitMemberByKey("ZL_ID");
+                if (jwId != null && jwId > 0)
                 {
-                    foreach (var item in ids)
+                    waitdeals.Add(new waitdeal
                     {
-                        waitdeals.Add(new waitdeal
-                        {
-                            source = "patent",
-                            source_id = dbPatent.id,
-                            user_id = item,
-                            router = "patent_view",
-                            content = "您有专利订单需要提交审核",
-                            read_status = 0
-                        });
-                    }
+                        source = "patent",
+                        source_id = dbPatent.id,
+                        user_id = jwId,
+                        router = "patent_view",
+                        content = "您有专利订单需要提交审核",
+                        read_status = 0
+                    });
                 }
+
+                //var ids = GetSubmitMembers();
+                //if (ids.Count() > 0)
+                //{
+                //    foreach (var item in ids)
+                //    {
+                //        waitdeals.Add(new waitdeal
+                //        {
+                //            source = "patent",
+                //            source_id = dbPatent.id,
+                //            user_id = item,
+                //            router = "patent_view",
+                //            content = "您有专利订单需要提交审核",
+                //            read_status = 0
+                //        });
+                //    }
+                //}
             }
             else
             {

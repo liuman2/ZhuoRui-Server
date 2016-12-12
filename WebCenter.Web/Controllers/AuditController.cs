@@ -707,23 +707,37 @@ namespace WebCenter.Web.Controllers
                         read_status = 0
                     });
                 }
-
-                var ids = GetSubmitMembers();
-                if (ids.Count() > 0)
+                var key = dbAudit.type == "境外" ? "JWSJ_ID" : "GNSJ_ID";
+                var jwId = GetSubmitMemberByKey(key);
+                if (jwId != null && jwId > 0)
                 {
-                    foreach (var item in ids)
+                    waitdeals.Add(new waitdeal
                     {
-                        waitdeals.Add(new waitdeal
-                        {
-                            source = "audit",
-                            source_id = dbAudit.id,
-                            user_id = item,
-                            router = "audit_view",
-                            content = "您有审计订单需要提交审核",
-                            read_status = 0
-                        });
-                    }
+                        source = "audit",
+                        source_id = dbAudit.id,
+                        user_id = jwId,
+                        router = "audit_view",
+                        content = "您有审计订单需要提交审核",
+                        read_status = 0
+                    });
                 }
+
+                //var ids = GetSubmitMembers();
+                //if (ids.Count() > 0)
+                //{
+                //    foreach (var item in ids)
+                //    {
+                //        waitdeals.Add(new waitdeal
+                //        {
+                //            source = "audit",
+                //            source_id = dbAudit.id,
+                //            user_id = item,
+                //            router = "audit_view",
+                //            content = "您有审计订单需要提交审核",
+                //            read_status = 0
+                //        });
+                //    }
+                //}
             }
             else
             {

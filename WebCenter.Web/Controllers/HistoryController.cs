@@ -366,22 +366,36 @@ namespace WebCenter.Web.Controllers
                     read_status = 0
                 });
 
-                var ids = GetSubmitMembers();
-                if (ids.Count() > 0)
+                //var ids = GetSubmitMembers();
+                var jwId = GetSubmitForHistory(dbAudit);
+                if (jwId != null && jwId > 0)
                 {
-                    foreach (var item in ids)
+                    waitdeals.Add(new waitdeal
                     {
-                        waitdeals.Add(new waitdeal
-                        {
-                            source = "history",
-                            source_id = dbAudit.id,
-                            user_id = item,
-                            router = "history_view",
-                            content = "您有变更订单需要提交审核",
-                            read_status = 0
-                        });
-                    }
+                       source = "history",
+                       source_id = dbAudit.id,
+                       user_id = jwId,
+                       router = "history_view",
+                       content = "您有变更订单需要提交审核",
+                       read_status = 0
+                    });
                 }
+
+                //if (ids.Count() > 0)
+                //{
+                //    foreach (var item in ids)
+                //    {
+                //        waitdeals.Add(new waitdeal
+                //        {
+                //            source = "history",
+                //            source_id = dbAudit.id,
+                //            user_id = item,
+                //            router = "history_view",
+                //            content = "您有变更订单需要提交审核",
+                //            read_status = 0
+                //        });
+                //    }
+                //}
             }
             else
             {
@@ -525,6 +539,30 @@ namespace WebCenter.Web.Controllers
             }
 
             return SuccessResult;
+        }
+
+        private int? GetSubmitForHistory(history dbHistory)
+        {
+            var key = "";
+            switch (dbHistory.source)
+            {
+                case "reg_abroad":
+                    key = "JW_ID";
+                    break;
+                case "reg_internal":
+                    key = "GN_ID";
+                    break;
+                case "patent":
+                    key = "ZL_ID";
+                    break;
+                case "trademark":
+                    key = "SB_ID";
+                    break;
+                default:
+                    break;
+            }
+
+            return GetSubmitMemberByKey(key);
         }
     }
 }

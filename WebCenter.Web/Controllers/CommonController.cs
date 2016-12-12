@@ -413,7 +413,7 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "注册变更",
                         received = 0,
-                        saleman = a.member3.name,
+                        saleman = a.member2.name,
                         type = "",
                         currency = a.currency,
                         area = a.member3.area.name,

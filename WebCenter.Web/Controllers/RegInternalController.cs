@@ -713,22 +713,36 @@ namespace WebCenter.Web.Controllers
                     read_status = 0
                 });
 
-                var ids = GetSubmitMembers();
-                if (ids.Count() > 0)
+                //var ids = GetSubmitMembers();
+                var jwId = GetSubmitMemberByKey("GN_ID");
+                if (jwId != null && jwId > 0)
                 {
-                    foreach (var item in ids)
+                    waitdeals.Add(new waitdeal
                     {
-                        waitdeals.Add(new waitdeal
-                        {
-                            source = "reg_internal",
-                            source_id = dbReg.id,
-                            user_id = item,
-                            router = "internal_view",
-                            content = "您有国内注册订单需要提交审核",
-                            read_status = 0
-                        });
-                    }
+                        source = "reg_internal",
+                        source_id = dbReg.id,
+                        user_id = jwId,
+                        router = "internal_view",
+                        content = "您有国内注册订单需要提交审核",
+                        read_status = 0
+                    });
                 }
+
+                //if (ids.Count() > 0)
+                //{
+                //    foreach (var item in ids)
+                //    {
+                //        waitdeals.Add(new waitdeal
+                //        {
+                //            source = "reg_internal",
+                //            source_id = dbReg.id,
+                //            user_id = item,
+                //            router = "internal_view",
+                //            content = "您有国内注册订单需要提交审核",
+                //            read_status = 0
+                //        });
+                //    }
+                //}
             }
             else
             {
