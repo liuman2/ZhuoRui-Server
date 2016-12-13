@@ -436,6 +436,37 @@ namespace WebCenter.Web.Controllers
             return Json(printData, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult ExistCode(string code, string id)
+        {
+            var existCode = "";
+            switch (id)
+            {
+                case "reg_abroad":
+                    existCode = Uof.Ireg_abroadService.GetAll(a => a.code == code).Select(a => a.code).FirstOrDefault();
+                    break;
+                case "reg_internal":
+                    existCode = Uof.Ireg_internalService.GetAll(a => a.code == code).Select(a => a.code).FirstOrDefault();
+                    break;
+                case "trademark":
+                    existCode = Uof.ItrademarkService.GetAll(a => a.code == code).Select(a => a.code).FirstOrDefault();
+                    break;
+                case "patent":
+                    existCode = Uof.IpatentService.GetAll(a => a.code == code).Select(a => a.code).FirstOrDefault();
+                    break;
+                case "audit":
+                    existCode = Uof.IauditService.GetAll(a => a.code == code).Select(a => a.code).FirstOrDefault();
+                    break;
+                default:
+                    break;
+            }
+
+            if (string.IsNullOrEmpty(existCode))
+            {
+                return Json(new { ok = "验证成功" }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { error = "档案号已存在" }, JsonRequestBehavior.AllowGet);
+        }
+
         private void getCompanyName(PrintData printData)
         {
             switch (printData.source)
