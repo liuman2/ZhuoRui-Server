@@ -131,6 +131,14 @@ namespace WebCenter.Web.Controllers
 
                 var hasOpers = Uof.Irole_operationService.GetAll(o => o.role_id == role.role_id).Select(o => o.operation_id.Value).ToList();
 
+                // 是否有提交权限
+                var settings = Uof.IsettingService.GetAll(s => s.name == "JW_ID" || s.name == "GN_ID" || s.name == "JWSJ_ID" || s.name == "GNSJ_ID" || s.name == "SB_ID" || s.name == "ZL_ID").ToList();
+                var rows = settings.Where(s => s.value == user.id.ToString()).ToList();
+                if (rows.Count > 0)
+                {
+                    hasOpers.Add(4);
+                }
+
                 if (hasMenus.Count() == 0)
                 {
                     return Json(new { success = true, user = user, menus = getUserMenus(memberMenus), opers = hasOpers }, JsonRequestBehavior.AllowGet);
