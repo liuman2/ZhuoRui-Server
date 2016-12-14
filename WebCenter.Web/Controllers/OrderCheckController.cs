@@ -423,7 +423,7 @@ namespace WebCenter.Web.Controllers
             var settings = Uof.IsettingService.GetAll(s => s.name == "JW_ID" || s.name == "GN_ID" || s.name == "JWSJ_ID" || s.name == "GNSJ_ID" || s.name == "SB_ID" || s.name == "ZL_ID").ToList();
 
             #region 境外注册
-            var jwId = settings.Where(s => name == "JW_ID").Select(s => s.value).FirstOrDefault();
+            var jwId = settings.Where(s => s.name == "JW_ID").Select(s => s.value).FirstOrDefault();
             if ((string.IsNullOrEmpty(order_type) || order_type == "reg_abroad") && (hasCompany != null || jwId == userId))
             {
                 Expression<Func<reg_abroad, bool>> customerQuery1 = c => true;
@@ -487,7 +487,7 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 国内注册
-            var gnId = settings.Where(s => name == "GN_ID").Select(s => s.value).FirstOrDefault();
+            var gnId = settings.Where(s => s.name == "GN_ID").Select(s => s.value).FirstOrDefault();
             if ((string.IsNullOrEmpty(order_type) || order_type == "reg_internal") && (hasCompany != null || userId == gnId))
             {
                 Expression<Func<reg_internal, bool>> customerQuery2 = c => true;
@@ -550,7 +550,7 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 商标注册
-            var sbId = settings.Where(s => name == "SB_ID").Select(s => s.value).FirstOrDefault();
+            var sbId = settings.Where(s => s.name == "SB_ID").Select(s => s.value).FirstOrDefault();
             if ((string.IsNullOrEmpty(order_type) || order_type == "trademark") && (hasCompany != null || userId == sbId))
             {
                 Expression<Func<trademark, bool>> customerQuery3 = c => true;
@@ -614,7 +614,7 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 专利注册
-            var zlId = settings.Where(s => name == "ZL_ID").Select(s => s.value).FirstOrDefault();
+            var zlId = settings.Where(s => s.name == "ZL_ID").Select(s => s.value).FirstOrDefault();
             if ((string.IsNullOrEmpty(order_type) || order_type == "patent") && (hasCompany != null || userId != zlId))
             {
                 Expression<Func<patent, bool>> customerQuery4 = c => true;
@@ -677,8 +677,8 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 审计
-            var jwSjId = settings.Where(s => name == "JWSJ_ID").Select(s => s.value).FirstOrDefault();
-            var gnSjId = settings.Where(s => name == "GNSJ_ID").Select(s => s.value).FirstOrDefault();
+            var jwSjId = settings.Where(s => s.name == "JWSJ_ID").Select(s => s.value).FirstOrDefault();
+            var gnSjId = settings.Where(s => s.name == "GNSJ_ID").Select(s => s.value).FirstOrDefault();
 
             if ((string.IsNullOrEmpty(order_type) || order_type == "audit") && (hasCompany != null || jwSjId == userId || gnSjId == userId))
             {

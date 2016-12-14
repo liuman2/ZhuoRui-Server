@@ -188,7 +188,7 @@ namespace WebCenter.Web.Controllers
 
             if (abroads.Count() > 0)
             {
-                var newList = abroads.Where(a => (a.annual_date == null && new DateTime(DateTime.Now.Year, a.date_setup.Value.Month, a.date_setup.Value.Day).AddMonths(10) <= DateTime.Today) || (a.annual_date != null && a.annual_date.Value.AddMonths(10) <= DateTime.Today)).ToList();
+                var newList = abroads.Where(a => (a.annual_date == null && new DateTime(DateTime.Now.Year, a.date_setup.Value.Month, 1) <= DateTime.Today) || (a.annual_date != null && a.annual_date.Value.AddMonths(10) <= DateTime.Today)).ToList();
                 items.AddRange(newList);
             }
             #endregion
