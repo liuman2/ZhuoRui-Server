@@ -125,8 +125,8 @@ namespace WebCenter.Web.Controllers
             var list = Uof.IcustomerService.GetAll(condition)
                 .Where(nameQuery)
                 .Where(permQuery)
-                .OrderByDescending(item => item.id).Select(c => new
-            {
+                .OrderByDescending(item => item.id).Select(c => new Customer()
+                {
                 id = c.id,
                 code = c.code,
                 name = c.name,
@@ -137,8 +137,15 @@ namespace WebCenter.Web.Controllers
                 province = c.province,
                 city = c.city,
                 county = c.county,
-                address = c.address
-            }).ToPagedList(index, size).ToList();
+                address = c.address,
+
+                salesman = c.member1.name,
+                source = c.source,
+                source_id = c.source_id,
+                source_name = "",
+                assistant_id = c.assistant_id,
+                assistant_name = "",
+                }).ToPagedList(index, size).ToList();
 
             var totalRecord = Uof.IcustomerService.GetAll(condition)
                 .Where(nameQuery)
@@ -156,6 +163,45 @@ namespace WebCenter.Web.Controllers
                 total_size = totalRecord,
                 total_page = totalPages
             };
+
+            if (list.Count > 0)
+            {
+                var sourceIds = list.Where(l => l.source_id != null).Select(l => l.source_id).Distinct().ToList();
+                if (sourceIds.Count() > 0)
+                {
+                    var customers = Uof.IcustomerService.GetAll(c => sourceIds.Contains(c.id)).Select(c => new
+                    {
+                        id = c.id,
+                        name = c.name
+                    }).ToList();
+                    foreach (var item in customers)
+                    {
+                        var tls = list.Where(l => l.source_id == item.id).ToList();
+                        foreach (var tl in tls)
+                        {
+                            tl.source_name = item.name;
+                        }
+                    }
+                }
+
+                var memberIds = list.Where(l => l.assistant_id != null).Select(l => l.assistant_id).Distinct().ToList();
+                if (memberIds.Count > 0)
+                {
+                    var members = Uof.ImemberService.GetAll(c => memberIds.Contains(c.id)).Select(c => new
+                    {
+                        id = c.id,
+                        name = c.name
+                    }).ToList();
+                    foreach (var item in members)
+                    {
+                        var tls = list.Where(l => l.assistant_id == item.id).ToList();
+                        foreach (var tl in tls)
+                        {
+                            tl.assistant_name = item.name;
+                        }
+                    }
+                }
+            }
 
             var result = new
             {

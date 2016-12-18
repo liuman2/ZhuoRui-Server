@@ -11,6 +11,7 @@ using System.Web.Security;
 using System.Text;
 using System.Net;
 using System.Drawing;
+using System.Reflection;
 
 namespace WebCenter.Web.Controllers
 {
@@ -465,6 +466,70 @@ namespace WebCenter.Web.Controllers
                 return Json(new { ok = "验证成功" }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { error = "档案号已存在" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public FileStreamResult ExportExcel(string tableName)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                throw new Exception("您没登录");
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                throw new Exception("您没登录");
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            switch (tableName)
+            {
+                case "reg_abroad":
+                    var abroads = Uof.Ireg_abroadService.GetAll(a => a.salesman_id == userId || a.assistant_id == userId || userId == 1).OrderBy(m => m.code).Select(a => new RegAbroad()
+                    {
+                        ID = a.id,
+                        业务员 = a.member4.name,
+                        交易币别 = a.currency,
+                        公司中文名称 = a.name_cn,
+                        公司英文名称 = a.name_en,
+                        公司股东 = a.shareholder,
+                        公司董事 = a.director,
+                        其他事项 = a.description,
+                        助理 = a.member7.name,
+                        客户名称 = a.customer.name,
+                        年检客服 = a.member6.name,
+                        //成交日期 = a.date_transaction,
+                        成交金额 = a.amount_transaction,
+                        成立日期 = a.date_setup,
+                        是否开户 = a.is_open_bank,
+                        档案号 = a.code,
+                        汇率 = a.rate.ToString(),
+                        注册地区 = a.region,
+                        注册地址 = a.address,
+                        注册编号 = a.reg_no
+                    }).ToList();
+
+                    var sheet = ExportToExcel(abroads);
+                    var fileName = "境外注册.xml";
+                    var bytes = GenerateStreamFromString(sheet);
+                    return File(bytes, "application/xml", fileName);
+            }
+
+            throw new Exception("您没登录");
+        }
+
+        public static Stream GenerateStreamFromString(string s)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
 
         private void getCompanyName(PrintData printData)
