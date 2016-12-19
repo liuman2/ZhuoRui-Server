@@ -173,8 +173,12 @@ namespace WebCenter.Web.Controllers
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment,
                     date_trial = c.date_trial,
-                    date_created = c.date_created
-
+                    date_created = c.date_created,
+                    date_receipt = c.date_receipt,
+                    date_accept = c.date_accept,
+                    trial_type = c.trial_type,
+                    date_allege = c.date_allege,
+                    date_regit =c.date_regit,
                 }).ToPagedList(request.index, request.size).ToList();
 
             var totalRecord = Uof.ItrademarkService.GetAll(condition)
@@ -356,8 +360,11 @@ namespace WebCenter.Web.Controllers
                 date_trial = a.date_trial,
                 date_regit = a.date_regit,
                 date_exten = a.date_exten,
+                regit_no = a.regit_no,
                 progress = a.progress,
-
+                date_created = a.date_created,
+                trial_type = a.trial_type,
+                date_allege = a.date_allege,
                 salesman_id = a.salesman_id,
                 salesman = a.member4.name,
                 waiter_id = a.waiter_id,
@@ -413,6 +420,11 @@ namespace WebCenter.Web.Controllers
                 date_exten = a.date_exten,
                 progress = a.progress,
                 date_finish = a.date_finish,
+                regit_no = a.regit_no,
+
+                date_created = a.date_created,
+                trial_type = a.trial_type,
+                date_allege = a.date_allege,
 
                 salesman_id = a.salesman_id,
                 salesman = a.member4.name,
@@ -928,7 +940,11 @@ namespace WebCenter.Web.Controllers
                 date_receipt = r.date_receipt,
                 date_trial = r.date_trial,
                 date_regit = r.date_regit,
-                date_exten = r.date_exten
+                date_exten = r.date_exten,
+                trial_type = r.trial_type ?? "",
+                date_allege = r.date_allege,
+                exten_period = r.exten_period,
+                regit_no = r.regit_no,
             }).FirstOrDefault();
 
             return Json(p, JsonRequestBehavior.AllowGet);
@@ -957,30 +973,23 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (request.progress_type != "p")
+            if (request.progress_type == "p")
             {
-                dbtrademark.status = 4;
                 dbtrademark.date_updated = DateTime.Now;
-                dbtrademark.date_accept = request.date_accept;
                 dbtrademark.date_receipt = request.date_receipt;
+                dbtrademark.date_accept = request.date_accept;
+                dbtrademark.trial_type = request.trial_type;
                 dbtrademark.date_trial = request.date_trial;
-                dbtrademark.date_regit = request.date_regit;
-                dbtrademark.date_exten = request.date_exten;
-
-                if (dbtrademark.date_finish == null)
-                {
-                    dbtrademark.date_finish = request.date_finish ?? DateTime.Today;
-                }
+                dbtrademark.date_allege = request.date_allege;             
             }
             else
             {
-                if (dbtrademark.progress == request.progress && dbtrademark.date_finish == request.date_finish)
-                {
-                    return Json(new { success = true, message = "" }, JsonRequestBehavior.AllowGet);
-                }
+                dbtrademark.date_updated = DateTime.Now;
                 dbtrademark.status = 4;
-                dbtrademark.date_finish = request.date_finish;
-                dbtrademark.progress = request.progress;
+                dbtrademark.date_regit = request.date_regit;
+                dbtrademark.regit_no = request.regit_no;
+                dbtrademark.exten_period = request.exten_period;
+                dbtrademark.date_finish = request.date_finish ?? DateTime.Today;
             }
 
             var r = Uof.ItrademarkService.UpdateEntity(dbtrademark);
@@ -1028,7 +1037,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbtrademark.id,
                         source_name = "trademark",
                         title = "更新了订单进度",
-                        content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbtrademark.progress, dbtrademark.date_finish.Value.ToString("yyyy-MM-dd"))
+                        content = string.Format("{0}更新了进度", arrs[3])
                     });
 
                     var waitdeals = new List<waitdeal>();

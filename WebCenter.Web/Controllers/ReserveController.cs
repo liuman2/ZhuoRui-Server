@@ -18,6 +18,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Search(int index = 1, int size = 10, string name = "")
         {
+            size = 10;
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
             {

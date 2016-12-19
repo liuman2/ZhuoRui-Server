@@ -55,5 +55,9 @@ namespace WebCenter.Web
         public DateTime? date_trial { get; set; }
         public DateTime? date_regit { get; set; }
         public DateTime? date_exten { get; set; }
+        public DateTime? date_allege { get; set; }
+        public string trial_type { get; set; }
+        public string regit_no { get; set; }
+        public int exten_period { get; set; }
     }
 }

@@ -30,13 +30,6 @@ namespace WebCenter.Entities
             this.annual_exam5 = new HashSet<annual_exam>();
             this.annual_exam6 = new HashSet<annual_exam>();
             this.annual_exam7 = new HashSet<annual_exam>();
-            this.trademarks = new HashSet<trademark>();
-            this.trademarks1 = new HashSet<trademark>();
-            this.trademarks2 = new HashSet<trademark>();
-            this.trademarks3 = new HashSet<trademark>();
-            this.trademarks4 = new HashSet<trademark>();
-            this.trademarks5 = new HashSet<trademark>();
-            this.trademarks6 = new HashSet<trademark>();
             this.customers = new HashSet<customer>();
             this.customers1 = new HashSet<customer>();
             this.reg_abroad = new HashSet<reg_abroad>();
@@ -72,6 +65,13 @@ namespace WebCenter.Entities
             this.audits5 = new HashSet<audit>();
             this.audits6 = new HashSet<audit>();
             this.receipts = new HashSet<receipt>();
+            this.trademarks = new HashSet<trademark>();
+            this.trademarks1 = new HashSet<trademark>();
+            this.trademarks2 = new HashSet<trademark>();
+            this.trademarks3 = new HashSet<trademark>();
+            this.trademarks4 = new HashSet<trademark>();
+            this.trademarks5 = new HashSet<trademark>();
+            this.trademarks6 = new HashSet<trademark>();
         }
     
     
@@ -153,13 +153,6 @@ namespace WebCenter.Entities
         public virtual ICollection<annual_exam> annual_exam5 { get; set; }
         public virtual ICollection<annual_exam> annual_exam6 { get; set; }
         public virtual ICollection<annual_exam> annual_exam7 { get; set; }
-        public virtual ICollection<trademark> trademarks { get; set; }
-        public virtual ICollection<trademark> trademarks1 { get; set; }
-        public virtual ICollection<trademark> trademarks2 { get; set; }
-        public virtual ICollection<trademark> trademarks3 { get; set; }
-        public virtual ICollection<trademark> trademarks4 { get; set; }
-        public virtual ICollection<trademark> trademarks5 { get; set; }
-        public virtual ICollection<trademark> trademarks6 { get; set; }
         public virtual ICollection<customer> customers { get; set; }
         public virtual ICollection<customer> customers1 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
@@ -195,5 +188,12 @@ namespace WebCenter.Entities
         public virtual ICollection<audit> audits5 { get; set; }
         public virtual ICollection<audit> audits6 { get; set; }
         public virtual ICollection<receipt> receipts { get; set; }
+        public virtual ICollection<trademark> trademarks { get; set; }
+        public virtual ICollection<trademark> trademarks1 { get; set; }
+        public virtual ICollection<trademark> trademarks2 { get; set; }
+        public virtual ICollection<trademark> trademarks3 { get; set; }
+        public virtual ICollection<trademark> trademarks4 { get; set; }
+        public virtual ICollection<trademark> trademarks5 { get; set; }
+        public virtual ICollection<trademark> trademarks6 { get; set; }
     }
 }

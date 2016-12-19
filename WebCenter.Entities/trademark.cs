@@ -180,6 +180,23 @@ namespace WebCenter.Entities
     
         public Nullable<int> assistant_id { get; set; }
     
+    
+    
+        public Nullable<System.DateTime> date_allege { get; set; }
+    
+    
+    
+        public string trial_type { get; set; }
+    
+    
+    
+        public Nullable<int> exten_period { get; set; }
+    
+    
+    
+        public string regit_no { get; set; }
+    
+        public virtual customer customer { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }
@@ -187,6 +204,5 @@ namespace WebCenter.Entities
         public virtual member member4 { get; set; }
         public virtual member member5 { get; set; }
         public virtual member member6 { get; set; }
-        public virtual customer customer { get; set; }
     }
 }

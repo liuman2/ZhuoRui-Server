@@ -44,8 +44,7 @@
         <EntityTypeShape EntityType="DataCenter.Entities.bank" Width="1.5" PointX="5.375" PointY="17.5" />
         <EntityTypeShape EntityType="DataCenter.Entities.leave" Width="1.5" PointX="7.375" PointY="18.25" />
         <EntityTypeShape EntityType="DataCenter.Entities.notice" Width="1.5" PointX="9.375" PointY="18.375" />
-        <EntityTypeShape EntityType="DataCenter.Entities.annual_exam" Width="1.5" PointX="18.875" PointY="13" />
-        <EntityTypeShape EntityType="DataCenter.Entities.trademark" Width="1.5" PointX="21.125" PointY="12.875" />
+        <EntityTypeShape EntityType="DataCenter.Entities.annual_exam" Width="1.5" PointX="18" PointY="13" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_accountant" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_finance_reviewer" />
@@ -54,13 +53,6 @@
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_waiter" />
         <AssociationConnector Association="DataCenter.Entities.fk_annual_exam_assistant_id" />
-        <AssociationConnector Association="DataCenter.Entities.fk_trademark_assistant_id" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_creator" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_finance_reviewer" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_manager" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_salesman" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_submit_reviewer" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_waiter" />
         <EntityTypeShape EntityType="DataCenter.Entities.customer" Width="1.5" PointX="13.625" PointY="3.25" />
         <AssociationConnector Association="DataCenter.Entities.annual_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.bank_account_customer" />
@@ -69,7 +61,6 @@
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.timeline_ibfk_customer" />
-        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_customer" />
         <EntityTypeShape EntityType="DataCenter.Entities.patent" Width="1.5" PointX="21.875" PointY="4.625" />
         <EntityTypeShape EntityType="DataCenter.Entities.reg_abroad" Width="1.5" PointX="24.125" PointY="11.625" />
         <EntityTypeShape EntityType="DataCenter.Entities.reg_internal" Width="1.5" PointX="27.125" PointY="11.25" />
@@ -116,6 +107,15 @@
         <AssociationConnector Association="DataCenter.Entities.fk_audit_assistant_id" />
         <EntityTypeShape EntityType="DataCenter.Entities.receipt" Width="1.5" PointX="13.625" PointY="31.875" />
         <AssociationConnector Association="DataCenter.Entities.receipt_ibfk_creator" />
+        <EntityTypeShape EntityType="DataCenter.Entities.trademark" Width="1.5" PointX="24.875" PointY="1.5" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_customer" />
+        <AssociationConnector Association="DataCenter.Entities.fk_trademark_assistant_id" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_creator" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_finance_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_manager" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_salesman" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_submit_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_waiter" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -718,6 +718,10 @@
           <Property Name="is_annual" Type="int" />
           <Property Name="annual_date" Type="datetime" Precision="0" />
           <Property Name="assistant_id" Type="int" />
+          <Property Name="date_allege" Type="datetime" Precision="0" />
+          <Property Name="trial_type" Type="varchar" MaxLength="10" />
+          <Property Name="exten_period" Type="int" />
+          <Property Name="regit_no" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="waitdeal">
           <Key>
@@ -2003,7 +2007,6 @@
           <EntitySet Name="leaves" EntityType="DataCenter.Entities.leave" />
           <EntitySet Name="notices" EntityType="DataCenter.Entities.notice" />
           <EntitySet Name="annual_exam" EntityType="DataCenter.Entities.annual_exam" />
-          <EntitySet Name="trademarks" EntityType="DataCenter.Entities.trademark" />
           <AssociationSet Name="annual_ibfk_accountant" Association="DataCenter.Entities.annual_ibfk_accountant">
             <End Role="member" EntitySet="members" />
             <End Role="annual_exam" EntitySet="annual_exam" />
@@ -2036,34 +2039,6 @@
             <End Role="member" EntitySet="members" />
             <End Role="annual_exam" EntitySet="annual_exam" />
           </AssociationSet>
-          <AssociationSet Name="fk_trademark_assistant_id" Association="DataCenter.Entities.fk_trademark_assistant_id">
-            <End Role="member" EntitySet="members" />
-            <End Role="trademark" EntitySet="trademarks" />
-          </AssociationSet>
-          <AssociationSet Name="trademark_ibfk_creator" Association="DataCenter.Entities.trademark_ibfk_creator">
-            <End Role="member" EntitySet="members" />
-            <End Role="trademark" EntitySet="trademarks" />
-          </AssociationSet>
-          <AssociationSet Name="trademark_ibfk_finance_reviewer" Association="DataCenter.Entities.trademark_ibfk_finance_reviewer">
-            <End Role="member" EntitySet="members" />
-            <End Role="trademark" EntitySet="trademarks" />
-          </AssociationSet>
-          <AssociationSet Name="trademark_ibfk_manager" Association="DataCenter.Entities.trademark_ibfk_manager">
-            <End Role="member" EntitySet="members" />
-            <End Role="trademark" EntitySet="trademarks" />
-          </AssociationSet>
-          <AssociationSet Name="trademark_ibfk_salesman" Association="DataCenter.Entities.trademark_ibfk_salesman">
-            <End Role="member" EntitySet="members" />
-            <End Role="trademark" EntitySet="trademarks" />
-          </AssociationSet>
-          <AssociationSet Name="trademark_ibfk_submit_reviewer" Association="DataCenter.Entities.trademark_ibfk_submit_reviewer">
-            <End Role="member" EntitySet="members" />
-            <End Role="trademark" EntitySet="trademarks" />
-          </AssociationSet>
-          <AssociationSet Name="trademark_ibfk_waiter" Association="DataCenter.Entities.trademark_ibfk_waiter">
-            <End Role="member" EntitySet="members" />
-            <End Role="trademark" EntitySet="trademarks" />
-          </AssociationSet>
           <EntitySet Name="customers" EntityType="DataCenter.Entities.customer" />
           <AssociationSet Name="annual_ibfk_customer" Association="DataCenter.Entities.annual_ibfk_customer">
             <End Role="customer" EntitySet="customers" />
@@ -2092,10 +2067,6 @@
           <AssociationSet Name="timeline_ibfk_customer" Association="DataCenter.Entities.timeline_ibfk_customer">
             <End Role="customer" EntitySet="customers" />
             <End Role="customer_timeline" EntitySet="customer_timeline" />
-          </AssociationSet>
-          <AssociationSet Name="trademark_ibfk_customer" Association="DataCenter.Entities.trademark_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="trademark" EntitySet="trademarks" />
           </AssociationSet>
           <EntitySet Name="patents" EntityType="DataCenter.Entities.patent" />
           <EntitySet Name="reg_abroad" EntityType="DataCenter.Entities.reg_abroad" />
@@ -2259,6 +2230,39 @@
           <AssociationSet Name="receipt_ibfk_creator" Association="DataCenter.Entities.receipt_ibfk_creator">
             <End Role="member" EntitySet="members" />
             <End Role="receipt" EntitySet="receipts" />
+          </AssociationSet>
+          <EntitySet Name="trademarks" EntityType="DataCenter.Entities.trademark" />
+          <AssociationSet Name="trademark_ibfk_customer" Association="DataCenter.Entities.trademark_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="trademark" EntitySet="trademarks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_trademark_assistant_id" Association="DataCenter.Entities.fk_trademark_assistant_id">
+            <End Role="member" EntitySet="members" />
+            <End Role="trademark" EntitySet="trademarks" />
+          </AssociationSet>
+          <AssociationSet Name="trademark_ibfk_creator" Association="DataCenter.Entities.trademark_ibfk_creator">
+            <End Role="member" EntitySet="members" />
+            <End Role="trademark" EntitySet="trademarks" />
+          </AssociationSet>
+          <AssociationSet Name="trademark_ibfk_finance_reviewer" Association="DataCenter.Entities.trademark_ibfk_finance_reviewer">
+            <End Role="member" EntitySet="members" />
+            <End Role="trademark" EntitySet="trademarks" />
+          </AssociationSet>
+          <AssociationSet Name="trademark_ibfk_manager" Association="DataCenter.Entities.trademark_ibfk_manager">
+            <End Role="member" EntitySet="members" />
+            <End Role="trademark" EntitySet="trademarks" />
+          </AssociationSet>
+          <AssociationSet Name="trademark_ibfk_salesman" Association="DataCenter.Entities.trademark_ibfk_salesman">
+            <End Role="member" EntitySet="members" />
+            <End Role="trademark" EntitySet="trademarks" />
+          </AssociationSet>
+          <AssociationSet Name="trademark_ibfk_submit_reviewer" Association="DataCenter.Entities.trademark_ibfk_submit_reviewer">
+            <End Role="member" EntitySet="members" />
+            <End Role="trademark" EntitySet="trademarks" />
+          </AssociationSet>
+          <AssociationSet Name="trademark_ibfk_waiter" Association="DataCenter.Entities.trademark_ibfk_waiter">
+            <End Role="member" EntitySet="members" />
+            <End Role="trademark" EntitySet="trademarks" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
@@ -2516,13 +2520,6 @@
           <NavigationProperty Name="annual_exam5" Relationship="DataCenter.Entities.annual_ibfk_submit_reviewer" FromRole="member" ToRole="annual_exam" />
           <NavigationProperty Name="annual_exam6" Relationship="DataCenter.Entities.annual_ibfk_waiter" FromRole="member" ToRole="annual_exam" />
           <NavigationProperty Name="annual_exam7" Relationship="DataCenter.Entities.fk_annual_exam_assistant_id" FromRole="member" ToRole="annual_exam" />
-          <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.fk_trademark_assistant_id" FromRole="member" ToRole="trademark" />
-          <NavigationProperty Name="trademarks1" Relationship="DataCenter.Entities.trademark_ibfk_creator" FromRole="member" ToRole="trademark" />
-          <NavigationProperty Name="trademarks2" Relationship="DataCenter.Entities.trademark_ibfk_finance_reviewer" FromRole="member" ToRole="trademark" />
-          <NavigationProperty Name="trademarks3" Relationship="DataCenter.Entities.trademark_ibfk_manager" FromRole="member" ToRole="trademark" />
-          <NavigationProperty Name="trademarks4" Relationship="DataCenter.Entities.trademark_ibfk_salesman" FromRole="member" ToRole="trademark" />
-          <NavigationProperty Name="trademarks5" Relationship="DataCenter.Entities.trademark_ibfk_submit_reviewer" FromRole="member" ToRole="trademark" />
-          <NavigationProperty Name="trademarks6" Relationship="DataCenter.Entities.trademark_ibfk_waiter" FromRole="member" ToRole="trademark" />
           <NavigationProperty Name="customers" Relationship="DataCenter.Entities.member_ibfk_creator" FromRole="member" ToRole="customer" />
           <NavigationProperty Name="customers1" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="member" ToRole="customer" />
           <NavigationProperty Name="reg_abroad" Relationship="DataCenter.Entities.abroad_ibfk_creator" FromRole="member" ToRole="reg_abroad" />
@@ -2558,6 +2555,13 @@
           <NavigationProperty Name="audits5" Relationship="DataCenter.Entities.audit_ibfk_submit_reviewer" FromRole="member" ToRole="audit" />
           <NavigationProperty Name="audits6" Relationship="DataCenter.Entities.fk_audit_assistant_id" FromRole="member" ToRole="audit" />
           <NavigationProperty Name="receipts" Relationship="DataCenter.Entities.receipt_ibfk_creator" FromRole="member" ToRole="receipt" />
+          <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.fk_trademark_assistant_id" FromRole="member" ToRole="trademark" />
+          <NavigationProperty Name="trademarks1" Relationship="DataCenter.Entities.trademark_ibfk_creator" FromRole="member" ToRole="trademark" />
+          <NavigationProperty Name="trademarks2" Relationship="DataCenter.Entities.trademark_ibfk_finance_reviewer" FromRole="member" ToRole="trademark" />
+          <NavigationProperty Name="trademarks3" Relationship="DataCenter.Entities.trademark_ibfk_manager" FromRole="member" ToRole="trademark" />
+          <NavigationProperty Name="trademarks4" Relationship="DataCenter.Entities.trademark_ibfk_salesman" FromRole="member" ToRole="trademark" />
+          <NavigationProperty Name="trademarks5" Relationship="DataCenter.Entities.trademark_ibfk_submit_reviewer" FromRole="member" ToRole="trademark" />
+          <NavigationProperty Name="trademarks6" Relationship="DataCenter.Entities.trademark_ibfk_waiter" FromRole="member" ToRole="trademark" />
           </EntityType>
         <Association Name="member_ibfk_3">
           <End Type="DataCenter.Entities.area" Role="area" Multiplicity="0..1" />
@@ -2874,60 +2878,6 @@
           <NavigationProperty Name="member7" Relationship="DataCenter.Entities.fk_annual_exam_assistant_id" FromRole="annual_exam" ToRole="member" />
           <NavigationProperty Name="customer" Relationship="DataCenter.Entities.annual_ibfk_customer" FromRole="annual_exam" ToRole="customer" />
         </EntityType>
-        <EntityType Name="trademark">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="customer_id" Type="Int32" />
-          <Property Name="code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="applicant" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="trademark_type" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="region" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="reg_mode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="date_transaction" Type="DateTime" />
-          <Property Name="amount_transaction" Type="Single" />
-          <Property Name="rate" Type="Single" />
-          <Property Name="currency" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="date_receipt" Type="DateTime" />
-          <Property Name="date_accept" Type="DateTime" />
-          <Property Name="date_trial" Type="DateTime" />
-          <Property Name="date_regit" Type="DateTime" />
-          <Property Name="date_exten" Type="DateTime" />
-          <Property Name="progress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="status" Type="SByte" />
-          <Property Name="finance_reviewer_id" Type="Int32" />
-          <Property Name="finance_review_date" Type="DateTime" />
-          <Property Name="finance_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="submit_reviewer_id" Type="Int32" />
-          <Property Name="submit_review_date" Type="DateTime" />
-          <Property Name="submit_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="review_status" Type="Int32" />
-          <Property Name="date_finish" Type="DateTime" />
-          <Property Name="creator_id" Type="Int32" />
-          <Property Name="salesman_id" Type="Int32" />
-          <Property Name="waiter_id" Type="Int32" />
-          <Property Name="manager_id" Type="Int32" />
-          <Property Name="organization_id" Type="Int32" />
-          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-          <Property Name="annual_year" Type="Int32" />
-          <Property Name="is_annual" Type="Int32" />
-          <Property Name="annual_date" Type="DateTime" />
-          <Property Name="assistant_id" Type="Int32" />
-          <NavigationProperty Name="member" Relationship="DataCenter.Entities.fk_trademark_assistant_id" FromRole="trademark" ToRole="member" />
-          <NavigationProperty Name="member1" Relationship="DataCenter.Entities.trademark_ibfk_creator" FromRole="trademark" ToRole="member" />
-          <NavigationProperty Name="member2" Relationship="DataCenter.Entities.trademark_ibfk_finance_reviewer" FromRole="trademark" ToRole="member" />
-          <NavigationProperty Name="member3" Relationship="DataCenter.Entities.trademark_ibfk_manager" FromRole="trademark" ToRole="member" />
-          <NavigationProperty Name="member4" Relationship="DataCenter.Entities.trademark_ibfk_salesman" FromRole="trademark" ToRole="member" />
-          <NavigationProperty Name="member5" Relationship="DataCenter.Entities.trademark_ibfk_submit_reviewer" FromRole="trademark" ToRole="member" />
-          <NavigationProperty Name="member6" Relationship="DataCenter.Entities.trademark_ibfk_waiter" FromRole="trademark" ToRole="member" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="trademark" ToRole="customer" />
-        </EntityType>
         <Association Name="annual_ibfk_accountant">
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
           <End Type="DataCenter.Entities.annual_exam" Role="annual_exam" Multiplicity="*" />
@@ -3024,90 +2974,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_trademark_assistant_id">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="trademark">
-              <PropertyRef Name="assistant_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="trademark_ibfk_creator">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="trademark">
-              <PropertyRef Name="creator_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="trademark_ibfk_finance_reviewer">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="trademark">
-              <PropertyRef Name="finance_reviewer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="trademark_ibfk_manager">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="trademark">
-              <PropertyRef Name="manager_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="trademark_ibfk_salesman">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="trademark">
-              <PropertyRef Name="salesman_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="trademark_ibfk_submit_reviewer">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="trademark">
-              <PropertyRef Name="submit_reviewer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="trademark_ibfk_waiter">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="trademark">
-              <PropertyRef Name="waiter_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="customer">
           <Key>
             <PropertyRef Name="id" />
@@ -3146,11 +3012,11 @@
           <NavigationProperty Name="member" Relationship="DataCenter.Entities.member_ibfk_creator" FromRole="customer" ToRole="member" />
           <NavigationProperty Name="member1" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="customer" ToRole="member" />
           <NavigationProperty Name="customer_timeline" Relationship="DataCenter.Entities.timeline_ibfk_customer" FromRole="customer" ToRole="customer_timeline" />
-          <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="customer" ToRole="trademark" />
           <NavigationProperty Name="reg_abroad" Relationship="DataCenter.Entities.abroad_ibfk_customer" FromRole="customer" ToRole="reg_abroad" />
           <NavigationProperty Name="patents" Relationship="DataCenter.Entities.patent_ibfk_customer" FromRole="customer" ToRole="patent" />
           <NavigationProperty Name="reg_internal" Relationship="DataCenter.Entities.reg_internal_ibfk_customer" FromRole="customer" ToRole="reg_internal" />
           <NavigationProperty Name="audits" Relationship="DataCenter.Entities.audit_ibfk_customer" FromRole="customer" ToRole="audit" />
+          <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="customer" ToRole="trademark" />
         </EntityType>
         <Association Name="annual_ibfk_customer">
           <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
@@ -3232,18 +3098,6 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="customer_timeline">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="trademark_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="trademark">
               <PropertyRef Name="customer_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -4011,6 +3865,160 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="trademark">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="customer_id" Type="Int32" />
+          <Property Name="code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="applicant" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="trademark_type" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="region" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="reg_mode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="date_transaction" Type="DateTime" />
+          <Property Name="amount_transaction" Type="Single" />
+          <Property Name="rate" Type="Single" />
+          <Property Name="currency" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="date_receipt" Type="DateTime" />
+          <Property Name="date_accept" Type="DateTime" />
+          <Property Name="date_trial" Type="DateTime" />
+          <Property Name="date_regit" Type="DateTime" />
+          <Property Name="date_exten" Type="DateTime" />
+          <Property Name="progress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="SByte" />
+          <Property Name="finance_reviewer_id" Type="Int32" />
+          <Property Name="finance_review_date" Type="DateTime" />
+          <Property Name="finance_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="submit_reviewer_id" Type="Int32" />
+          <Property Name="submit_review_date" Type="DateTime" />
+          <Property Name="submit_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="review_status" Type="Int32" />
+          <Property Name="date_finish" Type="DateTime" />
+          <Property Name="creator_id" Type="Int32" />
+          <Property Name="salesman_id" Type="Int32" />
+          <Property Name="waiter_id" Type="Int32" />
+          <Property Name="manager_id" Type="Int32" />
+          <Property Name="organization_id" Type="Int32" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <Property Name="annual_year" Type="Int32" />
+          <Property Name="is_annual" Type="Int32" />
+          <Property Name="annual_date" Type="DateTime" />
+          <Property Name="assistant_id" Type="Int32" />
+          <Property Name="date_allege" Type="DateTime" />
+          <Property Name="trial_type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="exten_period" Type="Int32" />
+          <Property Name="regit_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="trademark" ToRole="customer" />
+          <NavigationProperty Name="member" Relationship="DataCenter.Entities.fk_trademark_assistant_id" FromRole="trademark" ToRole="member" />
+          <NavigationProperty Name="member1" Relationship="DataCenter.Entities.trademark_ibfk_creator" FromRole="trademark" ToRole="member" />
+          <NavigationProperty Name="member2" Relationship="DataCenter.Entities.trademark_ibfk_finance_reviewer" FromRole="trademark" ToRole="member" />
+          <NavigationProperty Name="member3" Relationship="DataCenter.Entities.trademark_ibfk_manager" FromRole="trademark" ToRole="member" />
+          <NavigationProperty Name="member4" Relationship="DataCenter.Entities.trademark_ibfk_salesman" FromRole="trademark" ToRole="member" />
+          <NavigationProperty Name="member5" Relationship="DataCenter.Entities.trademark_ibfk_submit_reviewer" FromRole="trademark" ToRole="member" />
+          <NavigationProperty Name="member6" Relationship="DataCenter.Entities.trademark_ibfk_waiter" FromRole="trademark" ToRole="member" />
+        </EntityType>
+        <Association Name="trademark_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_trademark_assistant_id">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="assistant_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="trademark_ibfk_creator">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="creator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="trademark_ibfk_finance_reviewer">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="finance_reviewer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="trademark_ibfk_manager">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="manager_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="trademark_ibfk_salesman">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="salesman_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="trademark_ibfk_submit_reviewer">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="submit_reviewer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="trademark_ibfk_waiter">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="waiter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4440,53 +4448,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="trademarks">
-            <EntityTypeMapping TypeName="DataCenter.Entities.trademark">
-              <MappingFragment StoreEntitySet="trademark">
-                <ScalarProperty Name="assistant_id" ColumnName="assistant_id" />
-                <ScalarProperty Name="annual_date" ColumnName="annual_date" />
-                <ScalarProperty Name="is_annual" ColumnName="is_annual" />
-                <ScalarProperty Name="annual_year" ColumnName="annual_year" />
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
-                <ScalarProperty Name="manager_id" ColumnName="manager_id" />
-                <ScalarProperty Name="waiter_id" ColumnName="waiter_id" />
-                <ScalarProperty Name="salesman_id" ColumnName="salesman_id" />
-                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
-                <ScalarProperty Name="date_finish" ColumnName="date_finish" />
-                <ScalarProperty Name="review_status" ColumnName="review_status" />
-                <ScalarProperty Name="submit_review_moment" ColumnName="submit_review_moment" />
-                <ScalarProperty Name="submit_review_date" ColumnName="submit_review_date" />
-                <ScalarProperty Name="submit_reviewer_id" ColumnName="submit_reviewer_id" />
-                <ScalarProperty Name="finance_review_moment" ColumnName="finance_review_moment" />
-                <ScalarProperty Name="finance_review_date" ColumnName="finance_review_date" />
-                <ScalarProperty Name="finance_reviewer_id" ColumnName="finance_reviewer_id" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="progress" ColumnName="progress" />
-                <ScalarProperty Name="date_exten" ColumnName="date_exten" />
-                <ScalarProperty Name="date_regit" ColumnName="date_regit" />
-                <ScalarProperty Name="date_trial" ColumnName="date_trial" />
-                <ScalarProperty Name="date_accept" ColumnName="date_accept" />
-                <ScalarProperty Name="date_receipt" ColumnName="date_receipt" />
-                <ScalarProperty Name="currency" ColumnName="currency" />
-                <ScalarProperty Name="rate" ColumnName="rate" />
-                <ScalarProperty Name="amount_transaction" ColumnName="amount_transaction" />
-                <ScalarProperty Name="date_transaction" ColumnName="date_transaction" />
-                <ScalarProperty Name="reg_mode" ColumnName="reg_mode" />
-                <ScalarProperty Name="region" ColumnName="region" />
-                <ScalarProperty Name="trademark_type" ColumnName="trademark_type" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="applicant" ColumnName="applicant" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="type" ColumnName="type" />
-                <ScalarProperty Name="code" ColumnName="code" />
-                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="customers">
             <EntityTypeMapping TypeName="DataCenter.Entities.customer">
               <MappingFragment StoreEntitySet="customer">
@@ -4779,6 +4740,57 @@
                 <ScalarProperty Name="order_id" ColumnName="order_id" />
                 <ScalarProperty Name="order_source" ColumnName="order_source" />
                 <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="trademarks">
+            <EntityTypeMapping TypeName="DataCenter.Entities.trademark">
+              <MappingFragment StoreEntitySet="trademark">
+                <ScalarProperty Name="regit_no" ColumnName="regit_no" />
+                <ScalarProperty Name="exten_period" ColumnName="exten_period" />
+                <ScalarProperty Name="trial_type" ColumnName="trial_type" />
+                <ScalarProperty Name="date_allege" ColumnName="date_allege" />
+                <ScalarProperty Name="assistant_id" ColumnName="assistant_id" />
+                <ScalarProperty Name="annual_date" ColumnName="annual_date" />
+                <ScalarProperty Name="is_annual" ColumnName="is_annual" />
+                <ScalarProperty Name="annual_year" ColumnName="annual_year" />
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
+                <ScalarProperty Name="manager_id" ColumnName="manager_id" />
+                <ScalarProperty Name="waiter_id" ColumnName="waiter_id" />
+                <ScalarProperty Name="salesman_id" ColumnName="salesman_id" />
+                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
+                <ScalarProperty Name="date_finish" ColumnName="date_finish" />
+                <ScalarProperty Name="review_status" ColumnName="review_status" />
+                <ScalarProperty Name="submit_review_moment" ColumnName="submit_review_moment" />
+                <ScalarProperty Name="submit_review_date" ColumnName="submit_review_date" />
+                <ScalarProperty Name="submit_reviewer_id" ColumnName="submit_reviewer_id" />
+                <ScalarProperty Name="finance_review_moment" ColumnName="finance_review_moment" />
+                <ScalarProperty Name="finance_review_date" ColumnName="finance_review_date" />
+                <ScalarProperty Name="finance_reviewer_id" ColumnName="finance_reviewer_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="progress" ColumnName="progress" />
+                <ScalarProperty Name="date_exten" ColumnName="date_exten" />
+                <ScalarProperty Name="date_regit" ColumnName="date_regit" />
+                <ScalarProperty Name="date_trial" ColumnName="date_trial" />
+                <ScalarProperty Name="date_accept" ColumnName="date_accept" />
+                <ScalarProperty Name="date_receipt" ColumnName="date_receipt" />
+                <ScalarProperty Name="currency" ColumnName="currency" />
+                <ScalarProperty Name="rate" ColumnName="rate" />
+                <ScalarProperty Name="amount_transaction" ColumnName="amount_transaction" />
+                <ScalarProperty Name="date_transaction" ColumnName="date_transaction" />
+                <ScalarProperty Name="reg_mode" ColumnName="reg_mode" />
+                <ScalarProperty Name="region" ColumnName="region" />
+                <ScalarProperty Name="trademark_type" ColumnName="trademark_type" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="applicant" ColumnName="applicant" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
