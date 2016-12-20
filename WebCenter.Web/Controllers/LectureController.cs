@@ -241,7 +241,29 @@ namespace WebCenter.Web.Controllers
                 atts = Uof.IattachmentService.GetAll(a => a.source_id == _l.id && a.source_name == "lecture").ToList();
             }
 
-            return Json( new { lect = _l, attachments = atts }, JsonRequestBehavior.AllowGet);
+            var lecturePeriod = GetSettingByKey("LECTURE_PERIOD");
+            if (lecturePeriod == null || _l.date_at == null)
+            {
+                return Json(new
+                {
+                    lect = _l,
+                    attachments = atts,
+                    period = new
+                    {
+                        disabled = false,
+                        days = 0
+                    }
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            int period = 0;
+            int.TryParse(lecturePeriod.value, out period);
+
+            var limittedDate = _l.date_at.Value.AddDays(period);
+            var disabled = DateTime.Today > limittedDate;
+            
+
+            return Json(new { lect = _l, attachments = atts, period = new { disabled = disabled, days = period } }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetDetails(int id, int size, int index)

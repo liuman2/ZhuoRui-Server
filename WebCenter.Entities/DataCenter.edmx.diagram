@@ -107,7 +107,7 @@
         <AssociationConnector Association="DataCenter.Entities.fk_audit_assistant_id" />
         <EntityTypeShape EntityType="DataCenter.Entities.receipt" Width="1.5" PointX="13.625" PointY="31.875" />
         <AssociationConnector Association="DataCenter.Entities.receipt_ibfk_creator" />
-        <EntityTypeShape EntityType="DataCenter.Entities.trademark" Width="1.5" PointX="24.875" PointY="1.5" />
+        <EntityTypeShape EntityType="DataCenter.Entities.trademark" Width="1.5" PointX="24.875" PointY="1.75" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.fk_trademark_assistant_id" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_creator" />

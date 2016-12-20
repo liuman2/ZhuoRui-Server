@@ -404,6 +404,17 @@ namespace WebCenter.Web.Controllers
             return deptIds;
         }
 
+        public setting GetSettingByKey(string key)
+        {
+            var dbSetting = Uof.IsettingService.GetAll(s => s.name == key).FirstOrDefault();
+            if (dbSetting == null)
+            {
+                return null;
+            }
+
+            return dbSetting;
+        }
+
         private void GetNextChildrenDept(int parentId, List<DepartmentIds> allDept, List<int> deptIds)
         {
             var ids = allDept.Where(a => a.parent_id == parentId).Select(a => a.id).ToList();

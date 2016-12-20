@@ -59,5 +59,10 @@ namespace WebCenter.Web
         public string trial_type { get; set; }
         public string regit_no { get; set; }
         public int exten_period { get; set; }
+
+        public string receipt_memo { get; set; }
+        public string accept_memo { get; set; }
+        public string trial_memo { get; set; }
+        public string allege_memo { get; set; }
     }
 }

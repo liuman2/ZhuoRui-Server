@@ -365,6 +365,12 @@ namespace WebCenter.Web.Controllers
                 date_created = a.date_created,
                 trial_type = a.trial_type,
                 date_allege = a.date_allege,
+
+                receipt_memo = a.receipt_memo,
+                accept_memo = a.accept_memo,
+                trial_memo = a.trial_memo,
+                allege_memo = a.allege_memo,
+
                 salesman_id = a.salesman_id,
                 salesman = a.member4.name,
                 waiter_id = a.waiter_id,
@@ -421,6 +427,11 @@ namespace WebCenter.Web.Controllers
                 progress = a.progress,
                 date_finish = a.date_finish,
                 regit_no = a.regit_no,
+
+                receipt_memo = a.receipt_memo,
+                accept_memo = a.accept_memo,
+                trial_memo = a.trial_memo,
+                allege_memo = a.allege_memo,
 
                 date_created = a.date_created,
                 trial_type = a.trial_type,
@@ -945,6 +956,10 @@ namespace WebCenter.Web.Controllers
                 date_allege = r.date_allege,
                 exten_period = r.exten_period,
                 regit_no = r.regit_no,
+                receipt_memo = r.receipt_memo,
+                accept_memo = r.accept_memo,
+                trial_memo = r.trial_memo,
+                allege_memo = r.allege_memo,
             }).FirstOrDefault();
 
             return Json(p, JsonRequestBehavior.AllowGet);
@@ -980,7 +995,11 @@ namespace WebCenter.Web.Controllers
                 dbtrademark.date_accept = request.date_accept;
                 dbtrademark.trial_type = request.trial_type;
                 dbtrademark.date_trial = request.date_trial;
-                dbtrademark.date_allege = request.date_allege;             
+                dbtrademark.date_allege = request.date_allege;
+                dbtrademark.receipt_memo = request.receipt_memo;
+                dbtrademark.accept_memo = request.accept_memo;
+                dbtrademark.trial_memo = request.trial_memo;
+                dbtrademark.allege_memo = request.allege_memo;            
             }
             else
             {

@@ -722,6 +722,10 @@
           <Property Name="trial_type" Type="varchar" MaxLength="10" />
           <Property Name="exten_period" Type="int" />
           <Property Name="regit_no" Type="varchar" MaxLength="100" />
+          <Property Name="receipt_memo" Type="varchar" MaxLength="60" />
+          <Property Name="accept_memo" Type="varchar" MaxLength="60" />
+          <Property Name="trial_memo" Type="varchar" MaxLength="60" />
+          <Property Name="allege_memo" Type="varchar" MaxLength="60" />
         </EntityType>
         <EntityType Name="waitdeal">
           <Key>
@@ -3914,6 +3918,10 @@
           <Property Name="trial_type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="exten_period" Type="Int32" />
           <Property Name="regit_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="receipt_memo" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="accept_memo" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="trial_memo" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="allege_memo" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="customer" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="trademark" ToRole="customer" />
           <NavigationProperty Name="member" Relationship="DataCenter.Entities.fk_trademark_assistant_id" FromRole="trademark" ToRole="member" />
           <NavigationProperty Name="member1" Relationship="DataCenter.Entities.trademark_ibfk_creator" FromRole="trademark" ToRole="member" />
@@ -4747,6 +4755,10 @@
           <EntitySetMapping Name="trademarks">
             <EntityTypeMapping TypeName="DataCenter.Entities.trademark">
               <MappingFragment StoreEntitySet="trademark">
+                <ScalarProperty Name="allege_memo" ColumnName="allege_memo" />
+                <ScalarProperty Name="trial_memo" ColumnName="trial_memo" />
+                <ScalarProperty Name="accept_memo" ColumnName="accept_memo" />
+                <ScalarProperty Name="receipt_memo" ColumnName="receipt_memo" />
                 <ScalarProperty Name="regit_no" ColumnName="regit_no" />
                 <ScalarProperty Name="exten_period" ColumnName="exten_period" />
                 <ScalarProperty Name="trial_type" ColumnName="trial_type" />

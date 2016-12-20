@@ -3,4 +3,9 @@ call AddColumnUnlessExists(Database(), 'trademark', 'trial_type', 'varchar(10) D
 call AddColumnUnlessExists(Database(), 'trademark', 'exten_period', 'int(11) DEFAULT NULL COMMENT "续展周期"');
 call AddColumnUnlessExists(Database(), 'trademark', 'regit_no', 'varchar(100) DEFAULT NULL COMMENT "注册号"');
 
+call AddColumnUnlessExists(Database(), 'trademark', 'receipt_memo', 'varchar(60) DEFAULT NULL COMMENT "注册号"');
+call AddColumnUnlessExists(Database(), 'trademark', 'accept_memo', 'varchar(60) DEFAULT NULL COMMENT "注册号"');
+call AddColumnUnlessExists(Database(), 'trademark', 'trial_memo', 'varchar(60) DEFAULT NULL COMMENT "注册号"');
+call AddColumnUnlessExists(Database(), 'trademark', 'allege_memo', 'varchar(60) DEFAULT NULL COMMENT "注册号"');
 
+INSERT INTO `settings` VALUES ('12', 'LECTURE_PERIOD', 3, null);

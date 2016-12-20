@@ -196,6 +196,22 @@ namespace WebCenter.Entities
     
         public string regit_no { get; set; }
     
+    
+    
+        public string receipt_memo { get; set; }
+    
+    
+    
+        public string accept_memo { get; set; }
+    
+    
+    
+        public string trial_memo { get; set; }
+    
+    
+    
+        public string allege_memo { get; set; }
+    
         public virtual customer customer { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
