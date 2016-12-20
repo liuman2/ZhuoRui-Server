@@ -100,37 +100,43 @@ namespace WebCenter.Web.Controllers
             if (list.Count > 0)
             {
                 var sourceIds = list.Where(l => l.source_id != null).Select(l => l.source_id).Distinct().ToList();
-                if (sourceIds.Count > 0)
+                if (sourceIds != null && sourceIds.Count > 0)
                 {
                     var customers = Uof.IcustomerService.GetAll(c => sourceIds.Contains(c.id)).Select(c => new
                     {
                         id = c.id,
                         name = c.name
                     }).ToList();
-                    foreach (var item in customers)
+                    if (customers!= null && customers.Count() > 0)
                     {
-                        var tls = list.Where(l => l.source_id.Value == item.id).ToList();
-                        foreach (var tl in tls)
+                        foreach (var item in customers)
                         {
-                            tl.source_name = item.name;
+                            var tls = list.Where(l => l.source_id == item.id).ToList();
+                            foreach (var tl in tls)
+                            {
+                                tl.source_name = item.name;
+                            }
                         }
-                    }
+                    }                    
                 }
 
                 var memberIds = list.Where(l => l.assistant_id != null).Select(l => l.assistant_id).Distinct().ToList();
-                if (memberIds.Count > 0)
+                if (memberIds != null && memberIds.Count > 0)
                 {
                     var members = Uof.ImemberService.GetAll(c => memberIds.Contains(c.id)).Select(c => new
                     {
                         id = c.id,
                         name = c.name
                     }).ToList();
-                    foreach (var item in members)
+                    if (members!= null && members.Count > 0)
                     {
-                        var tls = list.Where(l => l.assistant_id.Value == item.id).ToList();
-                        foreach (var tl in tls)
+                        foreach (var item in members)
                         {
-                            tl.assistant_name = item.name;
+                            var tls = list.Where(l => l.assistant_id == item.id).ToList();
+                            foreach (var tl in tls)
+                            {
+                                tl.assistant_name = item.name;
+                            }
                         }
                     }
                 }
