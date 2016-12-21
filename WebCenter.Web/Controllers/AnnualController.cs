@@ -89,9 +89,13 @@ namespace WebCenter.Web.Controllers
             var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
             var hasDepart = ops.Where(o => o == "2").FirstOrDefault();
 
+            var abroadWarningMonth = GetSettingByKey("ABROAD_WARN_MONTH");
+            var abroadMonth = 2;
+            int.TryParse(abroadWarningMonth.value, out abroadMonth);
+
             var items = new List<AnnualWarning>();
             var nowYear = DateTime.Now.Year;
-            var Month1 = DateTime.Now.AddMonths(2).Month; // DateTime.Now.AddMonths(-13).Month;
+            var Month1 = DateTime.Now.AddMonths(abroadMonth).Month; // DateTime.Now.AddMonths(-13).Month;
             var Month2 = DateTime.Now.Month;
             var Month3 = DateTime.Now.AddMonths(1).Month;
 
@@ -108,37 +112,6 @@ namespace WebCenter.Web.Controllers
                 customerQuery1 = c => (c.customer_id == customer_id);
             }
 
-            //Expression<Func<reg_abroad, bool>> userQuery1 = c => true;
-            //if (hasInspect == null)
-            //{
-            //    if (hasCompany == null)
-            //    {
-            //        if (hasDepart != null)
-            //        {
-            //            userQuery1 = c => c.organization_id == deptId;
-            //        }
-            //        else
-            //        {
-            //            userQuery1 = c => (c.salesman_id == userId || c.assistant_id == userId);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    if (hasCompany == null)
-            //    {
-            //        if (hasDepart != null)
-            //        {
-            //            userQuery1 = c => c.organization_id == deptId;
-            //        }
-            //        else
-            //        {
-            //            userQuery1 = c => c.waiter_id == userId;
-            //        }
-            //    }
-            //}
-
-            //int? waiter_id, int? salesman_id, string name
             Expression<Func<reg_abroad, bool>> waiterQuery1 = c => true;
             if (waiter_id != null)
             {
@@ -299,54 +272,15 @@ namespace WebCenter.Web.Controllers
             }
             #endregion
 
-            #region 商标注册
-            // Expression<Func<trademark, bool>> condition3 = c => c.status == 4 && c.submit_review_date.Value.Month - Month1 >= 1 && nowYear > c.submit_review_date.Value.Year && (c.annual_year == null || (c.annual_year != null && c.annual_year < nowYear));
-
-            var trademarkPeriodSetting = Uof.IsettingService.GetAll(s => s.name == "TRADEMARK_PERIOD").Select(s => s.value).FirstOrDefault();
-            int trademarkPeriod = 0;
-            int.TryParse(trademarkPeriodSetting, out trademarkPeriod);
-
-            Expression<Func<trademark, bool>> condition3 = c => c.status == 4 &&
-            ((c.annual_date == null && c.annual_year.Value < (nowYear - trademarkPeriod) && (Month1 == (c.date_regit.Value.Month) || Month2 >= (c.date_regit.Value.Month) || Month3 == (c.date_regit.Value.Month)) && (nowYear - trademarkPeriod) == c.date_regit.Value.Year) ||
-            (c.annual_date != null && c.annual_year.Value < (nowYear - trademarkPeriod) && (Month1 == (c.date_regit.Value.Month) || Month2 >= (c.date_regit.Value.Month) || Month3 == (c.date_regit.Value.Month)) && (nowYear - trademarkPeriod) == c.annual_date.Value.Year) ||
-            (c.is_annual == 1 && ((c.annual_year == null) || (c.annual_year != null && c.annual_year.Value < nowYear))));
+            #region 商标注册            
+            Expression<Func<trademark, bool>> condition3 = c => c.status == 4 && c.date_regit != null && c.exten_period != null;
 
             Expression<Func<trademark, bool>> customerQuery3 = c => true;
             if (customer_id != null && customer_id.Value > 0)
             {
                 customerQuery3 = c => (c.customer_id == customer_id);
             }
-
-            //Expression<Func<trademark, bool>> userQuery3 = c => true;
-            //if (hasInspect == null)
-            //{
-            //    if (hasCompany == null)
-            //    {
-            //        if (hasDepart != null)
-            //        {
-            //            userQuery3 = c => c.organization_id == deptId;
-            //        }
-            //        else
-            //        {
-            //            userQuery3 = c => (c.salesman_id == userId || c.assistant_id == userId);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    if (hasCompany == null)
-            //    {
-            //        if (hasDepart != null)
-            //        {
-            //            userQuery3 = c => c.organization_id == deptId;
-            //        }
-            //        else
-            //        {
-            //            userQuery3 = c => c.waiter_id == userId;
-            //        }
-            //    }
-            //}
-
+            
             Expression<Func<trademark, bool>> waiterQuery3 = c => true;
             if (waiter_id != null)
             {
@@ -390,12 +324,22 @@ namespace WebCenter.Web.Controllers
                     date_finish = a.date_finish,
                     date_setup = a.date_regit,
                     annual_year = a.annual_year,
-                    month = (a.date_regit != null) ? (DateTime.Today.Month - a.date_regit.Value.Month) : 0,
+                    exten_period = a.exten_period,
+                    //month = (a.date_regit != null) ? (DateTime.Today.Month - a.date_regit.Value.Month) : 0,
                 }).ToList();
 
             if (trademarks.Count() > 0)
             {
-                items.AddRange(trademarks);
+                var trademarkWarningMonth = GetSettingByKey("TRADEMARK_WARN_MONTH");
+                var tradeWarningMonth = 6;
+                int.TryParse(trademarkWarningMonth.value, out tradeWarningMonth);
+                
+                var _trademarks = trademarks.Where(t => (t.annual_year == null && t.date_setup.Value.Year < DateTime.Today.Year && t.date_setup.Value.AddYears(t.exten_period.Value).AddMonths(-tradeWarningMonth) <= DateTime.Today) ||
+                (t.annual_year != null && new DateTime(t.annual_year.Value, t.date_setup.Value.Month, 1).AddYears(t.exten_period.Value).AddMonths(-tradeWarningMonth) <= DateTime.Today)).ToList();
+                if (_trademarks.Count() > 0)
+                {
+                    items.AddRange(_trademarks);
+                }               
             }
             #endregion
 
@@ -558,7 +502,7 @@ namespace WebCenter.Web.Controllers
                         customer_id = a.customer_id,
                         customer_code = a.customer.code,
                         customer_name = a.customer.name,
-                        date_setup = a.date_trial,
+                        date_setup = a.date_regit,
 
                         salesman_id = a.salesman_id,
                         salesman = a.member4.name,
@@ -577,7 +521,7 @@ namespace WebCenter.Web.Controllers
                         customer_id = a.customer_id,
                         customer_code = a.customer.code,
                         customer_name = a.customer.name,
-                        date_setup = a.date_empower,
+                        date_setup = a.date_regit,
 
                         salesman_id = a.salesman_id,
                         salesman = a.member4.name,
@@ -990,6 +934,9 @@ namespace WebCenter.Web.Controllers
                 }
             }
 
+
+            
+
             var balance = annua.amount_transaction - total;
             var incomes = new
             {
@@ -998,9 +945,9 @@ namespace WebCenter.Web.Controllers
                 balance = balance,
 
                 rate = annua.rate,
-                local_amount = annua.amount_transaction * annua.rate,
-                local_total = total * annua.rate,
-                local_balance = balance * annua.rate
+                local_amount = (float)Math.Round((double)(annua.amount_transaction * annua.rate), 2),
+                local_total = (float)Math.Round((double)(total * annua.rate), 2),
+                local_balance = (float)Math.Round((double)(balance * annua.rate), 2)
             };
 
             return Json(new { order = annua, incomes = incomes }, JsonRequestBehavior.AllowGet);

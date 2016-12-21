@@ -222,16 +222,26 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetTop3()
         {
-            var list = Uof.InoticeService.GetAll(n => n.status == 1).Select(n => new
+            var list = Uof.InoticeService.GetAll(n => n.status == 1).Select(n => new simpleNotice
             {
                 id = n.id,
-                title = n.title
+                title = n.title,
+                created = n.date_created,
+                isNew = false,
             }).OrderByDescending(n => n.id).Take(3).ToList();
 
-           var total = Uof.InoticeService.GetAll(n => n.status == 1).Count();
-
-
-            return Json( new { list = list, total = total }, JsonRequestBehavior.AllowGet);
+            if (list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    if (item.created.Value.AddDays(6) >= DateTime.Today)
+                    {
+                        item.isNew = true;
+                    }
+                }
+            }
+            var total = Uof.InoticeService.GetAll(n => n.status == 1).Count();
+            return Json(new { list = list, total = total }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Views(int index = 1, int size = 10, string name = "")

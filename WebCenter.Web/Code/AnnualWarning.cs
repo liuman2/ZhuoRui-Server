@@ -27,6 +27,7 @@ namespace WebCenter.Web
 
         public int? annual_year { get; set; }
         public int? month { get; set; }
+        public int? exten_period { get; set; }
     }
 
     public class FinanceCheck

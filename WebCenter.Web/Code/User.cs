@@ -40,4 +40,12 @@ namespace WebCenter.Web
         public string county { get; set; }
         public string address { get; set; }
     }
+
+    public class simpleNotice
+    {
+        public int id { get; set; }
+        public string title { get; set; }
+        public DateTime? created { get; set; }
+        public bool isNew { get; set; }
+    }
 }

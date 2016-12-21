@@ -464,9 +464,9 @@ namespace WebCenter.Web.Controllers
                 balance = balance,
 
                 rate = reg.rate,
-                local_amount = reg.amount_transaction * reg.rate,
-                local_total = total * reg.rate,
-                local_balance = balance * reg.rate
+                local_amount = (float)Math.Round((double)(reg.amount_transaction * reg.rate), 2),
+                local_total = (float)Math.Round((double)(total * reg.rate), 2),
+                local_balance = (float)Math.Round((double)(balance * reg.rate), 2)
             };
 
             return Json(new { order = reg, incomes = incomes }, JsonRequestBehavior.AllowGet);

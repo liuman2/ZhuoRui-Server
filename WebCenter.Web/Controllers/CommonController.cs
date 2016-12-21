@@ -422,7 +422,7 @@ namespace WebCenter.Web.Controllers
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}提交", printData.area);
+                    printData.project = string.Format("{0}其他", printData.area);
 
                     getCompanyName(printData);
 
@@ -434,6 +434,7 @@ namespace WebCenter.Web.Controllers
                     break;
             }
 
+            printData.amount = (float)Math.Round((double)(printData.amount * (printData.rate ?? 1)), 2);
             return Json(printData, JsonRequestBehavior.AllowGet);
         }
 
@@ -619,8 +620,8 @@ namespace WebCenter.Web.Controllers
                     total += item.amount.Value;
                 }
 
-                pd.received = total * pd.rate;
-                pd.balance = pd.amount - total * pd.rate;
+                pd.received = (float)Math.Round((double)(total * pd.rate), 2);
+                pd.balance = (float)Math.Round((double)(pd.amount * pd.rate - total * pd.rate), 2);
                 pd.payer = list[0].payer ?? "";
 
                 var acc = list[0].account ?? "";

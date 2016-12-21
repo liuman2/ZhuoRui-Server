@@ -245,8 +245,8 @@ namespace WebCenter.Web.Controllers
                 {
                     total += item.amount.Value;
                 }
-
-                pd.received = total * pd.rate;
+                
+                pd.received = (float)Math.Round((double)(total * pd.rate), 2);
 
                 var acc = list[0].account ?? "";
                 if (list[0].account.Length > 4)
