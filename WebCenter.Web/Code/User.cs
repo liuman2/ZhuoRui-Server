@@ -33,12 +33,40 @@ namespace WebCenter.Web
         public int? assistant_id { get; set; }
         public string assistant_name { get; set; }
         public string tel { get; set; }
+
+        public string fax { get; set; }
+        public string email { get; set; }
+        public string QQ { get; set; }
+        public string wechat { get; set; }
+        public int? creator_id { get; set; }
+        public int? salesman_id { get; set; }
+        public int? organization_id { get; set; }
+        public string description { get; set; }
+        public string contacts { get; set; }
         public string code { get; set; }
         public string industry { get; set; }
         public string province { get; set; }
         public string city { get; set; }
         public string county { get; set; }
         public string address { get; set; }
+        public string assistants { get; set; }
+        public List<Assistant> assistantList { get; set; }
+        public List<Bank> banks { get; set; }
+    }
+
+    public class Assistant
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+    }
+
+    public class Bank
+    {
+        public int id { get; set; }
+        public int? customer_id { get; set; }
+        public string bank { get; set; }
+        public string holder { get; set; }
+        public string account { get; set; }
     }
 
     public class simpleNotice

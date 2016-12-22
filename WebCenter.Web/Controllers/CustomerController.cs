@@ -96,7 +96,8 @@ namespace WebCenter.Web.Controllers
             Expression<Func<customer, bool>> permQuery = c => true;
             if (ops.Count() == 0)
             {
-                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId);
+                var strUserId = userId.ToString();
+                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
             }
             else
             {
@@ -146,6 +147,7 @@ namespace WebCenter.Web.Controllers
                 source_name = "",
                 assistant_id = c.assistant_id,
                 assistant_name = "",
+                assistants = c.assistants,
                 }).ToPagedList(index, size).ToList();
 
             var totalRecord = Uof.IcustomerService.GetAll(condition)
@@ -221,8 +223,30 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult SearchForDropdown(int index = 1, int size = 10, string name = "")
         {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
             Expression<Func<customer, bool>> condition = c => c.status == 1;
             Expression<Func<customer, bool>> nameQuery = c => true;
+            Expression<Func<customer, bool>> permQuery = c => true;
+            var strUserId = userId.ToString();
+            permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -231,6 +255,7 @@ namespace WebCenter.Web.Controllers
             
             var list = Uof.IcustomerService.GetAll(condition)
                 .Where(nameQuery)
+                .Where(permQuery)
                 .OrderByDescending(item => item.id).Select(c => new
                 {
                     id = c.id,
@@ -352,7 +377,8 @@ namespace WebCenter.Web.Controllers
                 _c.tel == c.tel &&
                 _c.wechat == c.wechat &&
                 _c.contacts == c.contacts &&
-                _c.assistant_id == c.assistant_id
+                _c.assistant_id == c.assistant_id &&
+                _c.assistants == c.assistants
                 )
             {
                 return Json(new { id = _c.id }, JsonRequestBehavior.AllowGet);
@@ -374,6 +400,7 @@ namespace WebCenter.Web.Controllers
             _c.salesman_id = c.salesman_id;
             _c.contacts = c.contacts;
             _c.assistant_id = c.assistant_id;
+            _c.assistants = c.assistants;
 
             if (c.source != "客户介绍")
             {
@@ -423,7 +450,7 @@ namespace WebCenter.Web.Controllers
                 assistant_name = Uof.ImemberService.GetAll(c => c.id == _customer.assistant_id).Select(c => c.name).FirstOrDefault();
             }
 
-            var banks = Uof.Ibank_accountService.GetAll(b => b.customer_id == _customer.id).Select(b => new
+            var banks = Uof.Ibank_accountService.GetAll(b => b.customer_id == _customer.id).Select(b => new Bank
             {
                 id = b.id,
                 customer_id = b.customer_id,
@@ -431,8 +458,8 @@ namespace WebCenter.Web.Controllers
                 holder = b.holder,
                 account = b.account,
             }).ToList();
-            
-            return Json(new
+
+            var customerEntity = new Customer()
             {
                 id = _customer.id,
                 code = _customer.code,
@@ -458,11 +485,36 @@ namespace WebCenter.Web.Controllers
                 description = _customer.description,
                 salesman = _customer.member1.name,
                 contacts = _customer.contacts,
-                banks = banks, //_customer.bank_account
+                banks = banks,
+                assistants = _customer.assistants,
                 assistant_id = _customer.assistant_id,
                 assistant_name = assistant_name
+            };
 
-            }, JsonRequestBehavior.AllowGet);
+            if (!string.IsNullOrEmpty(customerEntity.assistants))
+            {
+                var assistantIds = new List<int>();
+                var ids = customerEntity.assistants.Split(',');
+                if (ids.Length > 0)
+                {
+                    foreach (var item in ids)
+                    {
+                        int _id = 0;
+                        int.TryParse(item, out _id);
+                        assistantIds.Add(_id);
+                    }
+
+                    var _members = Uof.ImemberService.GetAll(m => assistantIds.Contains(m.id)).Select(m => new Assistant()
+                    {
+                        id = m.id,
+                        name = m.name
+                    }).ToList();
+
+                    customerEntity.assistantList = _members;
+                }
+            }
+            
+            return Json(customerEntity, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Delete(int id)

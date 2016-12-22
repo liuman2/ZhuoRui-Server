@@ -487,9 +487,9 @@ namespace WebCenter.Web.Controllers
                 balance = balance,
 
                 rate = dbTrademar.rate,
-                local_amount = (float)Math.Round((double)(dbTrademar.amount_transaction * dbTrademar.rate), 2),
-                local_total = (float)Math.Round((double)(total * dbTrademar.rate), 2),
-                local_balance = (float)Math.Round((double)(balance * dbTrademar.rate), 2)
+                local_amount = (float)Math.Round((double)(dbTrademar.amount_transaction * dbTrademar.rate ?? 0), 2),
+                local_total = (float)Math.Round((double)(total * dbTrademar.rate ?? 0), 2),
+                local_balance = (float)Math.Round((double)(balance * dbTrademar.rate ?? 0), 2)
             };
 
             return Json(new { order = dbTrademar, incomes = incomes }, JsonRequestBehavior.AllowGet);

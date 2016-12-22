@@ -8,4 +8,5 @@ call AddColumnUnlessExists(Database(), 'trademark', 'accept_memo', 'varchar(60) 
 call AddColumnUnlessExists(Database(), 'trademark', 'trial_memo', 'varchar(60) DEFAULT NULL COMMENT "注册号"');
 call AddColumnUnlessExists(Database(), 'trademark', 'allege_memo', 'varchar(60) DEFAULT NULL COMMENT "注册号"');
 
-INSERT INTO `settings` VALUES ('12', 'LECTURE_PERIOD', 3, null);
+
+call AddColumnUnlessExists(Database(), 'customer', 'assistants', 'varchar(60) DEFAULT NULL COMMENT "多个助理"');
