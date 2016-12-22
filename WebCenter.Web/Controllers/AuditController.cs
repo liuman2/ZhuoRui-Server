@@ -480,9 +480,9 @@ namespace WebCenter.Web.Controllers
                 balance = balance,
 
                 rate = reg.rate,
-                local_amount = (float)Math.Round((double)(reg.amount_transaction * reg.rate), 2),
-                local_total = (float)Math.Round((double)(total * reg.rate), 2),
-                local_balance = (float)Math.Round((double)(balance * reg.rate), 2)
+                local_amount = (float)Math.Round((double)(reg.amount_transaction * reg.rate ?? 0), 2),
+                local_total = (float)Math.Round((double)(total * reg.rate ?? 0), 2),
+                local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
             };
 
             var banks = Uof.Iaudit_bankService.GetAll(b => b.audit_id == id).Select(b => new

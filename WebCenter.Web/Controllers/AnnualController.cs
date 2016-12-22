@@ -932,10 +932,7 @@ namespace WebCenter.Web.Controllers
                 {
                     total += item.amount.Value;
                 }
-            }
-
-
-            
+            }                       
 
             var balance = annua.amount_transaction - total;
             var incomes = new
@@ -945,9 +942,9 @@ namespace WebCenter.Web.Controllers
                 balance = balance,
 
                 rate = annua.rate,
-                local_amount = (float)Math.Round((double)(annua.amount_transaction * annua.rate), 2),
-                local_total = (float)Math.Round((double)(total * annua.rate), 2),
-                local_balance = (float)Math.Round((double)(balance * annua.rate), 2)
+                local_amount = (float)Math.Round((double)(annua.amount_transaction * annua.rate ?? 0), 2),
+                local_total = (float)Math.Round((double)(total * annua.rate ?? 0), 2),
+                local_balance = (float)Math.Round((double)(balance * annua.rate ?? 0), 2)
             };
 
             return Json(new { order = annua, incomes = incomes }, JsonRequestBehavior.AllowGet);
