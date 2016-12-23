@@ -92,11 +92,10 @@ namespace WebCenter.Web.Controllers
             }
 
             var ops = arrs[4].Split(',');
-
+            var strUserId = userId.ToString();
             Expression<Func<customer, bool>> permQuery = c => true;
             if (ops.Count() == 0)
-            {
-                var strUserId = userId.ToString();
+            {                
                 permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
             }
             else
@@ -107,18 +106,18 @@ namespace WebCenter.Web.Controllers
                 {
                     if (hasDepart == null)
                     {
-                        permQuery = c => (c.salesman_id == userId || c.assistant_id == userId);
+                        permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
                     }
                     else
                     {
                         var ids = GetChildrenDept(deptId);
                         if (ids.Count > 0)
                         {
-                            permQuery = c => c.organization_id == deptId;
+                            permQuery = c => (c.organization_id == deptId || c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
                         }
                         else
                         {
-                            permQuery = c => ids.Contains(c.organization_id.Value);
+                            permQuery = c => (ids.Contains(c.organization_id.Value) || c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
                         }
                     }
                 }
@@ -140,7 +139,7 @@ namespace WebCenter.Web.Controllers
                 city = c.city,
                 county = c.county,
                 address = c.address,
-
+                salesman_id = c.salesman_id,
                 salesman = c.member1.name,
                 source = c.source,
                 source_id = c.source_id,
