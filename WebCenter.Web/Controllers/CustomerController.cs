@@ -101,25 +101,9 @@ namespace WebCenter.Web.Controllers
             else
             {
                 var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
-                var hasDepart = ops.Where(o => o == "2").FirstOrDefault();
                 if (hasCompany == null)
                 {
-                    if (hasDepart == null)
-                    {
-                        permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
-                    }
-                    else
-                    {
-                        var ids = GetChildrenDept(deptId);
-                        if (ids.Count > 0)
-                        {
-                            permQuery = c => (c.organization_id == deptId || c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
-                        }
-                        else
-                        {
-                            permQuery = c => (ids.Contains(c.organization_id.Value) || c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
-                        }
-                    }
+                    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
                 }
             }
 

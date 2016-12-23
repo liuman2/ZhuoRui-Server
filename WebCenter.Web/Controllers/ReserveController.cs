@@ -61,21 +61,22 @@ namespace WebCenter.Web.Controllers
                 var hasDepart = ops.Where(o => o == "2").FirstOrDefault();
                 if (hasCompany == null)
                 {
-                    if (hasDepart == null)
-                    {
-                        permQuery = c => (c.salesman_id == userId || c.assistant_id == userId);
-                    } else
-                    {
-                        var ids = GetChildrenDept(deptId);
-                        if (ids.Count > 0)
-                        {
-                            permQuery = c => c.organization_id == deptId;
-                        }
-                        else
-                        {
-                            permQuery = c => ids.Contains(c.organization_id.Value);
-                        }
-                    }
+                    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId);
+                    //if (hasDepart == null)
+                    //{
+                    //    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId);
+                    //} else
+                    //{
+                    //    var ids = GetChildrenDept(deptId);
+                    //    if (ids.Count > 0)
+                    //    {
+                    //        permQuery = c => c.organization_id == deptId;
+                    //    }
+                    //    else
+                    //    {
+                    //        permQuery = c => ids.Contains(c.organization_id.Value);
+                    //    }
+                    //}
                 }
             }
 
@@ -95,7 +96,7 @@ namespace WebCenter.Web.Controllers
                 tel = c.tel
             }).ToPagedList(index, size).ToList();
 
-            var totalRecord = Uof.IcustomerService.GetAll(condition).Count();
+            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Where(permQuery).Count();
 
             if (list.Count > 0)
             {
