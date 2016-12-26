@@ -619,6 +619,10 @@ namespace WebCenter.Web.Controllers
                 {
                     total += item.amount.Value;
                 }
+                if (pd.rate == null)
+                {
+                    pd.rate = 1;
+                }
 
                 pd.received = (float)Math.Round((double)(total * pd.rate), 2);
                 pd.balance = (float)Math.Round((double)(pd.amount * pd.rate - total * pd.rate), 2);
