@@ -197,6 +197,9 @@
     <Compile Include="setting.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="sub_audit.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="timeline.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

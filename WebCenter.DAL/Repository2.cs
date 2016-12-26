@@ -182,6 +182,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class sub_auditRepository :BaseRepository<sub_audit>,Isub_auditRepository
+    {
+         
+    }
+	
 	public partial class timelineRepository :BaseRepository<timeline>,ItimelineRepository
     {
          

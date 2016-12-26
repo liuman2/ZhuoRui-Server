@@ -150,6 +150,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface Isub_auditService:IBaseService<sub_audit>
+    {   
+    }
+	
 	public partial interface ItimelineService:IBaseService<timeline>
     {   
     }

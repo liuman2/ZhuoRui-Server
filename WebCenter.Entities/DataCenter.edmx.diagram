@@ -116,6 +116,15 @@
         <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.timeline_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_customer" />
+        <EntityTypeShape EntityType="DataCenter.Entities.sub_audit" Width="1.5" PointX="21.125" PointY="19.375" />
+        <AssociationConnector Association="DataCenter.Entities.audit_sub_ibfk_master" />
+        <AssociationConnector Association="DataCenter.Entities.audit_sub_ibfk_customer" />
+        <AssociationConnector Association="DataCenter.Entities.audit_sub_ibfk_accountant" />
+        <AssociationConnector Association="DataCenter.Entities.audit_sub_ibfk_creator" />
+        <AssociationConnector Association="DataCenter.Entities.audit_sub_ibfk_finance_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.audit_sub_ibfk_manager" />
+        <AssociationConnector Association="DataCenter.Entities.audit_sub_ibfk_salesman" />
+        <AssociationConnector Association="DataCenter.Entities.audit_sub_ibfk_submit_reviewer" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

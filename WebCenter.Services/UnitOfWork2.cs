@@ -254,6 +254,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  Isub_auditService Isub_auditService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  ItimelineService ItimelineService
     {
         get;

@@ -77,6 +77,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.IsettingRepository settingRepository { get { return new settingRepository(); } }
 	
+	public IDAL.Isub_auditRepository sub_auditRepository { get { return new sub_auditRepository(); } }
+	
 	public IDAL.ItimelineRepository timelineRepository { get { return new timelineRepository(); } }
 	
 	public IDAL.ItrademarkRepository trademarkRepository { get { return new trademarkRepository(); } }

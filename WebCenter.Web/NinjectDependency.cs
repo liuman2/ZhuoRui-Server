@@ -87,6 +87,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<IsettingService>().To<settingService>().InRequestScope();
 	
+	   kernel.Bind<Isub_auditService>().To<sub_auditService>().InRequestScope();
+	
 	   kernel.Bind<ItimelineService>().To<timelineService>().InRequestScope();
 	
 	   kernel.Bind<ItrademarkService>().To<trademarkService>().InRequestScope();

@@ -363,6 +363,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class sub_auditService:BaseService<sub_audit>,Isub_auditService
+    {   
+        public sub_auditService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.sub_auditRepository;
+        }  
+    }
+	
 	public partial class timelineService:BaseService<timeline>,ItimelineService
     {   
         public timelineService()

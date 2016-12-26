@@ -78,6 +78,8 @@ namespace WebCenter.IServices
 	
 	  IsettingService IsettingService{get;set;} 
 	
+	  Isub_auditService Isub_auditService{get;set;} 
+	
 	  ItimelineService ItimelineService{get;set;} 
 	
 	  ItrademarkService ItrademarkService{get;set;} 

@@ -63,5 +63,6 @@ namespace WebCenter.Entities
         public virtual DbSet<receipt> receipts { get; set; }
         public virtual DbSet<trademark> trademarks { get; set; }
         public virtual DbSet<customer> customers { get; set; }
+        public virtual DbSet<sub_audit> sub_audit { get; set; }
     }
 }

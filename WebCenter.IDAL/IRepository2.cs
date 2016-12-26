@@ -146,6 +146,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface Isub_auditRepository :IBaseRepository<sub_audit>
+    {         
+    }
+	
     public partial interface ItimelineRepository :IBaseRepository<timeline>
     {         
     }

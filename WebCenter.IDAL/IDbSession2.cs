@@ -118,6 +118,9 @@ namespace WebCenter.IDAL
 		IDAL.IsettingRepository settingRepository { get; }
 	  
 
+		IDAL.Isub_auditRepository sub_auditRepository { get; }
+	  
+
 		IDAL.ItimelineRepository timelineRepository { get; }
 	  
 

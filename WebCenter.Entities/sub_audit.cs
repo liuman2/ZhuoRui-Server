@@ -12,18 +12,17 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class audit:BaseModel
+    public partial class sub_audit:BaseModel
     {
-        public audit()
-        {
-            this.sub_audit = new HashSet<sub_audit>();
-        }
     
     
     
-    
-    [EntityPrimKey("audit")]
+    [EntityPrimKey("sub_audit")]
         public int id { get; set; }
+    
+    
+    
+        public int master_id { get; set; }
     
     
     
@@ -31,59 +30,11 @@ namespace WebCenter.Entities
     
     
     
-        public string source { get; set; }
-    
-    
-    
-        public Nullable<int> source_id { get; set; }
-    
-    
-    
-        public string source_code { get; set; }
-    
-    
-    
-        public string code { get; set; }
-    
-    
-    
-        public string type { get; set; }
-    
-    
-    
-        public string name_cn { get; set; }
-    
-    
-    
-        public string name_en { get; set; }
-    
-    
-    
-        public Nullable<System.DateTime> date_setup { get; set; }
-    
-    
-    
-        public string address { get; set; }
-    
-    
-    
-        public string business_area { get; set; }
-    
-    
-    
-        public string trade_mode { get; set; }
-    
-    
-    
-        public Nullable<sbyte> has_parent { get; set; }
-    
-    
-    
-        public Nullable<int> account_number { get; set; }
-    
-    
-    
         public Nullable<System.DateTime> account_period { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> account_period2 { get; set; }
     
     
     
@@ -183,23 +134,7 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<int> organization_id { get; set; }
-    
-    
-    
         public string description { get; set; }
-    
-    
-    
-        public Nullable<System.DateTime> date_created { get; set; }
-    
-    
-    
-        public Nullable<System.DateTime> date_updated { get; set; }
-    
-    
-    
-        public Nullable<int> annual_year { get; set; }
     
     
     
@@ -211,16 +146,19 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<System.DateTime> account_period2 { get; set; }
+        public Nullable<System.DateTime> date_created { get; set; }
     
+    
+    
+        public Nullable<System.DateTime> date_updated { get; set; }
+    
+        public virtual audit audit { get; set; }
+        public virtual customer customer { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }
         public virtual member member3 { get; set; }
         public virtual member member4 { get; set; }
         public virtual member member5 { get; set; }
-        public virtual member member6 { get; set; }
-        public virtual customer customer { get; set; }
-        public virtual ICollection<sub_audit> sub_audit { get; set; }
     }
 }

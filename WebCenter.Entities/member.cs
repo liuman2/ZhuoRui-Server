@@ -72,6 +72,12 @@ namespace WebCenter.Entities
             this.trademarks6 = new HashSet<trademark>();
             this.customers = new HashSet<customer>();
             this.customers1 = new HashSet<customer>();
+            this.sub_audit = new HashSet<sub_audit>();
+            this.sub_audit1 = new HashSet<sub_audit>();
+            this.sub_audit2 = new HashSet<sub_audit>();
+            this.sub_audit3 = new HashSet<sub_audit>();
+            this.sub_audit4 = new HashSet<sub_audit>();
+            this.sub_audit5 = new HashSet<sub_audit>();
         }
     
     
@@ -195,5 +201,11 @@ namespace WebCenter.Entities
         public virtual ICollection<trademark> trademarks6 { get; set; }
         public virtual ICollection<customer> customers { get; set; }
         public virtual ICollection<customer> customers1 { get; set; }
+        public virtual ICollection<sub_audit> sub_audit { get; set; }
+        public virtual ICollection<sub_audit> sub_audit1 { get; set; }
+        public virtual ICollection<sub_audit> sub_audit2 { get; set; }
+        public virtual ICollection<sub_audit> sub_audit3 { get; set; }
+        public virtual ICollection<sub_audit> sub_audit4 { get; set; }
+        public virtual ICollection<sub_audit> sub_audit5 { get; set; }
     }
 }
