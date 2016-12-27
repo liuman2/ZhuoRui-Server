@@ -31,18 +31,6 @@ namespace WebCenter.Entities
     
     
     
-        public string source { get; set; }
-    
-    
-    
-        public Nullable<int> source_id { get; set; }
-    
-    
-    
-        public string source_code { get; set; }
-    
-    
-    
         public string code { get; set; }
     
     
@@ -213,14 +201,26 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> account_period2 { get; set; }
     
+    
+    
+        public string source { get; set; }
+    
+    
+    
+        public Nullable<int> source_id { get; set; }
+    
+    
+    
+        public string source_code { get; set; }
+    
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }
         public virtual member member3 { get; set; }
         public virtual member member4 { get; set; }
         public virtual member member5 { get; set; }
+        public virtual ICollection<sub_audit> sub_audit { get; set; }
         public virtual member member6 { get; set; }
         public virtual customer customer { get; set; }
-        public virtual ICollection<sub_audit> sub_audit { get; set; }
     }
 }

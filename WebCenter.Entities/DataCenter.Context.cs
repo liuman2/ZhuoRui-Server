@@ -59,10 +59,10 @@ namespace WebCenter.Entities
         public virtual DbSet<reg_internal> reg_internal { get; set; }
         public virtual DbSet<mail> mails { get; set; }
         public virtual DbSet<setting> settings { get; set; }
-        public virtual DbSet<audit> audits { get; set; }
         public virtual DbSet<receipt> receipts { get; set; }
-        public virtual DbSet<trademark> trademarks { get; set; }
-        public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<sub_audit> sub_audit { get; set; }
+        public virtual DbSet<audit> audits { get; set; }
+        public virtual DbSet<customer> customers { get; set; }
+        public virtual DbSet<trademark> trademarks { get; set; }
     }
 }
