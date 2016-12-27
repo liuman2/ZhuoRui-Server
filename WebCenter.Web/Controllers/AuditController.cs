@@ -390,7 +390,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetView(int id)
         {
-            var reg = Uof.IauditService.GetAll(a => a.id == id).Select(a => new
+            var reg = Uof.IauditService.GetAll(a => a.id == id).Select(a => new AuditEntity()
             {
                 id = a.id,
                 customer_id = a.customer_id,
@@ -445,7 +445,6 @@ namespace WebCenter.Web.Controllers
                 finance_review_moment = a.finance_review_moment,
                 submit_review_moment = a.submit_review_moment,
                 description = a.description
-
             }).FirstOrDefault();
 
             var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "audit").Select(i => new {
@@ -495,7 +494,36 @@ namespace WebCenter.Web.Controllers
                 account = b.bank_account.account
             }).ToList();
 
-            return Json(new { order = reg, incomes = incomes, banks = banks }, JsonRequestBehavior.AllowGet);
+            var subs = Uof.Isub_auditService.GetAll(s => s.master_id == id).Select(a => new {
+                id = a.id,
+                master_id = a.master_id,
+                customer_id = a.customer_id,
+                customer_name = a.customer.name,                
+                turnover_currency = a.turnover_currency,                
+                account_period = a.account_period,
+                account_period2 = a.account_period2,
+                date_year_end = a.date_year_end,
+                turnover = a.turnover,
+                amount_bank = a.amount_bank,
+                bill_number = a.bill_number,
+                accounting_standard = a.accounting_standard,
+                cost_accounting = a.cost_accounting,
+                progress = a.progress,
+                date_transaction = a.date_transaction,
+                amount_transaction = a.amount_transaction,
+                date_finish = a.date_finish,
+                currency = a.currency,
+                rate = a.rate,
+                salesman_id = a.salesman_id,
+                salesman = a.member4.name,
+                accountant_id = a.accountant_id,
+                accountant_name = a.member.name,
+                manager_id = a.manager_id,
+                manager_name = a.member3.name,
+                assistant_id = a.assistant_id,
+            });
+
+            return Json(new { order = reg, incomes = incomes, subs = subs, banks = banks }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Update(audit _audit)
@@ -1302,5 +1330,6 @@ namespace WebCenter.Web.Controllers
 
             return SuccessResult;
         }
+        
     }
 }
