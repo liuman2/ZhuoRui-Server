@@ -77,5 +77,40 @@ namespace WebCenter.Web.Controllers
             return Json(new { id = newAbroad.id }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Get(int id)
+        {
+            var sub = Uof.Isub_auditService.GetAll(s => s.id == id).Select(a => new SubAudit
+            {
+                id = a.id,
+                master_id = a.master_id,
+                customer_id = a.customer_id,
+                customer_name = a.customer.name,
+                turnover_currency = a.turnover_currency,
+                account_period = a.account_period,
+                account_period2 = a.account_period2,
+                date_year_end = a.date_year_end,
+                turnover = a.turnover,
+                amount_bank = a.amount_bank,
+                bill_number = a.bill_number,
+                accounting_standard = a.accounting_standard,
+                cost_accounting = a.cost_accounting,
+                progress = a.progress,
+                date_transaction = a.date_transaction,
+                amount_transaction = a.amount_transaction,
+                date_finish = a.date_finish,
+                currency = a.currency,
+                rate = a.rate,
+                salesman_id = a.salesman_id,
+                salesman = a.member4.name,
+                accountant_id = a.accountant_id,
+                accountant_name = a.member.name,
+                manager_id = a.manager_id,
+                manager_name = a.member3.name,
+                assistant_id = a.assistant_id,
+            }).FirstOrDefault();
+
+            return Json(sub, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

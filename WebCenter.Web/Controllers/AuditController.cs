@@ -494,7 +494,8 @@ namespace WebCenter.Web.Controllers
                 account = b.bank_account.account
             }).ToList();
 
-            var subs = Uof.Isub_auditService.GetAll(s => s.master_id == id).Select(a => new {
+            var subs = Uof.Isub_auditService.GetAll(s => s.master_id == id).Select(a => new SubAudit
+            {
                 id = a.id,
                 master_id = a.master_id,
                 customer_id = a.customer_id,
