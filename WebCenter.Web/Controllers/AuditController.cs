@@ -522,6 +522,13 @@ namespace WebCenter.Web.Controllers
                 manager_id = a.manager_id,
                 manager_name = a.member3.name,
                 assistant_id = a.assistant_id,
+
+                status = a.status,
+                review_status = a.review_status,
+                description = a.description,
+                finance_review_moment = a.finance_review_moment,
+                submit_review_moment = a.submit_review_moment,
+
             });
 
             return Json(new { order = reg, incomes = incomes, subs = subs, banks = banks }, JsonRequestBehavior.AllowGet);
@@ -921,7 +928,7 @@ namespace WebCenter.Web.Controllers
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbAudit.id,
-                    source_name = "reg_abroad",
+                    source_name = "audit",
                     title = "驳回审核",
                     content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
                 });
@@ -1069,8 +1076,8 @@ namespace WebCenter.Web.Controllers
                     {
                         source_id = dbAudit.id,
                         source_name = "audit",
-                        title = "完善了注册资料",
-                        content = string.Format("{0}完善了注册资料", arrs[3])
+                        title = "完善了审计资料",
+                        content = string.Format("{0}完善了审计资料", arrs[3])
                     });
 
                     var waitdeals = new List<waitdeal>();

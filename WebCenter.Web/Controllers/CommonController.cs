@@ -221,10 +221,10 @@ namespace WebCenter.Web.Controllers
                         id = a.id,
                         accounter = a.member5.name,
                         cashier = a.member2.name, // 出纳
-                        amount = a.amount_transaction * a.rate,
+                        amount = a.amount_transaction,
                         attachments = 0,
                         auditor = a.member2.name,
-                        balance = a.amount_transaction * a.rate,
+                        balance = a.amount_transaction,
                         code = a.code,
                         customer_name = a.customer.name,
                         company_cn = a.name_cn,
@@ -262,10 +262,10 @@ namespace WebCenter.Web.Controllers
                         id = a.id,
                         accounter = a.member6.name,
                         cashier = a.member2.name, // 出纳
-                        amount = a.amount_transaction * a.rate,
+                        amount = a.amount_transaction,
                         attachments = 0,
                         auditor = a.member2.name,
-                        balance = a.amount_transaction * a.rate,
+                        balance = a.amount_transaction,
                         code = a.code,
                         customer_name = a.customer.name,
                         company_cn = a.name_cn,
@@ -303,10 +303,10 @@ namespace WebCenter.Web.Controllers
                         id = a.id,
                         accounter = a.member5.name,
                         cashier = a.member2.name, // 出纳
-                        amount = a.amount_transaction * a.rate,
+                        amount = a.amount_transaction,
                         attachments = 0,
                         auditor = a.member2.name,
-                        balance = a.amount_transaction * a.rate,
+                        balance = a.amount_transaction,
                         code = a.code,
                         customer_name = a.customer.name,
                         company_cn = a.applicant,
@@ -344,10 +344,10 @@ namespace WebCenter.Web.Controllers
                         id = a.id,
                         accounter = a.member5.name,
                         cashier = a.member2.name, // 出纳
-                        amount = a.amount_transaction * a.rate,
+                        amount = a.amount_transaction,
                         attachments = 0,
                         auditor = a.member2.name,
-                        balance = a.amount_transaction * a.rate,
+                        balance = a.amount_transaction,
                         code = a.code,
                         customer_name = a.customer.name,
                         company_cn = a.applicant,
@@ -394,10 +394,10 @@ namespace WebCenter.Web.Controllers
                         source = a.source,
                         source_id = a.source_id,
 
-                        amount = a.amount_transaction * a.rate,
+                        amount = a.amount_transaction,
                         attachments = 0,
                         auditor = a.member1.name,
-                        balance = a.amount_transaction * a.rate,
+                        balance = a.amount_transaction,
                         code = a.order_code,
                         customer_name = "",
                         company_cn = "",
@@ -430,11 +430,53 @@ namespace WebCenter.Web.Controllers
                     #endregion
 
                     break;
+                case "sub_audit":
+                    #region 审计
+                    printData = Uof.Isub_auditService.GetAll(a => a.id == id).Select(a => new PrintData
+                    {
+                        print_type = "sub_audit",
+                        id = a.id,
+                        accounter = a.member5.name,
+                        cashier = a.member2.name, // 出纳
+                        amount = a.amount_transaction,
+                        attachments = 0,
+                        auditor = a.member2.name,
+                        balance = a.amount_transaction,
+                        code = a.audit.code,
+                        customer_name = a.customer.name,
+                        company_cn = a.audit.name_cn,
+                        company_en = a.audit.name_en,
+                        creator = a.member1.name,
+                        date_transaction = a.date_transaction,
+                        date = "",
+                        mode = "",
+                        ordername = a.audit.name_cn,
+                        others = a.description,
+                        payer = "",
+                        pay_info = "",
+                        pay_way = "",
+                        project = "",
+                        reason = "审计",
+                        received = 0,
+                        saleman = a.member4.name,
+                        type = "",
+                        currency = a.currency,
+                        area = a.member4.area.name,
+                        rate = a.rate
+                    }).FirstOrDefault();
+
+                    printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
+                    printData.project = string.Format("{0}审计", printData.area);
+
+                    getPrintDataIncome(printData, "sub_audit");
+                    #endregion
+                    break;
                 default:
                     break;
             }
 
             printData.amount = (float)Math.Round((double)(printData.amount * (printData.rate ?? 1)), 2);
+            printData.balance = (float)Math.Round((double)(printData.balance * (printData.rate ?? 1)), 2);
             return Json(printData, JsonRequestBehavior.AllowGet);
         }
 
@@ -623,7 +665,10 @@ namespace WebCenter.Web.Controllers
                 {
                     pd.rate = 1;
                 }
-
+                if (pd.amount == null)
+                {
+                    pd.amount = 0;
+                }
                 pd.received = (float)Math.Round((double)(total * pd.rate), 2);
                 pd.balance = (float)Math.Round((double)(pd.amount * pd.rate - total * pd.rate), 2);
                 pd.payer = list[0].payer ?? "";

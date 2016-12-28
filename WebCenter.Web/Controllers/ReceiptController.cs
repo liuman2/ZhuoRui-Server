@@ -191,6 +191,21 @@ namespace WebCenter.Web.Controllers
                     GetPrintDataIncome(printData, "history");
                     #endregion
                     break;
+                case "sub_audit":
+                    #region 审计账期
+                    printData = Uof.Isub_auditService.GetAll(a => a.id == order_id).Select(a => new ReceiptPrintData
+                    {
+                        print_type = "sub_audit",
+                        id = a.id,
+                        customer_name = a.audit.name_cn ?? a.audit.name_en,
+                        saleman = a.member4.english_name,
+                        finance_reviewer = a.member2.english_name,
+                        rate = a.rate ?? 1,
+                    }).FirstOrDefault();
+
+                    GetPrintDataIncome(printData, "sub_audit");
+                    #endregion
+                    break;
                 default:
                     break;
             }
