@@ -267,9 +267,34 @@ namespace WebCenter.Web.Controllers
         }
 
         public ActionResult GetDetails(int id, int size, int index)
-        {                      
-            var list = Uof.Ilecture_customerService.GetAll(c=>c.lecture_id == id)
-                .OrderByDescending(item => item.id).Select(c => new
+        {
+            size = 500;
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+            var strUserId = userId.ToString();
+
+            var list = Uof.Ilecture_customerService
+                .GetAll(c=>c.lecture_id == id)
+                //.Where(c => c.customer.salesman_id == userId || c.customer.assistant_id == userId || c.customer.assistants.Contains(strUserId))
+                .OrderByDescending(item => item.id).Select(c => new LectureCustomer()
                 {
                     id = c.id,
                     lecture_id = c.lecture_id,
@@ -296,7 +321,32 @@ namespace WebCenter.Web.Controllers
 
                 }).ToPagedList(index, size).ToList();
 
-            var totalRecord = Uof.Ilecture_customerService.GetAll(c => c.lecture_id == id).Count();
+            var ids = list.Select(l => l.customer_id).ToList();
+            var myCustomers = Uof.IcustomerService
+                .GetAll(c => c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId))
+                .Where(c => ids.Contains(c.id)).Select(c => c.id).ToList();
+
+            if (myCustomers.Count() == 0)
+            {
+                var page1 = new
+                {
+                    current_index = index,
+                    current_size = size,
+                    total_size = 0,
+                    total_page = 0
+                };
+
+                var result1 = new
+                {
+                    page = page1,
+                    items = new List<LectureCustomer>()
+                };
+                return Json(result1, JsonRequestBehavior.AllowGet);
+            }
+
+            var newList = list.Where(l => myCustomers.Contains(l.customer_id.Value)).ToList();
+
+            var totalRecord = newList.Count(); //  Uof.Ilecture_customerService.GetAll(c => c.lecture_id == id).Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
@@ -314,7 +364,7 @@ namespace WebCenter.Web.Controllers
             var result = new
             {
                 page = page,
-                items = list
+                items = newList
             };
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -323,7 +373,6 @@ namespace WebCenter.Web.Controllers
         [HttpPost]
         public ActionResult SaveCustomer(int leactueId, int[] customerIds)
         {
-
             var oldMembers = Uof.Ilecture_customerService.GetAll(m => m.lecture_id == leactueId).ToList();
             var adds = new List<lecture_customer>();
 
@@ -379,6 +428,28 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult CusomerSearch(int lectureId, int index = 1, int size = 10, string name = "")
         {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+            var strUserId = userId.ToString();
+
             var customerIds = Uof.Ilecture_customerService.GetAll(c=>c.lecture_id == lectureId).Select(m => m.customer_id).ToList();
             Expression<Func<customer, bool>> excludeIds = m => true;
             if (customerIds.Count() > 0)
@@ -395,6 +466,7 @@ namespace WebCenter.Web.Controllers
 
             var list = Uof.IcustomerService.GetAll(nameQuery)
                 .Where(excludeIds)
+                .Where(c => c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId))
                 .OrderByDescending(item => item.id).Select(c => new
                 {
                     id = c.id,
