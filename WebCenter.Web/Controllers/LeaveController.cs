@@ -468,7 +468,7 @@ namespace WebCenter.Web.Controllers
             if (request.start_time != null && request.end_time != null)
             {
                 var endTime = request.end_time.Value.AddDays(1);
-                dateQuery = c => ((c.date_start >= request.start_time.Value || c.date_end < endTime));
+                dateQuery = c => ((c.date_start >= request.start_time.Value && c.date_end < endTime));
             }
             if (request.start_time != null && request.end_time == null)
             {
@@ -480,11 +480,11 @@ namespace WebCenter.Web.Controllers
                 dateQuery = c => (c.date_end < endTime);
             }
 
-            var list = Uof.IleaveService.GetAll(l => l.status == 1)
+            var list = Uof.IleaveService.GetAll(l => l.status >= -1)
                 .Where(condition)
                 .Where(typeQuery)
                 .Where(dateQuery)
-                .OrderByDescending(item => item.owner_id).Select(c => new LeaveResponse
+                .OrderByDescending(item => item.date_created).Select(c => new LeaveResponse
                 {
                     id = c.id,
                     auditor_id = c.auditor_id,
@@ -495,11 +495,12 @@ namespace WebCenter.Web.Controllers
                     date_start = c.date_start,
                     date_end = c.date_end,
                     date_review = c.date_review,
-                    type = c.type
+                    type = c.type,
+                    status = c.status
 
                 }).ToPagedList(request.index, request.size).ToList();
 
-            var totalRecord = Uof.IleaveService.GetAll(l => l.status == 1)
+            var totalRecord = Uof.IleaveService.GetAll(l => l.status >= -1)
                 .Where(condition)
                 .Where(typeQuery)
                 .Where(dateQuery).Count();

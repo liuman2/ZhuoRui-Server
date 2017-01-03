@@ -293,7 +293,6 @@ namespace WebCenter.Web.Controllers
 
             var list = Uof.Ilecture_customerService
                 .GetAll(c=>c.lecture_id == id)
-                //.Where(c => c.customer.salesman_id == userId || c.customer.assistant_id == userId || c.customer.assistants.Contains(strUserId))
                 .OrderByDescending(item => item.id).Select(c => new LectureCustomer()
                 {
                     id = c.id,
@@ -323,7 +322,7 @@ namespace WebCenter.Web.Controllers
 
             var ids = list.Select(l => l.customer_id).ToList();
             var myCustomers = Uof.IcustomerService
-                .GetAll(c => c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId))
+                .GetAll(c => c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId) || userId == 1)
                 .Where(c => ids.Contains(c.id)).Select(c => c.id).ToList();
 
             if (myCustomers.Count() == 0)
@@ -466,7 +465,7 @@ namespace WebCenter.Web.Controllers
 
             var list = Uof.IcustomerService.GetAll(nameQuery)
                 .Where(excludeIds)
-                .Where(c => c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId))
+                .Where(c => c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId) || userId == 1)
                 .OrderByDescending(item => item.id).Select(c => new
                 {
                     id = c.id,
