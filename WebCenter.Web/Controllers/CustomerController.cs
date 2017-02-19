@@ -19,6 +19,44 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Introducers(int index = 1, int size = 10, string name = "")
         {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var ops = arrs[4].Split(',');
+            var strUserId = userId.ToString();
+            Expression<Func<customer, bool>> permQuery = c => true;
+            if (ops.Count() == 0)
+            {
+                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
+            }
+            else
+            {
+                var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+                if (hasCompany == null)
+                {
+                    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
+                }
+            }
+
+
             Expression<Func<customer, bool>> condition = c => true;
             if (!string.IsNullOrEmpty(name))
             {
@@ -26,14 +64,14 @@ namespace WebCenter.Web.Controllers
                 condition = tmp;
             }
 
-            var list = Uof.IcustomerService.GetAll(condition).OrderBy(item => item.id).Select(c => new
+            var list = Uof.IcustomerService.GetAll(condition).Where(permQuery).OrderBy(item => item.id).Select(c => new
             {
                 id = c.id,
                 code = c.code,
                 name = c.name
             }).ToPagedList(index, size).ToList();
 
-            var totalRecord = Uof.IcustomerService.GetAll(condition).Count();
+            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(permQuery).Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
