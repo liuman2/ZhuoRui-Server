@@ -57,6 +57,7 @@ namespace WebCenter.Web.Controllers
                 source_id = subAudit.master_id,
                 source_name = "audit",
                 title = "新增账期",
+                is_system = 1,
                 content = string.Format("{0}新增了账期", arrs[3])
             });
 
@@ -65,6 +66,7 @@ namespace WebCenter.Web.Controllers
                 source_id = subAudit.id,
                 source_name = "sub_audit",
                 title = "新增账期",
+                is_system = 1,
                 content = string.Format("{0}新增了账期", arrs[3])
             });
             try
@@ -199,6 +201,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAudit.id,
                     source_name = "sub_audit",
                     title = "修改账期",
+                    is_system = 1,
                     content = string.Format("{0}修改了账期", arrs[3])
                 });
             }
@@ -226,6 +229,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAudit.id,
                     source_name = "sub_audit",
                     title = "提交审核",
+                    is_system = 1,
                     content = string.Format("提交给财务审核")
                 });
 
@@ -367,6 +371,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAudit.id,
                     source_name = "sub_audit",
                     title = "通过审核",
+                    is_system = 1,
                     content = string.Format("{0}通过了{1}", arrs[3], t)
                 });
             }
@@ -476,6 +481,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAudit.id,
                     source_name = "sub_audit",
                     title = "驳回审核",
+                    is_system = 1,
                     content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
                 });
             }
@@ -538,6 +544,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbAudit.id,
                         source_name = "sub_audit",
                         title = "完善了审计资料",
+                        is_system = 1,
                         content = string.Format("{0}完善了注册资料", arrs[3])
                     });
 
@@ -573,6 +580,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbAudit.id,
                         source_name = "sub_audit",
                         title = "更新了订单进度",
+                        is_system = 1,
                         content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbAudit.progress, dbAudit.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 

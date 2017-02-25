@@ -197,6 +197,7 @@ namespace WebCenter.Web.Controllers
                             source_id = _l.order_id,
                             source_name = _l.order_source,
                             title = string.Format("新增{0}记录", _l.type),
+                            is_system = 1,
                             content = string.Format("{0}新建了一笔{1}记录, 审核人{2}, 信件单号: {3}", arrs[3], _l.type, auditor, _l.code)
                         });
                     }
@@ -357,6 +358,7 @@ namespace WebCenter.Web.Controllers
                         source_id = _c.order_id,
                         source_name = _c.order_source,
                         title = string.Format("修改{0}记录", _c.type),
+                        is_system = 1,
                         content = string.Format("{0}修改了一笔{1}记录, 审核人{2}, 信件单号: {3}", arrs[3], _c.type, auditor, _c.code)
                     });
                 }
@@ -729,6 +731,7 @@ namespace WebCenter.Web.Controllers
                             source_id = _c.order_id,
                             source_name = _c.order_source,
                             title = string.Format("新增{0}记录", _c.type),
+                            is_system = 1,
                             content = string.Format("{0}新建了一笔{1}记录, 审核人{2}, 信件单号: {3}", creator, _c.type,  _c.member.name, _c.code)
                         });
                     }

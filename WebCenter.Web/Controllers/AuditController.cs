@@ -306,6 +306,7 @@ namespace WebCenter.Web.Controllers
                 source_id = _audit.source_id,
                 source_name = _audit.source,
                 title = "新建审计",
+                is_system = 1,
                 content = string.Format("{0}新建了审计订单, 审计档案号{1}", arrs[3], _audit.code)
             });
 
@@ -314,6 +315,7 @@ namespace WebCenter.Web.Controllers
                 source_id = newAbroad.id,
                 source_name = "audit",
                 title = "新建订单",
+                is_system = 1,
                 content = string.Format("{0}新建了订单, 档案号{1}", arrs[3], _audit.code)
             });
             try
@@ -636,6 +638,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAudit.id,
                     source_name = "audit",
                     title = "修改订单资料",
+                    is_system = 1,
                     content = string.Format("{0}修改了订单资料", arrs[3])
                 });
             }
@@ -663,6 +666,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAudit.id,
                     source_name = "audit",
                     title = "提交审核",
+                    is_system = 1,
                     content = string.Format("提交给财务审核")
                 });
 
@@ -821,6 +825,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAudit.id,
                     source_name = "audit",
                     title = "通过审核",
+                    is_system = 1,
                     content = string.Format("{0}通过了{1}", arrs[3], t)
                 });
             }
@@ -930,6 +935,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAudit.id,
                     source_name = "audit",
                     title = "驳回审核",
+                    is_system = 1,
                     content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
                 });
             }
@@ -974,6 +980,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAudit.id,
                     source_name = "audit",
                     title = "完成订单",
+                    is_system = 1,
                     content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
                 });
 
@@ -1077,6 +1084,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbAudit.id,
                         source_name = "audit",
                         title = "完善了审计资料",
+                        is_system = 1,
                         content = string.Format("{0}完善了审计资料", arrs[3])
                     });
 
@@ -1112,6 +1120,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbAudit.id,
                         source_name = "audit",
                         title = "更新了订单进度",
+                        is_system = 1,
                         content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbAudit.progress, dbAudit.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 

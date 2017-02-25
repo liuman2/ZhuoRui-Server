@@ -67,6 +67,7 @@ namespace WebCenter.Web.Controllers
                 source_id = _inc.source_id,
                 source_name = _inc.source_name,
                 title = "新增收款",
+                is_system = 1,
                 content = string.Format("{0}新增了收款, 金额{1}", arrs[3], dbInc.amount)
             });
 
@@ -198,6 +199,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbIncome.source_id,
                     source_name = dbIncome.source_name,
                     title = "修改收款",
+                    is_system = 1,
                     content = string.Format("{0}修改了收款, {1}", arrs[3], string.Join(",", msg))
                 });
             }
@@ -225,6 +227,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbIncome.source_id,
                     source_name = dbIncome.source_name,
                     title = "删除收款",
+                    is_system = 1,
                     content = string.Format("{0}删除了收款, 金额{1}", arrs[3], dbIncome.amount)
                 });
             }

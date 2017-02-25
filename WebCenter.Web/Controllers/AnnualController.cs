@@ -614,6 +614,7 @@ namespace WebCenter.Web.Controllers
                 source_id = newExam.id,
                 source_name = "annual",
                 title = "新建年检",
+                is_system = 1,
                 content = string.Format("{0}新建了{1}年度年检订单, 单号{2}", arrs[3], DateTime.Now.Year, newExam.code)
             });
 
@@ -680,6 +681,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbExam.id,
                     source_name = "annual",
                     title = "修改年检资料",
+                    is_system = 1,
                     content = string.Format("{0}修改了年检资料", arrs[3])
                 });
             }
@@ -973,6 +975,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAnnual.id,
                     source_name = "annual",
                     title = "提交审核",
+                    is_system = 1,
                     content = string.Format("提交给财务审核")
                 });
 
@@ -1116,6 +1119,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAnnual.id,
                     source_name = "annual",
                     title = "通过审核",
+                    is_system = 1,
                     content = string.Format("{0}通过了{1}", arrs[3], t)
                 });
             }
@@ -1228,6 +1232,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAnnual.id,
                     source_name = "annual",
                     title = "驳回审核",
+                    is_system = 1,
                     content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
                 });
             }
@@ -1272,6 +1277,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAnnual.id,
                     source_name = "annual",
                     title = "完成订单",
+                    is_system = 1,
                     content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
                 });
 
@@ -1372,6 +1378,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbAnnual.id,
                         source_name = "annual",
                         title = "完善了注册资料",
+                        is_system = 1,
                         content = string.Format("{0}完善了注册资料", arrs[3])
                     });
 
@@ -1392,6 +1399,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbAnnual.id,
                         source_name = "annual",
                         title = "更新了订单进度",
+                        is_system = 1,
                         content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbAnnual.progress, dbAnnual.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 

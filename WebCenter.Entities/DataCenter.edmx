@@ -712,6 +712,8 @@
           <Property Name="content" Type="varchar" MaxLength="500" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="date_business" Type="datetime" Precision="0" />
+          <Property Name="is_system" Type="tinyint" />
         </EntityType>
         <EntityType Name="trademark">
           <Key>
@@ -2116,7 +2118,6 @@
           <EntitySet Name="sequences" EntityType="DataCenter.Entities.sequence" />
           <EntitySet Name="bank_account" EntityType="DataCenter.Entities.bank_account" />
           <EntitySet Name="customer_timeline" EntityType="DataCenter.Entities.customer_timeline" />
-          <EntitySet Name="timelines" EntityType="DataCenter.Entities.timeline" />
           <EntitySet Name="role_member" EntityType="DataCenter.Entities.role_member" />
           <EntitySet Name="role_memu" EntityType="DataCenter.Entities.role_memu" />
           <EntitySet Name="incomes" EntityType="DataCenter.Entities.income" />
@@ -2470,6 +2471,7 @@
             <End Role="member" EntitySet="members" />
             <End Role="trademark" EntitySet="trademarks" />
           </AssociationSet>
+          <EntitySet Name="timelines" EntityType="DataCenter.Entities.timeline" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -2570,18 +2572,6 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
           <NavigationProperty Name="customer" Relationship="DataCenter.Entities.timeline_ibfk_customer" FromRole="customer_timeline" ToRole="customer" />
-        </EntityType>
-        <EntityType Name="timeline">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="source_id" Type="Int32" />
-          <Property Name="source_name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="content" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
         </EntityType>
         <EntityType Name="role_member">
           <Key>
@@ -4381,6 +4371,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="timeline">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="source_id" Type="Int32" />
+          <Property Name="source_name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="content" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <Property Name="date_business" Type="DateTime" />
+          <Property Name="is_system" Type="SByte" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4484,19 +4488,6 @@
                 <ScalarProperty Name="content" ColumnName="content" />
                 <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="timelines">
-            <EntityTypeMapping TypeName="DataCenter.Entities.timeline">
-              <MappingFragment StoreEntitySet="timeline">
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="content" ColumnName="content" />
-                <ScalarProperty Name="title" ColumnName="title" />
-                <ScalarProperty Name="source_name" ColumnName="source_name" />
-                <ScalarProperty Name="source_id" ColumnName="source_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -5198,6 +5189,21 @@
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="timelines">
+            <EntityTypeMapping TypeName="DataCenter.Entities.timeline">
+              <MappingFragment StoreEntitySet="timeline">
+                <ScalarProperty Name="is_system" ColumnName="is_system" />
+                <ScalarProperty Name="date_business" ColumnName="date_business" />
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="source_name" ColumnName="source_name" />
+                <ScalarProperty Name="source_id" ColumnName="source_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

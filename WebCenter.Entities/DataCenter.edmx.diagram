@@ -14,7 +14,6 @@
         <EntityTypeShape EntityType="DataCenter.Entities.sequence" Width="1.5" PointX="3.75" PointY="3.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.bank_account" Width="1.5" PointX="15.875" PointY="25" />
         <EntityTypeShape EntityType="DataCenter.Entities.customer_timeline" Width="1.5" PointX="15.875" PointY="28.25" />
-        <EntityTypeShape EntityType="DataCenter.Entities.timeline" Width="1.5" PointX="7.375" PointY="6.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.role_member" Width="1.5" PointX="5.375" PointY="10.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.role_memu" Width="1.5" PointX="7.375" PointY="10.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.income" Width="1.5" PointX="15.875" PointY="12" />
@@ -125,6 +124,7 @@
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_waiter" />
+        <EntityTypeShape EntityType="DataCenter.Entities.timeline" Width="1.5" PointX="6.375" PointY="6.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

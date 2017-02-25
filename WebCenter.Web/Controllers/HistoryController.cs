@@ -296,6 +296,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbReg.id,
                     source_name = "history",
                     title = "提交审核",
+                    is_system = 1,
                     content = string.Format("提交给财务审核")
                 });
 
@@ -429,6 +430,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAudit.id,
                     source_name = "history",
                     title = "通过审核",
+                    is_system = 1,
                     content = string.Format("{0}通过了{1}", arrs[3], t)
                 });
             }
@@ -513,6 +515,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbAudit.id,
                     source_name = "history",
                     title = "驳回审核",
+                    is_system = 1,
                     content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
                 });
             }

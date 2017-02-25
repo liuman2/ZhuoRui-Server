@@ -323,6 +323,7 @@ namespace WebCenter.Web.Controllers
                 source_id = newInternal.id,
                 source_name = "reg_internal",
                 title = "新建订单",
+                is_system = 1,
                 content = string.Format("{0}新建了订单, 档案号{1}", arrs[3], newInternal.code)
             });
 
@@ -617,6 +618,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbReg.id,
                     source_name = "reg_internal",
                     title = "修改订单资料",
+                    is_system = 1,
                     content = string.Format("{0}修改了订单资料", arrs[3])
                 });
             }
@@ -645,6 +647,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbReg.id,
                     source_name = "reg_internal",
                     title = "提交审核",
+                    is_system = 1,
                     content = string.Format("提交给财务审核")
                 });
 
@@ -790,6 +793,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbReg.id,
                     source_name = "reg_internal",
                     title = "通过审核",
+                    is_system = 1,
                     content = string.Format("{0}通过了{1}", arrs[3], t)
                 });
             }
@@ -896,6 +900,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbReg.id,
                     source_name = "reg_internal",
                     title = "驳回审核",
+                    is_system = 1,
                     content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
                 });
             }
@@ -954,6 +959,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbReg.id,
                     source_name = "reg_internal",
                     title = "完成订单",
+                    is_system = 1,
                     content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
                 });
 
@@ -1203,6 +1209,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbInternal.id,
                         source_name = "reg_internal",
                         title = "完善了注册资料",
+                        is_system = 1,
                         content = string.Format("{0}完善了注册资料", arrs[3])
                     });
                     
@@ -1237,6 +1244,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbInternal.id,
                         source_name = "reg_internal",
                         title = "更新了订单进度",
+                        is_system = 1,
                         content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbInternal.progress, dbInternal.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 

@@ -43,5 +43,13 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> date_business { get; set; }
+    
+    
+    
+        public Nullable<sbyte> is_system { get; set; }
     }
 }

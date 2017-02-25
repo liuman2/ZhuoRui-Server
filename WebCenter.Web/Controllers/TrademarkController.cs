@@ -320,6 +320,7 @@ namespace WebCenter.Web.Controllers
                 source_id = newTrade.id,
                 source_name = "reg_abroad",
                 title = "新建订单",
+                is_system = 1,
                 content = string.Format("{0}新建了订单, 档案号{1}", arrs[3], newTrade.code)
             });
 
@@ -590,6 +591,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbTrade.id,
                     source_name = "trademark",
                     title = "修改订单资料",
+                    is_system = 1,
                     content = string.Format("{0}修改了订单资料", arrs[3])
                 });
             }
@@ -617,6 +619,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbTrade.id,
                     source_name = "trademark",
                     title = "提交审核",
+                    is_system = 1,
                     content = string.Format("提交给财务审核")
                 });
 
@@ -775,6 +778,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbTrade.id,
                     source_name = "trademark",
                     title = "通过审核",
+                    is_system = 1,
                     content = string.Format("{0}通过了{1}", arrs[3], t)
                 });
             }
@@ -885,6 +889,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbTrade.id,
                     source_name = "trademark",
                     title = "驳回审核",
+                    is_system = 1,
                     content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
                 });
             }
@@ -929,6 +934,7 @@ namespace WebCenter.Web.Controllers
                     source_id = dbReg.id,
                     source_name = "trademark",
                     title = "完成订单",
+                    is_system = 1,
                     content = string.Format("{0}完成了订单，完成日期为：{1}", arrs[3], date_finish.ToString("yyyy-MM-dd"))
                 });
 
@@ -1022,6 +1028,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbtrademark.id,
                         source_name = "trademark",
                         title = "完善了注册资料",
+                        is_system = 1,
                         content = string.Format("{0}完善了注册资料", arrs[3])
                     });
 
@@ -1056,6 +1063,7 @@ namespace WebCenter.Web.Controllers
                         source_id = dbtrademark.id,
                         source_name = "trademark",
                         title = "更新了订单进度",
+                        is_system = 1,
                         content = string.Format("{0}更新了进度", arrs[3])
                     });
 
