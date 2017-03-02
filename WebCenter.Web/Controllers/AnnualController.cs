@@ -574,15 +574,30 @@ namespace WebCenter.Web.Controllers
             {
                 case "reg_abroad":
                     var dbRegAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
-                    dbRegAbroad.annual_year = DateTime.Now.Year;
-                    dbRegAbroad.annual_date = DateTime.Today;
 
+                    dbRegAbroad.annual_year = DateTime.Now.Year;
+                    if (dbRegAbroad.date_setup != null)
+                    {
+                        dbRegAbroad.annual_date = new DateTime(DateTime.Today.Year, dbRegAbroad.date_setup.Value.Month, dbRegAbroad.date_setup.Value.Day);
+                    } else
+                    {
+                        dbRegAbroad.annual_date = DateTime.Today;
+                    }
+                    
                     Uof.Ireg_abroadService.UpdateEntity(dbRegAbroad);
                     break;
                 case "reg_internal":
                     var dbRegInternal = Uof.Ireg_internalService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
                     dbRegInternal.annual_year = DateTime.Now.Year;
-                    dbRegInternal.annual_date = DateTime.Today;
+
+                    if (dbRegInternal.date_setup != null)
+                    {
+                        dbRegInternal.annual_date = new DateTime(DateTime.Today.Year, dbRegInternal.date_setup.Value.Month, dbRegInternal.date_setup.Value.Day);
+                    }
+                    else
+                    {
+                        dbRegInternal.annual_date = DateTime.Today;
+                    }
 
                     Uof.Ireg_internalService.UpdateEntity(dbRegInternal);
                     break;
@@ -595,13 +610,30 @@ namespace WebCenter.Web.Controllers
                     var dbPatent = Uof.IpatentService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
                     dbPatent.annual_year = DateTime.Now.Year;
                     dbPatent.annual_date = DateTime.Today;
+                    if (dbPatent.date_regit != null)
+                    {
+                        dbPatent.annual_date = new DateTime(DateTime.Today.Year, dbPatent.date_regit.Value.Month, dbPatent.date_regit.Value.Day);
+                    }
+                    else
+                    {
+                        dbPatent.annual_date = DateTime.Today;
+                    }
 
                     Uof.IpatentService.UpdateEntity(dbPatent);
                     break;
                 case "trademark":
                     var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
                     dbTrademark.annual_year = DateTime.Now.Year;
-                    dbTrademark.annual_date = DateTime.Today;
+                    //dbTrademark.annual_date = DateTime.Today;
+
+                    if (dbTrademark.date_regit != null)
+                    {
+                        dbTrademark.annual_date = new DateTime(DateTime.Today.Year, dbTrademark.date_regit.Value.Month, dbTrademark.date_regit.Value.Day);
+                    }
+                    else
+                    {
+                        dbTrademark.annual_date = DateTime.Today;
+                    }
 
                     Uof.ItrademarkService.UpdateEntity(dbTrademark);
                     break;
