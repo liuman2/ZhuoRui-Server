@@ -37,4 +37,13 @@ namespace WebCenter.Web
         public string module_name { get; set; }
         public string value { get; set; }
     }
+
+    public class InboxOrder
+    {
+        public string order_source { get; set; }
+        public int? order_id { get; set; }
+        public string order_name { get; set; }
+        public string order_code { get; set; }
+        public int audit_id { get; set; }
+    }
 }
