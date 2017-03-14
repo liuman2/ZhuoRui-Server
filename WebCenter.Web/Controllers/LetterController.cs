@@ -198,7 +198,7 @@ namespace WebCenter.Web.Controllers
                             source_name = _l.order_source,
                             title = string.Format("新增{0}记录", _l.type),
                             is_system = 1,
-                            content = string.Format("{0}新建了一笔{1}记录, 审核人{2}, 信件单号: {3}", arrs[3], _l.type, auditor, _l.code)
+                            content = string.Format("{0}新建了一笔{1}记录, 审核人{2}, 信件单号: {3}，信件内容: {4}", arrs[3], _l.type, auditor, _l.code, _l.letter_type)
                         });
                     }
                 }
@@ -393,6 +393,12 @@ namespace WebCenter.Web.Controllers
                 needReview = true;
             }
 
+            if (c.review_status == null)
+            {
+                c.review_status = 0;
+                needReview = true;
+            }
+
             _c.type = c.type;
             _c.owner = c.owner;
             _c.letter_type = c.letter_type;
@@ -433,15 +439,18 @@ namespace WebCenter.Web.Controllers
                         });
                     }
 
-                    var auditor = Uof.ImemberService.GetAll(m => m.id == newAutid).Select(m => m.name).FirstOrDefault();
-                    Uof.ItimelineService.AddEntity(new timeline()
+                    if (_c.type == "寄件")
                     {
-                        source_id = _c.order_id,
-                        source_name = _c.order_source,
-                        title = string.Format("修改{0}记录", _c.type),
-                        is_system = 1,
-                        content = string.Format("{0}修改了一笔{1}记录, 审核人{2}, 信件单号: {3}", arrs[3], _c.type, auditor, _c.code)
-                    });
+                        var auditor = Uof.ImemberService.GetAll(m => m.id == newAutid).Select(m => m.name).FirstOrDefault();
+                        Uof.ItimelineService.AddEntity(new timeline()
+                        {
+                            source_id = _c.order_id,
+                            source_name = _c.order_source,
+                            title = string.Format("修改{0}记录", _c.type),
+                            is_system = 1,
+                            content = string.Format("{0}修改了一笔{1}记录, 审核人{2}, 信件单号: {3}，信件内容: {4}", arrs[3], _c.type, auditor, _c.code, _c.letter_type)
+                        });
+                    }
                 }
                 catch (Exception)
                 {
@@ -643,6 +652,8 @@ namespace WebCenter.Web.Controllers
                         order_id = a.id,
                         order_name = a.name_en ?? a.name_cn,
                         order_source = "reg_abroad",
+                        salesman_id = a.salesman_id,
+                        assistant_id = a.assistant_id
                     }).ToPagedList(request.index, request.size).ToList();
 
 
@@ -671,6 +682,8 @@ namespace WebCenter.Web.Controllers
                         order_id = a.id,
                         order_name = a.name_cn,
                         order_source = "reg_internal",
+                        salesman_id = a.salesman_id,
+                        assistant_id = a.assistant_id
                     }).ToPagedList(request.index, request.size).ToList();
                     
                     totalRecord = Uof.Ireg_internalService.GetAll(condition2).Count();
@@ -698,6 +711,8 @@ namespace WebCenter.Web.Controllers
                         order_id = a.id,
                         order_name = a.name_cn ?? a.name_en,
                         order_source = "audit",
+                        salesman_id = a.salesman_id,
+                        assistant_id = a.assistant_id
                     }).ToPagedList(request.index, request.size).ToList();
 
                     totalRecord = Uof.IauditService.GetAll(condition3).Count();
@@ -725,6 +740,8 @@ namespace WebCenter.Web.Controllers
                         order_id = a.id,
                         order_name = a.name,
                         order_source = "patent",
+                        salesman_id = a.salesman_id,
+                        assistant_id = a.assistant_id
                     }).ToPagedList(request.index, request.size).ToList();
 
                     totalRecord = Uof.IpatentService.GetAll(condition4).Count();
@@ -752,6 +769,8 @@ namespace WebCenter.Web.Controllers
                         order_id = a.id,
                         order_name = a.name,
                         order_source = "trademark",
+                        salesman_id = a.salesman_id,
+                        assistant_id = a.assistant_id
                     }).ToPagedList(request.index, request.size).ToList();
 
                     totalRecord = Uof.ItrademarkService.GetAll(condition5).Count();
@@ -813,7 +832,7 @@ namespace WebCenter.Web.Controllers
                             source_name = _c.order_source,
                             title = string.Format("新增{0}记录", _c.type),
                             is_system = 1,
-                            content = string.Format("{0}新建了一笔{1}记录, 审核人{2}, 信件单号: {3}", creator, _c.type,  _c.member.name, _c.code)
+                            content = string.Format("{0}新建了一笔{1}记录, 审核人{2}, 信件单号: {3}，信件内容: {4}", creator, _c.type,  _c.member.name, _c.code, _c.letter_type)
                         });
                     }
                 }
