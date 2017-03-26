@@ -55,7 +55,6 @@ namespace WebCenter.Entities
         public virtual DbSet<annual_exam> annual_exam { get; set; }
         public virtual DbSet<patent> patents { get; set; }
         public virtual DbSet<reg_abroad> reg_abroad { get; set; }
-        public virtual DbSet<reg_internal> reg_internal { get; set; }
         public virtual DbSet<mail> mails { get; set; }
         public virtual DbSet<setting> settings { get; set; }
         public virtual DbSet<receipt> receipts { get; set; }
@@ -64,5 +63,6 @@ namespace WebCenter.Entities
         public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<trademark> trademarks { get; set; }
         public virtual DbSet<timeline> timelines { get; set; }
+        public virtual DbSet<reg_internal> reg_internal { get; set; }
     }
 }

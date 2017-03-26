@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WebCenter.Entities;
 
 namespace WebCenter.Web
 {
@@ -220,4 +221,30 @@ namespace WebCenter.Web
         
     }
 
+    public class InternalName
+    {
+        public string name { get; set; }
+        public bool isFormal { get; set; }
+    }
+
+    public class InternalPrice
+    {
+        public string name { get; set; }
+        public string memo { get; set; }
+        public float price { get; set; }
+    }
+
+    public class Shareholder
+    {
+        public string name { get; set; }
+        public string gender { get; set; } 
+        public string cardNo { get; set; } 
+        public float takes { get; set; }
+    }
+
+    public class RegInternal : reg_internal
+    {
+        public List<InternalName> InternalNames { get; set; }
+        public List<InternalPrice> InternalPrices { get; set; }
+}
 }

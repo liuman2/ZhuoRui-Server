@@ -53,7 +53,7 @@ namespace WebCenter.Entities
     
         public virtual ICollection<audit_bank> audit_bank { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
-        public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual customer customer { get; set; }
+        public virtual ICollection<reg_internal> reg_internal { get; set; }
     }
 }

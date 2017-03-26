@@ -310,8 +310,6 @@ namespace WebCenter.Web.Controllers
                 reginternal.amount_bookkeeping = null;
             }
 
-            
-
             var newInternal = Uof.Ireg_internalService.AddEntity(reginternal);
             if (newInternal == null)
             {
@@ -542,7 +540,13 @@ namespace WebCenter.Web.Controllers
                 reg.rate == dbReg.rate &&
                 reg.currency == dbReg.currency &&
                 reg.assistant_id == dbReg.assistant_id &&
-                reg.shareholder == dbReg.shareholder
+                reg.shareholder == dbReg.shareholder &&
+                reg.shareholders == dbReg.shareholders &&
+                reg.card_no == dbReg.card_no &&
+                reg.scope == dbReg.scope &&
+                reg.pay_mode == dbReg.pay_mode &&
+                reg.names == dbReg.names &&
+                reg.prices == dbReg.prices
                 )
             {
                 return Json(new { success = true, id = reg.id }, JsonRequestBehavior.AllowGet);

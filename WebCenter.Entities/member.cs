@@ -38,7 +38,6 @@ namespace WebCenter.Entities
             this.reg_abroad5 = new HashSet<reg_abroad>();
             this.reg_abroad6 = new HashSet<reg_abroad>();
             this.reg_abroad7 = new HashSet<reg_abroad>();
-            this.reg_internal = new HashSet<reg_internal>();
             this.patents = new HashSet<patent>();
             this.patents1 = new HashSet<patent>();
             this.patents2 = new HashSet<patent>();
@@ -46,13 +45,6 @@ namespace WebCenter.Entities
             this.patents4 = new HashSet<patent>();
             this.patents5 = new HashSet<patent>();
             this.patents6 = new HashSet<patent>();
-            this.reg_internal1 = new HashSet<reg_internal>();
-            this.reg_internal2 = new HashSet<reg_internal>();
-            this.reg_internal3 = new HashSet<reg_internal>();
-            this.reg_internal4 = new HashSet<reg_internal>();
-            this.reg_internal5 = new HashSet<reg_internal>();
-            this.reg_internal6 = new HashSet<reg_internal>();
-            this.reg_internal7 = new HashSet<reg_internal>();
             this.mails = new HashSet<mail>();
             this.mails1 = new HashSet<mail>();
             this.receipts = new HashSet<receipt>();
@@ -78,6 +70,14 @@ namespace WebCenter.Entities
             this.trademarks4 = new HashSet<trademark>();
             this.trademarks5 = new HashSet<trademark>();
             this.trademarks6 = new HashSet<trademark>();
+            this.reg_internal = new HashSet<reg_internal>();
+            this.reg_internal1 = new HashSet<reg_internal>();
+            this.reg_internal2 = new HashSet<reg_internal>();
+            this.reg_internal3 = new HashSet<reg_internal>();
+            this.reg_internal4 = new HashSet<reg_internal>();
+            this.reg_internal5 = new HashSet<reg_internal>();
+            this.reg_internal6 = new HashSet<reg_internal>();
+            this.reg_internal7 = new HashSet<reg_internal>();
         }
     
     
@@ -167,7 +167,6 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad5 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad6 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad7 { get; set; }
-        public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual ICollection<patent> patents { get; set; }
         public virtual ICollection<patent> patents1 { get; set; }
         public virtual ICollection<patent> patents2 { get; set; }
@@ -175,13 +174,6 @@ namespace WebCenter.Entities
         public virtual ICollection<patent> patents4 { get; set; }
         public virtual ICollection<patent> patents5 { get; set; }
         public virtual ICollection<patent> patents6 { get; set; }
-        public virtual ICollection<reg_internal> reg_internal1 { get; set; }
-        public virtual ICollection<reg_internal> reg_internal2 { get; set; }
-        public virtual ICollection<reg_internal> reg_internal3 { get; set; }
-        public virtual ICollection<reg_internal> reg_internal4 { get; set; }
-        public virtual ICollection<reg_internal> reg_internal5 { get; set; }
-        public virtual ICollection<reg_internal> reg_internal6 { get; set; }
-        public virtual ICollection<reg_internal> reg_internal7 { get; set; }
         public virtual ICollection<mail> mails { get; set; }
         public virtual ICollection<mail> mails1 { get; set; }
         public virtual ICollection<receipt> receipts { get; set; }
@@ -207,5 +199,13 @@ namespace WebCenter.Entities
         public virtual ICollection<trademark> trademarks4 { get; set; }
         public virtual ICollection<trademark> trademarks5 { get; set; }
         public virtual ICollection<trademark> trademarks6 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal { get; set; }
+        public virtual ICollection<reg_internal> reg_internal1 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal2 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal3 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal4 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal5 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal6 { get; set; }
+        public virtual ICollection<reg_internal> reg_internal7 { get; set; }
     }
 }
