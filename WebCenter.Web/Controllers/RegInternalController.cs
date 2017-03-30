@@ -392,6 +392,12 @@ namespace WebCenter.Web.Controllers
                 description = a.description,
                 is_annual = a.is_annual ?? 0,
                 shareholder = a.shareholder,
+                names = a.names,
+                shareholders = a.shareholders,
+                prices = a.prices,
+                card_no = a.card_no,
+                scope = a.scope,
+                pay_mode = a.pay_mode,
             }).FirstOrDefault();
 
             return Json(reg, JsonRequestBehavior.AllowGet);
@@ -463,6 +469,13 @@ namespace WebCenter.Web.Controllers
                 description = a.description,
                 is_annual = a.is_annual ?? 0,
                 shareholder = a.shareholder,
+
+                names = a.names,
+                shareholders = a.shareholders,
+                prices = a.prices,
+                card_no = a.card_no,
+                scope = a.scope,
+                pay_mode = a.pay_mode,
 
             }).FirstOrDefault();
 
@@ -597,6 +610,13 @@ namespace WebCenter.Web.Controllers
 
             dbReg.date_updated = DateTime.Now;
             dbReg.shareholder = reg.shareholder;
+
+            dbReg.card_no = reg.card_no;
+            dbReg.scope = reg.scope;
+            dbReg.pay_mode = reg.pay_mode;
+            dbReg.names = reg.names;
+            dbReg.prices = reg.prices;
+            dbReg.shareholders = reg.shareholders;
 
             var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
