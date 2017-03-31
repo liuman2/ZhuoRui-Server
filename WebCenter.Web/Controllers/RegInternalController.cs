@@ -1300,5 +1300,53 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public ActionResult AddRegItem(RegItemRequest request)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var dbInternal = Uof.Ireg_internalService.GetAll(c => c.id == request.id).FirstOrDefault();
+            if (dbInternal == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbInternal.prices = request.items;
+            dbInternal.amount_transaction = request.amount_transaction;
+            dbInternal.date_updated = DateTime.Now;
+
+            Uof.Ireg_internalService.UpdateEntity(dbInternal);
+
+            try
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbInternal.id,
+                    source_name = "reg_internal",
+                    title = "新增委托事项",
+                    is_system = 1,
+                    content = string.Format("{0}新增委托事项{1}, 档案号{2}", arrs[3], request.name, dbInternal.code)
+                });
+            }
+            catch (Exception)
+            {
+                
+            }
+            
+
+            return Json(new { success = true, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

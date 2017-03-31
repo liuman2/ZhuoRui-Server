@@ -65,4 +65,12 @@ namespace WebCenter.Web
         public string trial_memo { get; set; }
         public string allege_memo { get; set; }
     }
+
+    public class RegItemRequest
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string items { get; set; }
+        public float? amount_transaction { get; set; }
+    }
 }
