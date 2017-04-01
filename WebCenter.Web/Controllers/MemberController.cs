@@ -274,5 +274,16 @@ namespace WebCenter.Web.Controllers
             var r = Uof.ImemberService.UpdateEntity(user);
             return Json(new { success = r, pwd = "123456" }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetAll()
+        {
+            var items = Uof.ImemberService.GetAll().Where(m=>m.username != "admin").Select(m => new
+            {
+                id = m.id,
+                name = m.name
+            }).ToList();
+
+            return Json(items, JsonRequestBehavior.AllowGet);
+        }
     }
 }

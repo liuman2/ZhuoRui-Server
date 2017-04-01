@@ -179,6 +179,9 @@
     <Compile Include="reg_internal_history.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="reg_internal_items.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="role.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

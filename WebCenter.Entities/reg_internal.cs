@@ -222,10 +222,6 @@ namespace WebCenter.Entities
     
     
     
-        public string prices { get; set; }
-    
-    
-    
         public string shareholders { get; set; }
     
     
@@ -239,6 +235,10 @@ namespace WebCenter.Entities
     
     
         public string pay_mode { get; set; }
+    
+    
+    
+        public Nullable<float> capital { get; set; }
     
         public virtual bank_account bank_account { get; set; }
         public virtual customer customer { get; set; }

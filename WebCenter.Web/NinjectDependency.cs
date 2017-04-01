@@ -75,6 +75,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<Ireg_internal_historyService>().To<reg_internal_historyService>().InRequestScope();
 	
+	   kernel.Bind<Ireg_internal_itemsService>().To<reg_internal_itemsService>().InRequestScope();
+	
 	   kernel.Bind<IroleService>().To<roleService>().InRequestScope();
 	
 	   kernel.Bind<Irole_memberService>().To<role_memberService>().InRequestScope();

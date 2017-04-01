@@ -126,6 +126,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface Ireg_internal_itemsService:IBaseService<reg_internal_items>
+    {   
+    }
+	
 	public partial interface IroleService:IBaseService<role>
     {   
     }

@@ -65,6 +65,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.Ireg_internal_historyRepository reg_internal_historyRepository { get { return new reg_internal_historyRepository(); } }
 	
+	public IDAL.Ireg_internal_itemsRepository reg_internal_itemsRepository { get { return new reg_internal_itemsRepository(); } }
+	
 	public IDAL.IroleRepository roleRepository { get { return new roleRepository(); } }
 	
 	public IDAL.Irole_memberRepository role_memberRepository { get { return new role_memberRepository(); } }

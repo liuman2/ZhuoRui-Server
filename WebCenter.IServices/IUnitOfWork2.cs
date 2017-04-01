@@ -66,6 +66,8 @@ namespace WebCenter.IServices
 	
 	  Ireg_internal_historyService Ireg_internal_historyService{get;set;} 
 	
+	  Ireg_internal_itemsService Ireg_internal_itemsService{get;set;} 
+	
 	  IroleService IroleService{get;set;} 
 	
 	  Irole_memberService Irole_memberService{get;set;} 

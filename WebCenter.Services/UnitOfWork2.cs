@@ -212,6 +212,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  Ireg_internal_itemsService Ireg_internal_itemsService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IroleService IroleService
     {
         get;

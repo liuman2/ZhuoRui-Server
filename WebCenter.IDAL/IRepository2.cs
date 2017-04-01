@@ -122,6 +122,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface Ireg_internal_itemsRepository :IBaseRepository<reg_internal_items>
+    {         
+    }
+	
     public partial interface IroleRepository :IBaseRepository<role>
     {         
     }

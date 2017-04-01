@@ -204,7 +204,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(reg_internal reginternal, oldRequest oldRequest)
+        public ActionResult Add(reg_internal reginternal, oldRequest oldRequest, List<reg_internal_items> items)
         {
             //if (reginternal.customer_id == null)
             //{
@@ -316,6 +316,16 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
             }
 
+            if (items.Count() > 0)
+            {
+                foreach (var item in items)
+                {
+                    item.status = 0;
+                    item.master_id = newInternal.id;
+                }
+                Uof.Ireg_internal_itemsService.AddEntities(items);
+            }
+
             Uof.ItimelineService.AddEntity(new timeline()
             {
                 source_id = newInternal.id,
@@ -394,13 +404,19 @@ namespace WebCenter.Web.Controllers
                 shareholder = a.shareholder,
                 names = a.names,
                 shareholders = a.shareholders,
-                prices = a.prices,
                 card_no = a.card_no,
                 scope = a.scope,
                 pay_mode = a.pay_mode,
             }).FirstOrDefault();
 
-            return Json(reg, JsonRequestBehavior.AllowGet);
+            //if (reg == null)
+            //{
+            //    return Json(null, JsonRequestBehavior.AllowGet);
+            //}
+
+            var items = Uof.Ireg_internal_itemsService.GetAll(r => r.master_id == reg.id).ToList();
+
+            return Json(new { order = reg, items = items }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetView(int id)
@@ -472,7 +488,6 @@ namespace WebCenter.Web.Controllers
 
                 names = a.names,
                 shareholders = a.shareholders,
-                prices = a.prices,
                 card_no = a.card_no,
                 scope = a.scope,
                 pay_mode = a.pay_mode,
@@ -516,55 +531,15 @@ namespace WebCenter.Web.Controllers
                 local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
             };
 
-            return Json(new { order = reg, incomes = incomes }, JsonRequestBehavior.AllowGet);
+            var items = Uof.Ireg_internal_itemsService.GetAll(r => r.master_id == reg.id).ToList();
+
+            return Json(new { order = reg, incomes = incomes, items = items }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Update(reg_internal reg)
+        public ActionResult Update(reg_internal reginternal, List<reg_internal_items> items)
         {
-            var dbReg = Uof.Ireg_internalService.GetById(reg.id);
-
-            if (reg.customer_id == dbReg.customer_id &&
-                reg.name_cn == dbReg.name_cn &&
-                //reg.date_setup == dbReg.date_setup &&
-                //reg.reg_no == dbReg.reg_no &&
-                reg.address == dbReg.address &&
-                //reg.amount_bookkeeping == dbReg.amount_bookkeeping &&
-                //reg.is_bookkeeping == dbReg.is_bookkeeping &&
-                //reg.is_customs == dbReg.is_customs &&
-                //reg.taxpayer == dbReg.taxpayer &&
-                //reg.customs_address == dbReg.customs_address && 
-                //reg.customs_name == dbReg.customs_name &&
-                reg.legal == dbReg.legal &&
-                reg.director == dbReg.director &&
-                //reg.bank_id == dbReg.bank_id &&
-                reg.date_transaction == dbReg.date_transaction &&
-                reg.amount_transaction == dbReg.amount_transaction &&
-                reg.invoice_name == dbReg.invoice_name &&
-                reg.invoice_tax == dbReg.invoice_tax &&
-                reg.invoice_address == dbReg.invoice_address &&
-                reg.invoice_tel == dbReg.invoice_tel &&
-                reg.invoice_bank == dbReg.invoice_bank &&
-                reg.invoice_account == dbReg.invoice_account &&
-                reg.salesman_id == dbReg.salesman_id &&
-                reg.waiter_id == dbReg.waiter_id &&
-                reg.manager_id == dbReg.manager_id &&
-                reg.outworker_id == dbReg.outworker_id &&
-                reg.description == dbReg.description &&
-                reg.rate == dbReg.rate &&
-                reg.currency == dbReg.currency &&
-                reg.assistant_id == dbReg.assistant_id &&
-                reg.shareholder == dbReg.shareholder &&
-                reg.shareholders == dbReg.shareholders &&
-                reg.card_no == dbReg.card_no &&
-                reg.scope == dbReg.scope &&
-                reg.pay_mode == dbReg.pay_mode &&
-                reg.names == dbReg.names &&
-                reg.prices == dbReg.prices
-                )
-            {
-                return Json(new { success = true, id = reg.id }, JsonRequestBehavior.AllowGet);
-            }
-
+            var dbReg = Uof.Ireg_internalService.GetById(reginternal.id);
+                        
             var identityName = HttpContext.User.Identity.Name;
             var arrs = identityName.Split('|');
             if (arrs.Length == 0)
@@ -572,65 +547,138 @@ namespace WebCenter.Web.Controllers
                 return new HttpUnauthorizedResult();
             }
 
-            var isChangeCurrency = reg.currency != dbReg.currency || reg.rate != dbReg.rate;
+            var isChangeCurrency = reginternal.currency != dbReg.currency || reginternal.rate != dbReg.rate;
 
-            dbReg.customer_id = reg.customer_id;
-            dbReg.name_cn = reg.name_cn;
-            dbReg.amount_bookkeeping = reg.amount_bookkeeping;
-            dbReg.customs_address = reg.customs_address;
-            dbReg.customs_name = reg.customs_name;
-            dbReg.is_bookkeeping = reg.is_bookkeeping;
-            dbReg.is_customs = reg.is_customs;
-            dbReg.legal = reg.legal;
-            dbReg.outworker_id = reg.outworker_id;
-            dbReg.taxpayer = reg.taxpayer;
-            dbReg.date_setup = reg.date_setup;
-            dbReg.reg_no = reg.reg_no;
+            dbReg.customer_id = reginternal.customer_id;
+            dbReg.name_cn = reginternal.name_cn;
+            dbReg.amount_bookkeeping = reginternal.amount_bookkeeping;
+            dbReg.customs_address = reginternal.customs_address;
+            dbReg.customs_name = reginternal.customs_name;
+            dbReg.is_bookkeeping = reginternal.is_bookkeeping;
+            dbReg.is_customs = reginternal.is_customs;
+            dbReg.legal = reginternal.legal;
+            dbReg.outworker_id = reginternal.outworker_id;
+            dbReg.taxpayer = reginternal.taxpayer;
+            dbReg.date_setup = reginternal.date_setup;
+            dbReg.reg_no = reginternal.reg_no;
 
-            dbReg.currency = reg.currency;
-            dbReg.rate = reg.rate;
+            dbReg.currency = reginternal.currency;
+            dbReg.rate = reginternal.rate;
             
-            dbReg.address = reg.address;
-            dbReg.director = reg.director;
+            dbReg.address = reginternal.address;
+            dbReg.director = reginternal.director;
            
-            dbReg.bank_id = reg.bank_id;
-            dbReg.date_transaction = reg.date_transaction;
-            dbReg.amount_transaction = reg.amount_transaction;
-            dbReg.invoice_name = reg.invoice_name;
-            dbReg.invoice_tax = reg.invoice_tax;
-            dbReg.invoice_address = reg.invoice_address;
-            dbReg.invoice_tel = reg.invoice_tel;
-            dbReg.invoice_bank = reg.invoice_bank;
-            dbReg.invoice_account = reg.invoice_account;
-            dbReg.waiter_id = reg.waiter_id;
-            dbReg.salesman_id = reg.salesman_id;
-            dbReg.manager_id = reg.manager_id;
-            dbReg.description = reg.description;
-            dbReg.assistant_id = reg.assistant_id;
+            dbReg.bank_id = reginternal.bank_id;
+            dbReg.date_transaction = reginternal.date_transaction;
+            dbReg.amount_transaction = reginternal.amount_transaction;
+            dbReg.invoice_name = reginternal.invoice_name;
+            dbReg.invoice_tax = reginternal.invoice_tax;
+            dbReg.invoice_address = reginternal.invoice_address;
+            dbReg.invoice_tel = reginternal.invoice_tel;
+            dbReg.invoice_bank = reginternal.invoice_bank;
+            dbReg.invoice_account = reginternal.invoice_account;
+            dbReg.waiter_id = reginternal.waiter_id;
+            dbReg.salesman_id = reginternal.salesman_id;
+            dbReg.manager_id = reginternal.manager_id;
+            dbReg.description = reginternal.description;
+            dbReg.assistant_id = reginternal.assistant_id;
 
             dbReg.date_updated = DateTime.Now;
-            dbReg.shareholder = reg.shareholder;
+            dbReg.shareholder = reginternal.shareholder;
 
-            dbReg.card_no = reg.card_no;
-            dbReg.scope = reg.scope;
-            dbReg.pay_mode = reg.pay_mode;
-            dbReg.names = reg.names;
-            dbReg.prices = reg.prices;
-            dbReg.shareholders = reg.shareholders;
+            dbReg.card_no = reginternal.card_no;
+            dbReg.scope = reginternal.scope;
+            dbReg.pay_mode = reginternal.pay_mode;
+            dbReg.names = reginternal.names;
+            dbReg.shareholders = reginternal.shareholders;
 
             var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
             if (r)
             {
+                var dbItems = Uof.Ireg_internal_itemsService.GetAll(i => i.master_id == dbReg.id).ToList();
+                var ids = items.Select(i => i.id).ToList();
+                var dbIds = new List<int>();
+
+                var deleteItems = new List<reg_internal_items>();
+                var updateItems = new List<reg_internal_items>();
+                var newItems = new List<reg_internal_items>();
+                if (dbItems.Count() > 0)
+                {
+                    dbIds = dbItems.Select(i => i.id).ToList();
+                    foreach (var dbItem in dbItems)
+                    {
+                        var isExist = ids.Contains(dbItem.id);
+                        if (isExist)
+                        {
+                            var existItem = items.Where(i => i.id == dbItem.id).FirstOrDefault();
+                            updateItems.Add(existItem);
+                        }
+                        else
+                        {
+                            deleteItems.Add(dbItem);
+                        }
+                    }
+                }
+
+                if (dbIds.Count() <= 0)
+                {
+                    newItems = items;
+                }
+                else
+                {
+                    foreach (var item in items)
+                    {
+                        var isExist = dbIds.Contains(item.id);
+                        if (!isExist)
+                        {
+                            item.status = 0;
+                            item.master_id = dbReg.id;
+                            newItems.Add(item);
+                        }
+                    }
+                }
+
+                if (deleteItems.Count() > 0)
+                {
+                    foreach (var item in deleteItems)
+                    {
+                        Uof.Ireg_internal_itemsService.DeleteEntity(item);
+                    }                    
+                }
+
+                if (updateItems.Count > 0)
+                {
+                    var toUpdateItems = new List<reg_internal_items>();
+                    foreach (var item in updateItems)
+                    {
+                        var dbItem = dbItems.Where(d => d.id == item.id).FirstOrDefault();
+                        dbItem.name = item.name;
+                        dbItem.material = item.material;
+                        dbItem.memo = item.memo;
+                        dbItem.price = item.price;
+                        dbItem.spend = item.spend;
+                        dbItem.date_updated = DateTime.Now;
+                        toUpdateItems.Add(dbItem);                        
+                    }
+
+                    Uof.Ireg_internal_itemsService.UpdateEntities(toUpdateItems);
+                }
+
+                if (newItems.Count() > 0)
+                {
+                    Uof.Ireg_internal_itemsService.AddEntities(newItems);
+                }
+
                 if (isChangeCurrency)
                 {
-                    var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "reg_internal").ToList();
+                    var list = Uof.IincomeService.GetAll(i => i.source_id == reginternal.id && i.source_name == "reg_internal").ToList();
                     if (list.Count() > 0)
                     {
                         foreach (var item in list)
                         {
-                            item.currency = reg.currency;
-                            item.rate = reg.rate;
+                            item.currency = reginternal.currency;
+                            item.rate = reginternal.rate;
                         }
 
                         Uof.IincomeService.UpdateEntities(list);
@@ -647,7 +695,7 @@ namespace WebCenter.Web.Controllers
                 });
             }
             
-            return Json(new { success = r, id = reg.id }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = r, id = reginternal.id }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Submit(int id)
@@ -1309,7 +1357,7 @@ namespace WebCenter.Web.Controllers
             {
                 return new HttpUnauthorizedResult();
             }
-
+            
             var identityName = HttpContext.User.Identity.Name;
             var arrs = identityName.Split('|');
             if (arrs.Length == 0)
@@ -1323,11 +1371,14 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            dbInternal.prices = request.items;
+            //dbInternal.prices = request.items;
             dbInternal.amount_transaction = request.amount_transaction;
             dbInternal.date_updated = DateTime.Now;
 
             Uof.Ireg_internalService.UpdateEntity(dbInternal);
+
+            request.item.master_id = request.id;
+            var newItem = Uof.Ireg_internal_itemsService.AddEntity(request.item);
 
             try
             {
@@ -1337,7 +1388,7 @@ namespace WebCenter.Web.Controllers
                     source_name = "reg_internal",
                     title = "新增委托事项",
                     is_system = 1,
-                    content = string.Format("{0}新增委托事项{1}, 档案号{2}", arrs[3], request.name, dbInternal.code)
+                    content = string.Format("{0}新增委托事项{1}, 档案号{2}", arrs[3], request.item.name, dbInternal.code)
                 });
             }
             catch (Exception)
@@ -1346,7 +1397,12 @@ namespace WebCenter.Web.Controllers
             }
             
 
-            return Json(new { success = true, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true, id = newItem.id, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult FinishItem(reg_internal_items item)
+        {
+            Uof.Ireg_internal_itemsService.GetById(m => m.id == item.id)
         }
     }
 }

@@ -100,6 +100,9 @@ namespace WebCenter.IDAL
 		IDAL.Ireg_internal_historyRepository reg_internal_historyRepository { get; }
 	  
 
+		IDAL.Ireg_internal_itemsRepository reg_internal_itemsRepository { get; }
+	  
+
 		IDAL.IroleRepository roleRepository { get; }
 	  
 

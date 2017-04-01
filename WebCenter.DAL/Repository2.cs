@@ -152,6 +152,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class reg_internal_itemsRepository :BaseRepository<reg_internal_items>,Ireg_internal_itemsRepository
+    {
+         
+    }
+	
 	public partial class roleRepository :BaseRepository<role>,IroleRepository
     {
          

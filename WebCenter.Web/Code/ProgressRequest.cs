@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WebCenter.Entities;
 
 namespace WebCenter.Web
 {
@@ -69,8 +70,7 @@ namespace WebCenter.Web
     public class RegItemRequest
     {
         public int id { get; set; }
-        public string name { get; set; }
-        public string items { get; set; }
+        public reg_internal_items item { get; set; }
         public float? amount_transaction { get; set; }
     }
 }

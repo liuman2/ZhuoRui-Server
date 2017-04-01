@@ -303,6 +303,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class reg_internal_itemsService:BaseService<reg_internal_items>,Ireg_internal_itemsService
+    {   
+        public reg_internal_itemsService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.reg_internal_itemsRepository;
+        }  
+    }
+	
 	public partial class roleService:BaseService<role>,IroleService
     {   
         public roleService()
