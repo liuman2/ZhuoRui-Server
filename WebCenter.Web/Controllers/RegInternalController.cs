@@ -1399,10 +1399,28 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { success = true, id = newItem.id, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
         }
-
+        [HttpPost]
         public ActionResult FinishItem(reg_internal_items item)
         {
-            Uof.Ireg_internal_itemsService.GetById(m => m.id == item.id)
+            var dbItem = Uof.Ireg_internal_itemsService.GetById(item.id);
+            dbItem.finisher = item.finisher;
+            dbItem.date_finished = item.date_finished;
+            dbItem.date_updated = DateTime.Now;
+            dbItem.status = 1;
+
+            Uof.Ireg_internal_itemsService.UpdateEntity(dbItem);
+
+            return SuccessResult;
+        }
+        [HttpPost]
+        public ActionResult SureName(int id, string name)
+        {
+            var dbReg = Uof.Ireg_internalService.GetAll(r => r.id == id).FirstOrDefault();
+            dbReg.name_cn = name;
+            dbReg.date_updated = DateTime.Now;
+
+            Uof.Ireg_internalService.UpdateEntity(dbReg);
+            return SuccessResult;
         }
     }
 }
