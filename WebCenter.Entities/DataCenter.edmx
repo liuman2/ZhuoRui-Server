@@ -599,6 +599,8 @@
           <Property Name="scope" Type="text" />
           <Property Name="pay_mode" Type="varchar" MaxLength="10" />
           <Property Name="capital" Type="float" />
+          <Property Name="biz_address" Type="varchar" MaxLength="300" />
+          <Property Name="director_card_no" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="reg_internal_history">
           <Key>
@@ -632,6 +634,7 @@
           <Property Name="date_finished" Type="datetime" Precision="0" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="sub_items" Type="text" />
         </EntityType>
         <EntityType Name="role">
           <Key>
@@ -2455,8 +2458,8 @@
             <End Role="trademark" EntitySet="trademarks" />
           </AssociationSet>
           <EntitySet Name="timelines" EntityType="DataCenter.Entities.timeline" />
-          <EntitySet Name="reg_internal_items" EntityType="DataCenter.Entities.reg_internal_items" />
           <EntitySet Name="reg_internal" EntityType="DataCenter.Entities.reg_internal" />
+          <EntitySet Name="reg_internal_items" EntityType="DataCenter.Entities.reg_internal_items" />
           <AssociationSet Name="reg_internal_ibfk_bank" Association="DataCenter.Entities.reg_internal_ibfk_bank">
             <End Role="bank_account" EntitySet="bank_account" />
             <End Role="reg_internal" EntitySet="reg_internal" />
@@ -4225,23 +4228,6 @@
           <Property Name="date_business" Type="DateTime" />
           <Property Name="is_system" Type="SByte" />
         </EntityType>
-        <EntityType Name="reg_internal_items">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="master_id" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="material" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="spend" Type="Int32" />
-          <Property Name="price" Type="Single" />
-          <Property Name="memo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="finisher" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="status" Type="Int32" />
-          <Property Name="date_finished" Type="DateTime" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-        </EntityType>
         <EntityType Name="reg_internal">
           <Key>
             <PropertyRef Name="id" />
@@ -4302,6 +4288,8 @@
           <Property Name="scope" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="pay_mode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="capital" Type="Single" />
+          <Property Name="biz_address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="director_card_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="bank_account" Relationship="DataCenter.Entities.reg_internal_ibfk_bank" FromRole="reg_internal" ToRole="bank_account" />
           <NavigationProperty Name="customer" Relationship="DataCenter.Entities.reg_internal_ibfk_customer" FromRole="reg_internal" ToRole="customer" />
           <NavigationProperty Name="member" Relationship="DataCenter.Entities.fk_internal_assistant_id" FromRole="reg_internal" ToRole="member" />
@@ -4312,6 +4300,24 @@
           <NavigationProperty Name="member5" Relationship="DataCenter.Entities.reg_internal_ibfk_salesman" FromRole="reg_internal" ToRole="member" />
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.reg_internal_ibfk_submit_reviewer" FromRole="reg_internal" ToRole="member" />
           <NavigationProperty Name="member7" Relationship="DataCenter.Entities.reg_internal_ibfk_waiter" FromRole="reg_internal" ToRole="member" />
+        </EntityType>
+        <EntityType Name="reg_internal_items">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="master_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="material" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="spend" Type="Int32" />
+          <Property Name="price" Type="Single" />
+          <Property Name="memo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="finisher" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="date_finished" Type="DateTime" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <Property Name="sub_items" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="reg_internal_ibfk_bank">
           <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="0..1" />
@@ -5200,27 +5206,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="reg_internal_items">
-            <EntityTypeMapping TypeName="DataCenter.Entities.reg_internal_items">
-              <MappingFragment StoreEntitySet="reg_internal_items">
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="date_finished" ColumnName="date_finished" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="finisher" ColumnName="finisher" />
-                <ScalarProperty Name="memo" ColumnName="memo" />
-                <ScalarProperty Name="price" ColumnName="price" />
-                <ScalarProperty Name="spend" ColumnName="spend" />
-                <ScalarProperty Name="material" ColumnName="material" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="master_id" ColumnName="master_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="reg_internal">
             <EntityTypeMapping TypeName="DataCenter.Entities.reg_internal">
               <MappingFragment StoreEntitySet="reg_internal">
+                <ScalarProperty Name="director_card_no" ColumnName="director_card_no" />
+                <ScalarProperty Name="biz_address" ColumnName="biz_address" />
                 <ScalarProperty Name="capital" ColumnName="capital" />
                 <ScalarProperty Name="pay_mode" ColumnName="pay_mode" />
                 <ScalarProperty Name="scope" ColumnName="scope" />
@@ -5276,6 +5266,25 @@
                 <ScalarProperty Name="name_cn" ColumnName="name_cn" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reg_internal_items">
+            <EntityTypeMapping TypeName="DataCenter.Entities.reg_internal_items">
+              <MappingFragment StoreEntitySet="reg_internal_items">
+                <ScalarProperty Name="sub_items" ColumnName="sub_items" />
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="date_finished" ColumnName="date_finished" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="finisher" ColumnName="finisher" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="spend" ColumnName="spend" />
+                <ScalarProperty Name="material" ColumnName="material" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="master_id" ColumnName="master_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

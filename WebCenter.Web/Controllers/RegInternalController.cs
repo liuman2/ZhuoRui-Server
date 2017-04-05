@@ -407,6 +407,9 @@ namespace WebCenter.Web.Controllers
                 card_no = a.card_no,
                 scope = a.scope,
                 pay_mode = a.pay_mode,
+                biz_address = a.biz_address,
+                director_card_no = a.director_card_no,
+                capital = a.capital,
             }).FirstOrDefault();
 
             //if (reg == null)
@@ -491,6 +494,10 @@ namespace WebCenter.Web.Controllers
                 card_no = a.card_no,
                 scope = a.scope,
                 pay_mode = a.pay_mode,
+
+                biz_address = a.biz_address,
+                director_card_no = a.director_card_no,
+                capital = a.capital,
 
             }).FirstOrDefault();
 
@@ -591,6 +598,9 @@ namespace WebCenter.Web.Controllers
             dbReg.pay_mode = reginternal.pay_mode;
             dbReg.names = reginternal.names;
             dbReg.shareholders = reginternal.shareholders;
+            dbReg.biz_address = reginternal.biz_address;
+            dbReg.director_card_no = reginternal.director_card_no;
+            dbReg.capital = reginternal.capital;
 
             var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
@@ -623,6 +633,11 @@ namespace WebCenter.Web.Controllers
 
                 if (dbIds.Count() <= 0)
                 {
+                    foreach (var item in items)
+                    {
+                        item.master_id = dbReg.id;
+                    }
+
                     newItems = items;
                 }
                 else
@@ -744,7 +759,7 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PassAudit(int id)
+        public ActionResult PassAudit(int id, int waiter_id)
         {
             var u = HttpContext.User.Identity.IsAuthenticated;
             if (!u)
@@ -853,7 +868,7 @@ namespace WebCenter.Web.Controllers
             }
 
             dbReg.date_updated = DateTime.Now;
-
+            dbReg.waiter_id = waiter_id;
             var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
             if (r)
@@ -1412,6 +1427,19 @@ namespace WebCenter.Web.Controllers
 
             return SuccessResult;
         }
+
+        [HttpPost]
+        public ActionResult FinishBaseItem(int id, string items)
+        {
+            var dbItem = Uof.Ireg_internal_itemsService.GetById(id);
+            dbItem.sub_items = items;            
+            dbItem.date_updated = DateTime.Now;
+
+            Uof.Ireg_internal_itemsService.UpdateEntity(dbItem);
+
+            return SuccessResult;
+        }
+        
         [HttpPost]
         public ActionResult SureName(int id, string name)
         {

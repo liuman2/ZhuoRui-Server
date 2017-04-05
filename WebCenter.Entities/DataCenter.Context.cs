@@ -63,7 +63,7 @@ namespace WebCenter.Entities
         public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<trademark> trademarks { get; set; }
         public virtual DbSet<timeline> timelines { get; set; }
-        public virtual DbSet<reg_internal_items> reg_internal_items { get; set; }
         public virtual DbSet<reg_internal> reg_internal { get; set; }
+        public virtual DbSet<reg_internal_items> reg_internal_items { get; set; }
     }
 }

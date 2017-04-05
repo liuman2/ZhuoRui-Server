@@ -240,6 +240,14 @@ namespace WebCenter.Entities
     
         public Nullable<float> capital { get; set; }
     
+    
+    
+        public string biz_address { get; set; }
+    
+    
+    
+        public string director_card_no { get; set; }
+    
         public virtual bank_account bank_account { get; set; }
         public virtual customer customer { get; set; }
         public virtual member member { get; set; }

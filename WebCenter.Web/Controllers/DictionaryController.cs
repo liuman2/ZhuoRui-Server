@@ -23,7 +23,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetDictionaryByGroup(string group)
         {
-            var list = Uof.IdictionaryService.GetAll(d=>d.group == group).Select(d => new { id = d.id, name = d.name, value = d.name }).ToList();
+            var list = Uof.IdictionaryService.GetAll(d=>d.group == group).Select(d => new { id = d.id, name = d.name, value = d.name, is_system = d.is_system }).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
