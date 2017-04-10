@@ -1417,6 +1417,19 @@ namespace WebCenter.Web.Controllers
         [HttpPost]
         public ActionResult FinishItem(reg_internal_items item)
         {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var dbItem = Uof.Ireg_internal_itemsService.GetById(item.id);
             dbItem.finisher = item.finisher;
             dbItem.date_finished = item.date_finished;
@@ -1425,17 +1438,62 @@ namespace WebCenter.Web.Controllers
 
             Uof.Ireg_internal_itemsService.UpdateEntity(dbItem);
 
+            try
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbItem.master_id,
+                    source_name = "reg_internal",
+                    title = "进度反馈",
+                    is_system = 1,
+                    content = string.Format("{0}反馈进度: {1}", arrs[3], dbItem.name)
+                });
+            }
+            catch (Exception)
+            {
+
+            }
+
             return SuccessResult;
         }
 
         [HttpPost]
         public ActionResult FinishBaseItem(int id, string items)
         {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var dbItem = Uof.Ireg_internal_itemsService.GetById(id);
             dbItem.sub_items = items;            
             dbItem.date_updated = DateTime.Now;
 
             Uof.Ireg_internal_itemsService.UpdateEntity(dbItem);
+
+            try
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbItem.master_id,
+                    source_name = "reg_internal",
+                    title = "进度反馈",
+                    is_system = 1,
+                    content = string.Format("{0}反馈进度: {1}", arrs[3], dbItem.name)
+                });
+            }
+            catch (Exception)
+            {
+
+            }
 
             return SuccessResult;
         }
@@ -1443,11 +1501,41 @@ namespace WebCenter.Web.Controllers
         [HttpPost]
         public ActionResult SureName(int id, string name)
         {
-            var dbReg = Uof.Ireg_internalService.GetAll(r => r.id == id).FirstOrDefault();
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var dbReg = Uof.Ireg_internalService.GetAll(r1 => r1.id == id).FirstOrDefault();
             dbReg.name_cn = name;
             dbReg.date_updated = DateTime.Now;
 
             Uof.Ireg_internalService.UpdateEntity(dbReg);
+
+            try
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbReg.id,
+                    source_name = "reg_internal",
+                    title = "进度反馈",
+                    is_system = 1,
+                    content = string.Format("{0}确认了公司名称: {1}", arrs[3], name)
+                });
+            }
+            catch (Exception)
+            {
+
+            }
+
             return SuccessResult;
         }
     }
