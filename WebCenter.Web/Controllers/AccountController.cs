@@ -22,7 +22,7 @@ namespace WebCenter.Web.Controllers
 
         [HttpPost]
         public ActionResult SignIn(string username, string password)
-        {
+        {           
             string pwd = HashPassword.GetHashPassword(password);
 
             var _user = Uof.ImemberService.GetAll(a => a.username == username && a.password == pwd).Select(u => new User

@@ -23,6 +23,33 @@ namespace WebCenter.Web.Controllers
         {
         }
 
+        private byte[] StringToByteArray(String hex)
+        {
+            int NumberChars = hex.Length;
+            byte[] bytes = new byte[NumberChars / 2];
+            for (int i = 0; i < NumberChars; i += 2)
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            return bytes;
+        }
+
+        [HttpPost]
+        public ActionResult GetHexFloat(Hex hex)
+        {
+            var ox = StringToByteArray(hex.ox);
+            var ph = StringToByteArray(hex.ph);
+            var water = StringToByteArray(hex.water);
+
+            float oxf = System.BitConverter.ToSingle(ox, 0);
+            float phf = System.BitConverter.ToSingle(ph, 0);
+            float waterf = System.BitConverter.ToSingle(water, 0);
+
+            return Json(new {
+                ox = oxf,
+                ph = phf,
+                water = waterf
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public ActionResult Upload()
         {

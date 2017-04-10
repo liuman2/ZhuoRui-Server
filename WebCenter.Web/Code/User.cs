@@ -6,6 +6,12 @@ using WebCenter.Entities;
 
 namespace WebCenter.Web
 {
+    public class Hex
+    {
+        public string ox { get; set; }
+        public string water { get; set; }
+        public string ph { get; set; }
+    }
     public class User
     {
         public int id { get; set; }

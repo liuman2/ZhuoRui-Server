@@ -836,6 +836,8 @@ namespace WebCenter.Web.Controllers
             }
             else
             {
+                dbReg.waiter_id = waiter_id;
+
                 dbReg.status = 3;
                 dbReg.review_status = 1;
                 dbReg.submit_reviewer_id = userId;
@@ -868,7 +870,7 @@ namespace WebCenter.Web.Controllers
             }
 
             dbReg.date_updated = DateTime.Now;
-            dbReg.waiter_id = waiter_id;
+            
             var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
             if (r)
