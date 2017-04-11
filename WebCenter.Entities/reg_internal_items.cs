@@ -67,5 +67,9 @@ namespace WebCenter.Entities
     
     
         public string sub_items { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> date_started { get; set; }
     }
 }

@@ -635,6 +635,7 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="sub_items" Type="text" />
+          <Property Name="date_started" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="role">
           <Key>
@@ -2459,7 +2460,6 @@
           </AssociationSet>
           <EntitySet Name="timelines" EntityType="DataCenter.Entities.timeline" />
           <EntitySet Name="reg_internal" EntityType="DataCenter.Entities.reg_internal" />
-          <EntitySet Name="reg_internal_items" EntityType="DataCenter.Entities.reg_internal_items" />
           <AssociationSet Name="reg_internal_ibfk_bank" Association="DataCenter.Entities.reg_internal_ibfk_bank">
             <End Role="bank_account" EntitySet="bank_account" />
             <End Role="reg_internal" EntitySet="reg_internal" />
@@ -2500,6 +2500,7 @@
             <End Role="member" EntitySet="members" />
             <End Role="reg_internal" EntitySet="reg_internal" />
           </AssociationSet>
+          <EntitySet Name="reg_internal_items" EntityType="DataCenter.Entities.reg_internal_items" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -4301,24 +4302,6 @@
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.reg_internal_ibfk_submit_reviewer" FromRole="reg_internal" ToRole="member" />
           <NavigationProperty Name="member7" Relationship="DataCenter.Entities.reg_internal_ibfk_waiter" FromRole="reg_internal" ToRole="member" />
         </EntityType>
-        <EntityType Name="reg_internal_items">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="master_id" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="material" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="spend" Type="Int32" />
-          <Property Name="price" Type="Single" />
-          <Property Name="memo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="finisher" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="status" Type="Int32" />
-          <Property Name="date_finished" Type="DateTime" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-          <Property Name="sub_items" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-        </EntityType>
         <Association Name="reg_internal_ibfk_bank">
           <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="0..1" />
           <End Type="DataCenter.Entities.reg_internal" Role="reg_internal" Multiplicity="*" />
@@ -4439,6 +4422,25 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="reg_internal_items">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="master_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="material" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="spend" Type="Int32" />
+          <Property Name="price" Type="Single" />
+          <Property Name="memo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="finisher" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="date_finished" Type="DateTime" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <Property Name="sub_items" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="date_started" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5273,6 +5275,7 @@
           <EntitySetMapping Name="reg_internal_items">
             <EntityTypeMapping TypeName="DataCenter.Entities.reg_internal_items">
               <MappingFragment StoreEntitySet="reg_internal_items">
+                <ScalarProperty Name="date_started" ColumnName="date_started" />
                 <ScalarProperty Name="sub_items" ColumnName="sub_items" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />

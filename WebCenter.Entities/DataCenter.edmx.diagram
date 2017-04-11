@@ -115,7 +115,6 @@
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_waiter" />
         <EntityTypeShape EntityType="DataCenter.Entities.timeline" Width="1.5" PointX="6.375" PointY="6.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.reg_internal" Width="1.5" PointX="27.125" PointY="9.625" />
-        <EntityTypeShape EntityType="DataCenter.Entities.reg_internal_items" Width="1.5" PointX="13.375" PointY="4.75" />
         <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_bank" />
         <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.fk_internal_assistant_id" />
@@ -126,6 +125,7 @@
         <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_waiter" />
+        <EntityTypeShape EntityType="DataCenter.Entities.reg_internal_items" Width="1.5" PointX="13.375" PointY="4.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

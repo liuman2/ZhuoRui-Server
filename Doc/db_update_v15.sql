@@ -42,3 +42,5 @@ INSERT INTO `sequence` VALUES ('reg_internal_items', '1');
 call AddColumnUnlessExists(Database(), 'reg_internal', 'biz_address', ' varchar(300) DEFAULT NULL COMMENT "经营地址"');
 call AddColumnUnlessExists(Database(), 'reg_internal', 'director_card_no', ' varchar(100) DEFAULT NULL COMMENT "监事身份证"');
 call AddColumnUnlessExists(Database(), 'reg_internal_items', 'sub_items', ' text DEFAULT NULL COMMENT "子事项"');
+
+call AddColumnUnlessExists(Database(), 'reg_internal_items', 'date_started', ' datetime DEFAULT NULL');

@@ -260,7 +260,7 @@ namespace WebCenter.Web.Controllers
             var organization_id = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
-                        
+
             reginternal.status = 0;
             reginternal.review_status = -1;
             reginternal.creator_id = userId;
@@ -546,7 +546,7 @@ namespace WebCenter.Web.Controllers
         public ActionResult Update(reg_internal reginternal, List<reg_internal_items> items)
         {
             var dbReg = Uof.Ireg_internalService.GetById(reginternal.id);
-                        
+
             var identityName = HttpContext.User.Identity.Name;
             var arrs = identityName.Split('|');
             if (arrs.Length == 0)
@@ -571,10 +571,10 @@ namespace WebCenter.Web.Controllers
 
             dbReg.currency = reginternal.currency;
             dbReg.rate = reginternal.rate;
-            
+
             dbReg.address = reginternal.address;
             dbReg.director = reginternal.director;
-           
+
             dbReg.bank_id = reginternal.bank_id;
             dbReg.date_transaction = reginternal.date_transaction;
             dbReg.amount_transaction = reginternal.amount_transaction;
@@ -659,7 +659,7 @@ namespace WebCenter.Web.Controllers
                     foreach (var item in deleteItems)
                     {
                         Uof.Ireg_internal_itemsService.DeleteEntity(item);
-                    }                    
+                    }
                 }
 
                 if (updateItems.Count > 0)
@@ -674,7 +674,7 @@ namespace WebCenter.Web.Controllers
                         dbItem.price = item.price;
                         dbItem.spend = item.spend;
                         dbItem.date_updated = DateTime.Now;
-                        toUpdateItems.Add(dbItem);                        
+                        toUpdateItems.Add(dbItem);
                     }
 
                     Uof.Ireg_internal_itemsService.UpdateEntities(toUpdateItems);
@@ -709,7 +709,7 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("{0}修改了订单资料", arrs[3])
                 });
             }
-            
+
             return Json(new { success = r, id = reginternal.id }, JsonRequestBehavior.AllowGet);
         }
 
@@ -870,7 +870,7 @@ namespace WebCenter.Web.Controllers
             }
 
             dbReg.date_updated = DateTime.Now;
-            
+
             var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
             if (r)
@@ -1081,7 +1081,7 @@ namespace WebCenter.Web.Controllers
             }
 
             var list = Uof.Ireg_internal_historyService.GetAll(h => h.reg_id == id).OrderByDescending(item => item.date_created).ToPagedList(index, size).ToList();
-            
+
             var result = new
             {
                 page = page,
@@ -1112,8 +1112,8 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "找不到订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (history.address == dbReg.address && 
-                history.date_setup == dbReg.date_setup && 
+            if (history.address == dbReg.address &&
+                history.date_setup == dbReg.date_setup &&
                 history.director == dbReg.director &&
                 history.name_cn == dbReg.name_cn &&
                 history.legal == dbReg.legal &&
@@ -1301,7 +1301,7 @@ namespace WebCenter.Web.Controllers
                         is_system = 1,
                         content = string.Format("{0}完善了注册资料", arrs[3])
                     });
-                    
+
                     var waitdeals = new List<waitdeal>();
                     waitdeals.Add(new waitdeal
                     {
@@ -1374,7 +1374,7 @@ namespace WebCenter.Web.Controllers
             {
                 return new HttpUnauthorizedResult();
             }
-            
+
             var identityName = HttpContext.User.Identity.Name;
             var arrs = identityName.Split('|');
             if (arrs.Length == 0)
@@ -1410,9 +1410,9 @@ namespace WebCenter.Web.Controllers
             }
             catch (Exception)
             {
-                
+
             }
-            
+
 
             return Json(new { success = true, id = newItem.id, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
         }
@@ -1435,6 +1435,7 @@ namespace WebCenter.Web.Controllers
             var dbItem = Uof.Ireg_internal_itemsService.GetById(item.id);
             dbItem.finisher = item.finisher;
             dbItem.date_finished = item.date_finished;
+            dbItem.date_started = item.date_started;
             dbItem.date_updated = DateTime.Now;
             dbItem.status = 1;
 
@@ -1476,7 +1477,7 @@ namespace WebCenter.Web.Controllers
             }
 
             var dbItem = Uof.Ireg_internal_itemsService.GetById(id);
-            dbItem.sub_items = items;            
+            dbItem.sub_items = items;
             dbItem.date_updated = DateTime.Now;
 
             Uof.Ireg_internal_itemsService.UpdateEntity(dbItem);
@@ -1499,9 +1500,9 @@ namespace WebCenter.Web.Controllers
 
             return SuccessResult;
         }
-        
+
         [HttpPost]
-        public ActionResult SureName(int id, string name)
+        public ActionResult SureName(int id, string name, string items)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
@@ -1516,27 +1517,34 @@ namespace WebCenter.Web.Controllers
                 return new HttpUnauthorizedResult();
             }
 
-            var dbReg = Uof.Ireg_internalService.GetAll(r1 => r1.id == id).FirstOrDefault();
-            dbReg.name_cn = name;
-            dbReg.date_updated = DateTime.Now;
+            var dbItem = Uof.Ireg_internal_itemsService.GetById(id);
+            dbItem.sub_items = items;
+            dbItem.date_updated = DateTime.Now;
 
-            Uof.Ireg_internalService.UpdateEntity(dbReg);
+            Uof.Ireg_internal_itemsService.UpdateEntity(dbItem);
 
             try
             {
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
-                    source_id = dbReg.id,
+                    source_id = dbItem.master_id,
                     source_name = "reg_internal",
                     title = "进度反馈",
                     is_system = 1,
-                    content = string.Format("{0}确认了公司名称: {1}", arrs[3], name)
+                    content = string.Format("{0}反馈进度: {1}", arrs[3], dbItem.name)
                 });
             }
             catch (Exception)
             {
-
             }
+
+
+            var dbReg = Uof.Ireg_internalService.GetAll(r1 => r1.id == dbItem.master_id).FirstOrDefault();
+            dbReg.name_cn = name;
+            dbReg.date_updated = DateTime.Now;
+
+            Uof.Ireg_internalService.UpdateEntity(dbReg);
+
 
             return SuccessResult;
         }
