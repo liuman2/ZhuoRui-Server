@@ -7,6 +7,10 @@ namespace WebCenter.DAL
     public partial class DbSession:IDbSession  
     {   
 	
+	public IDAL.IaccountingRepository accountingRepository { get { return new accountingRepository(); } }
+	
+	public IDAL.Iaccounting_itemRepository accounting_itemRepository { get { return new accounting_itemRepository(); } }
+	
 	public IDAL.Iannual_examRepository annual_examRepository { get { return new annual_examRepository(); } }
 	
 	public IDAL.IareaRepository areaRepository { get { return new areaRepository(); } }

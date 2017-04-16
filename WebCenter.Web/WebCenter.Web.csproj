@@ -221,6 +221,7 @@
     <Compile Include="Code\User.cs" />
     <Compile Include="Code\UserMenus.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AccountingController.cs" />
     <Compile Include="Controllers\AnnualController.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Controllers\AttachmentController.cs" />
@@ -337,6 +338,7 @@
     <Folder Include="Photo\" />
     <Folder Include="Uploads\image\thumbnail\" />
     <Folder Include="vendor\" />
+    <Folder Include="Views\Accounting\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\Annual\" />
     <Folder Include="Views\Area\" />

@@ -7,6 +7,16 @@ namespace WebCenter.DAL
 {
    
 	
+	public partial class accountingRepository :BaseRepository<accounting>,IaccountingRepository
+    {
+         
+    }
+	
+	public partial class accounting_itemRepository :BaseRepository<accounting_item>,Iaccounting_itemRepository
+    {
+         
+    }
+	
 	public partial class annual_examRepository :BaseRepository<annual_exam>,Iannual_examRepository
     {
          

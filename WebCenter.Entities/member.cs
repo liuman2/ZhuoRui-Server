@@ -78,6 +78,13 @@ namespace WebCenter.Entities
             this.reg_internal5 = new HashSet<reg_internal>();
             this.reg_internal6 = new HashSet<reg_internal>();
             this.reg_internal7 = new HashSet<reg_internal>();
+            this.accountings = new HashSet<accounting>();
+            this.accountings1 = new HashSet<accounting>();
+            this.accountings2 = new HashSet<accounting>();
+            this.accountings3 = new HashSet<accounting>();
+            this.accountings4 = new HashSet<accounting>();
+            this.accountings5 = new HashSet<accounting>();
+            this.accountings6 = new HashSet<accounting>();
         }
     
     
@@ -207,5 +214,12 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_internal> reg_internal5 { get; set; }
         public virtual ICollection<reg_internal> reg_internal6 { get; set; }
         public virtual ICollection<reg_internal> reg_internal7 { get; set; }
+        public virtual ICollection<accounting> accountings { get; set; }
+        public virtual ICollection<accounting> accountings1 { get; set; }
+        public virtual ICollection<accounting> accountings2 { get; set; }
+        public virtual ICollection<accounting> accountings3 { get; set; }
+        public virtual ICollection<accounting> accountings4 { get; set; }
+        public virtual ICollection<accounting> accountings5 { get; set; }
+        public virtual ICollection<accounting> accountings6 { get; set; }
     }
 }

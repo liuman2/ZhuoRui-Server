@@ -6,6 +6,14 @@ namespace WebCenter.IDAL
 {
    
 	
+    public partial interface IaccountingRepository :IBaseRepository<accounting>
+    {         
+    }
+	
+    public partial interface Iaccounting_itemRepository :IBaseRepository<accounting_item>
+    {         
+    }
+	
     public partial interface Iannual_examRepository :IBaseRepository<annual_exam>
     {         
     }

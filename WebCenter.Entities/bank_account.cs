@@ -19,6 +19,7 @@ namespace WebCenter.Entities
             this.audit_bank = new HashSet<audit_bank>();
             this.reg_abroad = new HashSet<reg_abroad>();
             this.reg_internal = new HashSet<reg_internal>();
+            this.accountings = new HashSet<accounting>();
         }
     
     
@@ -55,5 +56,6 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual customer customer { get; set; }
         public virtual ICollection<reg_internal> reg_internal { get; set; }
+        public virtual ICollection<accounting> accountings { get; set; }
     }
 }

@@ -881,6 +881,9 @@ namespace WebCenter.Web.Controllers
                 case "audit":
                     existCode = Uof.IauditService.GetAll(a => a.code == code).Select(a => a.code).FirstOrDefault();
                     break;
+                case "account":
+                    existCode = Uof.IaccountingService.GetAll(a => a.code == code).Select(a => a.code).FirstOrDefault();
+                    break;
                 default:
                     break;
             }

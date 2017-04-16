@@ -126,6 +126,17 @@
         <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_waiter" />
         <EntityTypeShape EntityType="DataCenter.Entities.reg_internal_items" Width="1.5" PointX="13.375" PointY="4.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.accounting_item" Width="1.5" PointX="8.375" PointY="6.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.accounting" Width="1.5" PointX="18.125" PointY="28.375" />
+        <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_accountant" />
+        <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_bank" />
+        <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_creator" />
+        <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_customer" />
+        <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_finance_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_manager" />
+        <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_oassistant" />
+        <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_salesman" />
+        <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_submit_reviewer" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -13,6 +13,26 @@ namespace WebCenter.Services
 {
    
 	
+	public partial class accountingService:BaseService<accounting>,IaccountingService
+    {   
+        public accountingService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.accountingRepository;
+        }  
+    }
+	
+	public partial class accounting_itemService:BaseService<accounting_item>,Iaccounting_itemService
+    {   
+        public accounting_itemService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.accounting_itemRepository;
+        }  
+    }
+	
 	public partial class annual_examService:BaseService<annual_exam>,Iannual_examService
     {   
         public annual_examService()

@@ -27,6 +27,7 @@ namespace WebCenter.Entities
             this.customer_timeline = new HashSet<customer_timeline>();
             this.trademarks = new HashSet<trademark>();
             this.reg_internal = new HashSet<reg_internal>();
+            this.accountings = new HashSet<accounting>();
         }
     
     
@@ -156,5 +157,6 @@ namespace WebCenter.Entities
         public virtual ICollection<customer_timeline> customer_timeline { get; set; }
         public virtual ICollection<trademark> trademarks { get; set; }
         public virtual ICollection<reg_internal> reg_internal { get; set; }
+        public virtual ICollection<accounting> accountings { get; set; }
     }
 }

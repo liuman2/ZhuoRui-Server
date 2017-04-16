@@ -9,6 +9,20 @@ namespace WebCenter.Services
 {  
 	
   [Ninject.Inject]
+	 public  IaccountingService IaccountingService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  Iaccounting_itemService Iaccounting_itemService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  Iannual_examService Iannual_examService
     {
         get;

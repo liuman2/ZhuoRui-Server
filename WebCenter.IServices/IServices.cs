@@ -10,6 +10,14 @@ namespace WebCenter.IServices
 {
    
 	
+	public partial interface IaccountingService:IBaseService<accounting>
+    {   
+    }
+	
+	public partial interface Iaccounting_itemService:IBaseService<accounting_item>
+    {   
+    }
+	
 	public partial interface Iannual_examService:IBaseService<annual_exam>
     {   
     }
