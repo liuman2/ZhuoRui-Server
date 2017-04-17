@@ -292,6 +292,11 @@ namespace WebCenter.Web.Controllers
                 //年审
                 case "NS":
                     break;
+                // 商标
+                case "JZ":
+                    dbCode = Uof.IaccountingService.GetAll(r => r.code.Contains(preCode)).OrderByDescending(a => a.code).Select(a => a.code).FirstOrDefault();
+                    break;
+
                 default:
                     break;
             }

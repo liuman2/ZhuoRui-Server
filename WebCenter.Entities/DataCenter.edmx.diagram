@@ -127,7 +127,7 @@
         <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_waiter" />
         <EntityTypeShape EntityType="DataCenter.Entities.reg_internal_items" Width="1.5" PointX="13.375" PointY="4.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.accounting_item" Width="1.5" PointX="8.375" PointY="6.75" />
-        <EntityTypeShape EntityType="DataCenter.Entities.accounting" Width="1.5" PointX="18.125" PointY="28.375" />
+        <EntityTypeShape EntityType="DataCenter.Entities.accounting" Width="2.75" PointX="18.125" PointY="28.375" />
         <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_accountant" />
         <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_bank" />
         <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_creator" />

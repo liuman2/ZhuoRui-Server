@@ -202,6 +202,284 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Add(accounting acc, oldRequest oldRequest)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
 
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            var organization_id = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out organization_id);
+
+            acc.status = 0;
+            acc.review_status = -1;
+            acc.creator_id = userId;
+            //reginternal.salesman_id = userId;
+            acc.organization_id = GetOrgIdByUserId(userId); // organization_id;
+
+            var nowYear = DateTime.Now.Year;
+            if (oldRequest.is_old == 0)
+            {
+                // 新单据
+                acc.code = GetNextOrderCode(acc.salesman_id.Value, "JZ");
+            }
+            else
+            {
+                // 旧单据
+                acc.status = 4;
+                acc.review_status = 1;
+            }
+
+            if (acc.source_type == 1)
+            {
+                acc.source_code = "";
+                acc.source_id = null;
+            }
+
+            acc.rate = 1;
+            acc.currency = "人民币";
+            var newAcc = Uof.IaccountingService.AddEntity(acc);
+            if (newAcc == null)
+            {
+                return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
+            }
+
+            Uof.ItimelineService.AddEntity(new timeline()
+            {
+                source_id = newAcc.id,
+                source_name = "accounting",
+                title = "新建记账订单",
+                is_system = 1,
+                content = string.Format("{0}新建了订单, 档案号{1}", arrs[3], newAcc.code)
+            });
+
+            return Json(new { id = newAcc.id }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Update(accounting acc)
+        {
+            var dbAcc = Uof.IaccountingService.GetById(acc.id);
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }           
+
+            dbAcc.customer_id = acc.customer_id;
+            dbAcc.name = acc.name;
+            dbAcc.source_type = acc.source_type;
+            dbAcc.source_id = acc.source_id;
+            dbAcc.source_code = acc.source_code;
+            dbAcc.legal = acc.legal;
+            dbAcc.address = acc.address;
+            dbAcc.bank_id = acc.bank_id;
+            dbAcc.amount_transaction = acc.amount_transaction;
+            dbAcc.date_transaction = acc.date_transaction;
+            dbAcc.date_updated = DateTime.Now;
+
+            if (acc.source_type == 1)
+            {
+                dbAcc.source_code = "";
+                dbAcc.source_id = null;
+            }
+
+            var r = Uof.IaccountingService.UpdateEntity(dbAcc);
+
+            if (r)
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbAcc.id,
+                    source_name = "accounting",
+                    title = "修改订单资料",
+                    is_system = 1,
+                    content = string.Format("{0}修改了订单资料", arrs[3])
+                });
+            }
+
+            return Json(new { success = r, id = dbAcc.id }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult Get(int id)
+        {
+            var acc = Uof.IaccountingService.GetAll(a => a.id == id).Select(a => new
+            {
+                id = a.id,
+                customer_id = a.customer_id,
+                customer_name = a.customer.name,
+                industry = a.customer.industry,
+                province = a.customer.province,
+                city = a.customer.city,
+                county = a.customer.county,
+                customer_address = a.customer.address,
+                contact = a.customer.contact,
+                mobile = a.customer.mobile,
+                tel = a.customer.tel,
+
+                code = a.code,
+                name = a.name,
+                address = a.address,
+                legal = a.legal,
+                date_transaction = a.date_transaction,
+                amount_transaction = a.amount_transaction,               
+                bank_id = a.bank_id,
+                bank_name = a.bank_account.bank,
+                holder = a.bank_account.holder,
+                account = a.bank_account.account,
+                
+                currency = a.currency,
+                rate = a.rate,
+
+                source_type = a.source_type,
+                source_id = a.source_id,
+                source_code = a.source_code,
+
+                salesman_id = a.salesman_id,
+                salesman = a.member5.name,               
+                manager_id = a.manager_id,
+                manager_name = a.member3.name,
+                finance_reviewer_id = a.finance_reviewer_id,
+                finance_reviewer = a.member2.name,
+                finance_review_moment = a.finance_review_moment,
+                submit_reviewer_id = a.submit_reviewer_id,
+                submit_reviewer = a.member6.name,
+                submit_review_moment = a.submit_review_moment,
+                review_status = a.review_status,
+                creator_id = a.creator_id,
+                creator_name = a.member1.name,
+                accountant_id = a.accountant_id,
+                accountan_name = a.member.name,
+                assistant_id = a.assistant_id,
+                assistant_name = a.member4.name,
+                status = a.status,                
+            }).FirstOrDefault();
+
+            //creator_id member1
+            //accountant_id member
+            //finance_reviewer_id member2
+            //mamager_id  3
+            //assistant_id  4
+            //salesman  5
+            //submit  6
+
+            //if (reg == null)
+            //{
+            //    return Json(null, JsonRequestBehavior.AllowGet);
+            //}
+                        
+            return Json(new { order = acc }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult GetView(int id)
+        {
+            var acc = Uof.IaccountingService.GetAll(a => a.id == id).Select(a => new
+            {
+                id = a.id,
+                customer_id = a.customer_id,
+                customer_name = a.customer.name,
+                industry = a.customer.industry,
+                province = a.customer.province,
+                city = a.customer.city,
+                county = a.customer.county,
+                customer_address = a.customer.address,
+                contact = a.customer.contact,
+                mobile = a.customer.mobile,
+                tel = a.customer.tel,
+
+                code = a.code,
+                name = a.name,
+                address = a.address,
+                legal = a.legal,
+                date_transaction = a.date_transaction,
+                amount_transaction = a.amount_transaction,
+                bank_id = a.bank_id,
+                bank_name = a.bank_account.bank,
+                holder = a.bank_account.holder,
+                account = a.bank_account.account,
+
+                currency = a.currency,
+                rate = a.rate,
+
+                source_type = a.source_type,
+                source_id = a.source_id,
+                source_code = a.source_code,
+
+                salesman_id = a.salesman_id,
+                salesman = a.member5.name,
+                manager_id = a.manager_id,
+                manager_name = a.member3.name,
+                finance_reviewer_id = a.finance_reviewer_id,
+                finance_reviewer = a.member2.name,
+                finance_review_moment = a.finance_review_moment,
+                submit_reviewer_id = a.submit_reviewer_id,
+                submit_reviewer = a.member6.name,
+                submit_review_moment = a.submit_review_moment,
+                review_status = a.review_status,
+                creator_id = a.creator_id,
+                creator_name = a.member1.name,
+                accountant_id = a.accountant_id,
+                accountan_name = a.member.name,
+                assistant_id = a.assistant_id,
+                assistant_name = a.member4.name,
+                status = a.status,
+            }).FirstOrDefault();
+
+
+            var items = Uof.Iaccounting_itemService.GetAll(a => a.master_id == acc.id).ToList();
+
+            var list = Uof.IincomeService.GetAll(i => i.source_id == acc.id && i.source_name == "accounting").Select(i => new {
+                id = i.id,
+                customer_id = i.customer_id,
+                source_id = i.source_id,
+                source_name = i.source_name,
+                payer = i.payer,
+                pay_way = i.pay_way,
+                account = i.account,
+                amount = i.amount,
+                date_pay = i.date_pay,
+                attachment_url = i.attachment_url,
+                description = i.description,
+                bank = i.bank
+            }).ToList();
+
+            var total = 0f;
+            if (list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    total += item.amount.Value;
+                }
+            }
+
+            var balance = acc.amount_transaction - total;
+            var incomes = new
+            {
+                items = list,
+                total = total,
+                balance = balance,
+
+                rate = acc.rate,
+                local_amount = (float)Math.Round((double)(acc.amount_transaction * acc.rate ?? 0), 2),
+                local_total = (float)Math.Round((double)(total * acc.rate ?? 0), 2),
+                local_balance = (float)Math.Round((double)(balance * acc.rate ?? 0), 2)
+            };
+
+            return Json(new { order = acc, incomes = incomes, items = items }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
