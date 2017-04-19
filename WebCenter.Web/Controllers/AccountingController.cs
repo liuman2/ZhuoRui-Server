@@ -481,5 +481,58 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { order = acc, incomes = incomes, items = items }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public ActionResult AddItem(accounting_item item)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            
+            var userId = 0;
+            var organization_id = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out organization_id);
+
+            item.status = 0;
+
+            var dbItem = Uof.Iaccounting_itemService.AddEntity(item);
+
+            var timelines = new List<timeline>();
+            timelines.Add(new timeline
+            {
+                source_id = dbItem.master_id,
+                source_name = "accounting",
+                title = "新增账期",
+                is_system = 1,
+                content = string.Format("{0}新增了账期", arrs[3])
+            });
+
+            timelines.Add(new timeline
+            {
+                source_id = dbItem.id,
+                source_name = "accounting_item",
+                title = "新增账期",
+                is_system = 1,
+                content = string.Format("{0}新增了账期", arrs[3])
+            });
+            try
+            {
+                Uof.ItimelineService.AddEntities(timelines);
+            }
+            catch (Exception)
+            {
+            }
+            return Json(new { id = dbItem.id }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
