@@ -312,8 +312,7 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { success = r, id = dbAcc.id }, JsonRequestBehavior.AllowGet);
         }
-
-
+        
         public ActionResult Get(int id)
         {
             var acc = Uof.IaccountingService.GetAll(a => a.id == id).Select(a => new
@@ -383,8 +382,7 @@ namespace WebCenter.Web.Controllers
                         
             return Json(new { order = acc }, JsonRequestBehavior.AllowGet);
         }
-
-
+        
         public ActionResult GetView(int id)
         {
             var acc = Uof.IaccountingService.GetAll(a => a.id == id).Select(a => new
@@ -533,6 +531,327 @@ namespace WebCenter.Web.Controllers
             {
             }
             return Json(new { id = dbItem.id }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeleteItem(int id)
+        {
+            var b = Uof.Iaccounting_itemService.DeleteEntity(id);
+            return b ? SuccessResult : ErrorResult;
+        }
+
+        [HttpPost]
+        public ActionResult UpdateItem(accounting_item item)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            var organization_id = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out organization_id);
+
+            var dbItem = Uof.Iaccounting_itemService.GetById(item.id);
+
+            dbItem.date_start = item.date_start;
+            dbItem.date_end = item.date_end;
+            dbItem.date_updated = DateTime.Now;
+
+            Uof.Iaccounting_itemService.UpdateEntity(dbItem);
+
+            var timelines = new List<timeline>();
+            timelines.Add(new timeline
+            {
+                source_id = dbItem.id,
+                source_name = "accounting_item",
+                title = "修改了账期",
+                is_system = 1,
+                content = string.Format("{0}修改了账期", arrs[3])
+            });
+            try
+            {
+                Uof.ItimelineService.AddEntities(timelines);
+            }
+            catch (Exception)
+            {
+            }
+            return Json(new { id = dbItem.id }, JsonRequestBehavior.AllowGet);
+        }
+        
+        public ActionResult Submit(int id)
+        {
+            var dbAcc = Uof.IaccountingService.GetById(id);
+            if (dbAcc == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbAcc.status = 1;
+            dbAcc.review_status = -1;
+            dbAcc.date_updated = DateTime.Now;
+
+            var r = Uof.IaccountingService.UpdateEntity(dbAcc);
+
+            if (r)
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbAcc.id,
+                    source_name = "accounting",
+                    title = "提交审核",
+                    is_system = 1,
+                    content = string.Format("提交给财务审核")
+                });
+
+                //var ids = GetFinanceMembers();
+                var auditor_id = GetAuditorByKey("CW_ID");
+                if (auditor_id != null)
+                {
+                    var waitdeals = new List<waitdeal>();
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "accounting",
+                        source_id = dbAcc.id,
+                        user_id = auditor_id,
+                        router = "accounting",
+                        content = "您有记账订单需要财务审核",
+                        read_status = 0
+                    });
+
+                    Uof.IwaitdealService.AddEntities(waitdeals);
+                }
+            }
+            return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PassAudit(int id, int waiter_id)
+        {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var dbAcc = Uof.IaccountingService.GetById(id);
+            if (dbAcc == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+            var t = "";
+            var waitdeals = new List<waitdeal>();
+            if (dbAcc.status == 1)
+            {
+                dbAcc.status = 2;
+                dbAcc.review_status = 1;
+                dbAcc.finance_reviewer_id = userId;
+                dbAcc.finance_review_date = DateTime.Now;
+                dbAcc.finance_review_moment = "";
+
+                t = "财务审核";
+                waitdeals.Add(new waitdeal
+                {
+                    source = "accounting",
+                    source_id = dbAcc.id,
+                    user_id = dbAcc.salesman_id,
+                    router = "internal_view",
+                    content = "您的记账订单已通过财务审核",
+                    read_status = 0
+                });
+
+                //var ids = GetSubmitMembers();
+                var jwId = GetSubmitMemberByKey("JZ_ID");
+                if (jwId != null && jwId > 0)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "accounting",
+                        source_id = dbAcc.id,
+                        user_id = jwId,
+                        router = "accounting",
+                        content = "您有记账订单需要提交审核",
+                        read_status = 0
+                    });
+                }
+            }
+            else
+            {
+                dbAcc.accountant_id = waiter_id;
+                dbAcc.status = 3;
+                dbAcc.review_status = 1;
+                dbAcc.submit_reviewer_id = userId;
+                dbAcc.submit_review_date = DateTime.Now;
+                dbAcc.submit_review_moment = "";
+
+                t = "提交的审核";
+                waitdeals.Add(new waitdeal
+                {
+                    source = "accounting",
+                    source_id = dbAcc.id,
+                    user_id = dbAcc.salesman_id,
+                    router = "internal_view",
+                    content = "您的记账订单已通过提交审核",
+                    read_status = 0
+                });
+
+                if (dbAcc.assistant_id != null && dbAcc.assistant_id != dbAcc.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "accounting",
+                        source_id = dbAcc.id,
+                        user_id = dbAcc.assistant_id,
+                        router = "internal_view",
+                        content = "您的记账订单已通过提交审核",
+                        read_status = 0
+                    });
+                }
+            }
+
+            dbAcc.date_updated = DateTime.Now;
+
+            var r = Uof.IaccountingService.UpdateEntity(dbAcc);
+
+            if (r)
+            {
+                Uof.IwaitdealService.AddEntities(waitdeals);
+
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbAcc.id,
+                    source_name = "accounting",
+                    title = "通过审核",
+                    is_system = 1,
+                    content = string.Format("{0}通过了{1}", arrs[3], t)
+                });
+            }
+            return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult RefuseAudit(int id, string description)
+        {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var dbAcc = Uof.IaccountingService.GetById(id);
+            if (dbAcc == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+            var t = "";
+            var waitdeals = new List<waitdeal>();
+            if (dbAcc.status == 1)
+            {
+                dbAcc.status = 0;
+                dbAcc.review_status = 0;
+                dbAcc.finance_reviewer_id = userId;
+                dbAcc.finance_review_date = DateTime.Now;
+                dbAcc.finance_review_moment = description;
+
+                t = "驳回了财务审核";
+                waitdeals.Add(new waitdeal
+                {
+                    source = "accounting",
+                    source_id = dbAcc.id,
+                    user_id = dbAcc.salesman_id,
+                    router = "internal_view",
+                    content = "您的国内注册订单未通过财务审核",
+                    read_status = 0
+                });
+                if (dbAcc.assistant_id != null && dbAcc.assistant_id != dbAcc.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "accounting",
+                        source_id = dbAcc.id,
+                        user_id = dbAcc.assistant_id,
+                        router = "internal_view",
+                        content = "您的国内注册订单未通过财务审核",
+                        read_status = 0
+                    });
+                }
+            }
+            else
+            {
+                dbAcc.status = 0;
+                dbAcc.review_status = 0;
+                dbAcc.submit_reviewer_id = userId;
+                dbAcc.submit_review_date = DateTime.Now;
+                dbAcc.submit_review_moment = description;
+
+                t = "驳回了提交的审核";
+                waitdeals.Add(new waitdeal
+                {
+                    source = "accounting",
+                    source_id = dbAcc.id,
+                    user_id = dbAcc.salesman_id,
+                    router = "account_view",
+                    content = "您的记账订单未通过提交审核",
+                    read_status = 0
+                });
+                if (dbAcc.assistant_id != null && dbAcc.assistant_id != dbAcc.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "accounting",
+                        source_id = dbAcc.id,
+                        user_id = dbAcc.assistant_id,
+                        router = "account_view",
+                        content = "您的记账订单未通过提交审核",
+                        read_status = 0
+                    });
+                }
+            }
+
+            dbAcc.date_updated = DateTime.Now;
+
+            var r = Uof.IaccountingService.UpdateEntity(dbAcc);
+
+            if (r)
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbAcc.id,
+                    source_name = "accounting",
+                    title = "驳回审核",
+                    is_system = 1,
+                    content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
+                });
+            }
+
+            return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
         }
     }
 }
