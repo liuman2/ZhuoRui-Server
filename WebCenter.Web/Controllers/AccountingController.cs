@@ -622,7 +622,7 @@ namespace WebCenter.Web.Controllers
                         source = "accounting",
                         source_id = dbAcc.id,
                         user_id = auditor_id,
-                        router = "accounting",
+                        router = "account_view",
                         content = "您有记账订单需要财务审核",
                         read_status = 0
                     });
@@ -672,7 +672,7 @@ namespace WebCenter.Web.Controllers
                     source = "accounting",
                     source_id = dbAcc.id,
                     user_id = dbAcc.salesman_id,
-                    router = "internal_view",
+                    router = "account_view",
                     content = "您的记账订单已通过财务审核",
                     read_status = 0
                 });
@@ -686,7 +686,7 @@ namespace WebCenter.Web.Controllers
                         source = "accounting",
                         source_id = dbAcc.id,
                         user_id = jwId,
-                        router = "accounting",
+                        router = "account_view",
                         content = "您有记账订单需要提交审核",
                         read_status = 0
                     });
@@ -707,7 +707,7 @@ namespace WebCenter.Web.Controllers
                     source = "accounting",
                     source_id = dbAcc.id,
                     user_id = dbAcc.salesman_id,
-                    router = "internal_view",
+                    router = "account_view",
                     content = "您的记账订单已通过提交审核",
                     read_status = 0
                 });
@@ -719,7 +719,7 @@ namespace WebCenter.Web.Controllers
                         source = "accounting",
                         source_id = dbAcc.id,
                         user_id = dbAcc.assistant_id,
-                        router = "internal_view",
+                        router = "account_view",
                         content = "您的记账订单已通过提交审核",
                         read_status = 0
                     });
@@ -786,8 +786,8 @@ namespace WebCenter.Web.Controllers
                     source = "accounting",
                     source_id = dbAcc.id,
                     user_id = dbAcc.salesman_id,
-                    router = "internal_view",
-                    content = "您的国内注册订单未通过财务审核",
+                    router = "account_view",
+                    content = "您的记账订单未通过财务审核",
                     read_status = 0
                 });
                 if (dbAcc.assistant_id != null && dbAcc.assistant_id != dbAcc.salesman_id)
@@ -797,8 +797,8 @@ namespace WebCenter.Web.Controllers
                         source = "accounting",
                         source_id = dbAcc.id,
                         user_id = dbAcc.assistant_id,
-                        router = "internal_view",
-                        content = "您的国内注册订单未通过财务审核",
+                        router = "account_view",
+                        content = "您的记账订单未通过财务审核",
                         read_status = 0
                     });
                 }

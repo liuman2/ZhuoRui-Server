@@ -387,6 +387,57 @@ namespace WebCenter.Web.Controllers
 
             #endregion
 
+            #region 记账
+            if (string.IsNullOrEmpty(order_type) || order_type == "accounting")
+            {
+                Expression<Func<accounting, bool>> customerQuery1 = c => true;
+                if (customer_id != null && customer_id.Value > 0)
+                {
+                    customerQuery1 = c => (c.customer_id == customer_id);
+                }
+
+                Expression<Func<accounting, bool>> salesmanQuery1 = c => true;
+                if (salesman_id != null && salesman_id.Value > 0)
+                {
+                    salesmanQuery1 = c => (c.salesman_id == salesman_id);
+                }
+
+                Expression<Func<accounting, bool>> orderTypeQuery1 = c => c.status > 0;
+                if (order_status == 0)
+                {
+                    // 未审核
+                    orderTypeQuery1 = c => c.status == 1;
+                }
+                else if (order_status == 1)
+                {
+                    // 已审核
+                    orderTypeQuery1 = c => c.status > 1;
+                }
+
+                var patents = Uof.IaccountingService.GetAll().Where(customerQuery1).Where(salesmanQuery1).Where(orderTypeQuery1).Select(a => new FinanceCheck
+                {
+                    id = a.id,
+                    customer_id = a.customer_id,
+                    customer_name = a.customer.name,
+                    customer_code = a.customer.code,
+                    order_code = a.code,
+                    order_name = a.name,
+                    order_type = "accounting",
+                    order_type_name = "记账",
+                    review_status = a.review_status,
+                    status = a.status,
+                    salesman = a.member4.name,
+                    amount_transaction = a.amount_transaction
+
+                }).ToList();
+
+                if (patents.Count() > 0)
+                {
+                    items.AddRange(patents);
+                }
+            }
+            #endregion
+
 
             var result = new
             {
@@ -888,6 +939,69 @@ namespace WebCenter.Web.Controllers
                 }
             }
 
+            #endregion
+
+            #region 记账
+            var jzId = settings.Where(s => s.name == "JZ_ID").Select(s => s.value).FirstOrDefault();
+            if ((string.IsNullOrEmpty(order_type) || order_type == "accounting") && (hasCompany != null || userId != zlId))
+            {
+                Expression<Func<accounting, bool>> customerQuery4 = c => true;
+                if (customer_id != null && customer_id.Value > 0)
+                {
+                    customerQuery4 = c => (c.customer_id == customer_id);
+                }
+
+                Expression<Func<accounting, bool>> salesmanQuery4 = c => true;
+                if (salesman_id != null && salesman_id.Value > 0)
+                {
+                    salesmanQuery4 = c => (c.salesman_id == salesman_id);
+                }
+
+                Expression<Func<accounting, bool>> orderTypeQuery4 = c => c.status >= 2;
+                if (order_status == 0)
+                {
+                    // 未审核
+                    orderTypeQuery4 = c => c.status == 2 && c.review_status == 1;
+                }
+                else if (order_status == 1)
+                {
+                    // 已审核
+                    orderTypeQuery4 = c => c.status > 2;
+                }
+
+                Expression<Func<accounting, bool>> nameQuery4 = c => true;
+                if (!string.IsNullOrEmpty(name))
+                {
+                    nameQuery4 = c => (c.name.ToLower().Contains(name.ToLower()) || c.code.ToLower().Contains(name.ToLower()));
+                }
+
+                var patents = Uof.IaccountingService.GetAll()
+                    .Where(customerQuery4)
+                    .Where(salesmanQuery4)
+                    .Where(orderTypeQuery4)
+                    .Where(nameQuery4)
+                    .Select(a => new FinanceCheck
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name,
+                        order_type = "accounting",
+                        order_type_name = "记账",
+                        review_status = a.review_status,
+                        status = a.status,
+                        salesman = a.member4.name,
+                        amount_transaction = a.amount_transaction
+
+                    }).ToList();
+
+                if (patents.Count() > 0)
+                {
+                    items.AddRange(patents);
+                }
+            }
             #endregion
 
             var result = new
