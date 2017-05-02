@@ -46,7 +46,7 @@ namespace WebCenter.Web.Controllers
             var ops = arrs[4].Split(',');
             if (ops.Count() == 0)
             {
-                condition = c => (c.salesman_id == userId || c.assistant_id == userId);
+                condition = c => (c.salesman_id == userId || c.assistant_id == userId || c.waiter_id == userId);
             }
             else
             {
@@ -1437,7 +1437,11 @@ namespace WebCenter.Web.Controllers
             dbItem.date_finished = item.date_finished;
             dbItem.date_started = item.date_started;
             dbItem.date_updated = DateTime.Now;
-            dbItem.status = 1;
+            if (dbItem.date_finished != null)
+            {
+                dbItem.status = 1;
+            }
+            
 
             Uof.Ireg_internal_itemsService.UpdateEntity(dbItem);
 

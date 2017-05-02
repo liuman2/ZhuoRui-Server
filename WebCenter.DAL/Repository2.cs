@@ -17,6 +17,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class accounting_progressRepository :BaseRepository<accounting_progress>,Iaccounting_progressRepository
+    {
+         
+    }
+	
 	public partial class annual_examRepository :BaseRepository<annual_exam>,Iannual_examRepository
     {
          

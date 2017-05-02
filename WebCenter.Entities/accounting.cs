@@ -136,6 +136,34 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
+    
+    
+        public Nullable<sbyte> tax { get; set; }
+    
+    
+    
+        public string invoice_name { get; set; }
+    
+    
+    
+        public string invoice_tax { get; set; }
+    
+    
+    
+        public string invoice_address { get; set; }
+    
+    
+    
+        public string invoice_tel { get; set; }
+    
+    
+    
+        public string invoice_bank { get; set; }
+    
+    
+    
+        public string invoice_account { get; set; }
+    
         public virtual member member { get; set; }
         public virtual bank_account bank_account { get; set; }
         public virtual member member1 { get; set; }

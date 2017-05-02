@@ -33,6 +33,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class accounting_progressService:BaseService<accounting_progress>,Iaccounting_progressService
+    {   
+        public accounting_progressService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.accounting_progressRepository;
+        }  
+    }
+	
 	public partial class annual_examService:BaseService<annual_exam>,Iannual_examService
     {   
         public annual_examService()

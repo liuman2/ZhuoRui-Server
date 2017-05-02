@@ -18,6 +18,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface Iaccounting_progressService:IBaseService<accounting_progress>
+    {   
+    }
+	
 	public partial interface Iannual_examService:IBaseService<annual_exam>
     {   
     }

@@ -21,6 +21,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<Iaccounting_itemService>().To<accounting_itemService>().InRequestScope();
 	
+	   kernel.Bind<Iaccounting_progressService>().To<accounting_progressService>().InRequestScope();
+	
 	   kernel.Bind<Iannual_examService>().To<annual_examService>().InRequestScope();
 	
 	   kernel.Bind<IareaService>().To<areaService>().InRequestScope();

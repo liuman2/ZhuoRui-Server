@@ -12,6 +12,8 @@ namespace WebCenter.IServices
 	
 	  Iaccounting_itemService Iaccounting_itemService{get;set;} 
 	
+	  Iaccounting_progressService Iaccounting_progressService{get;set;} 
+	
 	  Iannual_examService Iannual_examService{get;set;} 
 	
 	  IareaService IareaService{get;set;} 

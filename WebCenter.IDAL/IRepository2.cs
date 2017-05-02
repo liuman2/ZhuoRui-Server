@@ -14,6 +14,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface Iaccounting_progressRepository :IBaseRepository<accounting_progress>
+    {         
+    }
+	
     public partial interface Iannual_examRepository :IBaseRepository<annual_exam>
     {         
     }

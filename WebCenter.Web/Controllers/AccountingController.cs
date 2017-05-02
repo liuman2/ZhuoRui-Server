@@ -46,7 +46,7 @@ namespace WebCenter.Web.Controllers
             var ops = arrs[4].Split(',');
             if (ops.Count() == 0)
             {
-                condition = c => (c.salesman_id == userId || c.assistant_id == userId);
+                condition = c => (c.salesman_id == userId || c.assistant_id == userId || c.accountant_id == userId);
             }
             else
             {
@@ -276,7 +276,7 @@ namespace WebCenter.Web.Controllers
             if (arrs.Length == 0)
             {
                 return new HttpUnauthorizedResult();
-            }           
+            }
 
             dbAcc.customer_id = acc.customer_id;
             dbAcc.name = acc.name;
@@ -289,6 +289,26 @@ namespace WebCenter.Web.Controllers
             dbAcc.amount_transaction = acc.amount_transaction;
             dbAcc.date_transaction = acc.date_transaction;
             dbAcc.date_updated = DateTime.Now;
+
+            dbAcc.tax = acc.tax;
+            if (acc.tax == 0)
+            {
+                dbAcc.invoice_name = acc.invoice_name;
+                dbAcc.invoice_tax = acc.invoice_tax;
+                dbAcc.invoice_address = acc.invoice_address;
+                dbAcc.invoice_tel = acc.invoice_tel;
+                dbAcc.invoice_bank = acc.invoice_bank;
+                dbAcc.invoice_account = acc.invoice_account;
+            }
+            else
+            {
+                dbAcc.invoice_name = null;
+                dbAcc.invoice_tax = null;
+                dbAcc.invoice_address = null;
+                dbAcc.invoice_tel = null;
+                dbAcc.invoice_bank = null;
+                dbAcc.invoice_account = null;
+            }
 
             if (acc.source_type == 1)
             {
@@ -364,7 +384,15 @@ namespace WebCenter.Web.Controllers
                 accountan_name = a.member.name,
                 assistant_id = a.assistant_id,
                 assistant_name = a.member4.name,
-                status = a.status,                
+                status = a.status,
+                tax = a.tax,
+                invoice_name = a.invoice_name,
+                invoice_tax = a.invoice_tax,
+                invoice_address = a.invoice_address,
+                invoice_tel = a.invoice_tel,
+                invoice_bank = a.invoice_bank,
+                invoice_account = a.invoice_account,
+
             }).FirstOrDefault();
 
             //creator_id member1
@@ -435,6 +463,14 @@ namespace WebCenter.Web.Controllers
                 assistant_id = a.assistant_id,
                 assistant_name = a.member4.name,
                 status = a.status,
+
+                tax = a.tax,
+                invoice_name = a.invoice_name,
+                invoice_tax = a.invoice_tax,
+                invoice_address = a.invoice_address,
+                invoice_tel = a.invoice_tel,
+                invoice_bank = a.invoice_bank,
+                invoice_account = a.invoice_account,
             }).FirstOrDefault();
 
 
@@ -853,5 +889,40 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetPeriodProgress(int id)
+        {
+            var items = Uof.Iaccounting_progressService.GetAll(p => p.master_id == id).ToList();
+
+            return Json(items, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetProgress(int id)
+        {
+            var p = Uof.Iaccounting_progressService.GetById(id);
+
+            return Json(p, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult AddProress(accounting_progress progress)
+        {
+            Uof.Iaccounting_progressService.AddEntity(progress);
+            return SuccessResult;
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProress(accounting_progress progress)
+        {
+            var p = Uof.Iaccounting_progressService.GetById(progress.id);
+            p.progress = progress.progress;
+            p.attachment = progress.attachment;
+            p.date_start = progress.date_start;
+
+            Uof.Iaccounting_progressService.UpdateEntity(p);
+
+            return SuccessResult;
+        }
+        
     }
 }

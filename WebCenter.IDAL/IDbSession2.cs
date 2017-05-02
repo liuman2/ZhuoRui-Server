@@ -19,6 +19,9 @@ namespace WebCenter.IDAL
 		IDAL.Iaccounting_itemRepository accounting_itemRepository { get; }
 	  
 
+		IDAL.Iaccounting_progressRepository accounting_progressRepository { get; }
+	  
+
 		IDAL.Iannual_examRepository annual_examRepository { get; }
 	  
 

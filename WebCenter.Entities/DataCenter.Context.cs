@@ -64,8 +64,9 @@ namespace WebCenter.Entities
         public virtual DbSet<trademark> trademarks { get; set; }
         public virtual DbSet<timeline> timelines { get; set; }
         public virtual DbSet<reg_internal> reg_internal { get; set; }
-        public virtual DbSet<reg_internal_items> reg_internal_items { get; set; }
-        public virtual DbSet<accounting_item> accounting_item { get; set; }
         public virtual DbSet<accounting> accountings { get; set; }
+        public virtual DbSet<accounting_progress> accounting_progress { get; set; }
+        public virtual DbSet<accounting_item> accounting_item { get; set; }
+        public virtual DbSet<reg_internal_items> reg_internal_items { get; set; }
     }
 }

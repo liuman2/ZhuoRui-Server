@@ -11,6 +11,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.Iaccounting_itemRepository accounting_itemRepository { get { return new accounting_itemRepository(); } }
 	
+	public IDAL.Iaccounting_progressRepository accounting_progressRepository { get { return new accounting_progressRepository(); } }
+	
 	public IDAL.Iannual_examRepository annual_examRepository { get { return new annual_examRepository(); } }
 	
 	public IDAL.IareaRepository areaRepository { get { return new areaRepository(); } }

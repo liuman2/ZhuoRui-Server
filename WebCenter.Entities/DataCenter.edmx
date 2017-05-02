@@ -39,6 +39,13 @@
           <Property Name="assistant_id" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="tax" Type="tinyint" />
+          <Property Name="invoice_name" Type="varchar" MaxLength="200" />
+          <Property Name="invoice_tax" Type="varchar" MaxLength="200" />
+          <Property Name="invoice_address" Type="varchar" MaxLength="200" />
+          <Property Name="invoice_tel" Type="varchar" MaxLength="20" />
+          <Property Name="invoice_bank" Type="varchar" MaxLength="100" />
+          <Property Name="invoice_account" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="accounting_item">
           <Key>
@@ -51,6 +58,18 @@
           <Property Name="status" Type="int" />
           <Property Name="memo" Type="varchar" MaxLength="500" />
           <Property Name="finisher" Type="varchar" MaxLength="30" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="accounting_progress">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="master_id" Type="int" Nullable="false" />
+          <Property Name="date_start" Type="datetime" Precision="0" />
+          <Property Name="progress" Type="varchar" MaxLength="100" />
+          <Property Name="attachment" Type="varchar" MaxLength="300" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
@@ -1930,6 +1949,7 @@
         <EntityContainer Name="DataCenterEntitiesStoreContainer">
           <EntitySet Name="accounting" EntityType="Self.accounting" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="accounting_item" EntityType="Self.accounting_item" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="accounting_progress" EntityType="Self.accounting_progress" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="annual_exam" EntityType="Self.annual_exam" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="area" EntityType="Self.area" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="attachment" EntityType="Self.attachment" Schema="zhuoruioa" store:Type="Tables" />
@@ -2695,9 +2715,8 @@
             <End Role="member" EntitySet="members" />
             <End Role="reg_internal" EntitySet="reg_internal" />
           </AssociationSet>
-          <EntitySet Name="reg_internal_items" EntityType="DataCenter.Entities.reg_internal_items" />
-          <EntitySet Name="accounting_item" EntityType="DataCenter.Entities.accounting_item" />
           <EntitySet Name="accountings" EntityType="DataCenter.Entities.accounting" />
+          <EntitySet Name="accounting_progress" EntityType="DataCenter.Entities.accounting_progress" />
           <AssociationSet Name="accounting_ibfk_accountant" Association="DataCenter.Entities.accounting_ibfk_accountant">
             <End Role="member" EntitySet="members" />
             <End Role="accounting" EntitySet="accountings" />
@@ -2734,6 +2753,8 @@
             <End Role="member" EntitySet="members" />
             <End Role="accounting" EntitySet="accountings" />
           </AssociationSet>
+          <EntitySet Name="accounting_item" EntityType="DataCenter.Entities.accounting_item" />
+          <EntitySet Name="reg_internal_items" EntityType="DataCenter.Entities.reg_internal_items" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -4664,39 +4685,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="reg_internal_items">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="master_id" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="material" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="spend" Type="Int32" />
-          <Property Name="price" Type="Single" />
-          <Property Name="memo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="finisher" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="status" Type="Int32" />
-          <Property Name="date_finished" Type="DateTime" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-          <Property Name="sub_items" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="date_started" Type="DateTime" />
-        </EntityType>
-        <EntityType Name="accounting_item">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="master_id" Type="Int32" Nullable="false" />
-          <Property Name="date_start" Type="DateTime" />
-          <Property Name="date_end" Type="DateTime" />
-          <Property Name="status" Type="Int32" />
-          <Property Name="memo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="finisher" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-        </EntityType>
         <EntityType Name="accounting">
           <Key>
             <PropertyRef Name="id" />
@@ -4731,6 +4719,13 @@
           <Property Name="assistant_id" Type="Int32" />
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
+          <Property Name="tax" Type="SByte" />
+          <Property Name="invoice_name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="invoice_tax" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="invoice_address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="invoice_tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="invoice_bank" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="invoice_account" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="member" Relationship="DataCenter.Entities.accounting_ibfk_accountant" FromRole="accounting" ToRole="member" />
           <NavigationProperty Name="bank_account" Relationship="DataCenter.Entities.accounting_ibfk_bank" FromRole="accounting" ToRole="bank_account" />
           <NavigationProperty Name="member1" Relationship="DataCenter.Entities.accounting_ibfk_creator" FromRole="accounting" ToRole="member" />
@@ -4740,6 +4735,18 @@
           <NavigationProperty Name="member4" Relationship="DataCenter.Entities.accounting_ibfk_oassistant" FromRole="accounting" ToRole="member" />
           <NavigationProperty Name="member5" Relationship="DataCenter.Entities.accounting_ibfk_salesman" FromRole="accounting" ToRole="member" />
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.accounting_ibfk_submit_reviewer" FromRole="accounting" ToRole="member" />
+        </EntityType>
+        <EntityType Name="accounting_progress">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="master_id" Type="Int32" Nullable="false" />
+          <Property Name="date_start" Type="DateTime" />
+          <Property Name="progress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="attachment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
         </EntityType>
         <Association Name="accounting_ibfk_accountant">
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
@@ -4849,6 +4856,39 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="accounting_item">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="master_id" Type="Int32" Nullable="false" />
+          <Property Name="date_start" Type="DateTime" />
+          <Property Name="date_end" Type="DateTime" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="memo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="finisher" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="reg_internal_items">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="master_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="material" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="spend" Type="Int32" />
+          <Property Name="price" Type="Single" />
+          <Property Name="memo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="finisher" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Int32" />
+          <Property Name="date_finished" Type="DateTime" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <Property Name="sub_items" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="date_started" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5680,44 +5720,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="reg_internal_items">
-            <EntityTypeMapping TypeName="DataCenter.Entities.reg_internal_items">
-              <MappingFragment StoreEntitySet="reg_internal_items">
-                <ScalarProperty Name="date_started" ColumnName="date_started" />
-                <ScalarProperty Name="sub_items" ColumnName="sub_items" />
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="date_finished" ColumnName="date_finished" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="finisher" ColumnName="finisher" />
-                <ScalarProperty Name="memo" ColumnName="memo" />
-                <ScalarProperty Name="price" ColumnName="price" />
-                <ScalarProperty Name="spend" ColumnName="spend" />
-                <ScalarProperty Name="material" ColumnName="material" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="master_id" ColumnName="master_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="accounting_item">
-            <EntityTypeMapping TypeName="DataCenter.Entities.accounting_item">
-              <MappingFragment StoreEntitySet="accounting_item">
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="finisher" ColumnName="finisher" />
-                <ScalarProperty Name="memo" ColumnName="memo" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="date_end" ColumnName="date_end" />
-                <ScalarProperty Name="date_start" ColumnName="date_start" />
-                <ScalarProperty Name="master_id" ColumnName="master_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="accountings">
             <EntityTypeMapping TypeName="DataCenter.Entities.accounting">
               <MappingFragment StoreEntitySet="accounting">
+                <ScalarProperty Name="invoice_account" ColumnName="invoice_account" />
+                <ScalarProperty Name="invoice_bank" ColumnName="invoice_bank" />
+                <ScalarProperty Name="invoice_tel" ColumnName="invoice_tel" />
+                <ScalarProperty Name="invoice_address" ColumnName="invoice_address" />
+                <ScalarProperty Name="invoice_tax" ColumnName="invoice_tax" />
+                <ScalarProperty Name="invoice_name" ColumnName="invoice_name" />
+                <ScalarProperty Name="tax" ColumnName="tax" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="assistant_id" ColumnName="assistant_id" />
@@ -5747,6 +5759,54 @@
                 <ScalarProperty Name="source_type" ColumnName="source_type" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="accounting_progress">
+            <EntityTypeMapping TypeName="DataCenter.Entities.accounting_progress">
+              <MappingFragment StoreEntitySet="accounting_progress">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="attachment" ColumnName="attachment" />
+                <ScalarProperty Name="progress" ColumnName="progress" />
+                <ScalarProperty Name="date_start" ColumnName="date_start" />
+                <ScalarProperty Name="master_id" ColumnName="master_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="accounting_item">
+            <EntityTypeMapping TypeName="DataCenter.Entities.accounting_item">
+              <MappingFragment StoreEntitySet="accounting_item">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="finisher" ColumnName="finisher" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="date_end" ColumnName="date_end" />
+                <ScalarProperty Name="date_start" ColumnName="date_start" />
+                <ScalarProperty Name="master_id" ColumnName="master_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reg_internal_items">
+            <EntityTypeMapping TypeName="DataCenter.Entities.reg_internal_items">
+              <MappingFragment StoreEntitySet="reg_internal_items">
+                <ScalarProperty Name="date_started" ColumnName="date_started" />
+                <ScalarProperty Name="sub_items" ColumnName="sub_items" />
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="date_finished" ColumnName="date_finished" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="finisher" ColumnName="finisher" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="spend" ColumnName="spend" />
+                <ScalarProperty Name="material" ColumnName="material" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="master_id" ColumnName="master_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

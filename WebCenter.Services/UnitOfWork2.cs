@@ -23,6 +23,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  Iaccounting_progressService Iaccounting_progressService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  Iannual_examService Iannual_examService
     {
         get;

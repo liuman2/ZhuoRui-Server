@@ -79,6 +79,9 @@
     <Compile Include="accounting_item.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="accounting_progress.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="annual_exam.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
