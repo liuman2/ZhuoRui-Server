@@ -852,6 +852,63 @@ namespace WebCenter.Web.Controllers
                     getLinePrintDataIncome(printData, subAuditLineLine, "sub_audit");
                     #endregion
                     break;
+
+                case "account":
+                    #region 商标
+                    printData = Uof.IaccountingService.GetAll(a => a.id == id).Select(a => new PrintData
+                    {
+
+                        //creator_id member1
+                        //accountant_id member
+                        //finance_reviewer_id member2
+                        //mamager_id  3
+                        //assistant_id  4
+                        //salesman  5
+                        //submit  6
+
+                        print_type = "accounting",
+                        id = a.id,
+                        accounter = a.member.name,
+                        cashier = "", //a.member2.name, // 出纳
+                        amount = a.amount_transaction,
+                        attachments = 0,
+                        auditor = "", //a.member2.name,
+                        balance = a.amount_transaction,
+                        code = a.code,
+                        customer_name = a.customer.name,
+                        company_cn = a.name, //a.applicant,
+                        company_en = "",
+                        creator = a.member1.name,
+                        date_transaction = a.date_transaction,
+                        date = "",
+                        mode = "", //a.reg_mode,
+                        ordername = a.name,
+                        others = "", //a.description,
+                        payer = "",
+                        pay_info = "",
+                        pay_way = "",
+                        project = "",
+                        reason = "代理记账",
+                        received = 0,
+                        saleman = a.member5.name,
+                        type = "", //a.trademark_type,
+                        currency = a.currency,
+                        area = a.member4.area.name,
+                        rate = 1,
+                        region = "", //a.region
+                    }).FirstOrDefault();
+
+                    //if (!string.IsNullOrEmpty(printData.region))
+                    //{
+                    //    printData.others = string.Format("{0}  注册地区:{1}", printData.others, printData.region);
+                    //}
+
+                    printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
+                    printData.project = string.Format("{0}提交", printData.area);
+
+                    getPrintDataIncome(printData, "accounting");
+                    #endregion
+                    break;
                 default:
                     break;
             }

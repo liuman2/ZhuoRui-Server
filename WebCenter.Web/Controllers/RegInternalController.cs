@@ -56,7 +56,7 @@ namespace WebCenter.Web.Controllers
                 {
                     if (hasDepart == null)
                     {
-                        condition = c => (c.salesman_id == userId || c.assistant_id == userId);
+                        condition = c => (c.salesman_id == userId || c.assistant_id == userId || c.waiter_id == userId);
                     }
                     else
                     {
