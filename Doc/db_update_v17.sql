@@ -19,3 +19,4 @@ CREATE TABLE `accounting_progress` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `sequence` VALUES ('accounting_progress', '1');
 
+call AddColumnUnlessExists(Database(), 'accounting_progress', 'period', 'varchar(8) DEFAULT NULL COMMENT "账期"');

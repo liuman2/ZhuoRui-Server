@@ -72,6 +72,7 @@
           <Property Name="attachment" Type="varchar" MaxLength="300" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="period" Type="varchar" MaxLength="8" />
         </EntityType>
         <EntityType Name="annual_exam">
           <Key>
@@ -2716,7 +2717,6 @@
             <End Role="reg_internal" EntitySet="reg_internal" />
           </AssociationSet>
           <EntitySet Name="accountings" EntityType="DataCenter.Entities.accounting" />
-          <EntitySet Name="accounting_progress" EntityType="DataCenter.Entities.accounting_progress" />
           <AssociationSet Name="accounting_ibfk_accountant" Association="DataCenter.Entities.accounting_ibfk_accountant">
             <End Role="member" EntitySet="members" />
             <End Role="accounting" EntitySet="accountings" />
@@ -2755,6 +2755,7 @@
           </AssociationSet>
           <EntitySet Name="accounting_item" EntityType="DataCenter.Entities.accounting_item" />
           <EntitySet Name="reg_internal_items" EntityType="DataCenter.Entities.reg_internal_items" />
+          <EntitySet Name="accounting_progress" EntityType="DataCenter.Entities.accounting_progress" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -4736,18 +4737,6 @@
           <NavigationProperty Name="member5" Relationship="DataCenter.Entities.accounting_ibfk_salesman" FromRole="accounting" ToRole="member" />
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.accounting_ibfk_submit_reviewer" FromRole="accounting" ToRole="member" />
         </EntityType>
-        <EntityType Name="accounting_progress">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="master_id" Type="Int32" Nullable="false" />
-          <Property Name="date_start" Type="DateTime" />
-          <Property Name="progress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="attachment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-        </EntityType>
         <Association Name="accounting_ibfk_accountant">
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
           <End Type="DataCenter.Entities.accounting" Role="accounting" Multiplicity="*" />
@@ -4888,6 +4877,19 @@
           <Property Name="date_updated" Type="DateTime" />
           <Property Name="sub_items" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="date_started" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="accounting_progress">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="master_id" Type="Int32" Nullable="false" />
+          <Property Name="date_start" Type="DateTime" />
+          <Property Name="progress" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="attachment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <Property Name="period" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -5763,19 +5765,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="accounting_progress">
-            <EntityTypeMapping TypeName="DataCenter.Entities.accounting_progress">
-              <MappingFragment StoreEntitySet="accounting_progress">
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="attachment" ColumnName="attachment" />
-                <ScalarProperty Name="progress" ColumnName="progress" />
-                <ScalarProperty Name="date_start" ColumnName="date_start" />
-                <ScalarProperty Name="master_id" ColumnName="master_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="accounting_item">
             <EntityTypeMapping TypeName="DataCenter.Entities.accounting_item">
               <MappingFragment StoreEntitySet="accounting_item">
@@ -5806,6 +5795,20 @@
                 <ScalarProperty Name="spend" ColumnName="spend" />
                 <ScalarProperty Name="material" ColumnName="material" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="master_id" ColumnName="master_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="accounting_progress">
+            <EntityTypeMapping TypeName="DataCenter.Entities.accounting_progress">
+              <MappingFragment StoreEntitySet="accounting_progress">
+                <ScalarProperty Name="period" ColumnName="period" />
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="attachment" ColumnName="attachment" />
+                <ScalarProperty Name="progress" ColumnName="progress" />
+                <ScalarProperty Name="date_start" ColumnName="date_start" />
                 <ScalarProperty Name="master_id" ColumnName="master_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>

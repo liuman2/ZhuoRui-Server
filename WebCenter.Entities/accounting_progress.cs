@@ -43,5 +43,9 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
+    
+    
+    
+        public string period { get; set; }
     }
 }

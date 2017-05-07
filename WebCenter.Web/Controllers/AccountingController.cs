@@ -918,6 +918,7 @@ namespace WebCenter.Web.Controllers
             p.progress = progress.progress;
             p.attachment = progress.attachment;
             p.date_start = progress.date_start;
+            p.period = progress.period;
 
             Uof.Iaccounting_progressService.UpdateEntity(p);
 
