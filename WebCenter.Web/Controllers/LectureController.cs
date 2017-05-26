@@ -21,7 +21,11 @@ namespace WebCenter.Web.Controllers
             Expression<Func<lecture, bool>> condition = c => true;
             if (!string.IsNullOrEmpty(request.title))
             {
-                condition = c => (c.title.IndexOf(request.title) > -1);
+                condition = c => (c.title.IndexOf(request.title) > -1 || 
+                c.teacher.IndexOf(request.title) > -1 || 
+                c.city.IndexOf(request.title) > -1 ||
+                c.sponsor.IndexOf(request.title) > -1 ||
+                c.address.IndexOf(request.title) > -1);
             }
 
             // 形式
