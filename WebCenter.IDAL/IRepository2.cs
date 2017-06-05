@@ -6,6 +6,10 @@ namespace WebCenter.IDAL
 {
    
 	
+    public partial interface Iabroad_shareholderRepository :IBaseRepository<abroad_shareholder>
+    {         
+    }
+	
     public partial interface IaccountingRepository :IBaseRepository<accounting>
     {         
     }

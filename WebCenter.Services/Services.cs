@@ -13,6 +13,16 @@ namespace WebCenter.Services
 {
    
 	
+	public partial class abroad_shareholderService:BaseService<abroad_shareholder>,Iabroad_shareholderService
+    {   
+        public abroad_shareholderService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.abroad_shareholderRepository;
+        }  
+    }
+	
 	public partial class accountingService:BaseService<accounting>,IaccountingService
     {   
         public accountingService()

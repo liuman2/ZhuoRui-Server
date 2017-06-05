@@ -5,6 +5,25 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="DataCenter.Entities.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="abroad_shareholder">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="master_id" Type="int" Nullable="false" />
+          <Property Name="history_id" Type="int" />
+          <Property Name="name" Type="varchar" MaxLength="30" />
+          <Property Name="gender" Type="varchar" MaxLength="4" />
+          <Property Name="cardNo" Type="varchar" MaxLength="50" />
+          <Property Name="takes" Type="float" />
+          <Property Name="type" Type="varchar" MaxLength="10" />
+          <Property Name="changed_type" Type="datetime" Precision="0" />
+          <Property Name="date_changed" Type="datetime" Precision="0" />
+          <Property Name="memo" Type="varchar" MaxLength="300" />
+          <Property Name="attachment" Type="varchar" MaxLength="300" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
         <EntityType Name="accounting">
           <Key>
             <PropertyRef Name="id" />
@@ -1948,6 +1967,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="DataCenterEntitiesStoreContainer">
+          <EntitySet Name="abroad_shareholder" EntityType="Self.abroad_shareholder" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="accounting" EntityType="Self.accounting" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="accounting_item" EntityType="Self.accounting_item" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="accounting_progress" EntityType="Self.accounting_progress" Schema="zhuoruioa" store:Type="Tables" />
@@ -2756,6 +2776,7 @@
           <EntitySet Name="accounting_item" EntityType="DataCenter.Entities.accounting_item" />
           <EntitySet Name="reg_internal_items" EntityType="DataCenter.Entities.reg_internal_items" />
           <EntitySet Name="accounting_progress" EntityType="DataCenter.Entities.accounting_progress" />
+          <EntitySet Name="abroad_shareholder" EntityType="DataCenter.Entities.abroad_shareholder" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -4891,6 +4912,25 @@
           <Property Name="date_updated" Type="DateTime" />
           <Property Name="period" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="abroad_shareholder">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="master_id" Type="Int32" Nullable="false" />
+          <Property Name="history_id" Type="Int32" />
+          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="gender" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="cardNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="takes" Type="Single" />
+          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="changed_type" Type="DateTime" />
+          <Property Name="date_changed" Type="DateTime" />
+          <Property Name="memo" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="attachment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5809,6 +5849,26 @@
                 <ScalarProperty Name="attachment" ColumnName="attachment" />
                 <ScalarProperty Name="progress" ColumnName="progress" />
                 <ScalarProperty Name="date_start" ColumnName="date_start" />
+                <ScalarProperty Name="master_id" ColumnName="master_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="abroad_shareholder">
+            <EntityTypeMapping TypeName="DataCenter.Entities.abroad_shareholder">
+              <MappingFragment StoreEntitySet="abroad_shareholder">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="attachment" ColumnName="attachment" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="date_changed" ColumnName="date_changed" />
+                <ScalarProperty Name="changed_type" ColumnName="changed_type" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="takes" ColumnName="takes" />
+                <ScalarProperty Name="cardNo" ColumnName="cardNo" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="history_id" ColumnName="history_id" />
                 <ScalarProperty Name="master_id" ColumnName="master_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>

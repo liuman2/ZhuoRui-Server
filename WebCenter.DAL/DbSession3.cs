@@ -7,6 +7,8 @@ namespace WebCenter.DAL
     public partial class DbSession:IDbSession  
     {   
 	
+	public IDAL.Iabroad_shareholderRepository abroad_shareholderRepository { get { return new abroad_shareholderRepository(); } }
+	
 	public IDAL.IaccountingRepository accountingRepository { get { return new accountingRepository(); } }
 	
 	public IDAL.Iaccounting_itemRepository accounting_itemRepository { get { return new accounting_itemRepository(); } }

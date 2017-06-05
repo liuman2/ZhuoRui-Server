@@ -9,6 +9,13 @@ namespace WebCenter.Services
 {  
 	
   [Ninject.Inject]
+	 public  Iabroad_shareholderService Iabroad_shareholderService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IaccountingService IaccountingService
     {
         get;

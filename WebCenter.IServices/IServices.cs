@@ -10,6 +10,10 @@ namespace WebCenter.IServices
 {
    
 	
+	public partial interface Iabroad_shareholderService:IBaseService<abroad_shareholder>
+    {   
+    }
+	
 	public partial interface IaccountingService:IBaseService<accounting>
     {   
     }

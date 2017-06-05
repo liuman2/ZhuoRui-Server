@@ -7,6 +7,11 @@ namespace WebCenter.DAL
 {
    
 	
+	public partial class abroad_shareholderRepository :BaseRepository<abroad_shareholder>,Iabroad_shareholderRepository
+    {
+         
+    }
+	
 	public partial class accountingRepository :BaseRepository<accounting>,IaccountingRepository
     {
          

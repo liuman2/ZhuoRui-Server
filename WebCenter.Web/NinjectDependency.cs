@@ -17,6 +17,8 @@ public partial class  NinjectDependencyResolver:IDependencyResolver
 private void AutoAddBinds()
 {
 	
+	   kernel.Bind<Iabroad_shareholderService>().To<abroad_shareholderService>().InRequestScope();
+	
 	   kernel.Bind<IaccountingService>().To<accountingService>().InRequestScope();
 	
 	   kernel.Bind<Iaccounting_itemService>().To<accounting_itemService>().InRequestScope();

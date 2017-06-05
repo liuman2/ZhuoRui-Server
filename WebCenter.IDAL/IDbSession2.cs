@@ -13,6 +13,9 @@ namespace WebCenter.IDAL
    
 	  
 
+		IDAL.Iabroad_shareholderRepository abroad_shareholderRepository { get; }
+	  
+
 		IDAL.IaccountingRepository accountingRepository { get; }
 	  
 
