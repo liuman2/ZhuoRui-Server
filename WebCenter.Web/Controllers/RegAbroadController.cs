@@ -204,7 +204,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(reg_abroad aboad, oldRequest oldRequest)
+        public ActionResult Add(reg_abroad aboad, oldRequest oldRequest, List<Shareholder> shareholderList)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
@@ -272,6 +272,30 @@ namespace WebCenter.Web.Controllers
             if (newAbroad == null)
             {
                 return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (shareholderList.Count() > 0)
+            {
+                var hoders = new List<abroad_shareholder>();
+
+                foreach (var item in shareholderList)
+                {
+                    hoders.Add(new abroad_shareholder()
+                    {
+                        master_id = newAbroad.id,
+                        history_id = null,
+                        name = item.name,
+                        cardNo = item.cardNo,
+                        //changed_type = "original",  // TODO
+                        gender = item.gender,
+                        takes = item.takes,
+                        type = item.type,
+                        memo = item.memo,
+                        date_created = DateTime.Today,
+                    });
+                }
+
+                Uof.Iabroad_shareholderService.AddEntities(hoders);
             }
 
             Uof.ItimelineService.AddEntity(new timeline()
@@ -367,7 +391,12 @@ namespace WebCenter.Web.Controllers
 
             }).FirstOrDefault();
 
-            return Json(reg, JsonRequestBehavior.AllowGet);
+            var shareholderList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.type == "股东").ToList();
+            var directorList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.type == "董事").ToList();
+            // Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.changed_type != "exit").ToList();
+
+            //return Json(reg, JsonRequestBehavior.AllowGet);
+            return Json(new { order = reg, shareholderList = shareholderList, directorList = directorList }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetView(int id)
@@ -470,45 +499,48 @@ namespace WebCenter.Web.Controllers
                 local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
             };
 
-            return Json(new { order = reg, incomes = incomes }, JsonRequestBehavior.AllowGet);
+            var shareholderList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id).ToList();
+            var directorList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.type == "董事").ToList();
+            // Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.changed_type != "exit").ToList();
+            return Json(new { order = reg, incomes = incomes, shareholderList = shareholderList, directorList = directorList }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Update(reg_abroad reg)
+        public ActionResult Update(reg_abroad reg, List<Shareholder> shareholderList)
         {
             var dbReg = Uof.Ireg_abroadService.GetById(reg.id);
 
-            if (reg.customer_id == dbReg.customer_id && 
-                reg.name_cn == dbReg.name_cn && 
-                reg.name_en == dbReg.name_en &&
-                reg.date_setup == dbReg.date_setup &&
-                reg.reg_no == dbReg.reg_no &&
-                reg.region == dbReg.region &&
-                reg.address == dbReg.address &&
-                reg.director == dbReg.director &&
-                reg.is_open_bank == dbReg.is_open_bank &&
-                reg.bank_id == dbReg.bank_id &&
-                reg.date_transaction == dbReg.date_transaction &&
-                reg.amount_transaction == dbReg.amount_transaction &&
-                reg.invoice_name == dbReg.invoice_name &&
-                reg.invoice_tax == dbReg.invoice_tax &&
-                reg.invoice_address == dbReg.invoice_address &&
-                reg.invoice_tel == dbReg.invoice_tel &&
-                reg.invoice_bank == dbReg.invoice_bank &&
-                reg.invoice_account == dbReg.invoice_account &&
+            //if (reg.customer_id == dbReg.customer_id && 
+            //    reg.name_cn == dbReg.name_cn && 
+            //    reg.name_en == dbReg.name_en &&
+            //    reg.date_setup == dbReg.date_setup &&
+            //    reg.reg_no == dbReg.reg_no &&
+            //    reg.region == dbReg.region &&
+            //    reg.address == dbReg.address &&
+            //    reg.director == dbReg.director &&
+            //    reg.is_open_bank == dbReg.is_open_bank &&
+            //    reg.bank_id == dbReg.bank_id &&
+            //    reg.date_transaction == dbReg.date_transaction &&
+            //    reg.amount_transaction == dbReg.amount_transaction &&
+            //    reg.invoice_name == dbReg.invoice_name &&
+            //    reg.invoice_tax == dbReg.invoice_tax &&
+            //    reg.invoice_address == dbReg.invoice_address &&
+            //    reg.invoice_tel == dbReg.invoice_tel &&
+            //    reg.invoice_bank == dbReg.invoice_bank &&
+            //    reg.invoice_account == dbReg.invoice_account &&
 
-                reg.salesman_id == dbReg.salesman_id &&
-                reg.waiter_id == dbReg.waiter_id &&
-                reg.manager_id == dbReg.manager_id && 
-                reg.description == dbReg.description &&
-                reg.currency == dbReg.currency && 
-                reg.rate == dbReg.rate &&
-                reg.assistant_id == dbReg.assistant_id && 
-                reg.is_annual == dbReg.is_annual &&
-                reg.shareholder == dbReg.shareholder
-                )
-            {
-                return Json(new { id = reg.id }, JsonRequestBehavior.AllowGet);
-            }
+            //    reg.salesman_id == dbReg.salesman_id &&
+            //    reg.waiter_id == dbReg.waiter_id &&
+            //    reg.manager_id == dbReg.manager_id && 
+            //    reg.description == dbReg.description &&
+            //    reg.currency == dbReg.currency && 
+            //    reg.rate == dbReg.rate &&
+            //    reg.assistant_id == dbReg.assistant_id && 
+            //    reg.is_annual == dbReg.is_annual &&
+            //    reg.shareholder == dbReg.shareholder
+            //    )
+            //{
+            //    return Json(new { id = reg.id }, JsonRequestBehavior.AllowGet);
+            //}
 
             var identityName = HttpContext.User.Identity.Name;
             var arrs = identityName.Split('|');
@@ -597,6 +629,93 @@ namespace WebCenter.Web.Controllers
                     is_system = 1,
                     content = string.Format("{0}修改了订单资料", arrs[3])
                 });
+
+                //shareholderList
+
+                //var dbHolders = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == dbReg.id && (s.changed_type == "original" || s.changed_type == "new")).ToList();
+                var dbHolders = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == dbReg.id).ToList();
+
+                var newHolders = new List<abroad_shareholder>();
+                var deleteHolders = new List<abroad_shareholder>();
+                var updateHolders = new List<abroad_shareholder>();
+
+                if (shareholderList.Count() > 0)
+                {
+                    foreach (var item in shareholderList)
+                    {
+                        if (item.id == null)
+                        {
+                            newHolders.Add(new abroad_shareholder
+                            {
+                                master_id = dbReg.id,
+                                history_id = null,
+                                name = item.name,
+                                cardNo = item.cardNo,
+                                //changed_type = "original",  // TODO
+                                gender = item.gender,
+                                takes = item.takes,
+                                type = item.type,
+                                memo = item.memo,
+                                date_created = DateTime.Today,
+                            });
+                        }
+
+                        if (item.id > 0)
+                        {
+                           var updateHolder = dbHolders.Where(d => d.id == item.id).FirstOrDefault();
+                            if (updateHolder != null)
+                            {
+                                updateHolder.name = item.name;
+                                updateHolder.cardNo = item.cardNo;
+                                updateHolder.gender = item.gender;
+                                updateHolder.takes = item.takes;
+
+                                updateHolders.Add(updateHolder);
+                            }
+                        }
+                    }
+
+                    if (dbHolders.Count() > 0)
+                    {
+                        foreach (var item in dbHolders)
+                        {
+                            var shareholder = shareholderList.Where(s => s.id == item.id).FirstOrDefault();
+                            if (shareholder == null)
+                            {
+                                deleteHolders.Add(item);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    deleteHolders = dbHolders;
+                }
+
+                try
+                {
+                    if (deleteHolders.Count > 0)
+                    {
+                        foreach (var item in deleteHolders)
+                        {
+                            Uof.Iabroad_shareholderService.DeleteEntity(item);
+                        }                        
+                    }
+
+                    if (updateHolders.Count > 0)
+                    {
+                        Uof.Iabroad_shareholderService.UpdateEntities(updateHolders);
+                    }
+
+                    if (newHolders.Count > 0)
+                    {
+                        Uof.Iabroad_shareholderService.AddEntities(newHolders);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
             }
             return Json(new { success = r, id = reg.id }, JsonRequestBehavior.AllowGet);
         }

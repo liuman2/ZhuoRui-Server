@@ -242,10 +242,13 @@ namespace WebCenter.Web
 
     public class Shareholder
     {
+        public int? id { get; set; }
         public string name { get; set; }
         public string gender { get; set; } 
         public string cardNo { get; set; } 
         public float takes { get; set; }
+        public string memo { get; set; }
+        public string type { get; set; }
     }
 
     public class RegInternal : reg_internal
