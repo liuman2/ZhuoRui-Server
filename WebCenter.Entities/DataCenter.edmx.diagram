@@ -18,7 +18,6 @@
         <EntityTypeShape EntityType="DataCenter.Entities.role_memu" Width="1.5" PointX="7.375" PointY="10.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.income" Width="1.5" PointX="15.875" PointY="12" />
         <EntityTypeShape EntityType="DataCenter.Entities.reg_history" Width="1.5" PointX="3.75" PointY="6.75" />
-        <EntityTypeShape EntityType="DataCenter.Entities.reg_internal_history" Width="1.5" PointX="0.75" PointY="7.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.operation" Width="1.5" PointX="3.375" PointY="13.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.role_operation" Width="1.5" PointX="5.375" PointY="13.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.lecture_customer" Width="1.5" PointX="16.25" PointY="0.75" />
@@ -139,6 +138,8 @@
         <EntityTypeShape EntityType="DataCenter.Entities.reg_internal_items" Width="1.5" PointX="17.375" PointY="3.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.accounting_progress" Width="1.5" PointX="13.375" PointY="4.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.abroad_shareholder" Width="1.5" PointX="0.75" PointY="20.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.reg_internal_history" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.history_shareholder" Width="1.5" PointX="3.375" PointY="20.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -249,6 +249,9 @@ namespace WebCenter.Web
         public float takes { get; set; }
         public string memo { get; set; }
         public string type { get; set; }
+
+        public string changed_type { get; set; }
+        public int? person_id { get; set; }
     }
 
     public class RegInternal : reg_internal

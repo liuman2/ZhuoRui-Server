@@ -12,12 +12,12 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class abroad_shareholder:BaseModel
+    public partial class history_shareholder:BaseModel
     {
     
     
     
-    [EntityPrimKey("abroad_shareholder")]
+    [EntityPrimKey("history_shareholder")]
         public int id { get; set; }
     
     
@@ -30,7 +30,15 @@ namespace WebCenter.Entities
     
     
     
+        public Nullable<int> person_id { get; set; }
+    
+    
+    
         public string name { get; set; }
+    
+    
+    
+        public string source { get; set; }
     
     
     
@@ -71,9 +79,5 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
-    
-    
-    
-        public string source { get; set; }
     }
 }

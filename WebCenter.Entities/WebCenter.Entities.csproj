@@ -139,6 +139,9 @@
     <Compile Include="history.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="history_shareholder.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="income.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

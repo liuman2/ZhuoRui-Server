@@ -121,6 +121,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  Ihistory_shareholderService Ihistory_shareholderService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IincomeService IincomeService
     {
         get;

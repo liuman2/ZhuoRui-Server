@@ -173,6 +173,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class history_shareholderService:BaseService<history_shareholder>,Ihistory_shareholderService
+    {   
+        public history_shareholderService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.history_shareholderRepository;
+        }  
+    }
+	
 	public partial class incomeService:BaseService<income>,IincomeService
     {   
         public incomeService()

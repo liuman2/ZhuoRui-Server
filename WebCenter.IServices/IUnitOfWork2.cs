@@ -40,6 +40,8 @@ namespace WebCenter.IServices
 	
 	  IhistoryService IhistoryService{get;set;} 
 	
+	  Ihistory_shareholderService Ihistory_shareholderService{get;set;} 
+	
 	  IincomeService IincomeService{get;set;} 
 	
 	  IleaveService IleaveService{get;set;} 

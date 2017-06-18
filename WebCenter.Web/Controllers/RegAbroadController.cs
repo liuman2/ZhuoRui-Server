@@ -274,7 +274,7 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (shareholderList.Count() > 0)
+            if (shareholderList != null && shareholderList.Count() > 0)
             {
                 var hoders = new List<abroad_shareholder>();
 
@@ -286,7 +286,8 @@ namespace WebCenter.Web.Controllers
                         history_id = null,
                         name = item.name,
                         cardNo = item.cardNo,
-                        //changed_type = "original",  // TODO
+                        changed_type = "original",
+                        source = "reg_abroad",
                         gender = item.gender,
                         takes = item.takes,
                         type = item.type,
@@ -391,11 +392,9 @@ namespace WebCenter.Web.Controllers
 
             }).FirstOrDefault();
 
-            var shareholderList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.type == "股东").ToList();
-            var directorList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.type == "董事").ToList();
-            // Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.changed_type != "exit").ToList();
+            var shareholderList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_abroad" && s.type == "股东" && s.changed_type != "exit").ToList();
+            var directorList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_abroad" && s.type == "董事" && s.changed_type != "exit").ToList();
 
-            //return Json(reg, JsonRequestBehavior.AllowGet);
             return Json(new { order = reg, shareholderList = shareholderList, directorList = directorList }, JsonRequestBehavior.AllowGet);
         }
 
@@ -499,9 +498,10 @@ namespace WebCenter.Web.Controllers
                 local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
             };
 
-            var shareholderList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id).ToList();
-            var directorList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.type == "董事").ToList();
-            // Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.changed_type != "exit").ToList();
+            var shareholderList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_abroad" && s.type == "股东" && s.changed_type != "exit").ToList();
+            var directorList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_abroad" && s.type == "董事" &&
+            s.changed_type != "exit").ToList();
+            
             return Json(new { order = reg, incomes = incomes, shareholderList = shareholderList, directorList = directorList }, JsonRequestBehavior.AllowGet);
         }
 
@@ -630,16 +630,13 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("{0}修改了订单资料", arrs[3])
                 });
 
-                //shareholderList
-
-                //var dbHolders = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == dbReg.id && (s.changed_type == "original" || s.changed_type == "new")).ToList();
-                var dbHolders = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == dbReg.id).ToList();
+                var dbHolders = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == dbReg.id && s.source == "reg_abroad" && s.changed_type != "exit").ToList();
 
                 var newHolders = new List<abroad_shareholder>();
                 var deleteHolders = new List<abroad_shareholder>();
                 var updateHolders = new List<abroad_shareholder>();
 
-                if (shareholderList.Count() > 0)
+                if (shareholderList != null && shareholderList.Count() > 0)
                 {
                     foreach (var item in shareholderList)
                     {
@@ -651,7 +648,8 @@ namespace WebCenter.Web.Controllers
                                 history_id = null,
                                 name = item.name,
                                 cardNo = item.cardNo,
-                                //changed_type = "original",  // TODO
+                                changed_type = "original",
+                                source = "reg_abroad",
                                 gender = item.gender,
                                 takes = item.takes,
                                 type = item.type,

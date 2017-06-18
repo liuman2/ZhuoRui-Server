@@ -87,6 +87,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class history_shareholderRepository :BaseRepository<history_shareholder>,Ihistory_shareholderRepository
+    {
+         
+    }
+	
 	public partial class incomeRepository :BaseRepository<income>,IincomeRepository
     {
          

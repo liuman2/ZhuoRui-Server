@@ -61,6 +61,9 @@ namespace WebCenter.IDAL
 		IDAL.IhistoryRepository historyRepository { get; }
 	  
 
+		IDAL.Ihistory_shareholderRepository history_shareholderRepository { get; }
+	  
+
 		IDAL.IincomeRepository incomeRepository { get; }
 	  
 

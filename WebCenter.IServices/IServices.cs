@@ -74,6 +74,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface Ihistory_shareholderService:IBaseService<history_shareholder>
+    {   
+    }
+	
 	public partial interface IincomeService:IBaseService<income>
     {   
     }

@@ -13,11 +13,12 @@
           <Property Name="master_id" Type="int" Nullable="false" />
           <Property Name="history_id" Type="int" />
           <Property Name="name" Type="varchar" MaxLength="30" />
+          <Property Name="source" Type="varchar" MaxLength="30" />
           <Property Name="gender" Type="varchar" MaxLength="4" />
           <Property Name="cardNo" Type="varchar" MaxLength="50" />
           <Property Name="takes" Type="float" />
           <Property Name="type" Type="varchar" MaxLength="10" />
-          <Property Name="changed_type" Type="datetime" Precision="0" />
+          <Property Name="changed_type" Type="varchar" MaxLength="20" />
           <Property Name="date_changed" Type="datetime" Precision="0" />
           <Property Name="memo" Type="varchar" MaxLength="300" />
           <Property Name="attachment" Type="varchar" MaxLength="300" />
@@ -327,6 +328,27 @@
           <Property Name="progress" Type="varchar" MaxLength="50" />
           <Property Name="creator_id" Type="int" />
           <Property Name="salesman_id" Type="int" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="history_shareholder">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="master_id" Type="int" Nullable="false" />
+          <Property Name="history_id" Type="int" />
+          <Property Name="person_id" Type="int" />
+          <Property Name="name" Type="varchar" MaxLength="30" />
+          <Property Name="source" Type="varchar" MaxLength="30" />
+          <Property Name="gender" Type="varchar" MaxLength="4" />
+          <Property Name="cardNo" Type="varchar" MaxLength="50" />
+          <Property Name="takes" Type="float" />
+          <Property Name="type" Type="varchar" MaxLength="10" />
+          <Property Name="changed_type" Type="varchar" MaxLength="20" />
+          <Property Name="date_changed" Type="datetime" Precision="0" />
+          <Property Name="memo" Type="varchar" MaxLength="300" />
+          <Property Name="attachment" Type="varchar" MaxLength="300" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
@@ -1983,6 +2005,7 @@
           <EntitySet Name="dictionary" EntityType="Self.dictionary" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="dictionary_group" EntityType="Self.dictionary_group" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="history" EntityType="Self.history" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="history_shareholder" EntityType="Self.history_shareholder" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="income" EntityType="Self.income" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="leave" EntityType="Self.leave" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="lecture" EntityType="Self.lecture" Schema="zhuoruioa" store:Type="Tables" />
@@ -2386,7 +2409,6 @@
           <EntitySet Name="role_memu" EntityType="DataCenter.Entities.role_memu" />
           <EntitySet Name="incomes" EntityType="DataCenter.Entities.income" />
           <EntitySet Name="reg_history" EntityType="DataCenter.Entities.reg_history" />
-          <EntitySet Name="reg_internal_history" EntityType="DataCenter.Entities.reg_internal_history" />
           <EntitySet Name="operations" EntityType="DataCenter.Entities.operation" />
           <EntitySet Name="role_operation" EntityType="DataCenter.Entities.role_operation" />
           <EntitySet Name="lecture_customer" EntityType="DataCenter.Entities.lecture_customer" />
@@ -2777,6 +2799,8 @@
           <EntitySet Name="reg_internal_items" EntityType="DataCenter.Entities.reg_internal_items" />
           <EntitySet Name="accounting_progress" EntityType="DataCenter.Entities.accounting_progress" />
           <EntitySet Name="abroad_shareholder" EntityType="DataCenter.Entities.abroad_shareholder" />
+          <EntitySet Name="reg_internal_history" EntityType="DataCenter.Entities.reg_internal_history" />
+          <EntitySet Name="history_shareholder" EntityType="DataCenter.Entities.history_shareholder" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -2931,22 +2955,6 @@
           <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="others" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="director" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-        </EntityType>
-        <EntityType Name="reg_internal_history">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="reg_id" Type="Int32" />
-          <Property Name="name_cn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="date_setup" Type="DateTime" />
-          <Property Name="reg_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="legal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="director" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="others" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
         </EntityType>
@@ -4924,7 +4932,45 @@
           <Property Name="cardNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="takes" Type="Single" />
           <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="changed_type" Type="DateTime" />
+          <Property Name="changed_type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="date_changed" Type="DateTime" />
+          <Property Name="memo" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="attachment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <Property Name="source" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="reg_internal_history">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="reg_id" Type="Int32" />
+          <Property Name="name_cn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="date_setup" Type="DateTime" />
+          <Property Name="reg_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="legal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="director" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="others" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="history_shareholder">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="master_id" Type="Int32" Nullable="false" />
+          <Property Name="history_id" Type="Int32" />
+          <Property Name="person_id" Type="Int32" />
+          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="source" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="gender" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="cardNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="takes" Type="Single" />
+          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="changed_type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="date_changed" Type="DateTime" />
           <Property Name="memo" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="attachment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
@@ -5090,23 +5136,6 @@
                 <ScalarProperty Name="reg_no" ColumnName="reg_no" />
                 <ScalarProperty Name="date_setup" ColumnName="date_setup" />
                 <ScalarProperty Name="name_en" ColumnName="name_en" />
-                <ScalarProperty Name="name_cn" ColumnName="name_cn" />
-                <ScalarProperty Name="reg_id" ColumnName="reg_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="reg_internal_history">
-            <EntityTypeMapping TypeName="DataCenter.Entities.reg_internal_history">
-              <MappingFragment StoreEntitySet="reg_internal_history">
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="others" ColumnName="others" />
-                <ScalarProperty Name="director" ColumnName="director" />
-                <ScalarProperty Name="legal" ColumnName="legal" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="reg_no" ColumnName="reg_no" />
-                <ScalarProperty Name="date_setup" ColumnName="date_setup" />
                 <ScalarProperty Name="name_cn" ColumnName="name_cn" />
                 <ScalarProperty Name="reg_id" ColumnName="reg_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
@@ -5857,6 +5886,7 @@
           <EntitySetMapping Name="abroad_shareholder">
             <EntityTypeMapping TypeName="DataCenter.Entities.abroad_shareholder">
               <MappingFragment StoreEntitySet="abroad_shareholder">
+                <ScalarProperty Name="source" ColumnName="source" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="attachment" ColumnName="attachment" />
@@ -5868,6 +5898,45 @@
                 <ScalarProperty Name="cardNo" ColumnName="cardNo" />
                 <ScalarProperty Name="gender" ColumnName="gender" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="history_id" ColumnName="history_id" />
+                <ScalarProperty Name="master_id" ColumnName="master_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reg_internal_history">
+            <EntityTypeMapping TypeName="DataCenter.Entities.reg_internal_history">
+              <MappingFragment StoreEntitySet="reg_internal_history">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="others" ColumnName="others" />
+                <ScalarProperty Name="director" ColumnName="director" />
+                <ScalarProperty Name="legal" ColumnName="legal" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="reg_no" ColumnName="reg_no" />
+                <ScalarProperty Name="date_setup" ColumnName="date_setup" />
+                <ScalarProperty Name="name_cn" ColumnName="name_cn" />
+                <ScalarProperty Name="reg_id" ColumnName="reg_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="history_shareholder">
+            <EntityTypeMapping TypeName="DataCenter.Entities.history_shareholder">
+              <MappingFragment StoreEntitySet="history_shareholder">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="attachment" ColumnName="attachment" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="date_changed" ColumnName="date_changed" />
+                <ScalarProperty Name="changed_type" ColumnName="changed_type" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="takes" ColumnName="takes" />
+                <ScalarProperty Name="cardNo" ColumnName="cardNo" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="source" ColumnName="source" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="person_id" ColumnName="person_id" />
                 <ScalarProperty Name="history_id" ColumnName="history_id" />
                 <ScalarProperty Name="master_id" ColumnName="master_id" />
                 <ScalarProperty Name="id" ColumnName="id" />

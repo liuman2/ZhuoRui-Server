@@ -70,6 +70,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface Ihistory_shareholderRepository :IBaseRepository<history_shareholder>
+    {         
+    }
+	
     public partial interface IincomeRepository :IBaseRepository<income>
     {         
     }

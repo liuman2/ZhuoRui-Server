@@ -38,7 +38,6 @@ namespace WebCenter.Entities
         public virtual DbSet<role_memu> role_memu { get; set; }
         public virtual DbSet<income> incomes { get; set; }
         public virtual DbSet<reg_history> reg_history { get; set; }
-        public virtual DbSet<reg_internal_history> reg_internal_history { get; set; }
         public virtual DbSet<operation> operations { get; set; }
         public virtual DbSet<role_operation> role_operation { get; set; }
         public virtual DbSet<lecture_customer> lecture_customer { get; set; }
@@ -69,5 +68,7 @@ namespace WebCenter.Entities
         public virtual DbSet<reg_internal_items> reg_internal_items { get; set; }
         public virtual DbSet<accounting_progress> accounting_progress { get; set; }
         public virtual DbSet<abroad_shareholder> abroad_shareholder { get; set; }
+        public virtual DbSet<reg_internal_history> reg_internal_history { get; set; }
+        public virtual DbSet<history_shareholder> history_shareholder { get; set; }
     }
 }
