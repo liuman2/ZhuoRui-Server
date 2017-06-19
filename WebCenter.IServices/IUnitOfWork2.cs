@@ -8,6 +8,8 @@ namespace WebCenter.IServices
     public partial interface IUnitOfWork
 {  
 	
+	  Iabroad_historyService Iabroad_historyService{get;set;} 
+	
 	  Iabroad_shareholderService Iabroad_shareholderService{get;set;} 
 	
 	  IaccountingService IaccountingService{get;set;} 

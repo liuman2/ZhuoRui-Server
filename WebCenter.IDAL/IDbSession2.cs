@@ -13,6 +13,9 @@ namespace WebCenter.IDAL
    
 	  
 
+		IDAL.Iabroad_historyRepository abroad_historyRepository { get; }
+	  
+
 		IDAL.Iabroad_shareholderRepository abroad_shareholderRepository { get; }
 	  
 

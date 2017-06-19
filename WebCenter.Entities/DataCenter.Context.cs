@@ -70,5 +70,6 @@ namespace WebCenter.Entities
         public virtual DbSet<abroad_shareholder> abroad_shareholder { get; set; }
         public virtual DbSet<reg_internal_history> reg_internal_history { get; set; }
         public virtual DbSet<history_shareholder> history_shareholder { get; set; }
+        public virtual DbSet<abroad_history> abroad_history { get; set; }
     }
 }

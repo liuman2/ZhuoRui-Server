@@ -6,6 +6,7 @@ using Common;
 using System.Linq.Expressions;
 using System;
 using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace WebCenter.Web.Controllers
 {
@@ -400,6 +401,58 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetView(int id)
         {
+            #region history
+            var historyReocrd = Uof.Iabroad_historyService
+                .GetAll(h => h.master_id == id)
+                .FirstOrDefault();
+            if (historyReocrd == null)
+            {
+                historyReocrd = new abroad_history();
+                historyReocrd.master_id = id;
+                var dbHistoryRecord = Uof.IhistoryService.GetAll(h => h.source_id == id && h.source == "reg_abroad").OrderByDescending(h => h.id).FirstOrDefault();
+                if (dbHistoryRecord != null)
+                {
+                    if (dbHistoryRecord.value != null && dbHistoryRecord.value != "{}" && dbHistoryRecord.value.Length > 0)
+                    {
+                        var dbReg = Uof.Ireg_abroadService.GetAll(a => a.id == id).FirstOrDefault();
+
+                        JavaScriptSerializer jsonSerialize = new JavaScriptSerializer();
+                        var obj = jsonSerialize.Deserialize<HistoryAbroad>(dbHistoryRecord.value);
+                        if (obj.name_en != null || obj.name_cn != null || obj.address != null || obj.reg_no != null)
+                        {                            
+                            if (obj.name_cn != null && obj.name_cn.Length > 0)
+                            {
+                                historyReocrd.name_cn = dbReg.name_cn + "|" + dbHistoryRecord.date_created.Value.ToString("yyyy-MM-dd");
+                                dbReg.name_cn = obj.name_cn;
+                            }
+
+                            if (obj.name_en != null && obj.name_en.Length > 0)
+                            {
+                                historyReocrd.name_en = dbReg.name_en + "|" + dbHistoryRecord.date_created.Value.ToString("yyyy-MM-dd");
+                                dbReg.name_en = obj.name_en;
+                            }
+
+                            if (obj.reg_no != null && obj.reg_no.Length > 0)
+                            {
+                                historyReocrd.reg_no = dbReg.reg_no + "|" + dbHistoryRecord.date_created.Value.ToString("yyyy-MM-dd");
+                                dbReg.reg_no = obj.reg_no;
+                            }
+
+                            if (obj.address != null && obj.address.Length > 0)
+                            {
+                                historyReocrd.address = dbReg.address + "|" + dbHistoryRecord.date_created.Value.ToString("yyyy-MM-dd");
+                                dbReg.address = obj.address;
+                            }
+
+                            Uof.Ireg_abroadService.UpdateEntity(dbReg);
+                            Uof.Iabroad_historyService.AddEntity(historyReocrd);
+                        }
+                    }
+                }
+            }
+
+            #endregion
+
             var reg = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new
             {
                 id = a.id,
@@ -501,8 +554,27 @@ namespace WebCenter.Web.Controllers
             var shareholderList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_abroad" && s.type == "股东" && s.changed_type != "exit").ToList();
             var directorList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_abroad" && s.type == "董事" &&
             s.changed_type != "exit").ToList();
-            
-            return Json(new { order = reg, incomes = incomes, shareholderList = shareholderList, directorList = directorList }, JsonRequestBehavior.AllowGet);
+
+            var _historyReocrd = new HistoryAbroad();
+            if (historyReocrd != null)
+            {
+                _historyReocrd = new HistoryAbroad
+                {
+                    name_cn = historyReocrd.name_cn,
+                    name_en = historyReocrd.name_en,
+                    address = historyReocrd.address,
+                    others = historyReocrd.others,
+                    reg_no = historyReocrd.reg_no
+                };
+            }
+            return Json(new
+            {
+                order = reg,
+                incomes = incomes,
+                shareholderList = shareholderList,
+                directorList = directorList,
+                historyReocrd = _historyReocrd
+            }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Update(reg_abroad reg, List<Shareholder> shareholderList)

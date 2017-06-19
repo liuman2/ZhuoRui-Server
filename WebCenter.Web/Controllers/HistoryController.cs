@@ -633,32 +633,65 @@ namespace WebCenter.Web.Controllers
                     {
                         case "reg_abroad":
                             //dbAudit.value
-                            if (dbAudit.value.Length > 0)
+                            if (dbAudit.value.Length > 0 && dbAudit.value != "{}")
                             {
                                 JavaScriptSerializer jsonSerialize = new JavaScriptSerializer();
                                 var obj = jsonSerialize.Deserialize<HistoryAbroad>(dbAudit.value);
-
                                 var dbAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();
 
-                                if (obj.name_cn.Length > 0)
+                                var dbAbroadHistory = Uof.Iabroad_historyService.GetAll(a => a.master_id == dbAudit.source_id).FirstOrDefault();
+                                if (dbAbroadHistory == null)
                                 {
-                                    dbAbroad.name_cn = obj.name_cn;
+                                    dbAbroadHistory = new abroad_history();
                                 }
-                                if (obj.name_en.Length > 0)
+
+                                if (obj.name_cn != null && obj.name_cn.Length > 0)
                                 {
+                                    dbAbroadHistory.name_cn = dbAbroad.name_cn + "|" + dbAudit.date_created.Value.ToString("yyyy-MM-dd");
+                                    dbAbroad.name_cn = obj.name_cn;                                    
+                                }
+                                if (obj.name_en != null && obj.name_en.Length > 0)
+                                {
+                                    dbAbroadHistory.name_en = dbAbroad.name_en + "|" + dbAudit.date_created.Value.ToString("yyyy-MM-dd");
                                     dbAbroad.name_en = obj.name_en;
                                 }
-                                if (obj.address.Length > 0)
+                                if (obj.address != null && obj.address.Length > 0)
                                 {
+                                    dbAbroadHistory.address = dbAbroad.address + "|" + dbAudit.date_created.Value.ToString("yyyy-MM-dd");
                                     dbAbroad.address = obj.address;
                                 }
-                                if (obj.reg_no.Length > 0)
+                                if (obj.reg_no != null && obj.reg_no.Length > 0)
                                 {
+                                    dbAbroadHistory.reg_no = dbAbroad.reg_no + "|" + dbAudit.date_created.Value.ToString("yyyy-MM-dd");
                                     dbAbroad.reg_no = obj.reg_no;
                                 }
-                                if (obj.others.Length > 0)
+                                if (obj.others != null && obj.others.Length > 0)
                                 {
-                                
+                                    dbAbroadHistory.others = obj.others;
+                                }
+
+                                try
+                                {
+                                    Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
+
+                                    if (dbAbroadHistory.name_cn.Length > 0
+                                    || dbAbroadHistory.name_en.Length > 0
+                                    || dbAbroadHistory.address.Length > 0
+                                    || dbAbroadHistory.reg_no.Length > 0)
+                                    {
+                                        if (dbAbroadHistory.id > 0)
+                                        {
+                                            Uof.Iabroad_historyService.UpdateEntity(dbAbroadHistory);
+                                        }
+                                        else
+                                        {
+                                            dbAbroadHistory.master_id = dbAbroad.id;
+                                            Uof.Iabroad_historyService.AddEntity(dbAbroadHistory);
+                                        }
+                                    }
+                                }
+                                catch (Exception)
+                                {
                                 }
                             }
                             

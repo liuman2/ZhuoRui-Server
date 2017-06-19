@@ -6,6 +6,10 @@ namespace WebCenter.IDAL
 {
    
 	
+    public partial interface Iabroad_historyRepository :IBaseRepository<abroad_history>
+    {         
+    }
+	
     public partial interface Iabroad_shareholderRepository :IBaseRepository<abroad_shareholder>
     {         
     }

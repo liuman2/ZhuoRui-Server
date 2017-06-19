@@ -13,6 +13,16 @@ namespace WebCenter.Services
 {
    
 	
+	public partial class abroad_historyService:BaseService<abroad_history>,Iabroad_historyService
+    {   
+        public abroad_historyService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.abroad_historyRepository;
+        }  
+    }
+	
 	public partial class abroad_shareholderService:BaseService<abroad_shareholder>,Iabroad_shareholderService
     {   
         public abroad_shareholderService()
