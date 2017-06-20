@@ -40,3 +40,18 @@ CREATE TABLE `history_shareholder` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `sequence` VALUES ('history_shareholder', '1');
+
+DROP TABLE IF EXISTS `abroad_history`;
+CREATE TABLE `abroad_history` (
+  `id` int(11) NOT NULL,
+  `master_id` int(11) NOT NULL COMMENT '订单ID',
+  `name_cn` varchar(120) DEFAULT NULL,
+  `name_en` varchar(120) DEFAULT NULL,
+  `address` varchar(320) DEFAULT NULL,
+  `reg_no` varchar(320) DEFAULT NULL,
+  `others` varchar(400) DEFAULT NULL,
+  `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `sequence` VALUES ('abroad_history', '1');

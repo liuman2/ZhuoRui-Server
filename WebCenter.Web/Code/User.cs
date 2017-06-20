@@ -87,7 +87,7 @@ namespace WebCenter.Web
     public class AuditEntity
     {
         public int id { get; set; }
-        public int? customer_id { get; set; }        
+        public int? customer_id { get; set; }
         public string customer_name { get; set; }
 
         public string industry { get; set; }
@@ -159,7 +159,7 @@ namespace WebCenter.Web
         public DateTime? account_period2 { get; set; }
         public string date_year_end { get; set; }
         public float? turnover { get; set; }
-        public float? amount_bank { get; set; }        
+        public float? amount_bank { get; set; }
         public int? bill_number { get; set; }
         public string accounting_standard { get; set; }
         public float? cost_accounting { get; set; }
@@ -224,7 +224,7 @@ namespace WebCenter.Web
         public string county { get; set; }
         public string address { get; set; }
         public int? status { get; set; }
-        
+
     }
 
     public class InternalName
@@ -244,8 +244,8 @@ namespace WebCenter.Web
     {
         public int? id { get; set; }
         public string name { get; set; }
-        public string gender { get; set; } 
-        public string cardNo { get; set; } 
+        public string gender { get; set; }
+        public string cardNo { get; set; }
         public float takes { get; set; }
         public string memo { get; set; }
         public string type { get; set; }
@@ -258,5 +258,14 @@ namespace WebCenter.Web
     {
         public List<InternalName> InternalNames { get; set; }
         public List<InternalPrice> InternalPrices { get; set; }
-}
+    }
+
+    public class HistoryAbroad
+    {
+        public string name_cn { get; set; }
+        public string name_en { get; set; }
+        public string address { get; set; }
+        public string reg_no { get; set; }
+        public string others { get; set; }
+    }
 }

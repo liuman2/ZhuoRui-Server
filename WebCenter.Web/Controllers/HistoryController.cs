@@ -10,6 +10,7 @@ using System.IO;
 using System.Drawing;
 using System.Web;
 using System.Linq.Expressions;
+using System.Web.Script.Serialization;
 
 namespace WebCenter.Web.Controllers
 {
@@ -586,22 +587,6 @@ namespace WebCenter.Web.Controllers
                        read_status = 0
                     });
                 }
-
-                //if (ids.Count() > 0)
-                //{
-                //    foreach (var item in ids)
-                //    {
-                //        waitdeals.Add(new waitdeal
-                //        {
-                //            source = "history",
-                //            source_id = dbAudit.id,
-                //            user_id = item,
-                //            router = "history_view",
-                //            content = "您有变更订单需要提交审核",
-                //            read_status = 0
-                //        });
-                //    }
-                //}
             }
             else
             {
@@ -642,7 +627,49 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("{0}通过了{1}", arrs[3], t)
                 });
 
-                if (holders!= null && holders.Count() > 0)
+                if(dbAudit.status == 3)
+                {
+                    switch (dbAudit.source)
+                    {
+                        case "reg_abroad":
+                            //dbAudit.value
+                            if (dbAudit.value.Length > 0)
+                            {
+                                JavaScriptSerializer jsonSerialize = new JavaScriptSerializer();
+                                var obj = jsonSerialize.Deserialize<HistoryAbroad>(dbAudit.value);
+
+                                var dbAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();
+
+                                if (obj.name_cn.Length > 0)
+                                {
+                                    dbAbroad.name_cn = obj.name_cn;
+                                }
+                                if (obj.name_en.Length > 0)
+                                {
+                                    dbAbroad.name_en = obj.name_en;
+                                }
+                                if (obj.address.Length > 0)
+                                {
+                                    dbAbroad.address = obj.address;
+                                }
+                                if (obj.reg_no.Length > 0)
+                                {
+                                    dbAbroad.reg_no = obj.reg_no;
+                                }
+                                if (obj.others.Length > 0)
+                                {
+                                
+                                }
+                            }
+                            
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                #region 股东董事
+                if (holders!= null && holders.Count() > 0 && dbAudit.status == 3)
                 {
                     //dbAudit.source_id
                    var dbHolders = Uof.Iabroad_shareholderService.GetAll(a => a.master_id == dbAudit.source_id && a.source == dbAudit.source).ToList();
@@ -689,6 +716,7 @@ namespace WebCenter.Web.Controllers
                         Uof.Iabroad_shareholderService.UpdateEntities(updateHolders);
                     }
                 }
+                #endregion
             }
             return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
         }
