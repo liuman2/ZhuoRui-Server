@@ -1432,5 +1432,12 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult HistoryHolder(int master_id, string source, string type)
+        {
+            var list = Uof.Ihistory_shareholderService.GetAll(s => s.master_id == master_id && s.source == source && s.type == type).OrderByDescending(s=>s.id).ToList();
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
     }
 }
