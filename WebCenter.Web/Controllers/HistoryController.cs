@@ -113,6 +113,7 @@ namespace WebCenter.Web.Controllers
                         memo = item.memo,
                         date_created = DateTime.Today,
                         person_id = item.person_id,
+                        position = item.position,
                         date_changed = DateTime.Today,
                     });
                 }
@@ -199,6 +200,7 @@ namespace WebCenter.Web.Controllers
                             takes = item.takes,
                             type = item.type,
                             memo = item.memo,
+                            position = item.position,
                             date_created = DateTime.Today,
                             date_changed = DateTime.Today,
                         });
@@ -331,6 +333,78 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult List(int source_id, string source, int index, int size)
         {
+            if (source == "reg_internal")
+            {
+                #region 旧数据处理
+                try
+                {
+                    var dbReg = Uof.Ireg_internalService.GetAll(i => i.id == source_id).FirstOrDefault();
+                    var shareHolder = new List<internal_shareholder>();
+                    if (dbReg.shareholders != null && dbReg.shareholders.Length > 0)
+                    {
+                        JavaScriptSerializer jsonSerialize = new JavaScriptSerializer();
+                        var shareHolderList = jsonSerialize.Deserialize<List<Shareholder>>(dbReg.shareholders);
+                        if (shareHolderList != null && shareHolderList.Count > 0)
+                        {
+                            foreach (var item in shareHolderList)
+                            {
+                                shareHolder.Add(new internal_shareholder()
+                                {
+                                    cardNo = item.cardNo,
+                                    changed_type = "original",
+                                    date_changed = null,
+                                    date_created = dbReg.date_created,
+                                    gender = item.gender,
+                                    master_id = dbReg.id,
+                                    memo = item.memo,
+                                    name = item.name,
+                                    position = item.position,
+                                    source = "reg_internal",
+                                    takes = item.takes,
+                                    type = "股东"
+                                });
+                            }
+                            dbReg.shareholders = null;
+                        }
+                    }
+
+                    //if (reg.director != null && reg.director.Length > 0)
+                    //{
+                    //    shareHolder.Add(new internal_shareholder()
+                    //    {
+                    //        cardNo = reg.director_card_no,
+                    //        changed_type = "original",
+                    //        date_changed = null,
+                    //        date_created = reg.date_created,
+                    //        gender = null,
+                    //        master_id = reg.id,
+                    //        memo = null,
+                    //        name = reg.director,
+                    //        position = null,
+                    //        source = "reg_internal",
+                    //        takes = null,
+                    //        type = "监事"
+                    //    });
+
+                    //    dbReg.director = null;
+                    //    dbReg.director_card_no = null;
+                    //}
+
+                    if (shareHolder.Count() > 0)
+                    {
+                        var count = Uof.Iinternal_shareholderService.AddEntities(shareHolder);
+                        if (count > 0)
+                        {
+                            Uof.Ireg_internalService.UpdateEntity(dbReg);
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                }
+
+                #endregion
+            }
             var list = Uof.IhistoryService.GetAll(c=>c.source == source && c.source_id == source_id)
                 .OrderByDescending(item => item.id).Select(c => new
                 {
@@ -633,6 +707,7 @@ namespace WebCenter.Web.Controllers
                     {
                         case "reg_abroad":
                             //dbAudit.value
+                            #region reg_abroad
                             if (dbAudit.value.Length > 0 && dbAudit.value != "{}")
                             {
                                 JavaScriptSerializer jsonSerialize = new JavaScriptSerializer();
@@ -694,62 +769,186 @@ namespace WebCenter.Web.Controllers
                                 {
                                 }
                             }
-                            
+                            #endregion
+
+                            #region 股东董事
+                            if (holders != null && holders.Count() > 0)
+                            {
+                                //dbAudit.source_id
+                                var dbHolders = Uof.Iabroad_shareholderService.GetAll(a => a.master_id == dbAudit.source_id && a.source == dbAudit.source).ToList();
+                                var newHolders = new List<abroad_shareholder>();
+                                var updateHolders = new List<abroad_shareholder>();
+
+                                foreach (var item in holders)
+                                {
+                                    var holder = dbHolders.Where(d => d.id == item.person_id).FirstOrDefault();
+                                    if (holder == null)
+                                    {
+                                        newHolders.Add(new abroad_shareholder()
+                                        {
+                                            name = item.name,
+                                            cardNo = item.name,
+                                            changed_type = item.changed_type,
+                                            date_created = DateTime.Now,
+                                            date_changed = item.date_changed,
+                                            gender = item.gender,
+                                            history_id = item.history_id,
+                                            master_id = item.master_id,
+                                            source = item.source,
+                                            takes = item.takes,
+                                            type = item.type,
+                                            memo = item.memo
+                                        });
+                                    }
+                                    else
+                                    {
+                                        holder.changed_type = item.changed_type;
+                                        holder.takes = item.takes;
+                                        holder.history_id = item.history_id;
+                                        holder.date_changed = item.date_changed;
+                                        updateHolders.Add(holder);
+                                    }
+                                }
+
+                                if (newHolders != null && newHolders.Count() > 0)
+                                {
+                                    Uof.Iabroad_shareholderService.AddEntities(newHolders);
+                                }
+                                if (updateHolders != null && updateHolders.Count() > 0)
+                                {
+                                    Uof.Iabroad_shareholderService.UpdateEntities(updateHolders);
+                                }
+                            }
+                            #endregion
+                            break;
+                        case "reg_internal":
+                            #region reg_internal
+                            if (dbAudit.value.Length > 0 && dbAudit.value != "{}")
+                            {
+                                JavaScriptSerializer jsonSerialize = new JavaScriptSerializer();
+                                var obj = jsonSerialize.Deserialize<HistoryInternal>(dbAudit.value);
+                                var dbInternal = Uof.Ireg_internalService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();
+
+                                var dbInternalHistory = Uof.Iinternal_historyService.GetAll(a => a.master_id == dbAudit.source_id).FirstOrDefault();
+                                if (dbInternalHistory == null)
+                                {
+                                    dbInternalHistory = new internal_history();
+                                }
+
+                                if (obj.name_cn != null && obj.name_cn.Length > 0)
+                                {
+                                    dbInternalHistory.name_cn = dbInternal.name_cn + "|" + dbAudit.date_created.Value.ToString("yyyy-MM-dd");
+                                    dbInternal.name_cn = obj.name_cn;
+                                }
+                                if (obj.legal != null && obj.legal.Length > 0)
+                                {
+                                    dbInternalHistory.legal = dbInternal.legal + "|" + dbAudit.date_created.Value.ToString("yyyy-MM-dd");
+                                    dbInternal.legal = obj.legal;
+                                }
+                                if (obj.address != null && obj.address.Length > 0)
+                                {
+                                    dbInternalHistory.address = dbInternal.address + "|" + dbAudit.date_created.Value.ToString("yyyy-MM-dd");
+                                    dbInternal.address = obj.address;
+                                }
+                                if (obj.reg_no != null && obj.reg_no.Length > 0)
+                                {
+                                    dbInternalHistory.reg_no = dbInternal.reg_no + "|" + dbAudit.date_created.Value.ToString("yyyy-MM-dd");
+                                    dbInternal.reg_no = obj.reg_no;
+                                }
+                                if (obj.director != null && obj.director.Length > 0)
+                                {
+                                    dbInternalHistory.director = dbInternal.director + "|" + dbAudit.date_created.Value.ToString("yyyy-MM-dd");
+                                    dbInternal.director = obj.director;
+                                }
+                                if (obj.others != null && obj.others.Length > 0)
+                                {
+                                    dbInternalHistory.others = obj.others;
+                                }
+
+                                try
+                                {
+                                    Uof.Ireg_internalService.UpdateEntity(dbInternal);
+
+                                    if (dbInternalHistory.name_cn.Length > 0
+                                    || dbInternalHistory.legal.Length > 0
+                                    || dbInternalHistory.director.Length > 0
+                                    || dbInternalHistory.address.Length > 0
+                                    || dbInternalHistory.reg_no.Length > 0)
+                                    {
+                                        if (dbInternalHistory.id > 0)
+                                        {
+                                            Uof.Iinternal_historyService.UpdateEntity(dbInternalHistory);
+                                        }
+                                        else
+                                        {
+                                            dbInternalHistory.master_id = dbInternal.id;
+                                            Uof.Iinternal_historyService.AddEntity(dbInternalHistory);
+                                        }
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                }
+                            }
+                            #endregion
+                            #region 股东董事
+                            if (holders != null && holders.Count() > 0)
+                            {
+                                //dbAudit.source_id
+                                var dbHolders = Uof.Iinternal_shareholderService.GetAll(a => a.master_id == dbAudit.source_id && a.source == dbAudit.source).ToList();
+                                var newHolders = new List<internal_shareholder>();
+                                var updateHolders = new List<internal_shareholder>();
+
+                                foreach (var item in holders)
+                                {
+                                    var holder = dbHolders.Where(d => d.id == item.person_id).FirstOrDefault();
+                                    if (holder == null)
+                                    {
+                                        newHolders.Add(new internal_shareholder()
+                                        {
+                                            name = item.name,
+                                            cardNo = item.name,
+                                            changed_type = item.changed_type,
+                                            date_created = DateTime.Now,
+                                            date_changed = item.date_changed,
+                                            gender = item.gender,
+                                            history_id = item.history_id,
+                                            master_id = item.master_id,
+                                            source = item.source,
+                                            takes = item.takes,
+                                            type = item.type,
+                                            position = item.position,
+                                            memo = item.memo
+                                        });
+                                    }
+                                    else
+                                    {
+                                        holder.changed_type = item.changed_type;
+                                        holder.takes = item.takes;
+                                        holder.position = item.position;
+                                        holder.history_id = item.history_id;
+                                        holder.date_changed = item.date_changed;
+                                        updateHolders.Add(holder);
+                                    }
+                                }
+
+                                if (newHolders != null && newHolders.Count() > 0)
+                                {
+                                    Uof.Iinternal_shareholderService.AddEntities(newHolders);
+                                }
+                                if (updateHolders != null && updateHolders.Count() > 0)
+                                {
+                                    Uof.Iinternal_shareholderService.UpdateEntities(updateHolders);
+                                }
+                            }
+                            #endregion
                             break;
                         default:
                             break;
                     }
                 }
 
-                #region 股东董事
-                if (holders!= null && holders.Count() > 0 && dbAudit.status == 3)
-                {
-                    //dbAudit.source_id
-                   var dbHolders = Uof.Iabroad_shareholderService.GetAll(a => a.master_id == dbAudit.source_id && a.source == dbAudit.source).ToList();
-                   var newHolders = new List<abroad_shareholder>();
-                   var updateHolders = new List<abroad_shareholder>();
-
-                    foreach (var item in holders)
-                    {
-                        var holder = dbHolders.Where(d => d.id == item.person_id).FirstOrDefault();
-                        if (holder == null)
-                        {
-                            newHolders.Add(new abroad_shareholder()
-                            {
-                                name = item.name,
-                                cardNo = item.name,
-                                changed_type = item.changed_type,
-                                date_created = DateTime.Now,
-                                date_changed = item.date_changed,
-                                gender = item.gender,
-                                history_id = item.history_id,
-                                master_id = item.master_id,
-                                source = item.source,
-                                takes = item.takes,
-                                type = item.type,
-                                memo = item.memo
-                            });
-                        }
-                        else
-                        {
-                            holder.changed_type = item.changed_type;
-                            holder.takes = item.takes;
-                            holder.history_id = item.history_id;
-                            holder.date_changed = item.date_changed;
-                            updateHolders.Add(holder);
-                        }
-                    }
-
-                    if (newHolders != null && newHolders.Count() > 0)
-                    {
-                        Uof.Iabroad_shareholderService.AddEntities(newHolders);
-                    }
-                    if (updateHolders != null && updateHolders.Count() > 0)
-                    {
-                        Uof.Iabroad_shareholderService.UpdateEntities(updateHolders);
-                    }
-                }
-                #endregion
+                
             }
             return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
         }
@@ -891,17 +1090,20 @@ namespace WebCenter.Web.Controllers
             {
                 case "abroad":
                     source = "reg_abroad";
-                    break;
+                    var list1 = Uof.Iabroad_shareholderService
+                        .GetAll(s => s.master_id == id && s.source == source && s.type == "股东" && s.changed_type != "exit")
+                        .ToList();
+                    return Json(list1, JsonRequestBehavior.AllowGet);
                 case "internal":
                     source = "reg_internal";
-                    break;
-                default:
-                    break;
+
+                    var list2 = Uof.Iinternal_shareholderService
+                        .GetAll(s => s.master_id == id && s.source == source && s.type == "股东" && s.changed_type != "exit")
+                        .ToList();
+                    return Json(list2, JsonRequestBehavior.AllowGet);
             }
-            var list = Uof.Iabroad_shareholderService
-                .GetAll(s => s.master_id == id && s.source == source && s.type == "股东" && s.changed_type != "exit")
-                .ToList();
-            return Json(list, JsonRequestBehavior.AllowGet);
+
+            return SuccessResult;
         }
 
         public ActionResult GetDirectory(string name, int id)

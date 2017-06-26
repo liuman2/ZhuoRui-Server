@@ -34,6 +34,10 @@ namespace WebCenter.Entities
     
     
     
+        public string source { get; set; }
+    
+    
+    
         public string gender { get; set; }
     
     
@@ -74,6 +78,6 @@ namespace WebCenter.Entities
     
     
     
-        public string source { get; set; }
+        public string position { get; set; }
     }
 }

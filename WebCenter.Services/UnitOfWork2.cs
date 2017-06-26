@@ -142,6 +142,20 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  Iinternal_historyService Iinternal_historyService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
+	 public  Iinternal_shareholderService Iinternal_shareholderService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IleaveService IleaveService
     {
         get;

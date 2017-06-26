@@ -55,6 +55,10 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<IincomeService>().To<incomeService>().InRequestScope();
 	
+	   kernel.Bind<Iinternal_historyService>().To<internal_historyService>().InRequestScope();
+	
+	   kernel.Bind<Iinternal_shareholderService>().To<internal_shareholderService>().InRequestScope();
+	
 	   kernel.Bind<IleaveService>().To<leaveService>().InRequestScope();
 	
 	   kernel.Bind<IlectureService>().To<lectureService>().InRequestScope();

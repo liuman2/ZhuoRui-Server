@@ -203,6 +203,26 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class internal_historyService:BaseService<internal_history>,Iinternal_historyService
+    {   
+        public internal_historyService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.internal_historyRepository;
+        }  
+    }
+	
+	public partial class internal_shareholderService:BaseService<internal_shareholder>,Iinternal_shareholderService
+    {   
+        public internal_shareholderService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.internal_shareholderRepository;
+        }  
+    }
+	
 	public partial class leaveService:BaseService<leave>,IleaveService
     {   
         public leaveService()

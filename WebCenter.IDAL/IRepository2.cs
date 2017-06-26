@@ -82,6 +82,14 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface Iinternal_historyRepository :IBaseRepository<internal_history>
+    {         
+    }
+	
+    public partial interface Iinternal_shareholderRepository :IBaseRepository<internal_shareholder>
+    {         
+    }
+	
     public partial interface IleaveRepository :IBaseRepository<leave>
     {         
     }

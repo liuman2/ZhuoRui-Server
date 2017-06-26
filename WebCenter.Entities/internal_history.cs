@@ -12,12 +12,12 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class history_shareholder:BaseModel
+    public partial class internal_history:BaseModel
     {
     
     
     
-    [EntityPrimKey("history_shareholder")]
+    [EntityPrimKey("internal_history")]
         public int id { get; set; }
     
     
@@ -26,51 +26,27 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<int> history_id { get; set; }
+        public string name_cn { get; set; }
     
     
     
-        public Nullable<int> person_id { get; set; }
+        public string legal { get; set; }
     
     
     
-        public string name { get; set; }
+        public string address { get; set; }
     
     
     
-        public string source { get; set; }
+        public string reg_no { get; set; }
     
     
     
-        public string gender { get; set; }
+        public string director { get; set; }
     
     
     
-        public string cardNo { get; set; }
-    
-    
-    
-        public Nullable<float> takes { get; set; }
-    
-    
-    
-        public string type { get; set; }
-    
-    
-    
-        public string changed_type { get; set; }
-    
-    
-    
-        public Nullable<System.DateTime> date_changed { get; set; }
-    
-    
-    
-        public string memo { get; set; }
-    
-    
-    
-        public string attachment { get; set; }
+        public string others { get; set; }
     
     
     
@@ -79,9 +55,5 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
-    
-    
-    
-        public string position { get; set; }
     }
 }

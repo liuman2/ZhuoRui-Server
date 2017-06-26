@@ -6,6 +6,7 @@ using Common;
 using System.Linq.Expressions;
 using System;
 using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace WebCenter.Web.Controllers
 {
@@ -204,7 +205,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(reg_internal reginternal, oldRequest oldRequest, List<reg_internal_items> items)
+        public ActionResult Add(reg_internal reginternal, oldRequest oldRequest, List<reg_internal_items> items, List<Shareholder> shareholderList)
         {
             //if (reginternal.customer_id == null)
             //{
@@ -316,7 +317,7 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (items.Count() > 0)
+            if (items!= null && items.Count() > 0)
             {
                 foreach (var item in items)
                 {
@@ -324,6 +325,32 @@ namespace WebCenter.Web.Controllers
                     item.master_id = newInternal.id;
                 }
                 Uof.Ireg_internal_itemsService.AddEntities(items);
+            }
+
+            if (shareholderList != null && shareholderList.Count() > 0)
+            {
+                var hoders = new List<internal_shareholder>();
+
+                foreach (var item in shareholderList)
+                {
+                    hoders.Add(new internal_shareholder()
+                    {
+                        master_id = newInternal.id,
+                        history_id = null,
+                        name = item.name,
+                        cardNo = item.cardNo,
+                        changed_type = "original",
+                        source = "reg_internal",
+                        gender = item.gender,
+                        takes = item.takes,
+                        type = item.type,
+                        memo = item.memo,
+                        position = item.position,
+                        date_created = DateTime.Today,
+                    });
+                }
+
+                Uof.Iinternal_shareholderService.AddEntities(hoders);
             }
 
             Uof.ItimelineService.AddEntity(new timeline()
@@ -340,6 +367,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
+            #region get
             var reg = Uof.Ireg_internalService.GetAll(a => a.id == id).Select(a => new
             {
                 id = a.id,
@@ -410,16 +438,89 @@ namespace WebCenter.Web.Controllers
                 biz_address = a.biz_address,
                 director_card_no = a.director_card_no,
                 capital = a.capital,
+                date_created = a.date_created,
             }).FirstOrDefault();
+            #endregion
 
-            //if (reg == null)
-            //{
-            //    return Json(null, JsonRequestBehavior.AllowGet);
-            //}
+            #region 旧数据处理
+            try
+            {
+                var dbReg = Uof.Ireg_internalService.GetAll(i => i.id == reg.id).FirstOrDefault();
+                var shareHolder = new List<internal_shareholder>();
+                if (reg.shareholders != null && reg.shareholders.Length > 0)
+                {
+                    JavaScriptSerializer jsonSerialize = new JavaScriptSerializer();
+                    var shareHolderList = jsonSerialize.Deserialize<List<Shareholder>>(reg.shareholders);
+                    if (shareHolderList != null && shareHolderList.Count > 0)
+                    {
+                        foreach (var item in shareHolderList)
+                        {
+                            shareHolder.Add(new internal_shareholder()
+                            {
+                                cardNo = item.cardNo,
+                                changed_type = "original",
+                                date_changed = null,
+                                date_created = reg.date_created,
+                                gender = item.gender,
+                                master_id = reg.id,
+                                memo = item.memo,
+                                name = item.name,
+                                position = item.position,
+                                source = "reg_internal",
+                                takes = item.takes,
+                                type = "股东"
+                            });
+                        }
 
+                        dbReg.shareholders = null;
+                    }
+                }
+
+                //if (reg.director != null && reg.director.Length > 0)
+                //{
+                //    shareHolder.Add(new internal_shareholder()
+                //    {
+                //        cardNo = reg.director_card_no,
+                //        changed_type = "original",
+                //        date_changed = null,
+                //        date_created = reg.date_created,
+                //        gender = null,
+                //        master_id = reg.id,
+                //        memo = null,
+                //        name = reg.director,
+                //        position = null,
+                //        source = "reg_internal",
+                //        takes = null,
+                //        type = "监事"
+                //    });
+
+                //    dbReg.director = null;
+                //    dbReg.director_card_no = null;
+                //}
+
+                if (shareHolder.Count() > 0)
+                {
+                    var count = Uof.Iinternal_shareholderService.AddEntities(shareHolder);
+                    if (count > 0)
+                    {
+                        Uof.Ireg_internalService.UpdateEntity(dbReg);
+                    }
+                }                
+            }
+            catch (Exception)
+            {
+            }
+
+            #endregion
+
+            // 委托事项
             var items = Uof.Ireg_internal_itemsService.GetAll(r => r.master_id == reg.id).ToList();
+            // 公司股东
+            var shareholderList = Uof.Iinternal_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_internal" && s.type == "股东" && s.changed_type != "exit").ToList();
+            // 公司监事
+            //var directorList = Uof.Iinternal_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_internal" && s.type == "监事" && s.changed_type != "exit").ToList();
 
-            return Json(new { order = reg, items = items }, JsonRequestBehavior.AllowGet);
+            return Json(new { order = reg, items = items, shareholderList = shareholderList }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetView(int id)
@@ -498,9 +599,81 @@ namespace WebCenter.Web.Controllers
                 biz_address = a.biz_address,
                 director_card_no = a.director_card_no,
                 capital = a.capital,
+                date_created = a.date_created,
 
             }).FirstOrDefault();
 
+            #region 旧数据处理
+            try
+            {
+                var dbReg = Uof.Ireg_internalService.GetAll(i => i.id == reg.id).FirstOrDefault();
+                var shareHolder = new List<internal_shareholder>();
+                if (reg.shareholders != null && reg.shareholders.Length > 0)
+                {
+                    JavaScriptSerializer jsonSerialize = new JavaScriptSerializer();
+                    var shareHolderList = jsonSerialize.Deserialize<List<Shareholder>>(reg.shareholders);
+                    if (shareHolderList != null && shareHolderList.Count > 0)
+                    {
+                        foreach (var item in shareHolderList)
+                        {
+                            shareHolder.Add(new internal_shareholder()
+                            {
+                                cardNo = item.cardNo,
+                                changed_type = "original",
+                                date_changed = null,
+                                date_created = reg.date_created,
+                                gender = item.gender,
+                                master_id = reg.id,
+                                memo = item.memo,
+                                name = item.name,
+                                position = item.position,
+                                source = "reg_internal",
+                                takes = item.takes,
+                                type = "股东"
+                            });
+                        }
+
+                        dbReg.shareholders = null;
+                    }
+                }
+
+                //if (reg.director != null && reg.director.Length > 0)
+                //{
+                //    shareHolder.Add(new internal_shareholder()
+                //    {
+                //        cardNo = reg.director_card_no,
+                //        changed_type = "original",
+                //        date_changed = null,
+                //        date_created = reg.date_created,
+                //        gender = null,
+                //        master_id = reg.id,
+                //        memo = null,
+                //        name = reg.director,
+                //        position = null,
+                //        source = "reg_internal",
+                //        takes = null,
+                //        type = "监事"
+                //    });
+
+                //    dbReg.director = null;
+                //    dbReg.director_card_no = null;
+                //}
+
+                if (shareHolder.Count() > 0)
+                {
+                    var count = Uof.Iinternal_shareholderService.AddEntities(shareHolder);
+                    if (count > 0)
+                    {
+                        Uof.Ireg_internalService.UpdateEntity(dbReg);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            #endregion
+            
             var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "reg_internal").Select(i => new {
                 id = i.id,
                 customer_id = i.customer_id,
@@ -538,12 +711,17 @@ namespace WebCenter.Web.Controllers
                 local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
             };
 
+            // 委托事项
             var items = Uof.Ireg_internal_itemsService.GetAll(r => r.master_id == reg.id).ToList();
+            // 公司股东
+            var shareholderList = Uof.Iinternal_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_internal" && s.type == "股东" && s.changed_type != "exit").ToList();
+            // 公司监事
+            //var directorList = Uof.Iinternal_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_internal" && s.type == "监事" && s.changed_type != "exit").ToList();
 
-            return Json(new { order = reg, incomes = incomes, items = items }, JsonRequestBehavior.AllowGet);
+            return Json(new { order = reg, incomes = incomes, items = items, shareholderList = shareholderList }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Update(reg_internal reginternal, List<reg_internal_items> items)
+        public ActionResult Update(reg_internal reginternal, List<reg_internal_items> items, List<Shareholder> shareholderList)
         {
             var dbReg = Uof.Ireg_internalService.GetById(reginternal.id);
 
@@ -597,7 +775,7 @@ namespace WebCenter.Web.Controllers
             dbReg.scope = reginternal.scope;
             dbReg.pay_mode = reginternal.pay_mode;
             dbReg.names = reginternal.names;
-            dbReg.shareholders = reginternal.shareholders;
+            //dbReg.shareholders = reginternal.shareholders;
             dbReg.biz_address = reginternal.biz_address;
             dbReg.director_card_no = reginternal.director_card_no;
             dbReg.capital = reginternal.capital;
@@ -606,6 +784,11 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
+                #region 委托事项
+                if (items == null)
+                {
+                    items = new List<reg_internal_items>();
+                }
                 var dbItems = Uof.Ireg_internal_itemsService.GetAll(i => i.master_id == dbReg.id).ToList();
                 var ids = items.Select(i => i.id).ToList();
                 var dbIds = new List<int>();
@@ -699,6 +882,97 @@ namespace WebCenter.Web.Controllers
                         Uof.IincomeService.UpdateEntities(list);
                     }
                 }
+
+                #endregion
+
+                #region 股东
+                var dbHolders = Uof.Iinternal_shareholderService.GetAll(s => s.master_id == dbReg.id && s.source == "reg_internal" && s.changed_type != "exit").ToList();
+
+                var newHolders = new List<internal_shareholder>();
+                var deleteHolders = new List<internal_shareholder>();
+                var updateHolders = new List<internal_shareholder>();
+
+                if (shareholderList != null && shareholderList.Count() > 0)
+                {
+                    foreach (var item in shareholderList)
+                    {
+                        if (item.id == null)
+                        {
+                            newHolders.Add(new internal_shareholder
+                            {
+                                master_id = dbReg.id,
+                                history_id = null,
+                                name = item.name,
+                                cardNo = item.cardNo,
+                                changed_type = "original",
+                                source = "reg_internal",
+                                gender = item.gender,
+                                takes = item.takes,
+                                type = item.type,
+                                memo = item.memo,
+                                position = item.position,
+                                date_created = DateTime.Today,
+                            });
+                        }
+
+                        if (item.id > 0)
+                        {
+                            var updateHolder = dbHolders.Where(d => d.id == item.id).FirstOrDefault();
+                            if (updateHolder != null)
+                            {
+                                updateHolder.name = item.name;
+                                updateHolder.cardNo = item.cardNo;
+                                updateHolder.gender = item.gender;
+                                updateHolder.takes = item.takes;
+                                updateHolder.position = item.position;
+                                updateHolders.Add(updateHolder);
+                            }
+                        }
+                    }
+
+                    if (dbHolders.Count() > 0)
+                    {
+                        foreach (var item in dbHolders)
+                        {
+                            var shareholder = shareholderList.Where(s => s.id == item.id).FirstOrDefault();
+                            if (shareholder == null)
+                            {
+                                deleteHolders.Add(item);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    deleteHolders = dbHolders;
+                }
+
+                try
+                {
+                    if (deleteHolders.Count > 0)
+                    {
+                        foreach (var item in deleteHolders)
+                        {
+                            Uof.Iinternal_shareholderService.DeleteEntity(item);
+                        }
+                    }
+
+                    if (updateHolders.Count > 0)
+                    {
+                        Uof.Iinternal_shareholderService.UpdateEntities(updateHolders);
+                    }
+
+                    if (newHolders.Count > 0)
+                    {
+                        Uof.Iinternal_shareholderService.AddEntities(newHolders);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+
+                #endregion
 
                 Uof.ItimelineService.AddEntity(new timeline()
                 {

@@ -45,6 +45,10 @@ namespace WebCenter.DAL
 	
 	public IDAL.IincomeRepository incomeRepository { get { return new incomeRepository(); } }
 	
+	public IDAL.Iinternal_historyRepository internal_historyRepository { get { return new internal_historyRepository(); } }
+	
+	public IDAL.Iinternal_shareholderRepository internal_shareholderRepository { get { return new internal_shareholderRepository(); } }
+	
 	public IDAL.IleaveRepository leaveRepository { get { return new leaveRepository(); } }
 	
 	public IDAL.IlectureRepository lectureRepository { get { return new lectureRepository(); } }

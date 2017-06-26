@@ -12,12 +12,12 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class history_shareholder:BaseModel
+    public partial class internal_shareholder:BaseModel
     {
     
     
     
-    [EntityPrimKey("history_shareholder")]
+    [EntityPrimKey("internal_shareholder")]
         public int id { get; set; }
     
     
@@ -27,10 +27,6 @@ namespace WebCenter.Entities
     
     
         public Nullable<int> history_id { get; set; }
-    
-    
-    
-        public Nullable<int> person_id { get; set; }
     
     
     
@@ -47,6 +43,10 @@ namespace WebCenter.Entities
     
     
         public string cardNo { get; set; }
+    
+    
+    
+        public string position { get; set; }
     
     
     
@@ -79,9 +79,5 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
-    
-    
-    
-        public string position { get; set; }
     }
 }

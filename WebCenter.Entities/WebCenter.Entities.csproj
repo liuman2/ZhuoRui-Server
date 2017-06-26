@@ -148,6 +148,12 @@
     <Compile Include="income.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="internal_history.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
+    <Compile Include="internal_shareholder.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="leave.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

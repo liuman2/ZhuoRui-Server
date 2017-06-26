@@ -86,6 +86,14 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface Iinternal_historyService:IBaseService<internal_history>
+    {   
+    }
+	
+	public partial interface Iinternal_shareholderService:IBaseService<internal_shareholder>
+    {   
+    }
+	
 	public partial interface IleaveService:IBaseService<leave>
     {   
     }

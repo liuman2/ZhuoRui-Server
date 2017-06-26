@@ -102,6 +102,16 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class internal_historyRepository :BaseRepository<internal_history>,Iinternal_historyRepository
+    {
+         
+    }
+	
+	public partial class internal_shareholderRepository :BaseRepository<internal_shareholder>,Iinternal_shareholderRepository
+    {
+         
+    }
+	
 	public partial class leaveRepository :BaseRepository<leave>,IleaveRepository
     {
          

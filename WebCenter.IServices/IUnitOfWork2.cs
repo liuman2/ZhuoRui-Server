@@ -46,6 +46,10 @@ namespace WebCenter.IServices
 	
 	  IincomeService IincomeService{get;set;} 
 	
+	  Iinternal_historyService Iinternal_historyService{get;set;} 
+	
+	  Iinternal_shareholderService Iinternal_shareholderService{get;set;} 
+	
 	  IleaveService IleaveService{get;set;} 
 	
 	  IlectureService IlectureService{get;set;} 

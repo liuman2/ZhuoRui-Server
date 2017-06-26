@@ -70,6 +70,12 @@ namespace WebCenter.IDAL
 		IDAL.IincomeRepository incomeRepository { get; }
 	  
 
+		IDAL.Iinternal_historyRepository internal_historyRepository { get; }
+	  
+
+		IDAL.Iinternal_shareholderRepository internal_shareholderRepository { get; }
+	  
+
 		IDAL.IleaveRepository leaveRepository { get; }
 	  
 

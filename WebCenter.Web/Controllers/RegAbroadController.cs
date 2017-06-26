@@ -702,6 +702,7 @@ namespace WebCenter.Web.Controllers
                     content = string.Format("{0}修改了订单资料", arrs[3])
                 });
 
+                #region 股东 董事
                 var dbHolders = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == dbReg.id && s.source == "reg_abroad" && s.changed_type != "exit").ToList();
 
                 var newHolders = new List<abroad_shareholder>();
@@ -786,6 +787,8 @@ namespace WebCenter.Web.Controllers
                 {
 
                 }
+
+                #endregion
             }
             return Json(new { success = r, id = reg.id }, JsonRequestBehavior.AllowGet);
         }
