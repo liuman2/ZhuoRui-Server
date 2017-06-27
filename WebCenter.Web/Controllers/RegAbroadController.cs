@@ -401,7 +401,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetView(int id)
         {
-            #region history
+            #region history 旧数据处理
             var historyReocrd = Uof.Iabroad_historyService
                 .GetAll(h => h.master_id == id)
                 .FirstOrDefault();

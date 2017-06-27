@@ -525,6 +525,64 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetView(int id)
         {
+            #region history 旧数据处理
+            var historyReocrd = Uof.Iinternal_historyService
+                .GetAll(h => h.master_id == id)
+                .FirstOrDefault();
+            if (historyReocrd == null)
+            {
+                historyReocrd = new internal_history();
+                historyReocrd.master_id = id;
+                var dbHistoryRecord = Uof.IhistoryService.GetAll(h => h.source_id == id && h.source == "reg_internal").OrderByDescending(h => h.id).FirstOrDefault();
+                if (dbHistoryRecord != null)
+                {
+                    if (dbHistoryRecord.value != null && dbHistoryRecord.value != "{}" && dbHistoryRecord.value.Length > 0)
+                    {
+                        var dbReg = Uof.Ireg_internalService.GetAll(a => a.id == id).FirstOrDefault();
+
+                        JavaScriptSerializer jsonSerialize = new JavaScriptSerializer();
+                        var obj = jsonSerialize.Deserialize<HistoryInternal>(dbHistoryRecord.value);
+                        if (obj.legal != null || obj.name_cn != null || obj.address != null || obj.reg_no != null || obj.director != null)
+                        {
+                            if (obj.name_cn != null && obj.name_cn.Length > 0)
+                            {
+                                historyReocrd.name_cn = dbReg.name_cn + "|" + dbHistoryRecord.date_created.Value.ToString("yyyy-MM-dd");
+                                dbReg.name_cn = obj.name_cn;
+                            }
+
+                            if (obj.legal != null && obj.legal.Length > 0)
+                            {
+                                historyReocrd.legal = dbReg.legal + "|" + dbHistoryRecord.date_created.Value.ToString("yyyy-MM-dd");
+                                dbReg.legal = obj.legal;
+                            }
+
+                            if (obj.reg_no != null && obj.reg_no.Length > 0)
+                            {
+                                historyReocrd.reg_no = dbReg.reg_no + "|" + dbHistoryRecord.date_created.Value.ToString("yyyy-MM-dd");
+                                dbReg.reg_no = obj.reg_no;
+                            }
+
+                            if (obj.address != null && obj.address.Length > 0)
+                            {
+                                historyReocrd.address = dbReg.address + "|" + dbHistoryRecord.date_created.Value.ToString("yyyy-MM-dd");
+                                dbReg.address = obj.address;
+                            }
+
+                            if (obj.director != null && obj.director.Length > 0)
+                            {
+                                historyReocrd.director = dbReg.director + "|" + dbHistoryRecord.date_created.Value.ToString("yyyy-MM-dd");
+                                dbReg.director = obj.address;
+                            }
+
+                            Uof.Ireg_internalService.UpdateEntity(dbReg);
+                            Uof.Iinternal_historyService.AddEntity(historyReocrd);
+                        }
+                    }
+                }
+            }
+
+            #endregion
+            
             var reg = Uof.Ireg_internalService.GetAll(a => a.id == id).Select(a => new
             {
                 id = a.id,
@@ -718,7 +776,29 @@ namespace WebCenter.Web.Controllers
             // 公司监事
             //var directorList = Uof.Iinternal_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_internal" && s.type == "监事" && s.changed_type != "exit").ToList();
 
-            return Json(new { order = reg, incomes = incomes, items = items, shareholderList = shareholderList }, JsonRequestBehavior.AllowGet);
+
+            var _historyReocrd = new HistoryInternal();
+            if (historyReocrd != null)
+            {
+                _historyReocrd = new HistoryInternal
+                {
+                    name_cn = historyReocrd.name_cn,
+                    legal = historyReocrd.legal,
+                    address = historyReocrd.address,
+                    others = historyReocrd.others,
+                    reg_no = historyReocrd.reg_no,
+                    director = historyReocrd.director,
+                };
+            }
+
+            return Json(new
+            {
+                order = reg,
+                incomes = incomes,
+                items = items,
+                shareholderList = shareholderList,
+                historyReocrd = _historyReocrd
+            }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Update(reg_internal reginternal, List<reg_internal_items> items, List<Shareholder> shareholderList)
@@ -1825,6 +1905,13 @@ namespace WebCenter.Web.Controllers
 
 
             return SuccessResult;
+        }
+
+        public ActionResult HistoryHolder(int master_id, string source, string type)
+        {
+            var list = Uof.Ihistory_shareholderService.GetAll(s => s.master_id == master_id && s.source == source && s.type == type).OrderByDescending(s => s.id).ToList();
+
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
     }
 }
