@@ -32,6 +32,8 @@ namespace WebCenter.IServices
 	
 	  Ibank_accountService Ibank_accountService{get;set;} 
 	
+	  IcontactService IcontactService{get;set;} 
+	
 	  IcustomerService IcustomerService{get;set;} 
 	
 	  Icustomer_timelineService Icustomer_timelineService{get;set;} 

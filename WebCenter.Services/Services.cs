@@ -133,6 +133,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class contactService:BaseService<contact>,IcontactService
+    {   
+        public contactService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.contactRepository;
+        }  
+    }
+	
 	public partial class customerService:BaseService<customer>,IcustomerService
     {   
         public customerService()

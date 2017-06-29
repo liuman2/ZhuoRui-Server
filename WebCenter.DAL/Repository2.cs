@@ -67,6 +67,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class contactRepository :BaseRepository<contact>,IcontactRepository
+    {
+         
+    }
+	
 	public partial class customerRepository :BaseRepository<customer>,IcustomerRepository
     {
          

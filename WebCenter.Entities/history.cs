@@ -112,6 +112,14 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
+    
+    
+        public Nullable<int> logoff { get; set; }
+    
+    
+    
+        public string logoff_memo { get; set; }
+    
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }

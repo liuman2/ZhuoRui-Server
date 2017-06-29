@@ -93,6 +93,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IcontactService IcontactService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IcustomerService IcustomerService
     {
         get;

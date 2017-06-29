@@ -58,6 +58,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IcontactService:IBaseService<contact>
+    {   
+    }
+	
 	public partial interface IcustomerService:IBaseService<customer>
     {   
     }

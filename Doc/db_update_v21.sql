@@ -14,3 +14,6 @@ CREATE TABLE `contact` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `sequence` VALUES ('contact', '1');
+
+call AddColumnUnlessExists(Database(), 'history', 'logoff', 'int(1) DEFAULT NULL COMMENT "是否注销"');
+call AddColumnUnlessExists(Database(), 'history', 'logoff_memo', 'varchar(100) DEFAULT NULL COMMENT "注销备注"');
