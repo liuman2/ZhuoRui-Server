@@ -52,17 +52,13 @@ namespace WebCenter.Entities
         public virtual DbSet<leave> leaves { get; set; }
         public virtual DbSet<notice> notices { get; set; }
         public virtual DbSet<annual_exam> annual_exam { get; set; }
-        public virtual DbSet<patent> patents { get; set; }
-        public virtual DbSet<reg_abroad> reg_abroad { get; set; }
         public virtual DbSet<mail> mails { get; set; }
         public virtual DbSet<setting> settings { get; set; }
         public virtual DbSet<receipt> receipts { get; set; }
         public virtual DbSet<sub_audit> sub_audit { get; set; }
         public virtual DbSet<audit> audits { get; set; }
         public virtual DbSet<customer> customers { get; set; }
-        public virtual DbSet<trademark> trademarks { get; set; }
         public virtual DbSet<timeline> timelines { get; set; }
-        public virtual DbSet<reg_internal> reg_internal { get; set; }
         public virtual DbSet<accounting> accountings { get; set; }
         public virtual DbSet<accounting_item> accounting_item { get; set; }
         public virtual DbSet<reg_internal_items> reg_internal_items { get; set; }
@@ -73,5 +69,9 @@ namespace WebCenter.Entities
         public virtual DbSet<abroad_shareholder> abroad_shareholder { get; set; }
         public virtual DbSet<internal_shareholder> internal_shareholder { get; set; }
         public virtual DbSet<internal_history> internal_history { get; set; }
+        public virtual DbSet<patent> patents { get; set; }
+        public virtual DbSet<reg_abroad> reg_abroad { get; set; }
+        public virtual DbSet<reg_internal> reg_internal { get; set; }
+        public virtual DbSet<trademark> trademarks { get; set; }
     }
 }

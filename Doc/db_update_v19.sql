@@ -38,3 +38,7 @@ CREATE TABLE `internal_history` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `sequence` VALUES ('internal_history', '1');
+
+
+
+

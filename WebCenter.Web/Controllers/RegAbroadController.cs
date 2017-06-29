@@ -88,6 +88,14 @@ namespace WebCenter.Web.Controllers
                 {
                     statusQuery = c => (c.status == 2 || c.status == 3);
                 }
+                else if (request.status == 5)
+                {
+                    statusQuery = c => (c.order_status == 1);
+                }
+                else if (request.status == 6)
+                {
+                    statusQuery = c => (c.order_status == 2);
+                }
                 else
                 {
                     statusQuery = c => (c.status == request.status.Value);
@@ -168,6 +176,7 @@ namespace WebCenter.Web.Controllers
                     submit_review_moment = c.submit_review_moment,
                     date_setup = c.date_setup,
                     is_annual = c.is_annual ?? 0,
+                    order_status = c.order_status ?? 0,
                     description = c.description
 
                 }).ToPagedList(request.index, request.size).ToList();
@@ -388,6 +397,7 @@ namespace WebCenter.Web.Controllers
                 status = a.status,
                 review_status = a.review_status,
                 is_annual = a.is_annual ?? 0,
+                order_status = a.order_status ?? 0,
                 description = a.description,
                 shareholder = a.shareholder,
 
@@ -511,6 +521,7 @@ namespace WebCenter.Web.Controllers
                 is_annual = a.is_annual ?? 0,
                 description = a.description,
                 shareholder = a.shareholder,
+                order_status = a.order_status ?? 0,
 
             }).FirstOrDefault();
 

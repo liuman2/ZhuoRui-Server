@@ -19,15 +19,15 @@ namespace WebCenter.Entities
             this.annual_exam = new HashSet<annual_exam>();
             this.audits = new HashSet<audit>();
             this.bank_account = new HashSet<bank_account>();
-            this.reg_abroad = new HashSet<reg_abroad>();
             this.sub_audit = new HashSet<sub_audit>();
             this.lecture_customer = new HashSet<lecture_customer>();
             this.incomes = new HashSet<income>();
-            this.patents = new HashSet<patent>();
             this.customer_timeline = new HashSet<customer_timeline>();
-            this.trademarks = new HashSet<trademark>();
-            this.reg_internal = new HashSet<reg_internal>();
             this.accountings = new HashSet<accounting>();
+            this.reg_abroad = new HashSet<reg_abroad>();
+            this.patents = new HashSet<patent>();
+            this.reg_internal = new HashSet<reg_internal>();
+            this.trademarks = new HashSet<trademark>();
         }
     
     
@@ -147,16 +147,16 @@ namespace WebCenter.Entities
         public virtual ICollection<annual_exam> annual_exam { get; set; }
         public virtual ICollection<audit> audits { get; set; }
         public virtual ICollection<bank_account> bank_account { get; set; }
-        public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual ICollection<sub_audit> sub_audit { get; set; }
         public virtual ICollection<lecture_customer> lecture_customer { get; set; }
         public virtual ICollection<income> incomes { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
-        public virtual ICollection<patent> patents { get; set; }
         public virtual ICollection<customer_timeline> customer_timeline { get; set; }
-        public virtual ICollection<trademark> trademarks { get; set; }
-        public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual ICollection<accounting> accountings { get; set; }
+        public virtual ICollection<reg_abroad> reg_abroad { get; set; }
+        public virtual ICollection<patent> patents { get; set; }
+        public virtual ICollection<reg_internal> reg_internal { get; set; }
+        public virtual ICollection<trademark> trademarks { get; set; }
     }
 }

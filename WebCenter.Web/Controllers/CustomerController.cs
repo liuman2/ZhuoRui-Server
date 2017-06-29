@@ -872,5 +872,29 @@ namespace WebCenter.Web.Controllers
                 assistant_name = assistant_name
             }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public ActionResult UpdateShortInfo(ShortInfoCustomer info)
+        {
+            var dbCust = Uof.IcustomerService.GetAll(c => c.id == info.id).FirstOrDefault();
+
+            dbCust.province = info.province;
+            dbCust.city = info.city;
+            dbCust.county = info.county;
+            dbCust.address = info.address;
+            dbCust.contact = info.contact;
+            dbCust.mobile = info.mobile;
+            dbCust.tel = info.tel;
+            dbCust.fax = info.fax;
+            dbCust.email = info.email;
+            dbCust.QQ = info.QQ;
+            dbCust.wechat = info.wechat;
+
+            dbCust.date_updated = DateTime.Now;
+
+            Uof.IcustomerService.UpdateEntity(dbCust);
+
+            return SuccessResult;
+        }
     }
 }

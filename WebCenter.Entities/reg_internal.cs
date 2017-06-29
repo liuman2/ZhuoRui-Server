@@ -248,6 +248,10 @@ namespace WebCenter.Entities
     
         public string director_card_no { get; set; }
     
+    
+    
+        public Nullable<int> order_status { get; set; }
+    
         public virtual bank_account bank_account { get; set; }
         public virtual customer customer { get; set; }
         public virtual member member { get; set; }

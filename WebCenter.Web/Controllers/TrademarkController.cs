@@ -87,6 +87,14 @@ namespace WebCenter.Web.Controllers
                 {
                     statusQuery = c => (c.status == 2 || c.status == 3);
                 }
+                else if (request.status == 5)
+                {
+                    statusQuery = c => (c.order_status == 1);
+                }
+                else if (request.status == 6)
+                {
+                    statusQuery = c => (c.order_status == 2);
+                }
                 else
                 {
                     statusQuery = c => (c.status == request.status.Value);
@@ -179,6 +187,7 @@ namespace WebCenter.Web.Controllers
                     trial_type = c.trial_type,
                     date_allege = c.date_allege,
                     date_regit =c.date_regit,
+                    order_status = c.order_status ?? 0,
                 }).ToPagedList(request.index, request.size).ToList();
 
             var totalRecord = Uof.ItrademarkService.GetAll(condition)
@@ -318,7 +327,7 @@ namespace WebCenter.Web.Controllers
             Uof.ItimelineService.AddEntity(new timeline()
             {
                 source_id = newTrade.id,
-                source_name = "reg_abroad",
+                source_name = "trademark",
                 title = "新建订单",
                 is_system = 1,
                 content = string.Format("{0}新建了订单, 档案号{1}", arrs[3], newTrade.code)
@@ -381,7 +390,7 @@ namespace WebCenter.Web.Controllers
 
                 assistant_id = a.assistant_id,
                 assistant_name = a.member.name,
-
+                order_status = a.order_status ?? 0,
                 status = a.status,
                 review_status = a.review_status,
                 description = a.description
@@ -452,6 +461,7 @@ namespace WebCenter.Web.Controllers
                 review_status = a.review_status,
                 finance_review_moment = a.finance_review_moment,
                 submit_review_moment = a.submit_review_moment,
+                order_status = a.order_status ?? 0,
                 description = a.description
 
             }).FirstOrDefault();

@@ -100,7 +100,7 @@ namespace WebCenter.Web.Controllers
             var Month3 = DateTime.Now.AddMonths(1).Month;
 
             #region 境外注册
-            Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 && c.date_setup != null &&
+            Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 && c.date_setup != null && c.order_status == 0 &&
             ((c.annual_date == null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear >= c.date_setup.Value.Year) ||
             (c.annual_date != null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear >= c.annual_date.Value.Year) ||
             (c.annual_year == null && nowYear >= c.date_setup.Value.Year) ||
@@ -179,7 +179,7 @@ namespace WebCenter.Web.Controllers
                 //(c.annual_year != null && c.annual_year == nowYear && (Month1 == (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear >= c.date_setup.Value.Year) ||
                 //(c.is_annual == 1 && ((c.annual_year == null) || (c.annual_year != null && c.annual_year.Value < nowYear))));
 
-                Expression<Func<reg_internal, bool>> condition2 = c => c.status == 4 &&
+                Expression<Func<reg_internal, bool>> condition2 = c => c.status == 4 && c.order_status == 0 &&
                ((c.annual_year == null && nowYear >= c.date_setup.Value.Year) ||
                (c.annual_year != null && c.annual_year.Value < nowYear) ||
                (c.is_annual == 1 && ((c.annual_year == null) || (c.annual_year != null && c.annual_year.Value < nowYear))));
@@ -275,7 +275,7 @@ namespace WebCenter.Web.Controllers
             #endregion
 
             #region 商标注册            
-            Expression<Func<trademark, bool>> condition3 = c => c.status == 4 && c.date_regit != null && c.exten_period != null;
+            Expression<Func<trademark, bool>> condition3 = c => c.status == 4 && c.order_status == 0 && c.date_regit != null && c.exten_period != null;
 
             Expression<Func<trademark, bool>> customerQuery3 = c => true;
             if (customer_id != null && customer_id.Value > 0)
@@ -350,7 +350,7 @@ namespace WebCenter.Web.Controllers
             int patentPeriod = 0;
             int.TryParse(patentPeriodSetting, out patentPeriod);
 
-            Expression<Func<patent, bool>> condition4 = c => c.status == 4 &&
+            Expression<Func<patent, bool>> condition4 = c => c.status == 4 && c.order_status == 0 &&
             ((c.annual_date == null && c.annual_year.Value < (nowYear - patentPeriod) && (Month1 == (c.date_regit.Value.Month) || Month2 >= (c.date_regit.Value.Month) || Month3 == (c.date_regit.Value.Month)) && (nowYear - patentPeriod) == c.date_regit.Value.Year) ||
             (c.annual_date != null && c.annual_year.Value < (nowYear - patentPeriod) && (Month1 == (c.date_regit.Value.Month) || Month2 >= (c.date_regit.Value.Month) || Month3 == (c.date_regit.Value.Month)) && (nowYear - patentPeriod) == c.annual_date.Value.Year) ||
             (c.is_annual == 1 && ((c.annual_year == null) || (c.annual_year != null && c.annual_year.Value < nowYear))));
@@ -1488,6 +1488,131 @@ namespace WebCenter.Web.Controllers
                     var d = Uof.IpatentService.GetAll(r => r.id == orderId).FirstOrDefault();
                     d.annual_year = DateTime.Today.Year;
                     Uof.IpatentService.UpdateEntity(d);
+                    break;
+                default:
+                    break;
+            }
+
+            return SuccessResult;
+        }
+        [HttpPost]
+        public ActionResult SetOrderStatus(string orderType, int orderId, int status)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            var organization_id = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out organization_id);
+
+            //orderType: item.order_type,
+            //orderId: item.id,
+            //status: 2
+            //0 正常 1 转出 2 注销
+
+            var title = "";
+            switch (status)
+            {
+                case 0:
+                    title = "恢复正常年检";
+                    break;
+                case 1:
+                    title = "订单转出，不再年检";
+                    break;
+                case 2:
+                    title = "订单注销，不再年检";
+                    break;
+                default:
+                    break;
+            }
+            switch (orderType)
+            {
+                case "reg_abroad":
+                    var dbAbroad = Uof.Ireg_abroadService.GetAll(r1 => r1.id == orderId).FirstOrDefault();
+                    dbAbroad.order_status = status;
+                    dbAbroad.date_updated = DateTime.Now;
+
+                    var s1 = Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
+                    if (s1)
+                    {
+                        
+                        Uof.ItimelineService.AddEntity(new timeline()
+                        {
+                            source_id = dbAbroad.id,
+                            source_name = "reg_abroad",
+                            title = title,
+                            is_system = 1,
+                            content = string.Format("{0}{1}, 档案号{2}", arrs[3], title, dbAbroad.code)
+                        });
+                    }
+                    break;
+                case "reg_internal":
+                    var dbInternal = Uof.Ireg_internalService.GetAll(r2 => r2.id == orderId).FirstOrDefault();
+                    dbInternal.order_status = status;
+                    dbInternal.date_updated = DateTime.Now;
+
+                    var s2 = Uof.Ireg_internalService.UpdateEntity(dbInternal);
+                    if (s2)
+                    {
+
+                        Uof.ItimelineService.AddEntity(new timeline()
+                        {
+                            source_id = dbInternal.id,
+                            source_name = "reg_internal",
+                            title = title,
+                            is_system = 1,
+                            content = string.Format("{0}{1}, 档案号{2}", arrs[3], title, dbInternal.code)
+                        });
+                    }
+                    break;
+                case "trademark":
+                    var dbTrademark = Uof.ItrademarkService.GetAll(r2 => r2.id == orderId).FirstOrDefault();
+                    dbTrademark.order_status = status;
+                    dbTrademark.date_updated = DateTime.Now;
+
+                    var s3 = Uof.ItrademarkService.UpdateEntity(dbTrademark);
+                    if (s3)
+                    {
+
+                        Uof.ItimelineService.AddEntity(new timeline()
+                        {
+                            source_id = dbTrademark.id,
+                            source_name = "trademark",
+                            title = title,
+                            is_system = 1,
+                            content = string.Format("{0}{1}, 档案号{2}", arrs[3], title, dbTrademark.code)
+                        });
+                    }
+                    break;
+                case "patent":
+                    var dbPatent = Uof.IpatentService.GetAll(r2 => r2.id == orderId).FirstOrDefault();
+                    dbPatent.order_status = status;
+                    dbPatent.date_updated = DateTime.Now;
+
+                    var s4 = Uof.IpatentService.UpdateEntity(dbPatent);
+                    if (s4)
+                    {
+
+                        Uof.ItimelineService.AddEntity(new timeline()
+                        {
+                            source_id = dbPatent.id,
+                            source_name = "patent",
+                            title = title,
+                            is_system = 1,
+                            content = string.Format("{0}{1}, 档案号{2}", arrs[3], title, dbPatent.code)
+                        });
+                    }
                     break;
                 default:
                     break;

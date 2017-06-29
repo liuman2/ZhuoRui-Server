@@ -212,6 +212,10 @@ namespace WebCenter.Entities
     
         public string allege_memo { get; set; }
     
+    
+    
+        public Nullable<int> order_status { get; set; }
+    
         public virtual customer customer { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
