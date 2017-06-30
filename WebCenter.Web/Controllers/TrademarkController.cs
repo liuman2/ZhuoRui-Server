@@ -286,7 +286,7 @@ namespace WebCenter.Web.Controllers
             //trade.salesman_id = userId;
             trade.organization_id = GetOrgIdByUserId(userId); // organization_id;
 
-           
+            trade.order_status = 0;
             var nowYear = DateTime.Now.Year;
             if (oldRequest.is_old == 0)
             {

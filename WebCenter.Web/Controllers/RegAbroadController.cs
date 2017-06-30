@@ -278,6 +278,8 @@ namespace WebCenter.Web.Controllers
                 aboad.bank_id = null;
             }
 
+            aboad.order_status = 0;
+
             var newAbroad = Uof.Ireg_abroadService.AddEntity(aboad);
             if (newAbroad == null)
             {

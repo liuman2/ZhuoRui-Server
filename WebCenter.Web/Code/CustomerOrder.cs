@@ -31,5 +31,10 @@ namespace WebCenter.Web
         public string QQ { get; set; }
         public string wechat { get; set; }
         public string description { get; set; }
+
+        public string  mailling_address { get; set; }
+        public string  mailling_province { get; set; }
+        public string  mailling_city { get; set; }
+        public string  mailling_county { get; set; }
     }
 }

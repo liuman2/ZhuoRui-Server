@@ -6,6 +6,7 @@ using Common;
 using System.Linq.Expressions;
 using System;
 using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace WebCenter.Web.Controllers
 {
@@ -316,7 +317,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(customer c)
+        public ActionResult Add(customer c, List<contact> contacts)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
@@ -357,13 +358,36 @@ namespace WebCenter.Web.Controllers
                     is_system = 1
                 });
 
+                if (contacts != null && contacts.Count() > 0)
+                {
+                    var newContacts = new List<contact>();
+                    foreach (var item in contacts)
+                    {
+                        newContacts.Add(new contact()
+                        {
+                            name = item.name,
+                            customer_id = _c.id,
+                            date_created = DateTime.Now,
+                            email = item.email,
+                            mobile = item.mobile,
+                            position = item.position,
+                            QQ = item.QQ,
+                            tel = item.tel,
+                            type = item.type,
+                            wechat = item.wechat
+                        });
+                    }
+
+                    Uof.IcontactService.AddEntities(newContacts);
+                }
+                
                 return Json(new { id = c.id }, JsonRequestBehavior.AllowGet);
             }
 
             return ErrorResult;
         }
 
-        public ActionResult Update(customer c)
+        public ActionResult Update(customer c, List<contact> contacts)
         {
             var isAuth = HttpContext.User.Identity.IsAuthenticated;
             if (!isAuth)
@@ -380,30 +404,30 @@ namespace WebCenter.Web.Controllers
 
             var _c = Uof.IcustomerService.GetById(c.id);
 
-            if (_c.name == c.name &&
-                _c.address == c.address &&
-                _c.city == c.city &&
-                _c.contact == c.contact &&
-                _c.county == c.county &&
-                _c.description == c.description &&
-                _c.email == c.email &&
-                _c.fax == c.fax &&
-                _c.industry == c.industry &&
-                _c.mobile == c.mobile &&
-                _c.province == c.province &&
-                _c.QQ == c.QQ &&
-                _c.source == c.source &&
-                _c.source_id == c.source_id &&
-                _c.salesman_id == c.salesman_id &&
-                _c.tel == c.tel &&
-                _c.wechat == c.wechat &&
-                _c.contacts == c.contacts &&
-                _c.assistant_id == c.assistant_id &&
-                _c.assistants == c.assistants
-                )
-            {
-                return Json(new { id = _c.id }, JsonRequestBehavior.AllowGet);
-            }
+            //if (_c.name == c.name &&
+            //    _c.address == c.address &&
+            //    _c.city == c.city &&
+            //    _c.contact == c.contact &&
+            //    _c.county == c.county &&
+            //    _c.description == c.description &&
+            //    _c.email == c.email &&
+            //    _c.fax == c.fax &&
+            //    _c.industry == c.industry &&
+            //    _c.mobile == c.mobile &&
+            //    _c.province == c.province &&
+            //    _c.QQ == c.QQ &&
+            //    _c.source == c.source &&
+            //    _c.source_id == c.source_id &&
+            //    _c.salesman_id == c.salesman_id &&
+            //    _c.tel == c.tel &&
+            //    _c.wechat == c.wechat &&
+            //    _c.contacts == c.contacts &&
+            //    _c.assistant_id == c.assistant_id &&
+            //    _c.assistants == c.assistants
+            //    )
+            //{
+            //    return Json(new { id = _c.id }, JsonRequestBehavior.AllowGet);
+            //}
 
             _c.name = c.name;
             _c.address = c.address;
@@ -419,9 +443,14 @@ namespace WebCenter.Web.Controllers
             _c.QQ = c.QQ;
             _c.source = c.source;
             _c.salesman_id = c.salesman_id;
-            _c.contacts = c.contacts;
+            //_c.contacts = c.contacts;
             _c.assistant_id = c.assistant_id;
             _c.assistants = c.assistants;
+
+            _c.mailling_address = c.mailling_address;
+            _c.mailling_province = c.mailling_province;
+            _c.mailling_city = c.mailling_city;
+            _c.mailling_county = c.mailling_county;
 
             if (c.source != "客户介绍")
             {
@@ -449,6 +478,97 @@ namespace WebCenter.Web.Controllers
                     date_created = DateTime.Now,
                     is_system = 1
                 });
+
+                #region 联系人
+                var dbContacts = Uof.IcontactService.GetAll(s => s.customer_id == _c.id).ToList();
+
+                var newContacts = new List<contact>();
+                var deleteContacts = new List<contact>();
+                var updateContacts = new List<contact>();
+
+                if (contacts != null && contacts.Count() > 0)
+                {
+                    foreach (var item in contacts)
+                    {
+                        if (item.id == 0)
+                        {
+                            newContacts.Add(new contact
+                            {
+                                customer_id = _c.id,
+                                name = item.name,
+                                email = item.email,
+                                mobile = item.mobile,
+                                position = item.position,
+                                QQ = item.QQ,
+                                tel = item.tel,
+                                type = item.type,
+                                wechat = item.wechat,
+                                date_created = DateTime.Today,
+                            });
+                        }
+
+                        if (item.id > 0)
+                        {
+                            var updateContact = dbContacts.Where(d => d.id == item.id).FirstOrDefault();
+                            if (updateContact != null)
+                            {
+                                updateContact.name = item.name;
+                                updateContact.email = item.email;
+                                updateContact.mobile = item.mobile;
+                                updateContact.position = item.position;
+                                updateContact.QQ = item.QQ;
+                                updateContact.tel = item.tel;
+                                updateContact.type = item.type;
+                                updateContact.wechat = item.wechat;
+                                updateContact.date_updated = DateTime.Now;
+
+                                updateContacts.Add(updateContact);
+                            }
+                        }
+                    }
+
+                    if (dbContacts.Count() > 0)
+                    {
+                        foreach (var item in dbContacts)
+                        {
+                            var _contact = contacts.Where(s => s.id == item.id).FirstOrDefault();
+                            if (_contact == null)
+                            {
+                                deleteContacts.Add(item);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    deleteContacts = dbContacts;
+                }
+
+                try
+                {
+                    if (deleteContacts.Count > 0)
+                    {
+                        foreach (var item in deleteContacts)
+                        {
+                            Uof.IcontactService.DeleteEntity(item);
+                        }
+                    }
+
+                    if (updateContacts.Count > 0)
+                    {
+                        Uof.IcontactService.UpdateEntities(updateContacts);
+                    }
+
+                    if (newContacts.Count > 0)
+                    {
+                        Uof.IcontactService.AddEntities(newContacts);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+
+                #endregion
 
                 return Json(new { id = _c.id }, JsonRequestBehavior.AllowGet);
             }
@@ -505,11 +625,16 @@ namespace WebCenter.Web.Controllers
                 source_name = source_name,
                 description = _customer.description,
                 salesman = _customer.member1.name,
-                contacts = _customer.contacts,
+                //contacts = _customer.contacts,
                 banks = banks,
                 assistants = _customer.assistants,
                 assistant_id = _customer.assistant_id,
-                assistant_name = assistant_name
+                assistant_name = assistant_name,
+
+                mailling_address = _customer.mailling_address,
+                mailling_province = _customer.mailling_province,
+                mailling_city = _customer.mailling_city,
+                mailling_county = _customer.mailling_county,
             };
 
             if (!string.IsNullOrEmpty(customerEntity.assistants))
@@ -534,8 +659,9 @@ namespace WebCenter.Web.Controllers
                     customerEntity.assistantList = _members;
                 }
             }
-            
-            return Json(customerEntity, JsonRequestBehavior.AllowGet);
+
+            var contacts = Uof.IcontactService.GetAll(c => c.customer_id == id).ToList();
+            return Json(new { customer = customerEntity, contacts = contacts }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Delete(int id)
@@ -547,6 +673,17 @@ namespace WebCenter.Web.Controllers
             }
 
             var r = Uof.IcustomerService.DeleteEntity(c);
+            if (r)
+            {
+                var contacts = Uof.IcontactService.GetAll(a => a.customer_id == id).ToList();
+                if (contacts != null && contacts.Count > 0)
+                {
+                    foreach (var item in contacts)
+                    {
+                        Uof.IcontactService.DeleteEntity(item);
+                    }
+                }
+            }
 
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }
@@ -843,7 +980,7 @@ namespace WebCenter.Web.Controllers
                 assistant_name = Uof.ImemberService.GetAll(c => c.id == _customer.assistant_id).Select(c => c.name).FirstOrDefault();
             }
 
-            return Json(new
+            var _c = new
             {
                 id = _customer.id,
                 //code = _customer.code,
@@ -868,9 +1005,18 @@ namespace WebCenter.Web.Controllers
                 source_name = source_name,
                 description = _customer.description,
                 salesman = _customer.member1.name,
-                contacts = _customer.contacts,
-                assistant_name = assistant_name
-            }, JsonRequestBehavior.AllowGet);
+                //contacts = _customer.contacts,
+                assistant_name = assistant_name,
+
+                mailling_address = _customer.mailling_address,
+                mailling_province = _customer.mailling_province,
+                mailling_city = _customer.mailling_city,
+                mailling_county = _customer.mailling_county,
+
+            };
+
+            var contacts = Uof.IcontactService.GetAll(c => c.customer_id == customer_id).ToList();
+            return Json(new { customer = _c, contacts = contacts }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -882,17 +1028,82 @@ namespace WebCenter.Web.Controllers
             dbCust.city = info.city;
             dbCust.county = info.county;
             dbCust.address = info.address;
-            dbCust.contact = info.contact;
-            dbCust.mobile = info.mobile;
-            dbCust.tel = info.tel;
             dbCust.fax = info.fax;
-            dbCust.email = info.email;
-            dbCust.QQ = info.QQ;
-            dbCust.wechat = info.wechat;
+
+            //dbCust.contact = info.contact;
+            //dbCust.mobile = info.mobile;
+            //dbCust.tel = info.tel;
+            //dbCust.fax = info.fax;
+            //dbCust.email = info.email;
+            //dbCust.QQ = info.QQ;
+            //dbCust.wechat = info.wechat;
+
+            dbCust.mailling_address = info.mailling_address;
+            dbCust.mailling_province = info.mailling_province;
+            dbCust.mailling_city = info.mailling_city;
+            dbCust.mailling_county = info.mailling_county;
 
             dbCust.date_updated = DateTime.Now;
 
             Uof.IcustomerService.UpdateEntity(dbCust);
+
+            return SuccessResult;
+        }
+
+        public ActionResult UpdateOldConatacts()
+        {
+            var customers = Uof.IcustomerService.GetAll();
+
+            var contactList = new List<contact>();
+            foreach (var item in customers)
+            {                
+                if (!string.IsNullOrEmpty(item.contact))
+                {
+                    contactList.Add(new contact()
+                    {
+                        customer_id = item.id,
+                        name = item.contact,
+                        date_created = item.date_created,
+                        email = item.email,
+                        mobile = item.mobile,
+                        position = null,
+                        QQ = item.QQ,
+                        tel = item.tel,
+                        type = "main",
+                        wechat = item.wechat,
+                    });
+                }
+
+                if (item.contacts != null && item.contacts != "[]" && item.contacts != "{}" && item.contacts.Length > 0 && !string.IsNullOrEmpty(item.contacts))
+                {
+                    JavaScriptSerializer jsonSerialize = new JavaScriptSerializer();
+                    var list = jsonSerialize.Deserialize<List<Contact>>(item.contacts);
+                    if (list.Count > 0)
+                    {
+                        foreach (var l in list)
+                        {
+                            contactList.Add(new contact()
+                            {
+                                customer_id = item.id,
+                                name = l.name,
+                                date_created = item.date_created,
+                                email = l.email ?? "",
+                                mobile = l.mobile ?? "",
+                                position = l.position ?? "",
+                                QQ = l.QQ ?? "",
+                                tel = l.tel ?? "",
+                                type = "other",
+                                wechat = l.wechat,
+                            });
+                        }
+                    }
+                }                
+            }
+
+            if (contactList != null && contactList.Count > 0)
+            {
+                var updates = Uof.IcontactService.AddEntities(contactList);
+            }
 
             return SuccessResult;
         }

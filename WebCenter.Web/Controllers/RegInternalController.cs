@@ -277,7 +277,7 @@ namespace WebCenter.Web.Controllers
             reginternal.creator_id = userId;
             //reginternal.salesman_id = userId;
             reginternal.organization_id = GetOrgIdByUserId(userId); // organization_id;
-
+            reginternal.order_status = 0;
             var nowYear = DateTime.Now.Year;
             if (oldRequest.is_old == 0)
             {

@@ -173,9 +173,6 @@
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="customer_id" Type="int" />
-          <Property Name="source" Type="varchar" MaxLength="30" />
-          <Property Name="source_id" Type="int" />
-          <Property Name="source_code" Type="varchar" MaxLength="20" />
           <Property Name="code" Type="varchar" MaxLength="20" />
           <Property Name="type" Type="varchar" MaxLength="10" />
           <Property Name="name_cn" Type="varchar" MaxLength="100" />
@@ -219,6 +216,9 @@
           <Property Name="turnover_currency" Type="varchar" MaxLength="10" />
           <Property Name="assistant_id" Type="int" />
           <Property Name="account_period2" Type="datetime" Precision="0" />
+          <Property Name="source" Type="varchar" MaxLength="30" />
+          <Property Name="source_id" Type="int" />
+          <Property Name="source_code" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="audit_bank">
           <Key>
@@ -265,6 +265,8 @@
           <Property Name="email" Type="varchar" MaxLength="100" />
           <Property Name="wechat" Type="varchar" MaxLength="50" />
           <Property Name="QQ" Type="varchar" MaxLength="50" />
+          <Property Name="type" Type="varchar" MaxLength="10" />
+          <Property Name="memo" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
@@ -300,6 +302,10 @@
           <Property Name="contacts" Type="text" />
           <Property Name="assistant_id" Type="int" />
           <Property Name="assistants" Type="varchar" MaxLength="60" />
+          <Property Name="mailling_province" Type="varchar" MaxLength="20" />
+          <Property Name="mailling_city" Type="varchar" MaxLength="20" />
+          <Property Name="mailling_county" Type="varchar" MaxLength="20" />
+          <Property Name="mailling_address" Type="varchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="customer_timeline">
           <Key>
@@ -534,10 +540,10 @@
           <Property Name="mobile" Type="varchar" MaxLength="20" />
           <Property Name="hiredate" Type="datetime" Precision="0" />
           <Property Name="birthday" Type="datetime" Precision="0" />
+          <Property Name="url" Type="varchar" MaxLength="120" />
           <Property Name="status" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
-          <Property Name="url" Type="varchar" MaxLength="120" />
         </EntityType>
         <EntityType Name="menu">
           <Key>
@@ -1558,6 +1564,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_charge_id">
+          <End Role="member" Type="Self.member" Multiplicity="0..1" />
+          <End Role="lecture" Type="Self.lecture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture">
+              <PropertyRef Name="charge_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_internal_assistant_id">
           <End Role="member" Type="Self.member" Multiplicity="0..1" />
           <End Role="reg_internal" Type="Self.reg_internal" Multiplicity="*" />
@@ -2300,6 +2318,10 @@
             <End Role="member" EntitySet="member" />
             <End Role="audit" EntitySet="audit" />
           </AssociationSet>
+          <AssociationSet Name="fk_charge_id" Association="Self.fk_charge_id">
+            <End Role="member" EntitySet="member" />
+            <End Role="lecture" EntitySet="lecture" />
+          </AssociationSet>
           <AssociationSet Name="fk_internal_assistant_id" Association="Self.fk_internal_assistant_id">
             <End Role="member" EntitySet="member" />
             <End Role="reg_internal" EntitySet="reg_internal" />
@@ -2633,43 +2655,6 @@
             <End Role="member" EntitySet="members" />
             <End Role="audit" EntitySet="audits" />
           </AssociationSet>
-          <EntitySet Name="customers" EntityType="DataCenter.Entities.customer" />
-          <AssociationSet Name="annual_ibfk_customer" Association="DataCenter.Entities.annual_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="annual_exam" EntitySet="annual_exam" />
-          </AssociationSet>
-          <AssociationSet Name="audit_ibfk_customer" Association="DataCenter.Entities.audit_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="audit" EntitySet="audits" />
-          </AssociationSet>
-          <AssociationSet Name="bank_account_customer" Association="DataCenter.Entities.bank_account_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="bank_account" EntitySet="bank_account" />
-          </AssociationSet>
-          <AssociationSet Name="audit_sub_ibfk_customer" Association="DataCenter.Entities.audit_sub_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="sub_audit" EntitySet="sub_audit" />
-          </AssociationSet>
-          <AssociationSet Name="customer_ibfk_lec" Association="DataCenter.Entities.customer_ibfk_lec">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="lecture_customer" EntitySet="lecture_customer" />
-          </AssociationSet>
-          <AssociationSet Name="income_ibfk_customer" Association="DataCenter.Entities.income_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="income" EntitySet="incomes" />
-          </AssociationSet>
-          <AssociationSet Name="member_ibfk_creator" Association="DataCenter.Entities.member_ibfk_creator">
-            <End Role="member" EntitySet="members" />
-            <End Role="customer" EntitySet="customers" />
-          </AssociationSet>
-          <AssociationSet Name="member_ibfk_salesman" Association="DataCenter.Entities.member_ibfk_salesman">
-            <End Role="member" EntitySet="members" />
-            <End Role="customer" EntitySet="customers" />
-          </AssociationSet>
-          <AssociationSet Name="timeline_ibfk_customer" Association="DataCenter.Entities.timeline_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="customer_timeline" EntitySet="customer_timeline" />
-          </AssociationSet>
           <EntitySet Name="timelines" EntityType="DataCenter.Entities.timeline" />
           <EntitySet Name="accountings" EntityType="DataCenter.Entities.accounting" />
           <AssociationSet Name="accounting_ibfk_accountant" Association="DataCenter.Entities.accounting_ibfk_accountant">
@@ -2682,10 +2667,6 @@
           </AssociationSet>
           <AssociationSet Name="accounting_ibfk_creator" Association="DataCenter.Entities.accounting_ibfk_creator">
             <End Role="member" EntitySet="members" />
-            <End Role="accounting" EntitySet="accountings" />
-          </AssociationSet>
-          <AssociationSet Name="accounting_ibfk_customer" Association="DataCenter.Entities.accounting_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
             <End Role="accounting" EntitySet="accountings" />
           </AssociationSet>
           <AssociationSet Name="accounting_ibfk_finance_reviewer" Association="DataCenter.Entities.accounting_ibfk_finance_reviewer">
@@ -2728,22 +2709,6 @@
           <AssociationSet Name="reg_internal_ibfk_bank" Association="DataCenter.Entities.reg_internal_ibfk_bank">
             <End Role="bank_account" EntitySet="bank_account" />
             <End Role="reg_internal" EntitySet="reg_internal" />
-          </AssociationSet>
-          <AssociationSet Name="abroad_ibfk_customer" Association="DataCenter.Entities.abroad_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="reg_abroad" EntitySet="reg_abroad" />
-          </AssociationSet>
-          <AssociationSet Name="patent_ibfk_customer" Association="DataCenter.Entities.patent_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="patent" EntitySet="patents" />
-          </AssociationSet>
-          <AssociationSet Name="reg_internal_ibfk_customer" Association="DataCenter.Entities.reg_internal_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="reg_internal" EntitySet="reg_internal" />
-          </AssociationSet>
-          <AssociationSet Name="trademark_ibfk_customer" Association="DataCenter.Entities.trademark_ibfk_customer">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="trademark" EntitySet="trademarks" />
           </AssociationSet>
           <AssociationSet Name="abroad_ibfk_creator" Association="DataCenter.Entities.abroad_ibfk_creator">
             <End Role="member" EntitySet="members" />
@@ -2866,6 +2831,63 @@
             <End Role="trademark" EntitySet="trademarks" />
           </AssociationSet>
           <EntitySet Name="contacts" EntityType="DataCenter.Entities.contact" />
+          <EntitySet Name="customers" EntityType="DataCenter.Entities.customer" />
+          <AssociationSet Name="accounting_ibfk_customer" Association="DataCenter.Entities.accounting_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="accounting" EntitySet="accountings" />
+          </AssociationSet>
+          <AssociationSet Name="annual_ibfk_customer" Association="DataCenter.Entities.annual_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="annual_exam" EntitySet="annual_exam" />
+          </AssociationSet>
+          <AssociationSet Name="audit_ibfk_customer" Association="DataCenter.Entities.audit_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="audit" EntitySet="audits" />
+          </AssociationSet>
+          <AssociationSet Name="bank_account_customer" Association="DataCenter.Entities.bank_account_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="bank_account" EntitySet="bank_account" />
+          </AssociationSet>
+          <AssociationSet Name="abroad_ibfk_customer" Association="DataCenter.Entities.abroad_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="reg_abroad" EntitySet="reg_abroad" />
+          </AssociationSet>
+          <AssociationSet Name="audit_sub_ibfk_customer" Association="DataCenter.Entities.audit_sub_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="sub_audit" EntitySet="sub_audit" />
+          </AssociationSet>
+          <AssociationSet Name="customer_ibfk_lec" Association="DataCenter.Entities.customer_ibfk_lec">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="lecture_customer" EntitySet="lecture_customer" />
+          </AssociationSet>
+          <AssociationSet Name="income_ibfk_customer" Association="DataCenter.Entities.income_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="income" EntitySet="incomes" />
+          </AssociationSet>
+          <AssociationSet Name="member_ibfk_creator" Association="DataCenter.Entities.member_ibfk_creator">
+            <End Role="member" EntitySet="members" />
+            <End Role="customer" EntitySet="customers" />
+          </AssociationSet>
+          <AssociationSet Name="member_ibfk_salesman" Association="DataCenter.Entities.member_ibfk_salesman">
+            <End Role="member" EntitySet="members" />
+            <End Role="customer" EntitySet="customers" />
+          </AssociationSet>
+          <AssociationSet Name="patent_ibfk_customer" Association="DataCenter.Entities.patent_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="patent" EntitySet="patents" />
+          </AssociationSet>
+          <AssociationSet Name="reg_internal_ibfk_customer" Association="DataCenter.Entities.reg_internal_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="reg_internal" EntitySet="reg_internal" />
+          </AssociationSet>
+          <AssociationSet Name="timeline_ibfk_customer" Association="DataCenter.Entities.timeline_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="customer_timeline" EntitySet="customer_timeline" />
+          </AssociationSet>
+          <AssociationSet Name="trademark_ibfk_customer" Association="DataCenter.Entities.trademark_ibfk_customer">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="trademark" EntitySet="trademarks" />
+          </AssociationSet>
           <EntitySet Name="histories" EntityType="DataCenter.Entities.history" />
           <AssociationSet Name="history_ibfk_creator" Association="DataCenter.Entities.history_ibfk_creator">
             <End Role="member" EntitySet="members" />
@@ -2966,10 +2988,10 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
           <NavigationProperty Name="audit_bank" Relationship="DataCenter.Entities.audit_ibfk_bank" FromRole="bank_account" ToRole="audit_bank" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.bank_account_customer" FromRole="bank_account" ToRole="customer" />
           <NavigationProperty Name="accountings" Relationship="DataCenter.Entities.accounting_ibfk_bank" FromRole="bank_account" ToRole="accounting" />
           <NavigationProperty Name="reg_abroad" Relationship="DataCenter.Entities.abroad_ibfk_bank" FromRole="bank_account" ToRole="reg_abroad" />
           <NavigationProperty Name="reg_internal" Relationship="DataCenter.Entities.reg_internal_ibfk_bank" FromRole="bank_account" ToRole="reg_internal" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.bank_account_customer" FromRole="bank_account" ToRole="customer" />
         </EntityType>
         <EntityType Name="customer_timeline">
           <Key>
@@ -3124,8 +3146,6 @@
           <NavigationProperty Name="audits4" Relationship="DataCenter.Entities.audit_ibfk_salesman" FromRole="member" ToRole="audit" />
           <NavigationProperty Name="audits5" Relationship="DataCenter.Entities.audit_ibfk_submit_reviewer" FromRole="member" ToRole="audit" />
           <NavigationProperty Name="audits6" Relationship="DataCenter.Entities.fk_audit_assistant_id" FromRole="member" ToRole="audit" />
-          <NavigationProperty Name="customers" Relationship="DataCenter.Entities.member_ibfk_creator" FromRole="member" ToRole="customer" />
-          <NavigationProperty Name="customers1" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="member" ToRole="customer" />
           <NavigationProperty Name="accountings" Relationship="DataCenter.Entities.accounting_ibfk_accountant" FromRole="member" ToRole="accounting" />
           <NavigationProperty Name="accountings1" Relationship="DataCenter.Entities.accounting_ibfk_creator" FromRole="member" ToRole="accounting" />
           <NavigationProperty Name="accountings2" Relationship="DataCenter.Entities.accounting_ibfk_finance_reviewer" FromRole="member" ToRole="accounting" />
@@ -3163,6 +3183,8 @@
           <NavigationProperty Name="trademarks4" Relationship="DataCenter.Entities.trademark_ibfk_salesman" FromRole="member" ToRole="trademark" />
           <NavigationProperty Name="trademarks5" Relationship="DataCenter.Entities.trademark_ibfk_submit_reviewer" FromRole="member" ToRole="trademark" />
           <NavigationProperty Name="trademarks6" Relationship="DataCenter.Entities.trademark_ibfk_waiter" FromRole="member" ToRole="trademark" />
+          <NavigationProperty Name="customers" Relationship="DataCenter.Entities.member_ibfk_creator" FromRole="member" ToRole="customer" />
+          <NavigationProperty Name="customers1" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="member" ToRole="customer" />
           <NavigationProperty Name="histories" Relationship="DataCenter.Entities.history_ibfk_creator" FromRole="member" ToRole="history" />
           <NavigationProperty Name="histories1" Relationship="DataCenter.Entities.history_ibfk_finance_reviewer" FromRole="member" ToRole="history" />
           <NavigationProperty Name="histories2" Relationship="DataCenter.Entities.history_ibfk_salesman" FromRole="member" ToRole="history" />
@@ -3864,161 +3886,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="customer">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="industry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="business_nature" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="province" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="city" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="county" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="contact" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="fax" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="QQ" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="wechat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="source" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="creator_id" Type="Int32" />
-          <Property Name="salesman_id" Type="Int32" />
-          <Property Name="organization_id" Type="Int32" />
-          <Property Name="source_id" Type="Int32" />
-          <Property Name="status" Type="SByte" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="contacts" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="assistant_id" Type="Int32" />
-          <Property Name="assistants" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="annual_exam" Relationship="DataCenter.Entities.annual_ibfk_customer" FromRole="customer" ToRole="annual_exam" />
-          <NavigationProperty Name="audits" Relationship="DataCenter.Entities.audit_ibfk_customer" FromRole="customer" ToRole="audit" />
-          <NavigationProperty Name="bank_account" Relationship="DataCenter.Entities.bank_account_customer" FromRole="customer" ToRole="bank_account" />
-          <NavigationProperty Name="sub_audit" Relationship="DataCenter.Entities.audit_sub_ibfk_customer" FromRole="customer" ToRole="sub_audit" />
-          <NavigationProperty Name="lecture_customer" Relationship="DataCenter.Entities.customer_ibfk_lec" FromRole="customer" ToRole="lecture_customer" />
-          <NavigationProperty Name="incomes" Relationship="DataCenter.Entities.income_ibfk_customer" FromRole="customer" ToRole="income" />
-          <NavigationProperty Name="member" Relationship="DataCenter.Entities.member_ibfk_creator" FromRole="customer" ToRole="member" />
-          <NavigationProperty Name="member1" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="customer" ToRole="member" />
-          <NavigationProperty Name="customer_timeline" Relationship="DataCenter.Entities.timeline_ibfk_customer" FromRole="customer" ToRole="customer_timeline" />
-          <NavigationProperty Name="accountings" Relationship="DataCenter.Entities.accounting_ibfk_customer" FromRole="customer" ToRole="accounting" />
-          <NavigationProperty Name="reg_abroad" Relationship="DataCenter.Entities.abroad_ibfk_customer" FromRole="customer" ToRole="reg_abroad" />
-          <NavigationProperty Name="patents" Relationship="DataCenter.Entities.patent_ibfk_customer" FromRole="customer" ToRole="patent" />
-          <NavigationProperty Name="reg_internal" Relationship="DataCenter.Entities.reg_internal_ibfk_customer" FromRole="customer" ToRole="reg_internal" />
-          <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="customer" ToRole="trademark" />
-        </EntityType>
-        <Association Name="annual_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.annual_exam" Role="annual_exam" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="annual_exam">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="audit_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.audit" Role="audit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="audit">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="bank_account_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="bank_account">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="audit_sub_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.sub_audit" Role="sub_audit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="sub_audit">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="customer_ibfk_lec">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="lecture_customer">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="income_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.income" Role="income" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="income">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="member_ibfk_creator">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="customer">
-              <PropertyRef Name="creator_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="member_ibfk_salesman">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="customer">
-              <PropertyRef Name="salesman_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="timeline_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.customer_timeline" Role="customer_timeline" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="customer_timeline">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="timeline">
           <Key>
             <PropertyRef Name="id" />
@@ -4077,12 +3944,12 @@
           <NavigationProperty Name="member" Relationship="DataCenter.Entities.accounting_ibfk_accountant" FromRole="accounting" ToRole="member" />
           <NavigationProperty Name="bank_account" Relationship="DataCenter.Entities.accounting_ibfk_bank" FromRole="accounting" ToRole="bank_account" />
           <NavigationProperty Name="member1" Relationship="DataCenter.Entities.accounting_ibfk_creator" FromRole="accounting" ToRole="member" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.accounting_ibfk_customer" FromRole="accounting" ToRole="customer" />
           <NavigationProperty Name="member2" Relationship="DataCenter.Entities.accounting_ibfk_finance_reviewer" FromRole="accounting" ToRole="member" />
           <NavigationProperty Name="member3" Relationship="DataCenter.Entities.accounting_ibfk_manager" FromRole="accounting" ToRole="member" />
           <NavigationProperty Name="member4" Relationship="DataCenter.Entities.accounting_ibfk_oassistant" FromRole="accounting" ToRole="member" />
           <NavigationProperty Name="member5" Relationship="DataCenter.Entities.accounting_ibfk_salesman" FromRole="accounting" ToRole="member" />
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.accounting_ibfk_submit_reviewer" FromRole="accounting" ToRole="member" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.accounting_ibfk_customer" FromRole="accounting" ToRole="customer" />
         </EntityType>
         <Association Name="accounting_ibfk_accountant">
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
@@ -4117,18 +3984,6 @@
             </Principal>
             <Dependent Role="accounting">
               <PropertyRef Name="creator_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="accounting_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.accounting" Role="accounting" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="accounting">
-              <PropertyRef Name="customer_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4394,7 +4249,6 @@
           <Property Name="assistant_id" Type="Int32" />
           <Property Name="date_regit" Type="DateTime" />
           <Property Name="order_status" Type="Int32" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.patent_ibfk_customer" FromRole="patent" ToRole="customer" />
           <NavigationProperty Name="member" Relationship="DataCenter.Entities.fk_patent_assistant_id" FromRole="patent" ToRole="member" />
           <NavigationProperty Name="member1" Relationship="DataCenter.Entities.patent_ibfk_creator" FromRole="patent" ToRole="member" />
           <NavigationProperty Name="member2" Relationship="DataCenter.Entities.patent_ibfk_finance_reviewer" FromRole="patent" ToRole="member" />
@@ -4402,6 +4256,7 @@
           <NavigationProperty Name="member4" Relationship="DataCenter.Entities.patent_ibfk_salesman" FromRole="patent" ToRole="member" />
           <NavigationProperty Name="member5" Relationship="DataCenter.Entities.patent_ibfk_submit_reviewer" FromRole="patent" ToRole="member" />
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.patent_ibfk_waiter" FromRole="patent" ToRole="member" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.patent_ibfk_customer" FromRole="patent" ToRole="customer" />
         </EntityType>
         <EntityType Name="reg_abroad">
           <Key>
@@ -4455,7 +4310,6 @@
           <Property Name="shareholder" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="order_status" Type="Int32" />
           <NavigationProperty Name="bank_account" Relationship="DataCenter.Entities.abroad_ibfk_bank" FromRole="reg_abroad" ToRole="bank_account" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.abroad_ibfk_customer" FromRole="reg_abroad" ToRole="customer" />
           <NavigationProperty Name="member" Relationship="DataCenter.Entities.abroad_ibfk_creator" FromRole="reg_abroad" ToRole="member" />
           <NavigationProperty Name="member1" Relationship="DataCenter.Entities.abroad_ibfk_finance_reviewer" FromRole="reg_abroad" ToRole="member" />
           <NavigationProperty Name="member2" Relationship="DataCenter.Entities.abroad_ibfk_manager" FromRole="reg_abroad" ToRole="member" />
@@ -4464,6 +4318,7 @@
           <NavigationProperty Name="member5" Relationship="DataCenter.Entities.abroad_ibfk_submit_reviewer" FromRole="reg_abroad" ToRole="member" />
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.abroad_ibfk_waiter" FromRole="reg_abroad" ToRole="member" />
           <NavigationProperty Name="member7" Relationship="DataCenter.Entities.fk_abroad_assistant_id" FromRole="reg_abroad" ToRole="member" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.abroad_ibfk_customer" FromRole="reg_abroad" ToRole="customer" />
         </EntityType>
         <EntityType Name="reg_internal">
           <Key>
@@ -4529,7 +4384,6 @@
           <Property Name="director_card_no" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="order_status" Type="Int32" />
           <NavigationProperty Name="bank_account" Relationship="DataCenter.Entities.reg_internal_ibfk_bank" FromRole="reg_internal" ToRole="bank_account" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.reg_internal_ibfk_customer" FromRole="reg_internal" ToRole="customer" />
           <NavigationProperty Name="member" Relationship="DataCenter.Entities.fk_internal_assistant_id" FromRole="reg_internal" ToRole="member" />
           <NavigationProperty Name="member1" Relationship="DataCenter.Entities.reg_internal_ibfk_creator" FromRole="reg_internal" ToRole="member" />
           <NavigationProperty Name="member2" Relationship="DataCenter.Entities.reg_internal_ibfk_finance_reviewer" FromRole="reg_internal" ToRole="member" />
@@ -4538,6 +4392,7 @@
           <NavigationProperty Name="member5" Relationship="DataCenter.Entities.reg_internal_ibfk_salesman" FromRole="reg_internal" ToRole="member" />
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.reg_internal_ibfk_submit_reviewer" FromRole="reg_internal" ToRole="member" />
           <NavigationProperty Name="member7" Relationship="DataCenter.Entities.reg_internal_ibfk_waiter" FromRole="reg_internal" ToRole="member" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.reg_internal_ibfk_customer" FromRole="reg_internal" ToRole="customer" />
         </EntityType>
         <EntityType Name="trademark">
           <Key>
@@ -4593,7 +4448,6 @@
           <Property Name="trial_memo" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
           <Property Name="allege_memo" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
           <Property Name="order_status" Type="Int32" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="trademark" ToRole="customer" />
           <NavigationProperty Name="member" Relationship="DataCenter.Entities.fk_trademark_assistant_id" FromRole="trademark" ToRole="member" />
           <NavigationProperty Name="member1" Relationship="DataCenter.Entities.trademark_ibfk_creator" FromRole="trademark" ToRole="member" />
           <NavigationProperty Name="member2" Relationship="DataCenter.Entities.trademark_ibfk_finance_reviewer" FromRole="trademark" ToRole="member" />
@@ -4601,6 +4455,7 @@
           <NavigationProperty Name="member4" Relationship="DataCenter.Entities.trademark_ibfk_salesman" FromRole="trademark" ToRole="member" />
           <NavigationProperty Name="member5" Relationship="DataCenter.Entities.trademark_ibfk_submit_reviewer" FromRole="trademark" ToRole="member" />
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.trademark_ibfk_waiter" FromRole="trademark" ToRole="member" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="trademark" ToRole="customer" />
         </EntityType>
         <Association Name="abroad_ibfk_bank">
           <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="0..1" />
@@ -4623,54 +4478,6 @@
             </Principal>
             <Dependent Role="reg_internal">
               <PropertyRef Name="bank_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="abroad_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.reg_abroad" Role="reg_abroad" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="reg_abroad">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="patent_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.patent" Role="patent" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="patent">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="reg_internal_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.reg_internal" Role="reg_internal" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="reg_internal">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="trademark_ibfk_customer">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="trademark">
-              <PropertyRef Name="customer_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5047,9 +4854,230 @@
           <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="wechat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="QQ" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="memo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
         </EntityType>
+        <EntityType Name="customer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="industry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="business_nature" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="province" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="city" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="county" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="contact" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="mobile" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="fax" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="QQ" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="wechat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="source" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="creator_id" Type="Int32" />
+          <Property Name="salesman_id" Type="Int32" />
+          <Property Name="organization_id" Type="Int32" />
+          <Property Name="source_id" Type="Int32" />
+          <Property Name="status" Type="SByte" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <Property Name="description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="contacts" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="assistant_id" Type="Int32" />
+          <Property Name="assistants" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="mailling_province" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="mailling_city" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="mailling_county" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="mailling_address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="accountings" Relationship="DataCenter.Entities.accounting_ibfk_customer" FromRole="customer" ToRole="accounting" />
+          <NavigationProperty Name="annual_exam" Relationship="DataCenter.Entities.annual_ibfk_customer" FromRole="customer" ToRole="annual_exam" />
+          <NavigationProperty Name="audits" Relationship="DataCenter.Entities.audit_ibfk_customer" FromRole="customer" ToRole="audit" />
+          <NavigationProperty Name="bank_account" Relationship="DataCenter.Entities.bank_account_customer" FromRole="customer" ToRole="bank_account" />
+          <NavigationProperty Name="reg_abroad" Relationship="DataCenter.Entities.abroad_ibfk_customer" FromRole="customer" ToRole="reg_abroad" />
+          <NavigationProperty Name="sub_audit" Relationship="DataCenter.Entities.audit_sub_ibfk_customer" FromRole="customer" ToRole="sub_audit" />
+          <NavigationProperty Name="lecture_customer" Relationship="DataCenter.Entities.customer_ibfk_lec" FromRole="customer" ToRole="lecture_customer" />
+          <NavigationProperty Name="incomes" Relationship="DataCenter.Entities.income_ibfk_customer" FromRole="customer" ToRole="income" />
+          <NavigationProperty Name="member" Relationship="DataCenter.Entities.member_ibfk_creator" FromRole="customer" ToRole="member" />
+          <NavigationProperty Name="member1" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="customer" ToRole="member" />
+          <NavigationProperty Name="patents" Relationship="DataCenter.Entities.patent_ibfk_customer" FromRole="customer" ToRole="patent" />
+          <NavigationProperty Name="reg_internal" Relationship="DataCenter.Entities.reg_internal_ibfk_customer" FromRole="customer" ToRole="reg_internal" />
+          <NavigationProperty Name="customer_timeline" Relationship="DataCenter.Entities.timeline_ibfk_customer" FromRole="customer" ToRole="customer_timeline" />
+          <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="customer" ToRole="trademark" />
+        </EntityType>
+        <Association Name="accounting_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.accounting" Role="accounting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accounting">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="annual_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.annual_exam" Role="annual_exam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="annual_exam">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="audit_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.audit" Role="audit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="audit">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="bank_account_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="bank_account">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="abroad_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.reg_abroad" Role="reg_abroad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="reg_abroad">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="audit_sub_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.sub_audit" Role="sub_audit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="sub_audit">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="customer_ibfk_lec">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture_customer">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="income_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.income" Role="income" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="income">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="member_ibfk_creator">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="customer">
+              <PropertyRef Name="creator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="member_ibfk_salesman">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="customer">
+              <PropertyRef Name="salesman_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="patent_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.patent" Role="patent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="patent">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="reg_internal_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.reg_internal" Role="reg_internal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="reg_internal">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="timeline_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.customer_timeline" Role="customer_timeline" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="customer_timeline">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="trademark_ibfk_customer">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="history">
           <Key>
             <PropertyRef Name="id" />
@@ -5649,40 +5677,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="customers">
-            <EntityTypeMapping TypeName="DataCenter.Entities.customer">
-              <MappingFragment StoreEntitySet="customer">
-                <ScalarProperty Name="assistants" ColumnName="assistants" />
-                <ScalarProperty Name="assistant_id" ColumnName="assistant_id" />
-                <ScalarProperty Name="contacts" ColumnName="contacts" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="source_id" ColumnName="source_id" />
-                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
-                <ScalarProperty Name="salesman_id" ColumnName="salesman_id" />
-                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
-                <ScalarProperty Name="source" ColumnName="source" />
-                <ScalarProperty Name="wechat" ColumnName="wechat" />
-                <ScalarProperty Name="QQ" ColumnName="QQ" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="fax" ColumnName="fax" />
-                <ScalarProperty Name="tel" ColumnName="tel" />
-                <ScalarProperty Name="mobile" ColumnName="mobile" />
-                <ScalarProperty Name="contact" ColumnName="contact" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="county" ColumnName="county" />
-                <ScalarProperty Name="city" ColumnName="city" />
-                <ScalarProperty Name="province" ColumnName="province" />
-                <ScalarProperty Name="business_nature" ColumnName="business_nature" />
-                <ScalarProperty Name="industry" ColumnName="industry" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="code" ColumnName="code" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="timelines">
             <EntityTypeMapping TypeName="DataCenter.Entities.timeline">
               <MappingFragment StoreEntitySet="timeline">
@@ -6133,6 +6127,8 @@
               <MappingFragment StoreEntitySet="contact">
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="QQ" ColumnName="QQ" />
                 <ScalarProperty Name="wechat" ColumnName="wechat" />
                 <ScalarProperty Name="email" ColumnName="email" />
@@ -6141,6 +6137,44 @@
                 <ScalarProperty Name="mobile" ColumnName="mobile" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="customers">
+            <EntityTypeMapping TypeName="DataCenter.Entities.customer">
+              <MappingFragment StoreEntitySet="customer">
+                <ScalarProperty Name="mailling_address" ColumnName="mailling_address" />
+                <ScalarProperty Name="mailling_county" ColumnName="mailling_county" />
+                <ScalarProperty Name="mailling_city" ColumnName="mailling_city" />
+                <ScalarProperty Name="mailling_province" ColumnName="mailling_province" />
+                <ScalarProperty Name="assistants" ColumnName="assistants" />
+                <ScalarProperty Name="assistant_id" ColumnName="assistant_id" />
+                <ScalarProperty Name="contacts" ColumnName="contacts" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="source_id" ColumnName="source_id" />
+                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
+                <ScalarProperty Name="salesman_id" ColumnName="salesman_id" />
+                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
+                <ScalarProperty Name="source" ColumnName="source" />
+                <ScalarProperty Name="wechat" ColumnName="wechat" />
+                <ScalarProperty Name="QQ" ColumnName="QQ" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="fax" ColumnName="fax" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="mobile" ColumnName="mobile" />
+                <ScalarProperty Name="contact" ColumnName="contact" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="county" ColumnName="county" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="business_nature" ColumnName="business_nature" />
+                <ScalarProperty Name="industry" ColumnName="industry" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

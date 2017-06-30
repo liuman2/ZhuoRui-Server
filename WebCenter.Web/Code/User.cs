@@ -57,6 +57,12 @@ namespace WebCenter.Web
         public string county { get; set; }
         public string address { get; set; }
         public string assistants { get; set; }
+
+        public string mailling_address { get; set; }
+        public string mailling_province { get; set; }
+        public string mailling_city { get; set; }
+        public string mailling_county { get; set; }
+
         public List<Assistant> assistantList { get; set; }
         public List<Bank> banks { get; set; }
     }
@@ -277,5 +283,19 @@ namespace WebCenter.Web
         public string legal { get; set; }
         public string director { get; set; }
         public string others { get; set; }
+    }
+
+    public class Contact
+    {
+        public string name { get; set; }
+        public string customer_id { get; set; }
+        //public string date_created { get; set; }
+        public string email { get; set; }
+        public string mobile { get; set; }
+        public string position { get; set; }
+        public string QQ  { get; set; }
+        public string tel { get; set; }
+        //public string type { get; set; }
+        public string wechat { get; set; }
     }
 }

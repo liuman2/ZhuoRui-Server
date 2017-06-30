@@ -284,8 +284,8 @@ namespace WebCenter.Web.Controllers
             _patent.creator_id = userId;
             //_patent.salesman_id = userId;
             _patent.organization_id = GetOrgIdByUserId(userId); //organization_id;
+            _patent.order_status = 0;
 
-            
             var nowYear = DateTime.Now.Year;
             if (oldRequest.is_old == 0)
             {

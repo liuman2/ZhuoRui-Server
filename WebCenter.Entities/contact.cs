@@ -54,6 +54,14 @@ namespace WebCenter.Entities
     
     
     
+        public string type { get; set; }
+    
+    
+    
+        public string memo { get; set; }
+    
+    
+    
         public Nullable<System.DateTime> date_created { get; set; }
     
     

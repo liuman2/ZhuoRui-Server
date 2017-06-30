@@ -167,11 +167,11 @@ namespace WebCenter.Entities
         public virtual member member { get; set; }
         public virtual bank_account bank_account { get; set; }
         public virtual member member1 { get; set; }
-        public virtual customer customer { get; set; }
         public virtual member member2 { get; set; }
         public virtual member member3 { get; set; }
         public virtual member member4 { get; set; }
         public virtual member member5 { get; set; }
         public virtual member member6 { get; set; }
+        public virtual customer customer { get; set; }
     }
 }

@@ -42,8 +42,6 @@ namespace WebCenter.Entities
             this.audits4 = new HashSet<audit>();
             this.audits5 = new HashSet<audit>();
             this.audits6 = new HashSet<audit>();
-            this.customers = new HashSet<customer>();
-            this.customers1 = new HashSet<customer>();
             this.accountings = new HashSet<accounting>();
             this.accountings1 = new HashSet<accounting>();
             this.accountings2 = new HashSet<accounting>();
@@ -81,6 +79,8 @@ namespace WebCenter.Entities
             this.trademarks4 = new HashSet<trademark>();
             this.trademarks5 = new HashSet<trademark>();
             this.trademarks6 = new HashSet<trademark>();
+            this.customers = new HashSet<customer>();
+            this.customers1 = new HashSet<customer>();
             this.histories = new HashSet<history>();
             this.histories1 = new HashSet<history>();
             this.histories2 = new HashSet<history>();
@@ -178,8 +178,6 @@ namespace WebCenter.Entities
         public virtual ICollection<audit> audits4 { get; set; }
         public virtual ICollection<audit> audits5 { get; set; }
         public virtual ICollection<audit> audits6 { get; set; }
-        public virtual ICollection<customer> customers { get; set; }
-        public virtual ICollection<customer> customers1 { get; set; }
         public virtual ICollection<accounting> accountings { get; set; }
         public virtual ICollection<accounting> accountings1 { get; set; }
         public virtual ICollection<accounting> accountings2 { get; set; }
@@ -217,6 +215,8 @@ namespace WebCenter.Entities
         public virtual ICollection<trademark> trademarks4 { get; set; }
         public virtual ICollection<trademark> trademarks5 { get; set; }
         public virtual ICollection<trademark> trademarks6 { get; set; }
+        public virtual ICollection<customer> customers { get; set; }
+        public virtual ICollection<customer> customers1 { get; set; }
         public virtual ICollection<history> histories { get; set; }
         public virtual ICollection<history> histories1 { get; set; }
         public virtual ICollection<history> histories2 { get; set; }
