@@ -1107,5 +1107,29 @@ namespace WebCenter.Web.Controllers
 
             return SuccessResult;
         }
+        [HttpPost]
+        public ActionResult UpdateContact(contact item)
+        {
+            if (item.id == 0)
+            {
+                var dbItem = Uof.IcontactService.AddEntity(item);
+                return Json(dbItem, JsonRequestBehavior.AllowGet);
+            }
+
+            var d = Uof.IcontactService.GetById(item.id);
+            d.email = item.email;
+            d.memo = item.memo;
+            d.mobile = item.mobile;
+            d.name = item.name;
+            d.position = item.position;
+            d.QQ = item.QQ;
+            d.tel = item.tel;
+            d.wechat = item.wechat;
+            d.date_updated = DateTime.Now;
+
+            Uof.IcontactService.UpdateEntity(d);
+
+            return Json(d, JsonRequestBehavior.AllowGet);
+        }
     }
 }
