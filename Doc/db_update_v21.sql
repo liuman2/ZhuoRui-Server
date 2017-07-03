@@ -25,3 +25,9 @@ call AddColumnUnlessExists(Database(), 'customer', 'mailling_province', 'varchar
 call AddColumnUnlessExists(Database(), 'customer', 'mailling_city', 'varchar(20) DEFAULT NULL COMMENT "邮寄地址市"');
 call AddColumnUnlessExists(Database(), 'customer', 'mailling_county', 'varchar(20) DEFAULT NULL COMMENT "邮寄地址县"');
 call AddColumnUnlessExists(Database(), 'customer', 'mailling_address', 'varchar(200) DEFAULT NULL COMMENT "邮寄地址"');
+
+call AddColumnUnlessExists(Database(), 'contact', 'responsable', 'varchar(10) DEFAULT NULL COMMENT "对接事务"');
+call AddColumnUnlessExists(Database(), 'reg_abroad', 'need_annual', 'int(1) DEFAULT NULL COMMENT "是否需要年检"');
+
+-- update reg_abroad set need_annual = 1
+

@@ -67,5 +67,9 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
+    
+    
+    
+        public string responsable { get; set; }
     }
 }

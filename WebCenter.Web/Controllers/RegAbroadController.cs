@@ -402,6 +402,7 @@ namespace WebCenter.Web.Controllers
                 order_status = a.order_status ?? 0,
                 description = a.description,
                 shareholder = a.shareholder,
+                need_annual = a.need_annual,
 
             }).FirstOrDefault();
 
@@ -524,6 +525,7 @@ namespace WebCenter.Web.Controllers
                 description = a.description,
                 shareholder = a.shareholder,
                 order_status = a.order_status ?? 0,
+                need_annual = a.need_annual ?? 1,
 
             }).FirstOrDefault();
 
@@ -663,6 +665,8 @@ namespace WebCenter.Web.Controllers
             dbReg.rate = reg.rate;
             dbReg.assistant_id = reg.assistant_id;
             dbReg.shareholder = reg.shareholder;
+
+            dbReg.need_annual = reg.need_annual ?? 1;
 
             if (reg.is_open_bank == 0)
             {

@@ -504,6 +504,8 @@ namespace WebCenter.Web.Controllers
                                 type = item.type,
                                 wechat = item.wechat,
                                 date_created = DateTime.Today,
+                                memo = item.memo,
+                                responsable = item.responsable
                             });
                         }
 
@@ -520,6 +522,9 @@ namespace WebCenter.Web.Controllers
                                 updateContact.tel = item.tel;
                                 updateContact.type = item.type;
                                 updateContact.wechat = item.wechat;
+                                updateContact.memo = item.memo;
+                                updateContact.responsable = item.responsable;
+
                                 updateContact.date_updated = DateTime.Now;
 
                                 updateContacts.Add(updateContact);
@@ -1126,7 +1131,8 @@ namespace WebCenter.Web.Controllers
             d.tel = item.tel;
             d.wechat = item.wechat;
             d.date_updated = DateTime.Now;
-
+            d.memo = item.memo;
+            d.responsable = item.responsable;
             Uof.IcontactService.UpdateEntity(d);
 
             return Json(d, JsonRequestBehavior.AllowGet);

@@ -100,7 +100,7 @@ namespace WebCenter.Web.Controllers
             var Month3 = DateTime.Now.AddMonths(1).Month;
 
             #region 境外注册
-            Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 && c.date_setup != null && c.order_status == 0 &&
+            Expression<Func<reg_abroad, bool>> condition1 = c => c.status == 4 && c.date_setup != null && c.order_status == 0 && c.need_annual == 1 && 
             ((c.annual_date == null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear >= c.date_setup.Value.Year) ||
             (c.annual_date != null && c.annual_year.Value < nowYear && (Month1 == (c.date_setup.Value.Month) || Month2 >= (c.date_setup.Value.Month) || Month3 == (c.date_setup.Value.Month)) && nowYear >= c.annual_date.Value.Year) ||
             (c.annual_year == null && nowYear >= c.date_setup.Value.Year) ||

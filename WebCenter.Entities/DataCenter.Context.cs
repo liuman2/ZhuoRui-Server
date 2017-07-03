@@ -68,11 +68,11 @@ namespace WebCenter.Entities
         public virtual DbSet<internal_shareholder> internal_shareholder { get; set; }
         public virtual DbSet<internal_history> internal_history { get; set; }
         public virtual DbSet<patent> patents { get; set; }
-        public virtual DbSet<reg_abroad> reg_abroad { get; set; }
         public virtual DbSet<reg_internal> reg_internal { get; set; }
         public virtual DbSet<trademark> trademarks { get; set; }
-        public virtual DbSet<contact> contacts { get; set; }
         public virtual DbSet<customer> customers { get; set; }
         public virtual DbSet<history> histories { get; set; }
+        public virtual DbSet<contact> contacts { get; set; }
+        public virtual DbSet<reg_abroad> reg_abroad { get; set; }
     }
 }
