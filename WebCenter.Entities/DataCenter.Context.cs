@@ -58,7 +58,6 @@ namespace WebCenter.Entities
         public virtual DbSet<audit> audits { get; set; }
         public virtual DbSet<timeline> timelines { get; set; }
         public virtual DbSet<accounting> accountings { get; set; }
-        public virtual DbSet<accounting_item> accounting_item { get; set; }
         public virtual DbSet<reg_internal_items> reg_internal_items { get; set; }
         public virtual DbSet<accounting_progress> accounting_progress { get; set; }
         public virtual DbSet<reg_internal_history> reg_internal_history { get; set; }
@@ -74,5 +73,6 @@ namespace WebCenter.Entities
         public virtual DbSet<history> histories { get; set; }
         public virtual DbSet<contact> contacts { get; set; }
         public virtual DbSet<reg_abroad> reg_abroad { get; set; }
+        public virtual DbSet<accounting_item> accounting_item { get; set; }
     }
 }

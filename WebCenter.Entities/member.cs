@@ -85,6 +85,13 @@ namespace WebCenter.Entities
             this.reg_abroad5 = new HashSet<reg_abroad>();
             this.reg_abroad6 = new HashSet<reg_abroad>();
             this.reg_abroad7 = new HashSet<reg_abroad>();
+            this.accounting_item = new HashSet<accounting_item>();
+            this.accounting_item1 = new HashSet<accounting_item>();
+            this.accounting_item2 = new HashSet<accounting_item>();
+            this.accounting_item3 = new HashSet<accounting_item>();
+            this.accounting_item4 = new HashSet<accounting_item>();
+            this.accounting_item5 = new HashSet<accounting_item>();
+            this.accounting_item6 = new HashSet<accounting_item>();
         }
     
     
@@ -221,5 +228,12 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad5 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad6 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad7 { get; set; }
+        public virtual ICollection<accounting_item> accounting_item { get; set; }
+        public virtual ICollection<accounting_item> accounting_item1 { get; set; }
+        public virtual ICollection<accounting_item> accounting_item2 { get; set; }
+        public virtual ICollection<accounting_item> accounting_item3 { get; set; }
+        public virtual ICollection<accounting_item> accounting_item4 { get; set; }
+        public virtual ICollection<accounting_item> accounting_item5 { get; set; }
+        public virtual ICollection<accounting_item> accounting_item6 { get; set; }
     }
 }

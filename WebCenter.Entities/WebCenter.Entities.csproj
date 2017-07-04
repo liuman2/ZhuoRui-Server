@@ -259,7 +259,6 @@
     <Content Include="DataCenter.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DataCenter.edmx</DependentUpon>
-      <LastGenOutput>DataCenter.Context.cs</LastGenOutput>
     </Content>
     <Content Include="DataCenter.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

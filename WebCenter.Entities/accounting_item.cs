@@ -51,5 +51,105 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> date_transaction { get; set; }
+    
+    
+    
+        public Nullable<float> amount_transaction { get; set; }
+    
+    
+    
+        public string currency { get; set; }
+    
+    
+    
+        public Nullable<float> rate { get; set; }
+    
+    
+    
+        public Nullable<int> finance_reviewer_id { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> finance_review_date { get; set; }
+    
+    
+    
+        public string finance_review_moment { get; set; }
+    
+    
+    
+        public Nullable<int> submit_reviewer_id { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> submit_review_date { get; set; }
+    
+    
+    
+        public string submit_review_moment { get; set; }
+    
+    
+    
+        public Nullable<int> review_status { get; set; }
+    
+    
+    
+        public Nullable<int> creator_id { get; set; }
+    
+    
+    
+        public Nullable<int> salesman_id { get; set; }
+    
+    
+    
+        public Nullable<int> accountant_id { get; set; }
+    
+    
+    
+        public Nullable<int> manager_id { get; set; }
+    
+    
+    
+        public Nullable<int> assistant_id { get; set; }
+    
+    
+    
+        public Nullable<sbyte> tax { get; set; }
+    
+    
+    
+        public string invoice_name { get; set; }
+    
+    
+    
+        public string invoice_tax { get; set; }
+    
+    
+    
+        public string invoice_address { get; set; }
+    
+    
+    
+        public string invoice_tel { get; set; }
+    
+    
+    
+        public string invoice_bank { get; set; }
+    
+    
+    
+        public string invoice_account { get; set; }
+    
+        public virtual member member { get; set; }
+        public virtual member member1 { get; set; }
+        public virtual member member2 { get; set; }
+        public virtual member member3 { get; set; }
+        public virtual member member4 { get; set; }
+        public virtual member member5 { get; set; }
+        public virtual member member6 { get; set; }
     }
 }
