@@ -16,7 +16,6 @@ namespace WebCenter.Entities
     {
         public customer()
         {
-            this.accountings = new HashSet<accounting>();
             this.annual_exam = new HashSet<annual_exam>();
             this.audits = new HashSet<audit>();
             this.bank_account = new HashSet<bank_account>();
@@ -27,6 +26,7 @@ namespace WebCenter.Entities
             this.reg_internal = new HashSet<reg_internal>();
             this.customer_timeline = new HashSet<customer_timeline>();
             this.trademarks = new HashSet<trademark>();
+            this.accountings = new HashSet<accounting>();
             this.reg_abroad = new HashSet<reg_abroad>();
         }
     
@@ -160,7 +160,6 @@ namespace WebCenter.Entities
     
         public string mailling_address { get; set; }
     
-        public virtual ICollection<accounting> accountings { get; set; }
         public virtual ICollection<annual_exam> annual_exam { get; set; }
         public virtual ICollection<audit> audits { get; set; }
         public virtual ICollection<bank_account> bank_account { get; set; }
@@ -173,6 +172,7 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual ICollection<customer_timeline> customer_timeline { get; set; }
         public virtual ICollection<trademark> trademarks { get; set; }
+        public virtual ICollection<accounting> accountings { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
     }
 }

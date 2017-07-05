@@ -42,13 +42,6 @@ namespace WebCenter.Entities
             this.audits4 = new HashSet<audit>();
             this.audits5 = new HashSet<audit>();
             this.audits6 = new HashSet<audit>();
-            this.accountings = new HashSet<accounting>();
-            this.accountings1 = new HashSet<accounting>();
-            this.accountings2 = new HashSet<accounting>();
-            this.accountings3 = new HashSet<accounting>();
-            this.accountings4 = new HashSet<accounting>();
-            this.accountings5 = new HashSet<accounting>();
-            this.accountings6 = new HashSet<accounting>();
             this.reg_internal = new HashSet<reg_internal>();
             this.patents = new HashSet<patent>();
             this.trademarks = new HashSet<trademark>();
@@ -77,6 +70,20 @@ namespace WebCenter.Entities
             this.histories1 = new HashSet<history>();
             this.histories2 = new HashSet<history>();
             this.histories3 = new HashSet<history>();
+            this.accounting_item = new HashSet<accounting_item>();
+            this.accounting_item1 = new HashSet<accounting_item>();
+            this.accounting_item2 = new HashSet<accounting_item>();
+            this.accounting_item3 = new HashSet<accounting_item>();
+            this.accounting_item4 = new HashSet<accounting_item>();
+            this.accounting_item5 = new HashSet<accounting_item>();
+            this.accounting_item6 = new HashSet<accounting_item>();
+            this.accountings = new HashSet<accounting>();
+            this.accountings1 = new HashSet<accounting>();
+            this.accountings2 = new HashSet<accounting>();
+            this.accountings3 = new HashSet<accounting>();
+            this.accountings4 = new HashSet<accounting>();
+            this.accountings5 = new HashSet<accounting>();
+            this.accountings6 = new HashSet<accounting>();
             this.reg_abroad = new HashSet<reg_abroad>();
             this.reg_abroad1 = new HashSet<reg_abroad>();
             this.reg_abroad2 = new HashSet<reg_abroad>();
@@ -85,13 +92,6 @@ namespace WebCenter.Entities
             this.reg_abroad5 = new HashSet<reg_abroad>();
             this.reg_abroad6 = new HashSet<reg_abroad>();
             this.reg_abroad7 = new HashSet<reg_abroad>();
-            this.accounting_item = new HashSet<accounting_item>();
-            this.accounting_item1 = new HashSet<accounting_item>();
-            this.accounting_item2 = new HashSet<accounting_item>();
-            this.accounting_item3 = new HashSet<accounting_item>();
-            this.accounting_item4 = new HashSet<accounting_item>();
-            this.accounting_item5 = new HashSet<accounting_item>();
-            this.accounting_item6 = new HashSet<accounting_item>();
         }
     
     
@@ -185,13 +185,6 @@ namespace WebCenter.Entities
         public virtual ICollection<audit> audits4 { get; set; }
         public virtual ICollection<audit> audits5 { get; set; }
         public virtual ICollection<audit> audits6 { get; set; }
-        public virtual ICollection<accounting> accountings { get; set; }
-        public virtual ICollection<accounting> accountings1 { get; set; }
-        public virtual ICollection<accounting> accountings2 { get; set; }
-        public virtual ICollection<accounting> accountings3 { get; set; }
-        public virtual ICollection<accounting> accountings4 { get; set; }
-        public virtual ICollection<accounting> accountings5 { get; set; }
-        public virtual ICollection<accounting> accountings6 { get; set; }
         public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual ICollection<patent> patents { get; set; }
         public virtual ICollection<trademark> trademarks { get; set; }
@@ -220,6 +213,20 @@ namespace WebCenter.Entities
         public virtual ICollection<history> histories1 { get; set; }
         public virtual ICollection<history> histories2 { get; set; }
         public virtual ICollection<history> histories3 { get; set; }
+        public virtual ICollection<accounting_item> accounting_item { get; set; }
+        public virtual ICollection<accounting_item> accounting_item1 { get; set; }
+        public virtual ICollection<accounting_item> accounting_item2 { get; set; }
+        public virtual ICollection<accounting_item> accounting_item3 { get; set; }
+        public virtual ICollection<accounting_item> accounting_item4 { get; set; }
+        public virtual ICollection<accounting_item> accounting_item5 { get; set; }
+        public virtual ICollection<accounting_item> accounting_item6 { get; set; }
+        public virtual ICollection<accounting> accountings { get; set; }
+        public virtual ICollection<accounting> accountings1 { get; set; }
+        public virtual ICollection<accounting> accountings2 { get; set; }
+        public virtual ICollection<accounting> accountings3 { get; set; }
+        public virtual ICollection<accounting> accountings4 { get; set; }
+        public virtual ICollection<accounting> accountings5 { get; set; }
+        public virtual ICollection<accounting> accountings6 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad1 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad2 { get; set; }
@@ -228,12 +235,5 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad5 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad6 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad7 { get; set; }
-        public virtual ICollection<accounting_item> accounting_item { get; set; }
-        public virtual ICollection<accounting_item> accounting_item1 { get; set; }
-        public virtual ICollection<accounting_item> accounting_item2 { get; set; }
-        public virtual ICollection<accounting_item> accounting_item3 { get; set; }
-        public virtual ICollection<accounting_item> accounting_item4 { get; set; }
-        public virtual ICollection<accounting_item> accounting_item5 { get; set; }
-        public virtual ICollection<accounting_item> accounting_item6 { get; set; }
     }
 }
