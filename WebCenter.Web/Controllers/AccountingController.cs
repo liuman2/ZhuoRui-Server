@@ -538,7 +538,10 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[2], out organization_id);
 
             item.status = 0;
-
+            item.currency = "人民币";
+            item.rate = 1;
+            item.review_status = -1;
+            
             var dbItem = Uof.Iaccounting_itemService.AddEntity(item);
 
             var timelines = new List<timeline>();
@@ -601,6 +604,26 @@ namespace WebCenter.Web.Controllers
             dbItem.date_start = item.date_start;
             dbItem.date_end = item.date_end;
             dbItem.date_updated = DateTime.Now;
+
+            dbItem.memo = item.memo;
+            dbItem.amount_transaction = item.amount_transaction;
+
+            dbItem.salesman_id = item.salesman_id;
+            dbItem.accountant_id = item.accountant_id;
+            dbItem.manager_id = item.manager_id;
+            dbItem.assistant_id = item.assistant_id;
+            dbItem.tax = item.tax;
+
+            if (item.tax == 1)
+            {
+                dbItem.invoice_name = item.invoice_name;
+                dbItem.invoice_tax = item.invoice_tax;
+                dbItem.invoice_address = item.invoice_address;
+                dbItem.invoice_tel = item.invoice_tel;
+                dbItem.invoice_bank = item.invoice_bank;
+                dbItem.invoice_account = item.invoice_account;
+            }
+            
 
             Uof.Iaccounting_itemService.UpdateEntity(dbItem);
 
