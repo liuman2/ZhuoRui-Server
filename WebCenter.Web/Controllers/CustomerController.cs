@@ -290,7 +290,12 @@ namespace WebCenter.Web.Controllers
                     province = c.province,
                     city = c.city,
                     county = c.county,
-                    address = c.address
+                    address = c.address,
+
+                    mailling_address = c.mailling_address,
+                    mailling_province = c.mailling_province,
+                    mailling_city = c.mailling_city,
+                    mailling_county = c.mailling_county,
                 }).ToPagedList(index, size).ToList();
 
             var totalRecord = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Count();
@@ -801,7 +806,13 @@ namespace WebCenter.Web.Controllers
                     province = c.province,
                     city = c.city,
                     county = c.county,
-                    address = c.address
+                    address = c.address,
+
+                    mailling_address = c.mailling_address,
+                    mailling_province = c.mailling_province,
+                    mailling_city = c.mailling_city,
+                    mailling_county = c.mailling_county,
+
                 }).ToPagedList(index, size).ToList();
 
             var totalRecord = Uof.IcustomerService.GetAll(condition).Count();
