@@ -688,9 +688,9 @@ namespace WebCenter.Web.Controllers
             return Json(new { id = dbItem.id }, JsonRequestBehavior.AllowGet);
         }
         
-        public ActionResult Submit(int id)
+        public ActionResult Submit(int masterId, int subId, int period, string code)
         {
-            var dbAcc = Uof.IaccountingService.GetById(id);
+            var dbAcc = Uof.Iaccounting_itemService.GetById(subId);
             if (dbAcc == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
@@ -700,14 +700,14 @@ namespace WebCenter.Web.Controllers
             dbAcc.review_status = -1;
             dbAcc.date_updated = DateTime.Now;
 
-            var r = Uof.IaccountingService.UpdateEntity(dbAcc);
+            var r = Uof.Iaccounting_itemService.UpdateEntity(dbAcc);
 
             if (r)
             {
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbAcc.id,
-                    source_name = "accounting",
+                    source_name = "accounting_item",
                     title = "提交审核",
                     is_system = 1,
                     content = string.Format("提交给财务审核")
@@ -721,10 +721,10 @@ namespace WebCenter.Web.Controllers
                     waitdeals.Add(new waitdeal
                     {
                         source = "accounting",
-                        source_id = dbAcc.id,
+                        source_id = masterId,
                         user_id = auditor_id,
                         router = "account_view",
-                        content = "您有记账订单需要财务审核",
+                        content = string.Format("您有记账订单需要财务审核, 档案号: {0}, 账期{1}", code, period),
                         read_status = 0
                     });
 
@@ -734,7 +734,7 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PassAudit(int id, int waiter_id)
+        public ActionResult PassAudit(int masterId, int subId, int waiter_id, int period, string code)
         {
             var u = HttpContext.User.Identity.IsAuthenticated;
             if (!u)
@@ -752,7 +752,7 @@ namespace WebCenter.Web.Controllers
             var userId = 0;
             int.TryParse(arrs[0], out userId);
 
-            var dbAcc = Uof.IaccountingService.GetById(id);
+            var dbAcc = Uof.Iaccounting_itemService.GetById(subId);
             if (dbAcc == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
@@ -771,10 +771,10 @@ namespace WebCenter.Web.Controllers
                 waitdeals.Add(new waitdeal
                 {
                     source = "accounting",
-                    source_id = dbAcc.id,
+                    source_id = masterId,
                     user_id = dbAcc.salesman_id,
                     router = "account_view",
-                    content = "您的记账订单已通过财务审核",
+                    content = string.Format("您的记账订单已通过财务审核, 档案号: {0}, 账期{1}", code, period),
                     read_status = 0
                 });
 
@@ -785,10 +785,10 @@ namespace WebCenter.Web.Controllers
                     waitdeals.Add(new waitdeal
                     {
                         source = "accounting",
-                        source_id = dbAcc.id,
+                        source_id = masterId,
                         user_id = jwId,
                         router = "account_view",
-                        content = "您有记账订单需要提交审核",
+                        content = string.Format("您有记账订单需要提交审核, 档案号: {0}, 账期{1}", code, period),
                         read_status = 0
                     });
                 }
@@ -806,10 +806,10 @@ namespace WebCenter.Web.Controllers
                 waitdeals.Add(new waitdeal
                 {
                     source = "accounting",
-                    source_id = dbAcc.id,
+                    source_id = masterId,
                     user_id = dbAcc.salesman_id,
                     router = "account_view",
-                    content = "您的记账订单已通过提交审核",
+                    content = string.Format("您的记账订单已通过提交审核, 档案号: {0}, 账期{1}", code, period),
                     read_status = 0
                 });
 
@@ -818,10 +818,10 @@ namespace WebCenter.Web.Controllers
                     waitdeals.Add(new waitdeal
                     {
                         source = "accounting",
-                        source_id = dbAcc.id,
+                        source_id = masterId,
                         user_id = dbAcc.assistant_id,
                         router = "account_view",
-                        content = "您的记账订单已通过提交审核",
+                        content = string.Format("您的记账订单已通过提交审核, 档案号: {0}, 账期{1}", code, period),
                         read_status = 0
                     });
                 }
@@ -829,7 +829,7 @@ namespace WebCenter.Web.Controllers
 
             dbAcc.date_updated = DateTime.Now;
 
-            var r = Uof.IaccountingService.UpdateEntity(dbAcc);
+            var r = Uof.Iaccounting_itemService.UpdateEntity(dbAcc);
 
             if (r)
             {
@@ -837,8 +837,8 @@ namespace WebCenter.Web.Controllers
 
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
-                    source_id = dbAcc.id,
-                    source_name = "accounting",
+                    source_id = subId,
+                    source_name = "accounting_item",
                     title = "通过审核",
                     is_system = 1,
                     content = string.Format("{0}通过了{1}", arrs[3], t)
@@ -848,7 +848,7 @@ namespace WebCenter.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult RefuseAudit(int id, string description)
+        public ActionResult RefuseAudit(int masterId, int subId, int period, string description, string code)
         {
             var u = HttpContext.User.Identity.IsAuthenticated;
             if (!u)
@@ -866,7 +866,7 @@ namespace WebCenter.Web.Controllers
             var userId = 0;
             int.TryParse(arrs[0], out userId);
 
-            var dbAcc = Uof.IaccountingService.GetById(id);
+            var dbAcc = Uof.Iaccounting_itemService.GetById(subId);
             if (dbAcc == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
@@ -885,10 +885,10 @@ namespace WebCenter.Web.Controllers
                 waitdeals.Add(new waitdeal
                 {
                     source = "accounting",
-                    source_id = dbAcc.id,
+                    source_id = masterId,
                     user_id = dbAcc.salesman_id,
                     router = "account_view",
-                    content = "您的记账订单未通过财务审核",
+                    content = string.Format("您的记账订单未通过财务审核, 档案号: {0}, 账期{1}", code, period),
                     read_status = 0
                 });
                 if (dbAcc.assistant_id != null && dbAcc.assistant_id != dbAcc.salesman_id)
@@ -896,10 +896,10 @@ namespace WebCenter.Web.Controllers
                     waitdeals.Add(new waitdeal
                     {
                         source = "accounting",
-                        source_id = dbAcc.id,
+                        source_id = masterId,
                         user_id = dbAcc.assistant_id,
                         router = "account_view",
-                        content = "您的记账订单未通过财务审核",
+                        content = string.Format("您的记账订单未通过财务审核, 档案号: {0}, 账期{1}", code, period),
                         read_status = 0
                     });
                 }
@@ -916,10 +916,10 @@ namespace WebCenter.Web.Controllers
                 waitdeals.Add(new waitdeal
                 {
                     source = "accounting",
-                    source_id = dbAcc.id,
+                    source_id = masterId,
                     user_id = dbAcc.salesman_id,
                     router = "account_view",
-                    content = "您的记账订单未通过提交审核",
+                    content = string.Format("您的记账订单未通过提交审核, 档案号: {0}, 账期{1}", code, period),
                     read_status = 0
                 });
                 if (dbAcc.assistant_id != null && dbAcc.assistant_id != dbAcc.salesman_id)
@@ -927,10 +927,10 @@ namespace WebCenter.Web.Controllers
                     waitdeals.Add(new waitdeal
                     {
                         source = "accounting",
-                        source_id = dbAcc.id,
+                        source_id = masterId,
                         user_id = dbAcc.assistant_id,
                         router = "account_view",
-                        content = "您的记账订单未通过提交审核",
+                        content = string.Format("您的记账订单未通过提交审核, 档案号: {0}, 账期{1}", code, period),
                         read_status = 0
                     });
                 }
@@ -938,14 +938,14 @@ namespace WebCenter.Web.Controllers
 
             dbAcc.date_updated = DateTime.Now;
 
-            var r = Uof.IaccountingService.UpdateEntity(dbAcc);
+            var r = Uof.Iaccounting_itemService.UpdateEntity(dbAcc);
 
             if (r)
             {
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbAcc.id,
-                    source_name = "accounting",
+                    source_name = "accounting_item",
                     title = "驳回审核",
                     is_system = 1,
                     content = string.Format("{0}{1}, 驳回理由: {2}", arrs[3], t, description)
