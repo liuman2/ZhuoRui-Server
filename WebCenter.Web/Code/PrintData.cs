@@ -9,6 +9,8 @@ namespace WebCenter.Web
     {
         public int id { get; set; }
 
+        public int? masterId { get; set; }
+
         public string print_type { get; set; }
 
         /// <summary>

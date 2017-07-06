@@ -17,6 +17,77 @@ namespace WebCenter.Web.Controllers
 
         }
 
+        public ActionResult OldData()
+        {
+            var list = Uof.IaccountingService.GetAll().ToList();
+
+            var updates = new List<accounting_item>();
+            var incomes = new List<income>();
+            foreach (var item in list)
+            {
+                var sub = Uof.Iaccounting_itemService.GetAll(s => s.master_id == item.id).FirstOrDefault();
+                if (sub != null)
+                {
+                    sub.date_transaction = item.date_transaction;
+                    sub.amount_transaction = item.amount_transaction;
+                    sub.currency = item.currency;
+                    sub.rate = item.rate;
+                    sub.status = item.status;
+                    sub.finance_reviewer_id = item.finance_reviewer_id;
+                    sub.finance_review_date = item.finance_review_date;
+                    sub.finance_review_moment = item.finance_review_moment;
+                    sub.submit_reviewer_id = item.submit_reviewer_id;
+                    sub.submit_review_date = item.submit_review_date;
+                    sub.submit_review_moment = item.submit_review_moment;
+                    sub.review_status = item.review_status;
+                    sub.creator_id = item.creator_id;
+                    sub.salesman_id = item.salesman_id;
+                    sub.accountant_id = item.accountant_id;
+                    sub.manager_id = item.manager_id;
+                    sub.assistant_id = item.assistant_id;
+                    sub.tax = item.tax;
+                    sub.invoice_name = item.invoice_name;
+                    sub.invoice_tax = item.invoice_tax;
+                    sub.invoice_address = item.invoice_address;
+                    sub.invoice_tel = item.invoice_tel;
+                    sub.invoice_bank = item.invoice_bank;
+                    sub.invoice_account = item.invoice_account;
+
+                    updates.Add(sub);
+
+                    var icomes = Uof.IincomeService.GetAll(i => i.source_name == "accounting" && i.source_id == item.id).ToList();
+                    if (icomes != null)
+                    {
+                        if (icomes.Count() > 0)
+                        {
+                            foreach (var icome in icomes)
+                            {
+                                icome.source_id = sub.id;
+                                icome.source_name = "accounting_item";
+
+                                incomes.Add(icome);
+                            }
+                        }
+                    }
+                }
+                
+
+                
+            }
+
+            if (updates.Count() > 0)
+            {
+                Uof.Iaccounting_itemService.UpdateEntities(updates);
+            }
+
+            if (incomes.Count() > 0)
+            {
+                Uof.IincomeService.UpdateEntities(incomes);
+            }
+
+            return SuccessResult;
+        }
+
         public ActionResult Search(OrderSearchRequest request)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
@@ -606,6 +677,18 @@ namespace WebCenter.Web.Controllers
             });
             try
             {
+                try
+                {
+                    var master = Uof.IaccountingService.GetAll(a => a.id == dbItem.master_id).FirstOrDefault();
+                    master.status = 0;
+                    master.review_status = -1;
+                    Uof.IaccountingService.UpdateEntity(master);
+                }
+                catch (Exception)
+                {                    
+                }
+                
+
                 Uof.ItimelineService.AddEntities(timelines);
             }
             catch (Exception)
@@ -704,6 +787,22 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
+                try
+                {
+                    var master = Uof.IaccountingService.GetAll(a => a.id == masterId).FirstOrDefault();
+                    if (master!= null)
+                    {
+                        master.status = 1;
+                        master.review_status = -1;
+                        master.date_updated = DateTime.Now;
+
+                        Uof.IaccountingService.UpdateEntity(master);
+                    }
+                }
+                catch (Exception)
+                {
+                    
+                }
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbAcc.id,
@@ -753,6 +852,7 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
 
             var dbAcc = Uof.Iaccounting_itemService.GetById(subId);
+            var master = Uof.IaccountingService.GetById(masterId);
             if (dbAcc == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
@@ -766,6 +866,13 @@ namespace WebCenter.Web.Controllers
                 dbAcc.finance_reviewer_id = userId;
                 dbAcc.finance_review_date = DateTime.Now;
                 dbAcc.finance_review_moment = "";
+
+
+                master.status = 2;
+                master.review_status = 1;
+                master.finance_reviewer_id = userId;
+                master.finance_review_date = DateTime.Now;
+                master.finance_review_moment = "";
 
                 t = "财务审核";
                 waitdeals.Add(new waitdeal
@@ -802,6 +909,13 @@ namespace WebCenter.Web.Controllers
                 dbAcc.submit_review_date = DateTime.Now;
                 dbAcc.submit_review_moment = "";
 
+                master.accountant_id = waiter_id;
+                master.status = 3;
+                master.review_status = 1;
+                master.submit_reviewer_id = userId;
+                master.submit_review_date = DateTime.Now;
+                master.submit_review_moment = "";
+
                 t = "提交的审核";
                 waitdeals.Add(new waitdeal
                 {
@@ -830,9 +944,17 @@ namespace WebCenter.Web.Controllers
             dbAcc.date_updated = DateTime.Now;
 
             var r = Uof.Iaccounting_itemService.UpdateEntity(dbAcc);
-
+            
             if (r)
             {
+                try
+                {
+                    Uof.IaccountingService.UpdateEntity(master);
+                }
+                catch (Exception)
+                {
+                }                
+
                 Uof.IwaitdealService.AddEntities(waitdeals);
 
                 Uof.ItimelineService.AddEntity(new timeline()
@@ -867,6 +989,7 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
 
             var dbAcc = Uof.Iaccounting_itemService.GetById(subId);
+            var maser = Uof.IaccountingService.GetById(masterId);
             if (dbAcc == null)
             {
                 return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
@@ -880,6 +1003,12 @@ namespace WebCenter.Web.Controllers
                 dbAcc.finance_reviewer_id = userId;
                 dbAcc.finance_review_date = DateTime.Now;
                 dbAcc.finance_review_moment = description;
+
+                maser.status = 0;
+                maser.review_status = 0;
+                maser.finance_reviewer_id = userId;
+                maser.finance_review_date = DateTime.Now;
+                maser.finance_review_moment = description;
 
                 t = "驳回了财务审核";
                 waitdeals.Add(new waitdeal
@@ -912,6 +1041,12 @@ namespace WebCenter.Web.Controllers
                 dbAcc.submit_review_date = DateTime.Now;
                 dbAcc.submit_review_moment = description;
 
+                maser.status = 0;
+                maser.review_status = 0;
+                maser.submit_reviewer_id = userId;
+                maser.submit_review_date = DateTime.Now;
+                maser.submit_review_moment = description;
+
                 t = "驳回了提交的审核";
                 waitdeals.Add(new waitdeal
                 {
@@ -941,7 +1076,15 @@ namespace WebCenter.Web.Controllers
             var r = Uof.Iaccounting_itemService.UpdateEntity(dbAcc);
 
             if (r)
-            {
+            {                
+                try
+                {
+                    Uof.IaccountingService.UpdateEntity(maser);
+                }
+                catch (Exception)
+                {
+                }
+
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = dbAcc.id,
@@ -955,11 +1098,57 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPeriodProgress(int id)
+        public ActionResult GetPeriodProgressWithIncomes(int id)
         {
             var items = Uof.Iaccounting_progressService.GetAll(p => p.master_id == id).ToList();
 
-            return Json(items, JsonRequestBehavior.AllowGet);
+            var reg = Uof.Iaccounting_itemService.GetAll(s => s.id == id).Select(s => new
+            {
+                amount_transaction = s.amount_transaction,
+                rate = s.rate,
+
+            }).FirstOrDefault();
+
+            var list = Uof.IincomeService.GetAll(i => i.source_id == id && i.source_name == "accounting_item").Select(i => new {
+                id = i.id,
+                customer_id = i.customer_id,
+                source_id = i.source_id,
+                source_name = i.source_name,
+                payer = i.payer,
+                pay_way = i.pay_way,
+                account = i.account,
+                amount = i.amount,
+                date_pay = i.date_pay,
+                attachment_url = i.attachment_url,
+                description = i.description,
+                bank = i.bank
+            }).ToList();
+
+            var total = 0f;
+            if (list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    total += item.amount.Value;
+                }
+            }
+
+            var balance = reg.amount_transaction - total;
+            var incomes = new
+            {
+                items = list,
+                total = total,
+                balance = balance,
+
+                rate = reg.rate,
+                local_amount = (float)Math.Round((double)(reg.amount_transaction * reg.rate ?? 0), 2),
+                local_total = (float)Math.Round((double)(total * reg.rate ?? 0), 2),
+                local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
+            };
+
+            //var incomes = Uof.IincomeService.GetAll(i => i.source_id == id && i.source_name == "accounting_item").ToList();
+
+            return Json(new { progressList = items, incomes = incomes}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetProgress(int id)

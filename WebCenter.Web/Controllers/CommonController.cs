@@ -853,36 +853,28 @@ namespace WebCenter.Web.Controllers
                     #endregion
                     break;
 
-                case "account":
-                    #region 商标
-                    printData = Uof.IaccountingService.GetAll(a => a.id == id).Select(a => new PrintData
+                case "accounting":
+                    #region 记账
+                    printData = Uof.Iaccounting_itemService.GetAll(a => a.id == id).Select(a => new PrintData
                     {
-
-                        //creator_id member1
-                        //accountant_id member
-                        //finance_reviewer_id member2
-                        //mamager_id  3
-                        //assistant_id  4
-                        //salesman  5
-                        //submit  6
-
                         print_type = "accounting",
                         id = a.id,
+                        masterId = a.master_id,
                         accounter = a.member.name,
                         cashier = "", //a.member2.name, // 出纳
                         amount = a.amount_transaction,
                         attachments = 0,
                         auditor = "", //a.member2.name,
                         balance = a.amount_transaction,
-                        code = a.code,
-                        customer_name = a.customer.name,
-                        company_cn = a.name, //a.applicant,
+                        code = "",
+                        customer_name = "",
+                        company_cn = "", //a.applicant,
                         company_en = "",
                         creator = a.member1.name,
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "", //a.reg_mode,
-                        ordername = a.name,
+                        ordername = "",
                         others = "", //a.description,
                         payer = "",
                         pay_info = "",
@@ -893,7 +885,7 @@ namespace WebCenter.Web.Controllers
                         saleman = a.member5.name,
                         type = "", //a.trademark_type,
                         currency = a.currency,
-                        area = a.member4.area.name,
+                        area = a.member5.area.name,
                         rate = 1,
                         region = "", //a.region
                     }).FirstOrDefault();
@@ -902,35 +894,43 @@ namespace WebCenter.Web.Controllers
                     //{
                     //    printData.others = string.Format("{0}  注册地区:{1}", printData.others, printData.region);
                     //}
+                    var acc = Uof.IaccountingService.GetAll(a => a.id == printData.masterId).FirstOrDefault();
+
+                    printData.code = acc.code;
+                    printData.customer_name = acc.customer.name;
+                    printData.company_cn = acc.name;
+                    printData.ordername = acc.name;
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}提交", printData.area);
 
-                    getPrintDataIncome(printData, "accounting");
+                    getPrintDataIncome(printData, "accounting_item");
                     #endregion
                     break;
                 case "account_line":
-                    #region 审计
-                    var accountLineLine = Uof.IincomeService.GetAll(l => l.id == id).FirstOrDefault();
-                    printData = Uof.IaccountingService.GetAll(a => a.id == accountLineLine.source_id).Select(a => new PrintData
+                    #region 记账
+                    var accountLine = Uof.IincomeService.GetAll(l => l.id == id).FirstOrDefault();
+                    //
+                    printData = Uof.Iaccounting_itemService.GetAll(a => a.id == accountLine.source_id).Select(a => new PrintData
                     {
                         print_type = "accounting",
                         id = a.id,
+                        masterId = a.master_id,
                         accounter = a.member.name,
                         cashier = "", //a.member2.name, // 出纳
                         amount = a.amount_transaction,
                         attachments = 0,
                         auditor = "", //a.member2.name,
                         balance = a.amount_transaction,
-                        code = a.code,
-                        customer_name = a.customer.name,
-                        company_cn = a.name, //a.applicant,
+                        code = "",
+                        customer_name = "",
+                        company_cn = "", //a.applicant,
                         company_en = "",
                         creator = a.member1.name,
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "", //a.reg_mode,
-                        ordername = a.name,
+                        ordername = "",
                         others = "", //a.description,
                         payer = "",
                         pay_info = "",
@@ -941,16 +941,22 @@ namespace WebCenter.Web.Controllers
                         saleman = a.member5.name,
                         type = "", //a.trademark_type,
                         currency = a.currency,
-                        area = a.member4.area.name,
+                        area = a.member5.area.name,
                         rate = 1,
                         region = "", //a.region
                     }).FirstOrDefault();
 
-                    printData.date = accountLineLine.date_pay != null ? accountLineLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
+                    var acct = Uof.IaccountingService.GetAll(a => a.id == printData.masterId).FirstOrDefault();
+                    printData.code = acct.code;
+                    printData.customer_name = acct.customer.name;
+                    printData.company_cn = acct.name;
+                    printData.ordername = acct.name;
+
+                    printData.date = accountLine.date_pay != null ? accountLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}记账", printData.area);
 
                     //getPrintDataIncome(printData, "sub_audit");
-                    getLinePrintDataIncome(printData, accountLineLine, "accounting");
+                    getLinePrintDataIncome(printData, accountLine, "accounting_item");
                     #endregion
                     break;
                 default:
