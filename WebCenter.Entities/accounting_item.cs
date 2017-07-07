@@ -144,6 +144,10 @@ namespace WebCenter.Entities
     
         public string invoice_account { get; set; }
     
+    
+    
+        public Nullable<sbyte> pay_mode { get; set; }
+    
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }

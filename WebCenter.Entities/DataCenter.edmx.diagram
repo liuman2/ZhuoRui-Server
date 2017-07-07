@@ -121,14 +121,6 @@
         <AssociationConnector Association="DataCenter.Entities.history_ibfk_finance_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.history_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.history_ibfk_submit_reviewer" />
-        <EntityTypeShape EntityType="DataCenter.Entities.accounting_item" Width="1.5" PointX="13.625" PointY="43.875" />
-        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_accountant_id" />
-        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_assistant_id" />
-        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_creator_id" />
-        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_finance_reviewer_id" />
-        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_manager_id" />
-        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_salesman_id" />
-        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_submit_reviewer_id" />
         <EntityTypeShape EntityType="DataCenter.Entities.accounting" Width="1.5" PointX="18.125" PointY="29" />
         <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_accountant" />
         <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_bank" />
@@ -151,6 +143,14 @@
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_waiter" />
         <AssociationConnector Association="DataCenter.Entities.fk_abroad_assistant_id" />
+        <EntityTypeShape EntityType="DataCenter.Entities.accounting_item" Width="1.5" PointX="13.625" PointY="43.75" />
+        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_accountant_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_assistant_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_creator_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_finance_reviewer_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_manager_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_salesman_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_submit_reviewer_id" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -236,7 +236,9 @@ namespace WebCenter.Web.Controllers
 
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment,
-                    date_created = c.date_created
+                    date_created = c.date_created,
+
+                    pay_notify = c.pay_notify,
 
                 }).ToPagedList(request.index, request.size).ToList();
 
@@ -464,6 +466,8 @@ namespace WebCenter.Web.Controllers
                 invoice_bank = a.invoice_bank,
                 invoice_account = a.invoice_account,
 
+                pay_notify = a.pay_notify,
+
             }).FirstOrDefault();
 
             //creator_id member1
@@ -515,6 +519,7 @@ namespace WebCenter.Web.Controllers
                 source_type = a.source_type,
                 source_id = a.source_id,
                 source_code = a.source_code,
+                pay_notify = a.pay_notify,
 
                 //salesman_id = a.salesman_id,
                 //salesman = a.member5.name,
@@ -586,6 +591,9 @@ namespace WebCenter.Web.Controllers
                     invoice_tel = a.invoice_tel,
                     invoice_bank = a.invoice_bank,
                     invoice_account = a.invoice_account,
+
+                    pay_mode = a.pay_mode,
+                    
                 })
                 .ToList();
 
@@ -738,6 +746,7 @@ namespace WebCenter.Web.Controllers
             dbItem.manager_id = item.manager_id;
             dbItem.assistant_id = item.assistant_id;
             dbItem.tax = item.tax;
+            dbItem.pay_mode = item.pay_mode;
 
             if (item.tax == 1)
             {
@@ -1176,6 +1185,15 @@ namespace WebCenter.Web.Controllers
 
             Uof.Iaccounting_progressService.UpdateEntity(p);
 
+            return SuccessResult;
+        }
+
+        [HttpPost]
+        public ActionResult UpdateNotifyDate(int id, DateTime dt)
+        {
+            var d = Uof.IaccountingService.GetAll(a => a.id == id).FirstOrDefault();
+            d.pay_notify = dt;
+            Uof.IaccountingService.UpdateEntity(d);
             return SuccessResult;
         }
         

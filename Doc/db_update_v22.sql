@@ -43,3 +43,5 @@ call AddColumnUnlessExists(Database(), 'accounting_item', 'invoice_account', 'va
 
 call AddColumnUnlessExists(Database(), 'accounting', 'pay_mode', 'tinyint(3) DEFAULT NULL COMMENT "付款方式: 1-月付,3-季付,6-半年付,12-一年付"');
 call AddColumnUnlessExists(Database(), 'accounting', 'pay_notify', 'datetime DEFAULT NULL COMMENT "下次催收时间"');
+
+call AddColumnUnlessExists(Database(), 'accounting_item', 'pay_mode', 'tinyint(3) DEFAULT NULL COMMENT "付款方式: 1-月付,3-季付,6-半年付,12-一年付"');
