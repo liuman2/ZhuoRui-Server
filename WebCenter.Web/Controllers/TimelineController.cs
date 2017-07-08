@@ -18,6 +18,22 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetTimelines(int source_id, string source_name, string name)
         {
+            if (source_name == "annual")
+            {
+                // TODO
+                var annualExam = Uof.Iannual_examService.GetAll(a => a.id == source_id).Select(a=>new
+                {
+                    id = a.id,
+                    type = a.type,
+                    order_id = a.order_id,
+                    order_code = a.order_code
+                }).FirstOrDefault();
+
+                if (annualExam != null)
+                {
+
+                }
+            }
             Expression<Func<timeline, bool>> nameQuery = c => true;
 
             if (!string.IsNullOrEmpty(name))
