@@ -51,5 +51,9 @@ namespace WebCenter.Entities
     
     
         public Nullable<sbyte> is_system { get; set; }
+    
+    
+    
+        public Nullable<sbyte> log_type { get; set; }
     }
 }

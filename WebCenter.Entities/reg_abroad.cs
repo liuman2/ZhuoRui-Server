@@ -208,6 +208,14 @@ namespace WebCenter.Entities
     
         public Nullable<int> need_annual { get; set; }
     
+    
+    
+        public Nullable<System.DateTime> date_last { get; set; }
+    
+    
+    
+        public string title_last { get; set; }
+    
         public virtual bank_account bank_account { get; set; }
         public virtual customer customer { get; set; }
         public virtual member member { get; set; }

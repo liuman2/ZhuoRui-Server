@@ -157,6 +157,9 @@ namespace WebCenter.Web.Controllers
                     annual_date = a.annual_date,
                     annual_year = a.annual_year,
                     month = DateTime.Today.Month - a.date_setup.Value.Month,
+
+                    date_last = a.date_last,
+                    title_last = a.title_last,
                 }).ToList();
 
             if (abroads.Count() > 0)
@@ -265,6 +268,9 @@ namespace WebCenter.Web.Controllers
                         date_setup = a.date_setup,
                         annual_year = a.annual_year,
                         month = DateTime.Today.Month - a.date_setup.Value.Month,
+
+                        date_last = a.date_last,
+                        title_last = a.title_last,
                     }).ToList();
 
                 if (internas.Count() > 0)
@@ -328,6 +334,9 @@ namespace WebCenter.Web.Controllers
                     annual_year = a.annual_year,
                     exten_period = a.exten_period,
                     //month = (a.date_regit != null) ? (DateTime.Today.Month - a.date_regit.Value.Month) : 0,
+
+                    date_last = a.date_last,
+                    title_last = a.title_last,
                 }).ToList();
 
             if (trademarks.Count() > 0)
@@ -435,6 +444,9 @@ namespace WebCenter.Web.Controllers
                     date_setup = a.date_regit,
                     annual_year = a.annual_year,
                     month = (a.date_regit != null) ? (DateTime.Today.Month - a.date_regit.Value.Month) : 0,
+
+                    date_last = a.date_last,
+                    title_last = a.title_last,
                 }).ToList();
 
             if (patents.Count() > 0)

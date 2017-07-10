@@ -17,9 +17,9 @@ namespace WebCenter.Entities
         public bank_account()
         {
             this.audit_bank = new HashSet<audit_bank>();
-            this.reg_internal = new HashSet<reg_internal>();
             this.accountings = new HashSet<accounting>();
             this.reg_abroad = new HashSet<reg_abroad>();
+            this.reg_internal = new HashSet<reg_internal>();
         }
     
     
@@ -53,9 +53,9 @@ namespace WebCenter.Entities
         public Nullable<System.DateTime> date_updated { get; set; }
     
         public virtual ICollection<audit_bank> audit_bank { get; set; }
-        public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual customer customer { get; set; }
         public virtual ICollection<accounting> accountings { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad { get; set; }
+        public virtual ICollection<reg_internal> reg_internal { get; set; }
     }
 }

@@ -45,3 +45,14 @@ call AddColumnUnlessExists(Database(), 'accounting', 'pay_mode', 'tinyint(3) DEF
 call AddColumnUnlessExists(Database(), 'accounting', 'pay_notify', 'datetime DEFAULT NULL COMMENT "下次催收时间"');
 
 call AddColumnUnlessExists(Database(), 'accounting_item', 'pay_mode', 'tinyint(3) DEFAULT NULL COMMENT "付款方式: 1-月付,3-季付,6-半年付,12-一年付"');
+
+-- 2017-07-10
+call AddColumnUnlessExists(Database(), 'timeline', 'log_type', 'tinyint(3) DEFAULT NULL COMMENT "日志类型: 1-联系客户, 9-其它"');
+call AddColumnUnlessExists(Database(), 'reg_abroad', 'date_last', 'datetime DEFAULT NULL COMMENT "最近联系客户日期"');
+call AddColumnUnlessExists(Database(), 'reg_abroad', 'title_last', 'varchar(100) DEFAULT NULL COMMENT "最近联系内容"');
+call AddColumnUnlessExists(Database(), 'reg_internal', 'date_last', 'datetime DEFAULT NULL COMMENT "最近联系客户日期"');
+call AddColumnUnlessExists(Database(), 'reg_internal', 'title_last', 'varchar(100) DEFAULT NULL COMMENT "最近联系内容"');
+call AddColumnUnlessExists(Database(), 'trademark', 'date_last', 'datetime DEFAULT NULL COMMENT "最近联系客户日期"');
+call AddColumnUnlessExists(Database(), 'trademark', 'title_last', 'varchar(100) DEFAULT NULL COMMENT "最近联系内容"');
+call AddColumnUnlessExists(Database(), 'patent', 'date_last', 'datetime DEFAULT NULL COMMENT "最近联系客户日期"');
+call AddColumnUnlessExists(Database(), 'patent', 'title_last', 'varchar(100) DEFAULT NULL COMMENT "最近联系内容"');
