@@ -213,7 +213,7 @@ namespace WebCenter.Web.Controllers
                 .Where(date2Created)
                 .Where(nameQuery)
                 .Where(codeQuery)
-                .OrderByDescending(item => item.code).Select(c => new
+                .OrderByDescending(item => item.code).Select(c => new Accounting
                 {
                     id = c.id,
                     code = c.code,
@@ -240,6 +240,10 @@ namespace WebCenter.Web.Controllers
 
                     pay_notify = c.pay_notify,
 
+                    date_start = null,
+                    date_end = null,
+                    period = null,
+
                 }).ToPagedList(request.index, request.size).ToList();
 
             var totalRecord = Uof.IaccountingService.GetAll(condition)
@@ -265,6 +269,36 @@ namespace WebCenter.Web.Controllers
                 total_size = totalRecord,
                 total_page = totalPages
             };
+
+            if (list != null && list.Count() > 0)
+            {
+                foreach (var item in list)
+                {
+                    var lastItem = Uof.Iaccounting_itemService.GetAll(a => a.master_id == item.id).Select(a=>new
+                    {
+                        id = a.id,
+                        date_start = a.date_start,
+                        date_end = a.date_end
+                    }).OrderByDescending(a => a.id).FirstOrDefault();
+
+                    if (lastItem != null)
+                    {
+                        item.date_start = lastItem.date_start;
+                        item.date_end = lastItem.date_end;
+
+                        var lastProgress = Uof.Iaccounting_progressService.GetAll(a => a.master_id == lastItem.id).Select(a => new
+                        {
+                            id = a.id,
+                            period = a.period,
+                        }).OrderByDescending(a => a.id).FirstOrDefault();
+
+                        if (lastProgress != null)
+                        {
+                            item.period = lastProgress.period;
+                        }
+                    }
+                }
+            }
 
             var result = new
             {

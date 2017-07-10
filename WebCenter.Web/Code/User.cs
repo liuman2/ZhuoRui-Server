@@ -298,4 +298,36 @@ namespace WebCenter.Web
         //public string type { get; set; }
         public string wechat { get; set; }
     }
+
+    public class Accounting
+    {
+        public int id { get; set; }
+        public string code { get; set; }
+        public int? customer_id { get; set; }
+        public string customer_name { get; set; }
+        public string name { get; set; }
+        public string address { get; set; }
+        public string legal { get; set; }
+        public int? status { get; set; }
+        public int? review_status { get; set; }
+        public DateTime? date_transaction { get; set; }
+        public float? amount_transaction { get; set; }
+        public int? amount_income { get; set; }
+        public int? amount_unreceive { get; set; }
+        public int? salesman_id { get; set; }
+        public string salesman_name { get; set; }
+
+        public int? assistant_id { get; set; }
+        public string assistant_name { get; set; }
+
+        public string finance_review_moment { get; set; }
+        public string submit_review_moment { get; set; }
+        public DateTime? date_created { get; set; }
+
+        public DateTime? pay_notify { get; set; }
+
+        public DateTime? date_start { get; set; }
+        public DateTime? date_end { get; set; }
+        public string period { get; set; }
+    }
 }
