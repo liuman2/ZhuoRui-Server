@@ -265,7 +265,9 @@ namespace WebCenter.Web.Controllers
                 date_pay = i.date_pay,
                 attachment_url = i.attachment_url,
                 description = i.description,
-                bank = i.bank
+                bank = i.bank,
+                currency = i.currency,
+                rate = i.rate ?? 1,
             }).OrderByDescending(i => i.id).ToList();
 
             var total = 0f;
@@ -273,10 +275,11 @@ namespace WebCenter.Web.Controllers
             {
                 foreach (var item in list)
                 {
-                    total += item.amount.Value;
+                    total += item.amount.Value * item.rate;
                 }
-                
-                pd.received = (float)Math.Round((double)(total * pd.rate), 2);
+
+                //pd.received = (float)Math.Round((double)(total * pd.rate), 2);
+                pd.received = (float)Math.Round((double)(total), 2);
 
                 var acc = list[0].account ?? "";
                 if (list[0].account.Length > 4)

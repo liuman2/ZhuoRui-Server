@@ -68,7 +68,7 @@ namespace WebCenter.Web.Controllers
                 source_name = _inc.source_name,
                 title = "新增收款",
                 is_system = 1,
-                content = string.Format("{0}新增了收款, 金额{1}", arrs[3], dbInc.amount)
+                content = string.Format("{0}新增了收款, 币别{1},金额{2}", arrs[3], dbInc.currency, dbInc.amount)
             });
 
             var auditor_id = GetAuditorByKey("CW_ID");
@@ -80,13 +80,11 @@ namespace WebCenter.Web.Controllers
                     source_id = _inc.source_id,
                     user_id = auditor_id,
                     router = GetRouter(_inc.source_name),
-                    content = string.Format("{0}新增了一笔{1}收款, 金额{2}", arrs[3], GetOrderName(_inc), dbInc.amount),
+                    content = string.Format("{0}新增了一笔{1}收款, 币别{2},金额{3}", arrs[3], GetOrderName(_inc), dbInc.currency, dbInc.amount),
                     read_status = 0
                 });
             }
-
             return SuccessResult;
-
         }
 
         private object GetOrderName(income _inc)
@@ -133,7 +131,9 @@ namespace WebCenter.Web.Controllers
                date_pay = i.date_pay,
                pay_way = i.pay_way,
                attachment_url = i.attachment_url,
-               description = i.description
+               description = i.description,
+               currency = i.currency,
+               rate = i.rate
            }).FirstOrDefault();
 
             return Json(dbIncome, JsonRequestBehavior.AllowGet);
@@ -149,6 +149,9 @@ namespace WebCenter.Web.Controllers
                 dbIncome.amount == _income.amount &&
                 dbIncome.date_pay == _income.date_pay &&
                 dbIncome.pay_way == _income.pay_way &&
+                dbIncome.currency == _income.currency &&
+                dbIncome.rate == _income.rate &&
+
                 dbIncome.attachment_url == _income.attachment_url)
             {
                 return SuccessResult;
@@ -169,6 +172,9 @@ namespace WebCenter.Web.Controllers
             dbIncome.pay_way = _income.pay_way;
             dbIncome.bank = _income.bank;
             dbIncome.attachment_url = _income.attachment_url;
+
+            dbIncome.currency = _income.currency;
+            dbIncome.rate = _income.rate;
 
             dbIncome.date_updated = DateTime.Now;
 

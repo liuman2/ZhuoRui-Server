@@ -422,7 +422,7 @@ namespace WebCenter.Web.Controllers
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
                 currency = a.currency,
-                rate = a.rate,
+                rate = a.rate ?? 1,
 
                 date_accept = a.date_accept,
                 date_empower = a.date_empower,
@@ -462,7 +462,9 @@ namespace WebCenter.Web.Controllers
                 date_pay = i.date_pay,
                 attachment_url = i.attachment_url,
                 description = i.description,
-                bank = i.bank
+                bank = i.bank,
+                currency = i.currency,
+                rate = i.rate ?? 1,
             }).ToList();
 
             var total = 0f;
@@ -470,21 +472,21 @@ namespace WebCenter.Web.Controllers
             {
                 foreach (var item in list)
                 {
-                    total += item.amount.Value;
+                    total += item.amount.Value * item.rate;
                 }
             }
 
-            var balance = reg.amount_transaction - total;
+            var balance = (reg.amount_transaction * reg.rate) - total;
             var incomes = new
             {
                 items = list,
                 total = total,
                 balance = balance,
-
                 rate = reg.rate,
-                local_amount = (float)Math.Round((double)(reg.amount_transaction * reg.rate ?? 0), 2),
-                local_total = (float)Math.Round((double)(total * reg.rate ?? 0), 2),
-                local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
+                amount = (float)Math.Round((double)(reg.amount_transaction * reg.rate ?? 0), 2),
+
+                //local_total = (float)Math.Round((double)(total * reg.rate ?? 0), 2),
+                //local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
             };
 
             return Json(new { order = reg, incomes = incomes }, JsonRequestBehavior.AllowGet);
@@ -561,20 +563,20 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
-                if (isChangeCurrency)
-                {
-                    var list = Uof.IincomeService.GetAll(i => i.source_id == _patent.id && i.source_name == "patent").ToList();
-                    if (list.Count() > 0)
-                    {
-                        foreach (var item in list)
-                        {
-                            item.currency = _patent.currency;
-                            item.rate = _patent.rate;
-                        }
+                //if (isChangeCurrency)
+                //{
+                //    var list = Uof.IincomeService.GetAll(i => i.source_id == _patent.id && i.source_name == "patent").ToList();
+                //    if (list.Count() > 0)
+                //    {
+                //        foreach (var item in list)
+                //        {
+                //            item.currency = _patent.currency;
+                //            item.rate = _patent.rate;
+                //        }
 
-                        Uof.IincomeService.UpdateEntities(list);
-                    }
-                }
+                //        Uof.IincomeService.UpdateEntities(list);
+                //    }
+                //}
 
                 Uof.ItimelineService.AddEntity(new timeline()
                 {

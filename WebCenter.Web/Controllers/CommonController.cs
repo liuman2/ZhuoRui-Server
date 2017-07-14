@@ -183,7 +183,7 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate,
+                        rate = a.rate ?? 1,
                         region = a.region
                     }).FirstOrDefault();
 
@@ -231,7 +231,7 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate,
+                        rate = a.rate ?? 1,
                         region = a.region
                     }).FirstOrDefault();
 
@@ -278,7 +278,7 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate
+                        rate = a.rate ?? 1
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -321,7 +321,7 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate
+                        rate = a.rate ?? 1
                     }).FirstOrDefault();
 
                     printData.date = annualLine.date_pay != null ? annualLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -362,7 +362,7 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate
+                        rate = a.rate ?? 1
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -404,7 +404,7 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate
+                        rate = a.rate ?? 1
                     }).FirstOrDefault();
 
                     printData.date = auditLine.date_pay != null ? auditLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -445,7 +445,7 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member5.area.name,
-                        rate = a.rate
+                        rate = a.rate ?? 1
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction!=null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -487,7 +487,7 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member5.area.name,
-                        rate = a.rate
+                        rate = a.rate ?? 1
                     }).FirstOrDefault();
 
                     printData.date = internalLine.date_pay != null ? internalLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -528,7 +528,7 @@ namespace WebCenter.Web.Controllers
                         type = a.patent_type,
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate
+                        rate = a.rate ?? 1
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -570,7 +570,7 @@ namespace WebCenter.Web.Controllers
                         type = a.patent_type,
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate
+                        rate = a.rate ?? 1
                     }).FirstOrDefault();
 
                     printData.date = patentLine.date_pay != null ? patentLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -611,7 +611,7 @@ namespace WebCenter.Web.Controllers
                         type = a.trademark_type,
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate,
+                        rate = a.rate ?? 1,
                         region = a.region
                     }).FirstOrDefault();
 
@@ -659,7 +659,7 @@ namespace WebCenter.Web.Controllers
                         type = a.trademark_type,
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate,
+                        rate = a.rate ?? 1,
                         region = a.region
                     }).FirstOrDefault();
 
@@ -708,7 +708,7 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member3.area.name,
-                        rate = a.rate
+                        rate = a.rate ?? 1
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -756,7 +756,7 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member3.area.name,
-                        rate = a.rate
+                        rate = a.rate ?? 1
                     }).FirstOrDefault();
 
                     printData.date = historyLine.date_pay != null ? historyLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -800,7 +800,7 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate
+                        rate = a.rate ?? 1
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -842,7 +842,7 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate
+                        rate = a.rate ?? 1
                     }).FirstOrDefault();
 
                     printData.date = subAuditLineLine.date_pay != null ? subAuditLineLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -1142,7 +1142,9 @@ namespace WebCenter.Web.Controllers
                 date_pay = i.date_pay,
                 attachment_url = i.attachment_url,
                 description = i.description,
-                bank = i.bank
+                bank = i.bank,
+                currency = i.currency,
+                rate = i.rate ?? 1,
             }).OrderByDescending(i => i.id).ToList();
 
             var total = 0f;
@@ -1150,7 +1152,7 @@ namespace WebCenter.Web.Controllers
             {
                 foreach (var item in list)
                 {
-                    total += item.amount.Value;
+                    total += item.amount.Value * item.rate;
                 }
                 if (pd.rate == null)
                 {
@@ -1160,8 +1162,11 @@ namespace WebCenter.Web.Controllers
                 {
                     pd.amount = 0;
                 }
-                pd.received = (float)Math.Round((double)(total * pd.rate), 2);
-                pd.balance = (float)Math.Round((double)(pd.amount * pd.rate - total * pd.rate), 2);
+                //pd.received = (float)Math.Round((double)(total * pd.rate), 2);
+                //pd.balance = (float)Math.Round((double)(pd.amount * pd.rate - total * pd.rate), 2);
+
+                pd.received = (float)Math.Round((double)(total), 2);
+                pd.balance = (float)Math.Round((double)(pd.amount * pd.rate - total), 2);
                 pd.payer = list[0].payer ?? "";
 
                 var acc = list[0].account ?? "";
@@ -1192,7 +1197,9 @@ namespace WebCenter.Web.Controllers
                 date_pay = i.date_pay,
                 attachment_url = i.attachment_url,
                 description = i.description,
-                bank = i.bank
+                bank = i.bank,
+                currency = i.currency,
+                rate = i.rate ?? 1,
             }).OrderByDescending(i => i.id).ToList();
 
             var total = 0f;
@@ -1200,7 +1207,7 @@ namespace WebCenter.Web.Controllers
             {
                 foreach (var item in list)
                 {
-                    total += item.amount.Value;
+                    total += item.amount.Value * item.rate;
                 }
 
                 if (pd.rate == null)
@@ -1211,8 +1218,16 @@ namespace WebCenter.Web.Controllers
                 {
                     pd.amount = 0;
                 }
-                pd.received = (float)Math.Round((double)(lineIncome.amount * pd.rate), 2); // (float)Math.Round((double)(total * pd.rate), 2);
-                pd.balance = (float)Math.Round((double)(pd.amount * pd.rate - total * pd.rate), 2);
+
+                if (lineIncome.rate == null)
+                {
+                    lineIncome.rate = 1;
+                }
+                //pd.received = (float)Math.Round((double)(lineIncome.amount * pd.rate), 2); // (float)Math.Round((double)(total * pd.rate), 2);
+                //pd.balance = (float)Math.Round((double)(pd.amount * pd.rate - total * pd.rate), 2);
+
+                pd.received = (float)Math.Round((double)(lineIncome.amount * lineIncome.rate), 2); // (float)Math.Round((double)(total * pd.rate), 2);
+                pd.balance = (float)Math.Round((double)(pd.amount * pd.rate - total), 2);
                 pd.payer = list[0].payer ?? "";
 
                 var acc = list[0].account ?? "";

@@ -427,7 +427,7 @@ namespace WebCenter.Web.Controllers
                 date_transaction = a.date_transaction,
                 amount_transaction = a.amount_transaction,
                 currency = a.currency,
-                rate = a.rate,
+                rate = a.rate ?? 1,
 
                 date_receipt = a.date_receipt,
                 date_accept = a.date_receipt,
@@ -478,7 +478,9 @@ namespace WebCenter.Web.Controllers
                 date_pay = i.date_pay,
                 attachment_url = i.attachment_url,
                 description = i.description,
-                bank = i.bank
+                bank = i.bank,
+                currency = i.currency,
+                rate = i.rate ?? 1,
             }).ToList();
 
             var total = 0f;
@@ -486,21 +488,21 @@ namespace WebCenter.Web.Controllers
             {
                 foreach (var item in list)
                 {
-                    total += item.amount.Value;
+                    total += item.amount.Value * item.rate;
                 }
             }
 
-            var balance = dbTrademar.amount_transaction - total;
+            var balance = (dbTrademar.amount_transaction * dbTrademar.rate) - total;
             var incomes = new
             {
                 items = list,
                 total = total,
                 balance = balance,
-
                 rate = dbTrademar.rate,
-                local_amount = (float)Math.Round((double)(dbTrademar.amount_transaction * dbTrademar.rate ?? 0), 2),
-                local_total = (float)Math.Round((double)(total * dbTrademar.rate ?? 0), 2),
-                local_balance = (float)Math.Round((double)(balance * dbTrademar.rate ?? 0), 2)
+                amount = (float)Math.Round((double)(dbTrademar.amount_transaction * dbTrademar.rate ?? 0), 2),
+
+                //local_total = (float)Math.Round((double)(total * dbTrademar.rate ?? 0), 2),
+                //local_balance = (float)Math.Round((double)(balance * dbTrademar.rate ?? 0), 2)
             };
 
             return Json(new { order = dbTrademar, incomes = incomes }, JsonRequestBehavior.AllowGet);
@@ -581,20 +583,20 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
-                if (isChangeCurrency)
-                {
-                    var list = Uof.IincomeService.GetAll(i => i.source_id == trade.id && i.source_name == "trademark").ToList();
-                    if (list.Count() > 0)
-                    {
-                        foreach (var item in list)
-                        {
-                            item.currency = trade.currency;
-                            item.rate = trade.rate;
-                        }
+                //if (isChangeCurrency)
+                //{
+                //    var list = Uof.IincomeService.GetAll(i => i.source_id == trade.id && i.source_name == "trademark").ToList();
+                //    if (list.Count() > 0)
+                //    {
+                //        foreach (var item in list)
+                //        {
+                //            item.currency = trade.currency;
+                //            item.rate = trade.rate;
+                //        }
 
-                        Uof.IincomeService.UpdateEntities(list);
-                    }
-                }
+                //        Uof.IincomeService.UpdateEntities(list);
+                //    }
+                //}
 
                 Uof.ItimelineService.AddEntity(new timeline()
                 {

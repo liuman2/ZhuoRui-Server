@@ -432,7 +432,7 @@ namespace WebCenter.Web.Controllers
                         JavaScriptSerializer jsonSerialize = new JavaScriptSerializer();
                         var obj = jsonSerialize.Deserialize<HistoryAbroad>(dbHistoryRecord.value);
                         if (obj.name_en != null || obj.name_cn != null || obj.address != null || obj.reg_no != null)
-                        {                            
+                        {
                             if (obj.name_cn != null && obj.name_cn.Length > 0)
                             {
                                 historyReocrd.name_cn = dbReg.name_cn + "|" + dbHistoryRecord.date_created.Value.ToString("yyyy-MM-dd");
@@ -497,7 +497,7 @@ namespace WebCenter.Web.Controllers
                 account = a.bank_account.account,
                 date_finish = a.date_finish,
                 currency = a.currency,
-                rate = a.rate,
+                rate = a.rate ?? 1,
                 progress = a.progress,
 
                 invoice_name = a.invoice_name,
@@ -529,7 +529,8 @@ namespace WebCenter.Web.Controllers
 
             }).FirstOrDefault();
 
-            var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "reg_abroad").Select(i=> new {
+            var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "reg_abroad").Select(i => new
+            {
                 id = i.id,
                 customer_id = i.customer_id,
                 source_id = i.source_id,
@@ -541,7 +542,9 @@ namespace WebCenter.Web.Controllers
                 date_pay = i.date_pay,
                 attachment_url = i.attachment_url,
                 description = i.description,
-                bank = i.bank
+                bank = i.bank,
+                currency = i.currency,
+                rate = i.rate ?? 1,
             }).ToList();
 
             var total = 0f;
@@ -549,21 +552,21 @@ namespace WebCenter.Web.Controllers
             {
                 foreach (var item in list)
                 {
-                    total += item.amount.Value;
+                    total += item.amount.Value * item.rate;
                 }
             }
 
-            var balance = reg.amount_transaction - total;
+            var balance = (reg.amount_transaction * reg.rate) - total;
             var incomes = new
             {
                 items = list,
                 total = total,
                 balance = balance,
-
                 rate = reg.rate,
-                local_amount = (float)Math.Round((double)(reg.amount_transaction * reg.rate  ?? 0), 2),
-                local_total = (float)Math.Round((double)(total * reg.rate ?? 0), 2),
-                local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
+                amount = (float)Math.Round((double)(reg.amount_transaction * reg.rate ?? 0), 2),
+
+                //local_total = (float)Math.Round((double)(total * reg.rate ?? 0), 2),
+                //local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
             };
 
             var shareholderList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_abroad" && s.type == "股东" && s.changed_type != "exit").ToList();
@@ -695,20 +698,20 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
-                if (isChangeCurrency)
-                {
-                    var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "reg_abroad").ToList();
-                    if (list.Count() > 0)
-                    {
-                        foreach (var item in list)
-                        {
-                            item.currency = reg.currency;
-                            item.rate = reg.rate;
-                        }
+                //if (isChangeCurrency)
+                //{
+                //    var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "reg_abroad").ToList();
+                //    if (list.Count() > 0)
+                //    {
+                //        foreach (var item in list)
+                //        {
+                //            item.currency = reg.currency;
+                //            item.rate = reg.rate;
+                //        }
 
-                        Uof.IincomeService.UpdateEntities(list);
-                    }
-                }
+                //        Uof.IincomeService.UpdateEntities(list);
+                //    }
+                //}
 
                 Uof.ItimelineService.AddEntity(new timeline()
                 {

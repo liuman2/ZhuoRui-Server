@@ -548,7 +548,7 @@ namespace WebCenter.Web.Controllers
                 account = a.bank_account.account,
 
                 currency = a.currency,
-                rate = a.rate,
+                rate = a.rate ?? 1,
 
                 source_type = a.source_type,
                 source_id = a.source_id,
@@ -631,44 +631,44 @@ namespace WebCenter.Web.Controllers
                 })
                 .ToList();
 
-            var list = Uof.IincomeService.GetAll(i => i.source_id == acc.id && i.source_name == "accounting").Select(i => new {
-                id = i.id,
-                customer_id = i.customer_id,
-                source_id = i.source_id,
-                source_name = i.source_name,
-                payer = i.payer,
-                pay_way = i.pay_way,
-                account = i.account,
-                amount = i.amount,
-                date_pay = i.date_pay,
-                attachment_url = i.attachment_url,
-                description = i.description,
-                bank = i.bank
-            }).ToList();
+            //var list = Uof.IincomeService.GetAll(i => i.source_id == acc.id && i.source_name == "accounting").Select(i => new {
+            //    id = i.id,
+            //    customer_id = i.customer_id,
+            //    source_id = i.source_id,
+            //    source_name = i.source_name,
+            //    payer = i.payer,
+            //    pay_way = i.pay_way,
+            //    account = i.account,
+            //    amount = i.amount,
+            //    date_pay = i.date_pay,
+            //    attachment_url = i.attachment_url,
+            //    description = i.description,
+            //    bank = i.bank
+            //}).ToList();
 
-            var total = 0f;
-            if (list.Count > 0)
-            {
-                foreach (var item in list)
-                {
-                    total += item.amount.Value;
-                }
-            }
+            //var total = 0f;
+            //if (list.Count > 0)
+            //{
+            //    foreach (var item in list)
+            //    {
+            //        total += item.amount.Value;
+            //    }
+            //}
 
-            var balance = acc.amount_transaction - total;
-            var incomes = new
-            {
-                items = list,
-                total = total,
-                balance = balance,
+            //var balance = acc.amount_transaction - total;
+            //var incomes = new
+            //{
+            //    items = list,
+            //    total = total,
+            //    balance = balance,
 
-                rate = acc.rate,
-                local_amount = (float)Math.Round((double)(acc.amount_transaction * acc.rate ?? 0), 2),
-                local_total = (float)Math.Round((double)(total * acc.rate ?? 0), 2),
-                local_balance = (float)Math.Round((double)(balance * acc.rate ?? 0), 2)
-            };
+            //    rate = acc.rate,
+            //    local_amount = (float)Math.Round((double)(acc.amount_transaction * acc.rate ?? 0), 2),
+            //    local_total = (float)Math.Round((double)(total * acc.rate ?? 0), 2),
+            //    local_balance = (float)Math.Round((double)(balance * acc.rate ?? 0), 2)
+            //};
 
-            return Json(new { order = acc, incomes = incomes, items = items }, JsonRequestBehavior.AllowGet);
+            return Json(new { order = acc, items = items }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -1148,7 +1148,8 @@ namespace WebCenter.Web.Controllers
             var reg = Uof.Iaccounting_itemService.GetAll(s => s.id == id).Select(s => new
             {
                 amount_transaction = s.amount_transaction,
-                rate = s.rate,
+                currency = s.currency,
+                rate = s.rate ?? 1,
 
             }).FirstOrDefault();
 
@@ -1164,7 +1165,10 @@ namespace WebCenter.Web.Controllers
                 date_pay = i.date_pay,
                 attachment_url = i.attachment_url,
                 description = i.description,
-                bank = i.bank
+                bank = i.bank,
+                currency = i.currency,
+                rate = i.rate ?? 1,
+
             }).ToList();
 
             var total = 0f;
@@ -1172,21 +1176,21 @@ namespace WebCenter.Web.Controllers
             {
                 foreach (var item in list)
                 {
-                    total += item.amount.Value;
+                    total += item.amount.Value * item.rate;
                 }
             }
 
-            var balance = reg.amount_transaction - total;
+            var balance = (reg.amount_transaction * reg.rate) - total;
             var incomes = new
             {
                 items = list,
                 total = total,
                 balance = balance,
-
                 rate = reg.rate,
-                local_amount = (float)Math.Round((double)(reg.amount_transaction * reg.rate ?? 0), 2),
-                local_total = (float)Math.Round((double)(total * reg.rate ?? 0), 2),
-                local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
+                amount = (float)Math.Round((double)(reg.amount_transaction * reg.rate ?? 0), 2),
+
+                //local_total = (float)Math.Round((double)(total * reg.rate ?? 0), 2),
+                //local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
             };
 
             //var incomes = Uof.IincomeService.GetAll(i => i.source_id == id && i.source_name == "accounting_item").ToList();

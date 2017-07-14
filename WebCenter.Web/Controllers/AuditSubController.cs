@@ -181,20 +181,20 @@ namespace WebCenter.Web.Controllers
 
             if (r)
             {
-                if (isChangeCurrency)
-                {
-                    var list = Uof.IincomeService.GetAll(i => i.source_id == _audit.id && i.source_name == "sub_audit").ToList();
-                    if (list.Count() > 0)
-                    {
-                        foreach (var item in list)
-                        {
-                            item.currency = _audit.currency;
-                            item.rate = _audit.rate;
-                        }
+                //if (isChangeCurrency)
+                //{
+                //    var list = Uof.IincomeService.GetAll(i => i.source_id == _audit.id && i.source_name == "sub_audit").ToList();
+                //    if (list.Count() > 0)
+                //    {
+                //        foreach (var item in list)
+                //        {
+                //            item.currency = _audit.currency;
+                //            item.rate = _audit.rate;
+                //        }
 
-                        Uof.IincomeService.UpdateEntities(list);
-                    }
-                }
+                //        Uof.IincomeService.UpdateEntities(list);
+                //    }
+                //}
 
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
@@ -637,7 +637,8 @@ namespace WebCenter.Web.Controllers
             var reg = Uof.Isub_auditService.GetAll(s => s.id == id).Select(s=> new
             {
                 amount_transaction = s.amount_transaction,
-                rate = s.rate,
+                currency = s.currency,
+                rate = s.rate ?? 1,
 
             }).FirstOrDefault();
 
@@ -653,7 +654,9 @@ namespace WebCenter.Web.Controllers
                 date_pay = i.date_pay,
                 attachment_url = i.attachment_url,
                 description = i.description,
-                bank = i.bank
+                bank = i.bank,
+                currency = i.currency,
+                rate = i.rate ?? 1,
             }).ToList();
 
             var total = 0f;
@@ -661,21 +664,21 @@ namespace WebCenter.Web.Controllers
             {
                 foreach (var item in list)
                 {
-                    total += item.amount.Value;
+                    total += item.amount.Value * item.rate;
                 }
             }
 
-            var balance = reg.amount_transaction - total;
+            var balance = (reg.amount_transaction * reg.rate) - total;
             var incomes = new
             {
                 items = list,
                 total = total,
                 balance = balance,
-
                 rate = reg.rate,
-                local_amount = (float)Math.Round((double)(reg.amount_transaction * reg.rate ?? 0), 2),
-                local_total = (float)Math.Round((double)(total * reg.rate ?? 0), 2),
-                local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
+                amount = (float)Math.Round((double)(reg.amount_transaction * reg.rate ?? 0), 2),
+
+                //local_total = (float)Math.Round((double)(total * reg.rate ?? 0), 2),
+                //local_balance = (float)Math.Round((double)(balance * reg.rate ?? 0), 2)
             };
 
             return Json(incomes, JsonRequestBehavior.AllowGet);
