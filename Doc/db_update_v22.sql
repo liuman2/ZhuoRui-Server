@@ -56,3 +56,7 @@ call AddColumnUnlessExists(Database(), 'trademark', 'date_last', 'datetime DEFAU
 call AddColumnUnlessExists(Database(), 'trademark', 'title_last', 'varchar(100) DEFAULT NULL COMMENT "最近联系内容"');
 call AddColumnUnlessExists(Database(), 'patent', 'date_last', 'datetime DEFAULT NULL COMMENT "最近联系客户日期"');
 call AddColumnUnlessExists(Database(), 'patent', 'title_last', 'varchar(100) DEFAULT NULL COMMENT "最近联系内容"');
+
+-- 2017-07-17
+call AddColumnUnlessExists(Database(), 'reg_abroad', 'trader_id', 'int(11) DEFAULT NULL COMMENT "渠道商"');
+ALTER TABLE reg_abroad ADD CONSTRAINT fk_reg_abroad_trader_id FOREIGN KEY (trader_id) REFERENCES customer(id);

@@ -216,8 +216,13 @@ namespace WebCenter.Entities
     
         public string title_last { get; set; }
     
+    
+    
+        public Nullable<int> trader_id { get; set; }
+    
         public virtual bank_account bank_account { get; set; }
         public virtual customer customer { get; set; }
+        public virtual customer customer1 { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }

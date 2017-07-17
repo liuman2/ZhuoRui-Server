@@ -24,10 +24,11 @@ namespace WebCenter.Entities
             this.incomes = new HashSet<income>();
             this.customer_timeline = new HashSet<customer_timeline>();
             this.accountings = new HashSet<accounting>();
-            this.reg_abroad = new HashSet<reg_abroad>();
             this.patents = new HashSet<patent>();
             this.reg_internal = new HashSet<reg_internal>();
             this.trademarks = new HashSet<trademark>();
+            this.reg_abroad = new HashSet<reg_abroad>();
+            this.reg_abroad1 = new HashSet<reg_abroad>();
         }
     
     
@@ -170,9 +171,10 @@ namespace WebCenter.Entities
         public virtual member member1 { get; set; }
         public virtual ICollection<customer_timeline> customer_timeline { get; set; }
         public virtual ICollection<accounting> accountings { get; set; }
-        public virtual ICollection<reg_abroad> reg_abroad { get; set; }
         public virtual ICollection<patent> patents { get; set; }
         public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual ICollection<trademark> trademarks { get; set; }
+        public virtual ICollection<reg_abroad> reg_abroad { get; set; }
+        public virtual ICollection<reg_abroad> reg_abroad1 { get; set; }
     }
 }

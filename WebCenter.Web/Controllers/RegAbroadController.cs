@@ -404,6 +404,9 @@ namespace WebCenter.Web.Controllers
                 shareholder = a.shareholder,
                 need_annual = a.need_annual,
 
+                trader_id = a.trader_id,
+                trader_name = a.customer1.name
+
             }).FirstOrDefault();
 
             var shareholderList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_abroad" && s.type == "股东" && s.changed_type != "exit").ToList();
@@ -526,6 +529,9 @@ namespace WebCenter.Web.Controllers
                 shareholder = a.shareholder,
                 order_status = a.order_status ?? 0,
                 need_annual = a.need_annual ?? 1,
+
+                trader_id = a.trader_id,
+                trader_name = a.customer1.name,
 
             }).FirstOrDefault();
 
@@ -668,6 +674,8 @@ namespace WebCenter.Web.Controllers
             dbReg.rate = reg.rate;
             dbReg.assistant_id = reg.assistant_id;
             dbReg.shareholder = reg.shareholder;
+
+            dbReg.trader_id = reg.trader_id;
 
             dbReg.need_annual = reg.need_annual ?? 1;
 

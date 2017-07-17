@@ -467,8 +467,28 @@ namespace WebCenter.Web.Controllers
                 total_page = totalPages
             };
 
+            var orderName = "";
+            switch (source)
+            {
+                case "reg_abroad":
+                    orderName = Uof.Ireg_abroadService.GetAll(a => a.id == source_id).Select(a => a.name_en ?? a.name_cn).FirstOrDefault();
+                    break;
+                case "reg_internal":
+                    orderName = Uof.Ireg_internalService.GetAll(a => a.id == source_id).Select(a => a.name_cn).FirstOrDefault();
+                    break;
+                case "patent":
+                    orderName = Uof.IpatentService.GetAll(a => a.id == source_id).Select(a => a.name).FirstOrDefault();
+                    break;
+                case "trademark":
+                    orderName = Uof.ItrademarkService.GetAll(a => a.id == source_id).Select(a => a.name).FirstOrDefault();
+                    break;
+                default:
+                    break;
+            }
+
             var result = new
             {
+                orderName = orderName,
                 page = page,
                 items = list
             };

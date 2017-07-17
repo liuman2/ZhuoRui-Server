@@ -157,8 +157,8 @@ namespace WebCenter.Web.Controllers
                     {
                         print_type = "abroad",
                         id = a.id,
-                        accounter = a.member5.name, // 会计
-                        cashier = a.member1.name, // 出纳
+                        accounter = a.member5.name,     // 提交审核人
+                        cashier = a.member1.name,       // 出纳 财务审核人
                         amount = a.amount_transaction,
                         balance = a.amount_transaction,
                         attachments = 0,
@@ -184,7 +184,9 @@ namespace WebCenter.Web.Controllers
                         currency = a.currency,
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
-                        region = a.region
+                        region = a.region,
+                        trader = a.customer1.name
+
                     }).FirstOrDefault();
 
                     if (!string.IsNullOrEmpty(printData.region))
@@ -697,7 +699,7 @@ namespace WebCenter.Web.Controllers
                         date = "",
                         mode = "",
                         ordername = "",
-                        others = "",
+                        others = a.value ?? "",
                         payer = "",
                         pay_info = "",
                         pay_way = "",
@@ -745,7 +747,7 @@ namespace WebCenter.Web.Controllers
                         date = "",
                         mode = "",
                         ordername = "",
-                        others = "",
+                        others = a.value ?? "",
                         payer = "",
                         pay_info = "",
                         pay_way = "",
@@ -758,6 +760,8 @@ namespace WebCenter.Web.Controllers
                         area = a.member3.area.name,
                         rate = a.rate ?? 1
                     }).FirstOrDefault();
+
+
 
                     printData.date = historyLine.date_pay != null ? historyLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}其他", printData.area);

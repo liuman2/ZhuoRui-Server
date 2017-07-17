@@ -128,6 +128,11 @@ namespace WebCenter.Web
         public int? source_id { get; set; }
 
         public string region { get; set; }
+
+        /// <summary>
+        /// 渠道商
+        /// </summary>
+        public string trader { get; set; }
     }
 
     public class ReceiptPrintData
@@ -169,5 +174,7 @@ namespace WebCenter.Web
         public string finance_reviewer { get; set; }
 
         public string date { get; set; }
+
+        public string trader { get; set; }
     }
 }
