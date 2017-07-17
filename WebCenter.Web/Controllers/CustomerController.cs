@@ -296,6 +296,9 @@ namespace WebCenter.Web.Controllers
                     mailling_province = c.mailling_province,
                     mailling_city = c.mailling_city,
                     mailling_county = c.mailling_county,
+
+                    salesman_id = c.salesman_id,
+                    salesman = c.member1.name,
                 }).ToPagedList(index, size).ToList();
 
             var totalRecord = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Count();

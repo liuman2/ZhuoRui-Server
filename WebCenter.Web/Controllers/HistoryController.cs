@@ -471,7 +471,7 @@ namespace WebCenter.Web.Controllers
             switch (source)
             {
                 case "reg_abroad":
-                    orderName = Uof.Ireg_abroadService.GetAll(a => a.id == source_id).Select(a => a.name_en ?? a.name_cn).FirstOrDefault();
+                    orderName = Uof.Ireg_abroadService.GetAll(a => a.id == source_id).Select(a => a.name_en + " " + a.name_cn).FirstOrDefault();
                     break;
                 case "reg_internal":
                     orderName = Uof.Ireg_internalService.GetAll(a => a.id == source_id).Select(a => a.name_cn).FirstOrDefault();
