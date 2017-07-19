@@ -199,6 +199,9 @@
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="customer_id" Type="int" />
+          <Property Name="source" Type="varchar" MaxLength="30" />
+          <Property Name="source_id" Type="int" />
+          <Property Name="source_code" Type="varchar" MaxLength="20" />
           <Property Name="code" Type="varchar" MaxLength="20" />
           <Property Name="type" Type="varchar" MaxLength="10" />
           <Property Name="name_cn" Type="varchar" MaxLength="100" />
@@ -242,9 +245,6 @@
           <Property Name="turnover_currency" Type="varchar" MaxLength="10" />
           <Property Name="assistant_id" Type="int" />
           <Property Name="account_period2" Type="datetime" Precision="0" />
-          <Property Name="source" Type="varchar" MaxLength="30" />
-          <Property Name="source_id" Type="int" />
-          <Property Name="source_code" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="audit_bank">
           <Key>
@@ -551,6 +551,9 @@
           <Property Name="review_date" Type="datetime" Precision="0" />
           <Property Name="review_moment" Type="varchar" MaxLength="50" />
           <Property Name="paymode" Type="varchar" MaxLength="10" />
+          <Property Name="province" Type="varchar" MaxLength="20" />
+          <Property Name="city" Type="varchar" MaxLength="20" />
+          <Property Name="county" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="member">
           <Key>
@@ -567,10 +570,10 @@
           <Property Name="mobile" Type="varchar" MaxLength="20" />
           <Property Name="hiredate" Type="datetime" Precision="0" />
           <Property Name="birthday" Type="datetime" Precision="0" />
-          <Property Name="url" Type="varchar" MaxLength="120" />
           <Property Name="status" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="url" Type="varchar" MaxLength="120" />
         </EntityType>
         <EntityType Name="menu">
           <Key>
@@ -1687,18 +1690,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_charge_id">
-          <End Role="member" Type="Self.member" Multiplicity="0..1" />
-          <End Role="lecture" Type="Self.lecture" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="lecture">
-              <PropertyRef Name="charge_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="fk_internal_assistant_id">
           <End Role="member" Type="Self.member" Multiplicity="0..1" />
           <End Role="reg_internal" Type="Self.reg_internal" Multiplicity="*" />
@@ -2481,10 +2472,6 @@
             <End Role="member" EntitySet="member" />
             <End Role="audit" EntitySet="audit" />
           </AssociationSet>
-          <AssociationSet Name="fk_charge_id" Association="Self.fk_charge_id">
-            <End Role="member" EntitySet="member" />
-            <End Role="lecture" EntitySet="lecture" />
-          </AssociationSet>
           <AssociationSet Name="fk_internal_assistant_id" Association="Self.fk_internal_assistant_id">
             <End Role="member" EntitySet="member" />
             <End Role="reg_internal" EntitySet="reg_internal" />
@@ -2748,15 +2735,6 @@
           <AssociationSet Name="fk_annual_exam_assistant_id" Association="DataCenter.Entities.fk_annual_exam_assistant_id">
             <End Role="member" EntitySet="members" />
             <End Role="annual_exam" EntitySet="annual_exam" />
-          </AssociationSet>
-          <EntitySet Name="mails" EntityType="DataCenter.Entities.mail" />
-          <AssociationSet Name="fk_mail_audit_id" Association="DataCenter.Entities.fk_mail_audit_id">
-            <End Role="member" EntitySet="members" />
-            <End Role="mail" EntitySet="mails" />
-          </AssociationSet>
-          <AssociationSet Name="fk_mail_creator_id" Association="DataCenter.Entities.fk_mail_creator_id">
-            <End Role="member" EntitySet="members" />
-            <End Role="mail" EntitySet="mails" />
           </AssociationSet>
           <EntitySet Name="settings" EntityType="DataCenter.Entities.setting" />
           <EntitySet Name="receipts" EntityType="DataCenter.Entities.receipt" />
@@ -3104,6 +3082,15 @@
             <End Role="member" EntitySet="members" />
             <End Role="reg_abroad" EntitySet="reg_abroad" />
           </AssociationSet>
+          <EntitySet Name="mails" EntityType="DataCenter.Entities.mail" />
+          <AssociationSet Name="fk_mail_audit_id" Association="DataCenter.Entities.fk_mail_audit_id">
+            <End Role="member" EntitySet="members" />
+            <End Role="mail" EntitySet="mails" />
+          </AssociationSet>
+          <AssociationSet Name="fk_mail_creator_id" Association="DataCenter.Entities.fk_mail_creator_id">
+            <End Role="member" EntitySet="members" />
+            <End Role="mail" EntitySet="mails" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -3329,8 +3316,6 @@
           <NavigationProperty Name="annual_exam5" Relationship="DataCenter.Entities.annual_ibfk_submit_reviewer" FromRole="member" ToRole="annual_exam" />
           <NavigationProperty Name="annual_exam6" Relationship="DataCenter.Entities.annual_ibfk_waiter" FromRole="member" ToRole="annual_exam" />
           <NavigationProperty Name="annual_exam7" Relationship="DataCenter.Entities.fk_annual_exam_assistant_id" FromRole="member" ToRole="annual_exam" />
-          <NavigationProperty Name="mails" Relationship="DataCenter.Entities.fk_mail_audit_id" FromRole="member" ToRole="mail" />
-          <NavigationProperty Name="mails1" Relationship="DataCenter.Entities.fk_mail_creator_id" FromRole="member" ToRole="mail" />
           <NavigationProperty Name="receipts" Relationship="DataCenter.Entities.receipt_ibfk_creator" FromRole="member" ToRole="receipt" />
           <NavigationProperty Name="sub_audit" Relationship="DataCenter.Entities.audit_sub_ibfk_accountant" FromRole="member" ToRole="sub_audit" />
           <NavigationProperty Name="sub_audit1" Relationship="DataCenter.Entities.audit_sub_ibfk_creator" FromRole="member" ToRole="sub_audit" />
@@ -3395,6 +3380,8 @@
           <NavigationProperty Name="reg_abroad5" Relationship="DataCenter.Entities.abroad_ibfk_submit_reviewer" FromRole="member" ToRole="reg_abroad" />
           <NavigationProperty Name="reg_abroad6" Relationship="DataCenter.Entities.abroad_ibfk_waiter" FromRole="member" ToRole="reg_abroad" />
           <NavigationProperty Name="reg_abroad7" Relationship="DataCenter.Entities.fk_abroad_assistant_id" FromRole="member" ToRole="reg_abroad" />
+          <NavigationProperty Name="mails" Relationship="DataCenter.Entities.fk_mail_audit_id" FromRole="member" ToRole="mail" />
+          <NavigationProperty Name="mails1" Relationship="DataCenter.Entities.fk_mail_creator_id" FromRole="member" ToRole="mail" />
           </EntityType>
         <Association Name="member_ibfk_3">
           <End Type="DataCenter.Entities.area" Role="area" Multiplicity="0..1" />
@@ -3723,61 +3710,6 @@
             </Principal>
             <Dependent Role="annual_exam">
               <PropertyRef Name="assistant_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="mail">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="owner" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="letter_type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="merchant" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="date_at" Type="DateTime" />
-          <Property Name="description" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="file_url" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="creator_id" Type="Int32" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-          <Property Name="address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="audit_id" Type="Int32" />
-          <Property Name="order_source" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="order_id" Type="Int32" />
-          <Property Name="order_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="order_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="receiver" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="review_status" Type="SByte" />
-          <Property Name="review_date" Type="DateTime" />
-          <Property Name="review_moment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="paymode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="member" Relationship="DataCenter.Entities.fk_mail_audit_id" FromRole="mail" ToRole="member" />
-          <NavigationProperty Name="member1" Relationship="DataCenter.Entities.fk_mail_creator_id" FromRole="mail" ToRole="member" />
-        </EntityType>
-        <Association Name="fk_mail_audit_id">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.mail" Role="mail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="mail">
-              <PropertyRef Name="audit_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_mail_creator_id">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.mail" Role="mail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="mail">
-              <PropertyRef Name="creator_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5511,6 +5443,64 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="mail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="owner" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="letter_type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="merchant" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="date_at" Type="DateTime" />
+          <Property Name="description" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="file_url" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="creator_id" Type="Int32" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <Property Name="address" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="audit_id" Type="Int32" />
+          <Property Name="order_source" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="order_id" Type="Int32" />
+          <Property Name="order_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="order_name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="receiver" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="review_status" Type="SByte" />
+          <Property Name="review_date" Type="DateTime" />
+          <Property Name="review_moment" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="paymode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="province" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="city" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="county" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="member" Relationship="DataCenter.Entities.fk_mail_audit_id" FromRole="mail" ToRole="member" />
+          <NavigationProperty Name="member1" Relationship="DataCenter.Entities.fk_mail_creator_id" FromRole="mail" ToRole="member" />
+        </EntityType>
+        <Association Name="fk_mail_audit_id">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.mail" Role="mail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="mail">
+              <PropertyRef Name="audit_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_mail_creator_id">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.mail" Role="mail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="mail">
+              <PropertyRef Name="creator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5876,36 +5866,6 @@
                 <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="mails">
-            <EntityTypeMapping TypeName="DataCenter.Entities.mail">
-              <MappingFragment StoreEntitySet="mail">
-                <ScalarProperty Name="paymode" ColumnName="paymode" />
-                <ScalarProperty Name="review_moment" ColumnName="review_moment" />
-                <ScalarProperty Name="review_date" ColumnName="review_date" />
-                <ScalarProperty Name="review_status" ColumnName="review_status" />
-                <ScalarProperty Name="tel" ColumnName="tel" />
-                <ScalarProperty Name="receiver" ColumnName="receiver" />
-                <ScalarProperty Name="order_name" ColumnName="order_name" />
-                <ScalarProperty Name="order_code" ColumnName="order_code" />
-                <ScalarProperty Name="order_id" ColumnName="order_id" />
-                <ScalarProperty Name="order_source" ColumnName="order_source" />
-                <ScalarProperty Name="audit_id" ColumnName="audit_id" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
-                <ScalarProperty Name="file_url" ColumnName="file_url" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="date_at" ColumnName="date_at" />
-                <ScalarProperty Name="code" ColumnName="code" />
-                <ScalarProperty Name="merchant" ColumnName="merchant" />
-                <ScalarProperty Name="letter_type" ColumnName="letter_type" />
-                <ScalarProperty Name="owner" ColumnName="owner" />
-                <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -6596,6 +6556,39 @@
                 <ScalarProperty Name="name_cn" ColumnName="name_cn" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mails">
+            <EntityTypeMapping TypeName="DataCenter.Entities.mail">
+              <MappingFragment StoreEntitySet="mail">
+                <ScalarProperty Name="county" ColumnName="county" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="paymode" ColumnName="paymode" />
+                <ScalarProperty Name="review_moment" ColumnName="review_moment" />
+                <ScalarProperty Name="review_date" ColumnName="review_date" />
+                <ScalarProperty Name="review_status" ColumnName="review_status" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="receiver" ColumnName="receiver" />
+                <ScalarProperty Name="order_name" ColumnName="order_name" />
+                <ScalarProperty Name="order_code" ColumnName="order_code" />
+                <ScalarProperty Name="order_id" ColumnName="order_id" />
+                <ScalarProperty Name="order_source" ColumnName="order_source" />
+                <ScalarProperty Name="audit_id" ColumnName="audit_id" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
+                <ScalarProperty Name="file_url" ColumnName="file_url" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="date_at" ColumnName="date_at" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="merchant" ColumnName="merchant" />
+                <ScalarProperty Name="letter_type" ColumnName="letter_type" />
+                <ScalarProperty Name="owner" ColumnName="owner" />
+                <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -26,8 +26,6 @@ namespace WebCenter.Entities
             this.annual_exam5 = new HashSet<annual_exam>();
             this.annual_exam6 = new HashSet<annual_exam>();
             this.annual_exam7 = new HashSet<annual_exam>();
-            this.mails = new HashSet<mail>();
-            this.mails1 = new HashSet<mail>();
             this.receipts = new HashSet<receipt>();
             this.sub_audit = new HashSet<sub_audit>();
             this.sub_audit1 = new HashSet<sub_audit>();
@@ -92,6 +90,8 @@ namespace WebCenter.Entities
             this.reg_abroad5 = new HashSet<reg_abroad>();
             this.reg_abroad6 = new HashSet<reg_abroad>();
             this.reg_abroad7 = new HashSet<reg_abroad>();
+            this.mails = new HashSet<mail>();
+            this.mails1 = new HashSet<mail>();
         }
     
     
@@ -169,8 +169,6 @@ namespace WebCenter.Entities
         public virtual ICollection<annual_exam> annual_exam5 { get; set; }
         public virtual ICollection<annual_exam> annual_exam6 { get; set; }
         public virtual ICollection<annual_exam> annual_exam7 { get; set; }
-        public virtual ICollection<mail> mails { get; set; }
-        public virtual ICollection<mail> mails1 { get; set; }
         public virtual ICollection<receipt> receipts { get; set; }
         public virtual ICollection<sub_audit> sub_audit { get; set; }
         public virtual ICollection<sub_audit> sub_audit1 { get; set; }
@@ -235,5 +233,7 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad5 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad6 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad7 { get; set; }
+        public virtual ICollection<mail> mails { get; set; }
+        public virtual ICollection<mail> mails1 { get; set; }
     }
 }

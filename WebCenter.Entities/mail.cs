@@ -112,6 +112,18 @@ namespace WebCenter.Entities
     
         public string paymode { get; set; }
     
+    
+    
+        public string province { get; set; }
+    
+    
+    
+        public string city { get; set; }
+    
+    
+    
+        public string county { get; set; }
+    
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
     }

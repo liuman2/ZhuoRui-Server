@@ -16,6 +16,35 @@ namespace WebCenter.Web.Controllers
         {
         }
 
+        public ActionResult GetContacts(int order_id, string order_source)
+        {
+            int? customerId = 0;
+            switch (order_source)
+            {
+                case "reg_abroad":
+                    customerId = Uof.Ireg_abroadService.GetAll(a => a.id == order_id).Select(a => a.customer_id).FirstOrDefault();
+                    break;
+                case "reg_internal":
+                    customerId = Uof.Ireg_internalService.GetAll(a => a.id == order_id).Select(a => a.customer_id).FirstOrDefault();
+                    break;
+                case "audit":
+                    customerId = Uof.IauditService.GetAll(a => a.id == order_id).Select(a => a.customer_id).FirstOrDefault();
+                    break;
+                case "trademark":
+                    customerId = Uof.ItrademarkService.GetAll(a => a.id == order_id).Select(a => a.customer_id).FirstOrDefault();
+                    break;
+                case "patent":
+                    customerId = Uof.IpatentService.GetAll(a => a.id == order_id).Select(a => a.customer_id).FirstOrDefault();
+                    break;
+                default:
+                    break;
+            }
+
+            var list = Uof.IcontactService.GetAll(c => c.customer_id == customerId).ToList();
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Search(LetterRequest request)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
@@ -420,6 +449,10 @@ namespace WebCenter.Web.Controllers
             _c.paymode = c.paymode;
             _c.tel = c.tel;
 
+            _c.province = c.province;
+            _c.city = c.city;
+            _c.county = c.county;
+
             var r = Uof.ImailService.UpdateEntity(_c);
 
             if (r)
@@ -500,7 +533,12 @@ namespace WebCenter.Web.Controllers
                 tel = c.tel,
                 creator_id = c.creator_id,
                 creator_name = c.member1.name,
-                paymode = c.paymode
+                paymode = c.paymode,
+
+                province = c.province,
+                city = c.city,
+                county = c.county,
+
             }).FirstOrDefault();
 
             return Json(_l, JsonRequestBehavior.AllowGet);

@@ -63,3 +63,11 @@ ALTER TABLE reg_abroad ADD CONSTRAINT fk_reg_abroad_trader_id FOREIGN KEY (trade
 
 -- 2017-07-18
 call AddColumnUnlessExists(Database(), 'reg_abroad', 'annual_id', 'int(11) DEFAULT NULL COMMENT "年检id"');
+
+
+-- 2017-07-19
+call AddColumnUnlessExists(Database(), 'mail', 'province', 'varchar(20) DEFAULT NULL COMMENT "邮寄地址省份"');
+call AddColumnUnlessExists(Database(), 'mail', 'city', 'varchar(20) DEFAULT NULL COMMENT "邮寄地址市"');
+call AddColumnUnlessExists(Database(), 'mail', 'county', 'varchar(20) DEFAULT NULL COMMENT "邮寄地址县"');
+
+
