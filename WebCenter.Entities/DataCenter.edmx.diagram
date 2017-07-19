@@ -140,7 +140,7 @@
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_waiter" />
-        <EntityTypeShape EntityType="DataCenter.Entities.reg_abroad" Width="2.375" PointX="26.125" PointY="25.75" />
+        <EntityTypeShape EntityType="DataCenter.Entities.reg_abroad" Width="1.5" PointX="26.125" PointY="25.625" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_bank" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.fk_reg_abroad_trader_id" />

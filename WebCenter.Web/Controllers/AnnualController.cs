@@ -595,6 +595,11 @@ namespace WebCenter.Web.Controllers
                     {
                         dbRegAbroad.annual_date = DateTime.Today;
                     }
+
+                    if (dbRegAbroad.is_annual == 1)
+                    {
+                        dbRegAbroad.annual_id = newExam.id;
+                    }
                     
                     Uof.Ireg_abroadService.UpdateEntity(dbRegAbroad);
                     break;

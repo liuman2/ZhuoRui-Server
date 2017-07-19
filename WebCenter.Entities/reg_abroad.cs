@@ -220,6 +220,10 @@ namespace WebCenter.Entities
     
         public Nullable<int> trader_id { get; set; }
     
+    
+    
+        public Nullable<int> annual_id { get; set; }
+    
         public virtual bank_account bank_account { get; set; }
         public virtual customer customer { get; set; }
         public virtual customer customer1 { get; set; }

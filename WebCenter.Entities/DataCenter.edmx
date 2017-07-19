@@ -742,6 +742,7 @@
           <Property Name="date_last" Type="datetime" Precision="0" />
           <Property Name="title_last" Type="varchar" MaxLength="100" />
           <Property Name="trader_id" Type="int" />
+          <Property Name="annual_id" Type="int" />
         </EntityType>
         <EntityType Name="reg_history">
           <Key>
@@ -5365,6 +5366,7 @@
           <Property Name="date_last" Type="DateTime" />
           <Property Name="title_last" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="trader_id" Type="Int32" />
+          <Property Name="annual_id" Type="Int32" />
           <NavigationProperty Name="bank_account" Relationship="DataCenter.Entities.abroad_ibfk_bank" FromRole="reg_abroad" ToRole="bank_account" />
           <NavigationProperty Name="customer" Relationship="DataCenter.Entities.abroad_ibfk_customer" FromRole="reg_abroad" ToRole="customer" />
           <NavigationProperty Name="customer1" Relationship="DataCenter.Entities.fk_reg_abroad_trader_id" FromRole="reg_abroad" ToRole="customer" />
@@ -6543,6 +6545,7 @@
           <EntitySetMapping Name="reg_abroad">
             <EntityTypeMapping TypeName="DataCenter.Entities.reg_abroad">
               <MappingFragment StoreEntitySet="reg_abroad">
+                <ScalarProperty Name="annual_id" ColumnName="annual_id" />
                 <ScalarProperty Name="trader_id" ColumnName="trader_id" />
                 <ScalarProperty Name="title_last" ColumnName="title_last" />
                 <ScalarProperty Name="date_last" ColumnName="date_last" />

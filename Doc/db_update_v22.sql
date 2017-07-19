@@ -60,3 +60,6 @@ call AddColumnUnlessExists(Database(), 'patent', 'title_last', 'varchar(100) DEF
 -- 2017-07-17
 call AddColumnUnlessExists(Database(), 'reg_abroad', 'trader_id', 'int(11) DEFAULT NULL COMMENT "渠道商"');
 ALTER TABLE reg_abroad ADD CONSTRAINT fk_reg_abroad_trader_id FOREIGN KEY (trader_id) REFERENCES customer(id);
+
+-- 2017-07-18
+call AddColumnUnlessExists(Database(), 'reg_abroad', 'annual_id', 'int(11) DEFAULT NULL COMMENT "年检id"');

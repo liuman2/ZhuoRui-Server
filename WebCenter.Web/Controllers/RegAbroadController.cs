@@ -177,7 +177,10 @@ namespace WebCenter.Web.Controllers
                     date_setup = c.date_setup,
                     is_annual = c.is_annual ?? 0,
                     order_status = c.order_status ?? 0,
-                    description = c.description
+                    description = c.description,
+
+                    annual_date = c.annual_date,
+                    annual_id = c.annual_id,
 
                 }).ToPagedList(request.index, request.size).ToList();
 
