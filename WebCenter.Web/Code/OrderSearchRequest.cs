@@ -96,6 +96,7 @@ namespace WebCenter.Web
         public string order_name { get; set; }
         public int? salesman_id { get; set; }
         public int? assistant_id { get; set; }
+        public int? customer_id { get; set; }
     }
 
     public class PassInbox
