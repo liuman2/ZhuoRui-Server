@@ -16,6 +16,44 @@ namespace WebCenter.Web.Controllers
         {
         }
 
+        [HttpPost]
+        public ActionResult UpdateAddress(MailAddress address)
+        {
+            var dbMail = Uof.ImailService.GetAll(m => m.id == address.id).FirstOrDefault();
+
+            if (dbMail == null)
+            {
+                return ErrorResult;
+            }
+
+            dbMail.receiver = address.receiver;
+            dbMail.tel = address.tel;
+            dbMail.province = address.province;
+            dbMail.city = address.city;
+            dbMail.county = address.county;
+            dbMail.address = address.address;
+
+            Uof.ImailService.UpdateEntity(dbMail);
+
+            return SuccessResult;
+        }
+
+        public ActionResult GetAddress(int id)
+        {
+           var address =  Uof.ImailService.GetAll(m => m.id == id).Select(m=>new
+            {
+                id = m.id,
+                receiver = m.receiver,
+                tel = m.tel ?? "",
+                province = m.province ?? "",
+                city = m.city ?? "",
+                county = m.county ?? "",
+                address = m.address ?? "",
+            }).FirstOrDefault();
+
+            return Json(address, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetContacts(int order_id, string order_source)
         {
             int? customerId = 0;

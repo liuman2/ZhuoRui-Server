@@ -873,7 +873,7 @@ namespace WebCenter.Web.Controllers
                 .Where(statusQuery)
                 .Where(date1Query)
                 .Where(date2Query)
-                .OrderByDescending(item => item.id).Select(c => new
+                .OrderByDescending(item => item.id).Select(c => new AnnualExamEntity
                 {
                     id = c.id,
                     code = c.code,
@@ -897,7 +897,8 @@ namespace WebCenter.Web.Controllers
                     assistant_name = c.member7.name,
 
                     finance_review_moment = c.finance_review_moment,
-                    submit_review_moment = c.submit_review_moment
+                    submit_review_moment = c.submit_review_moment,
+                    receipt_no = "",
 
                 }).ToPagedList(request.index, request.size).ToList();
 
@@ -915,6 +916,19 @@ namespace WebCenter.Web.Controllers
                 total_size = totalRecord,
                 total_page = totalPages
             };
+
+            if (list.Count() > 0)
+            {
+                foreach (var item in list)
+                {
+                    var dbReceipt = Uof.IreceiptService.GetAll(a => a.order_id == item.id && a.order_source == "annual").FirstOrDefault();
+                    if (dbReceipt != null)
+                    {
+                        item.receipt_no = dbReceipt.date_created.Value.ToString("yyyyMMdd") + dbReceipt.code;
+                    }                    
+                }
+                
+            }
 
             var result = new
             {

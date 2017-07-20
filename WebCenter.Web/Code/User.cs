@@ -27,6 +27,17 @@ namespace WebCenter.Web
         public string url { get; set; }
     }
 
+    public class MailAddress
+    {
+        public int id { get; set; }
+        public string receiver { get; set; }
+        public string tel { get; set; }
+        public string province { get; set; }
+        public string city { get; set; }
+        public string county { get; set; }
+        public string address { get; set; }
+    }
+
     public class Customer
     {
         public int id { get; set; }
@@ -329,5 +340,33 @@ namespace WebCenter.Web
         public DateTime? date_start { get; set; }
         public DateTime? date_end { get; set; }
         public string period { get; set; }
+    }
+
+    public class AnnualExamEntity
+    {
+        public int id { get; set; }
+        public string code { get; set; }
+        public int? customer_id { get; set; }
+        public string customer_code { get; set; }
+        public string type { get; set; }
+        public string customer_name { get; set; }
+        public string name_cn { get; set; }
+        public string name_en { get; set; }
+        public sbyte?  status { get; set; }
+        public int? review_status { get; set; }
+        public DateTime? date_transaction { get; set; }
+        public float? amount_transaction { get; set; }
+        public int? amount_income { get; set; }
+        public int? amount_unreceive { get; set; }
+        public string progress { get; set; }
+        public int? salesman_id { get; set; }
+        public string salesman_name { get; set; }
+
+        public int? assistant_id { get; set; }
+        public string assistant_name { get; set; }
+
+        public string finance_review_moment { get; set; }
+        public string submit_review_moment { get; set; }
+        public string receipt_no { get; set; }
     }
 }
