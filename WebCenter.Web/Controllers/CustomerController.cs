@@ -673,7 +673,21 @@ namespace WebCenter.Web.Controllers
                 }
             }
 
-            var contacts = Uof.IcontactService.GetAll(c => c.customer_id == id).ToList();
+            var contacts = Uof.IcontactService.GetAll(c => c.customer_id == id).Select(d => new
+            {
+                id = d.id,
+                customer_id = d.customer_id,
+                name = d.name,
+                mobile = d.mobile,
+                tel = d.tel,
+                position = d.position,
+                email = d.email,
+                wechat = d.wechat,
+                QQ = d.QQ,
+                type = d.type,
+                memo = d.memo,
+                responsable = d.responsable,
+            }).ToList();
             return Json(new { customer = customerEntity, contacts = contacts }, JsonRequestBehavior.AllowGet);
         }
 
@@ -1034,7 +1048,21 @@ namespace WebCenter.Web.Controllers
 
             };
 
-            var contacts = Uof.IcontactService.GetAll(c => c.customer_id == customer_id).ToList();
+            var contacts = Uof.IcontactService.GetAll(c => c.customer_id == customer_id).Select(d => new
+            {
+                id = d.id,
+                customer_id = d.customer_id,
+                name = d.name,
+                mobile = d.mobile,
+                tel = d.tel,
+                position = d.position,
+                email = d.email,
+                wechat = d.wechat,
+                QQ = d.QQ,
+                type = d.type,
+                memo = d.memo,
+                responsable = d.responsable,
+            }).ToList();
             return Json(new { customer = _c, contacts = contacts }, JsonRequestBehavior.AllowGet);
         }
 

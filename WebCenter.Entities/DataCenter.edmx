@@ -199,9 +199,6 @@
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="customer_id" Type="int" />
-          <Property Name="source" Type="varchar" MaxLength="30" />
-          <Property Name="source_id" Type="int" />
-          <Property Name="source_code" Type="varchar" MaxLength="20" />
           <Property Name="code" Type="varchar" MaxLength="20" />
           <Property Name="type" Type="varchar" MaxLength="10" />
           <Property Name="name_cn" Type="varchar" MaxLength="100" />
@@ -245,6 +242,9 @@
           <Property Name="turnover_currency" Type="varchar" MaxLength="10" />
           <Property Name="assistant_id" Type="int" />
           <Property Name="account_period2" Type="datetime" Precision="0" />
+          <Property Name="source" Type="varchar" MaxLength="30" />
+          <Property Name="source_id" Type="int" />
+          <Property Name="source_code" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="audit_bank">
           <Key>
@@ -522,6 +522,7 @@
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="lecture_id" Type="int" />
           <Property Name="customer_id" Type="int" />
+          <Property Name="contact_id" Type="int" />
         </EntityType>
         <EntityType Name="mail">
           <Key>
@@ -570,10 +571,10 @@
           <Property Name="mobile" Type="varchar" MaxLength="20" />
           <Property Name="hiredate" Type="datetime" Precision="0" />
           <Property Name="birthday" Type="datetime" Precision="0" />
+          <Property Name="url" Type="varchar" MaxLength="120" />
           <Property Name="status" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
-          <Property Name="url" Type="varchar" MaxLength="120" />
         </EntityType>
         <EntityType Name="menu">
           <Key>
@@ -1690,6 +1691,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_charge_id">
+          <End Role="member" Type="Self.member" Multiplicity="0..1" />
+          <End Role="lecture" Type="Self.lecture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture">
+              <PropertyRef Name="charge_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_internal_assistant_id">
           <End Role="member" Type="Self.member" Multiplicity="0..1" />
           <End Role="reg_internal" Type="Self.reg_internal" Multiplicity="*" />
@@ -1699,6 +1712,18 @@
             </Principal>
             <Dependent Role="reg_internal">
               <PropertyRef Name="assistant_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_lecture_customer_contact_id">
+          <End Role="contact" Type="Self.contact" Multiplicity="0..1" />
+          <End Role="lecture_customer" Type="Self.lecture_customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture_customer">
+              <PropertyRef Name="contact_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2472,9 +2497,17 @@
             <End Role="member" EntitySet="member" />
             <End Role="audit" EntitySet="audit" />
           </AssociationSet>
+          <AssociationSet Name="fk_charge_id" Association="Self.fk_charge_id">
+            <End Role="member" EntitySet="member" />
+            <End Role="lecture" EntitySet="lecture" />
+          </AssociationSet>
           <AssociationSet Name="fk_internal_assistant_id" Association="Self.fk_internal_assistant_id">
             <End Role="member" EntitySet="member" />
             <End Role="reg_internal" EntitySet="reg_internal" />
+          </AssociationSet>
+          <AssociationSet Name="fk_lecture_customer_contact_id" Association="Self.fk_lecture_customer_contact_id">
+            <End Role="contact" EntitySet="contact" />
+            <End Role="lecture_customer" EntitySet="lecture_customer" />
           </AssociationSet>
           <AssociationSet Name="fk_mail_audit_id" Association="Self.fk_mail_audit_id">
             <End Role="member" EntitySet="member" />
@@ -2665,7 +2698,6 @@
           <EntitySet Name="reg_history" EntityType="DataCenter.Entities.reg_history" />
           <EntitySet Name="operations" EntityType="DataCenter.Entities.operation" />
           <EntitySet Name="role_operation" EntityType="DataCenter.Entities.role_operation" />
-          <EntitySet Name="lecture_customer" EntityType="DataCenter.Entities.lecture_customer" />
           <EntitySet Name="menus" EntityType="DataCenter.Entities.menu" />
           <EntitySet Name="members" EntityType="DataCenter.Entities.member" />
           <AssociationSet Name="member_ibfk_3" Association="DataCenter.Entities.member_ibfk_3">
@@ -2695,10 +2727,6 @@
           <AssociationSet Name="lecture_ibfk_creator" Association="DataCenter.Entities.lecture_ibfk_creator">
             <End Role="member" EntitySet="members" />
             <End Role="lecture" EntitySet="lectures" />
-          </AssociationSet>
-          <AssociationSet Name="lecture_ibfk_lec" Association="DataCenter.Entities.lecture_ibfk_lec">
-            <End Role="lecture" EntitySet="lectures" />
-            <End Role="lecture_customer" EntitySet="lecture_customer" />
           </AssociationSet>
           <EntitySet Name="banks" EntityType="DataCenter.Entities.bank" />
           <EntitySet Name="leaves" EntityType="DataCenter.Entities.leave" />
@@ -2824,10 +2852,6 @@
           <AssociationSet Name="audit_sub_ibfk_customer" Association="DataCenter.Entities.audit_sub_ibfk_customer">
             <End Role="customer" EntitySet="customers" />
             <End Role="sub_audit" EntitySet="sub_audit" />
-          </AssociationSet>
-          <AssociationSet Name="customer_ibfk_lec" Association="DataCenter.Entities.customer_ibfk_lec">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="lecture_customer" EntitySet="lecture_customer" />
           </AssociationSet>
           <AssociationSet Name="income_ibfk_customer" Association="DataCenter.Entities.income_ibfk_customer">
             <End Role="customer" EntitySet="customers" />
@@ -3091,6 +3115,19 @@
             <End Role="member" EntitySet="members" />
             <End Role="mail" EntitySet="mails" />
           </AssociationSet>
+          <EntitySet Name="lecture_customer" EntityType="DataCenter.Entities.lecture_customer" />
+          <AssociationSet Name="fk_lecture_customer_contact_id" Association="DataCenter.Entities.fk_lecture_customer_contact_id">
+            <End Role="contact" EntitySet="contacts" />
+            <End Role="lecture_customer" EntitySet="lecture_customer" />
+          </AssociationSet>
+          <AssociationSet Name="customer_ibfk_lec" Association="DataCenter.Entities.customer_ibfk_lec">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="lecture_customer" EntitySet="lecture_customer" />
+          </AssociationSet>
+          <AssociationSet Name="lecture_ibfk_lec" Association="DataCenter.Entities.lecture_ibfk_lec">
+            <End Role="lecture" EntitySet="lectures" />
+            <End Role="lecture_customer" EntitySet="lecture_customer" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -3262,16 +3299,6 @@
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="role_id" Type="Int32" />
           <Property Name="operation_id" Type="Int32" />
-        </EntityType>
-        <EntityType Name="lecture_customer">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="lecture_id" Type="Int32" />
-          <Property Name="customer_id" Type="Int32" />
-          <NavigationProperty Name="lecture" Relationship="DataCenter.Entities.lecture_ibfk_lec" FromRole="lecture_customer" ToRole="lecture" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.customer_ibfk_lec" FromRole="lecture_customer" ToRole="customer" />
         </EntityType>
         <EntityType Name="menu">
           <Key>
@@ -3511,18 +3538,6 @@
             </Principal>
             <Dependent Role="lecture">
               <PropertyRef Name="creator_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="lecture_ibfk_lec">
-          <End Type="DataCenter.Entities.lecture" Role="lecture" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="lecture">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="lecture_customer">
-              <PropertyRef Name="lecture_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4205,7 +4220,6 @@
           <NavigationProperty Name="audits" Relationship="DataCenter.Entities.audit_ibfk_customer" FromRole="customer" ToRole="audit" />
           <NavigationProperty Name="bank_account" Relationship="DataCenter.Entities.bank_account_customer" FromRole="customer" ToRole="bank_account" />
           <NavigationProperty Name="sub_audit" Relationship="DataCenter.Entities.audit_sub_ibfk_customer" FromRole="customer" ToRole="sub_audit" />
-          <NavigationProperty Name="lecture_customer" Relationship="DataCenter.Entities.customer_ibfk_lec" FromRole="customer" ToRole="lecture_customer" />
           <NavigationProperty Name="incomes" Relationship="DataCenter.Entities.income_ibfk_customer" FromRole="customer" ToRole="income" />
           <NavigationProperty Name="member" Relationship="DataCenter.Entities.member_ibfk_creator" FromRole="customer" ToRole="member" />
           <NavigationProperty Name="member1" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="customer" ToRole="member" />
@@ -4216,6 +4230,7 @@
           <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="customer" ToRole="trademark" />
           <NavigationProperty Name="reg_abroad" Relationship="DataCenter.Entities.abroad_ibfk_customer" FromRole="customer" ToRole="reg_abroad" />
           <NavigationProperty Name="reg_abroad1" Relationship="DataCenter.Entities.fk_reg_abroad_trader_id" FromRole="customer" ToRole="reg_abroad" />
+          <NavigationProperty Name="lecture_customer" Relationship="DataCenter.Entities.customer_ibfk_lec" FromRole="customer" ToRole="lecture_customer" />
         </EntityType>
         <Association Name="annual_ibfk_customer">
           <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
@@ -4261,18 +4276,6 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="sub_audit">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="customer_ibfk_lec">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="lecture_customer">
               <PropertyRef Name="customer_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -4587,6 +4590,7 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
           <Property Name="responsable" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="lecture_customer" Relationship="DataCenter.Entities.fk_lecture_customer_contact_id" FromRole="contact" ToRole="lecture_customer" />
         </EntityType>
         <EntityType Name="accounting_item">
           <Key>
@@ -5501,6 +5505,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="lecture_customer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="lecture_id" Type="Int32" />
+          <Property Name="customer_id" Type="Int32" />
+          <Property Name="contact_id" Type="Int32" />
+          <NavigationProperty Name="contact" Relationship="DataCenter.Entities.fk_lecture_customer_contact_id" FromRole="lecture_customer" ToRole="contact" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.customer_ibfk_lec" FromRole="lecture_customer" ToRole="customer" />
+          <NavigationProperty Name="lecture" Relationship="DataCenter.Entities.lecture_ibfk_lec" FromRole="lecture_customer" ToRole="lecture" />
+        </EntityType>
+        <Association Name="fk_lecture_customer_contact_id">
+          <End Type="DataCenter.Entities.contact" Role="contact" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture_customer">
+              <PropertyRef Name="contact_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="customer_ibfk_lec">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture_customer">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="lecture_ibfk_lec">
+          <End Type="DataCenter.Entities.lecture" Role="lecture" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lecture">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture_customer">
+              <PropertyRef Name="lecture_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5679,15 +5731,6 @@
               <MappingFragment StoreEntitySet="role_operation">
                 <ScalarProperty Name="operation_id" ColumnName="operation_id" />
                 <ScalarProperty Name="role_id" ColumnName="role_id" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="lecture_customer">
-            <EntityTypeMapping TypeName="DataCenter.Entities.lecture_customer">
-              <MappingFragment StoreEntitySet="lecture_customer">
-                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
-                <ScalarProperty Name="lecture_id" ColumnName="lecture_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -6589,6 +6632,16 @@
                 <ScalarProperty Name="letter_type" ColumnName="letter_type" />
                 <ScalarProperty Name="owner" ColumnName="owner" />
                 <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lecture_customer">
+            <EntityTypeMapping TypeName="DataCenter.Entities.lecture_customer">
+              <MappingFragment StoreEntitySet="lecture_customer">
+                <ScalarProperty Name="contact_id" ColumnName="contact_id" />
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="lecture_id" ColumnName="lecture_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

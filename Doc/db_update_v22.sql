@@ -71,3 +71,7 @@ call AddColumnUnlessExists(Database(), 'mail', 'city', 'varchar(20) DEFAULT NULL
 call AddColumnUnlessExists(Database(), 'mail', 'county', 'varchar(20) DEFAULT NULL COMMENT "邮寄地址县"');
 
 
+-- 2017-07-27
+call AddColumnUnlessExists(Database(), 'lecture_customer', 'contact_id', 'int(11) DEFAULT NULL COMMENT "联系人id"');
+ALTER TABLE lecture_customer ADD CONSTRAINT fk_lecture_customer_contact_id FOREIGN KEY (contact_id) REFERENCES contact(id);
+

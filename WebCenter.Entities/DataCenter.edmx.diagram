@@ -20,7 +20,6 @@
         <EntityTypeShape EntityType="DataCenter.Entities.reg_history" Width="1.5" PointX="3.75" PointY="6.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.operation" Width="1.5" PointX="3.375" PointY="13.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.role_operation" Width="1.5" PointX="5.375" PointY="13.75" />
-        <EntityTypeShape EntityType="DataCenter.Entities.lecture_customer" Width="1.5" PointX="16.25" PointY="0.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.menu" Width="1.5" PointX="0.75" PointY="13.5" />
         <EntityTypeShape EntityType="DataCenter.Entities.member" Width="1.5" PointX="11.375" PointY="0.75" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_3" />
@@ -33,7 +32,6 @@
         <EntityTypeShape EntityType="DataCenter.Entities.lecture" Width="2" PointX="13.375" PointY="11.75" />
         <AssociationConnector Association="DataCenter.Entities.fk_charge_id" />
         <AssociationConnector Association="DataCenter.Entities.lecture_ibfk_creator" />
-        <AssociationConnector Association="DataCenter.Entities.lecture_ibfk_lec" />
         <EntityTypeShape EntityType="DataCenter.Entities.bank" Width="1.5" PointX="5.375" PointY="17.5" />
         <EntityTypeShape EntityType="DataCenter.Entities.leave" Width="1.5" PointX="7.375" PointY="18.25" />
         <EntityTypeShape EntityType="DataCenter.Entities.notice" Width="1.5" PointX="9.375" PointY="18.375" />
@@ -78,7 +76,6 @@
         <AssociationConnector Association="DataCenter.Entities.audit_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.bank_account_customer" />
         <AssociationConnector Association="DataCenter.Entities.audit_sub_ibfk_customer" />
-        <AssociationConnector Association="DataCenter.Entities.customer_ibfk_lec" />
         <AssociationConnector Association="DataCenter.Entities.income_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.member_ibfk_salesman" />
@@ -152,6 +149,10 @@
         <EntityTypeShape EntityType="DataCenter.Entities.mail" Width="1.5" PointX="13.625" PointY="22.75" />
         <AssociationConnector Association="DataCenter.Entities.fk_mail_audit_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_mail_creator_id" />
+        <EntityTypeShape EntityType="DataCenter.Entities.lecture_customer" Width="1.5" PointX="18.125" PointY="40.375" />
+        <AssociationConnector Association="DataCenter.Entities.fk_lecture_customer_contact_id" />
+        <AssociationConnector Association="DataCenter.Entities.customer_ibfk_lec" />
+        <AssociationConnector Association="DataCenter.Entities.lecture_ibfk_lec" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

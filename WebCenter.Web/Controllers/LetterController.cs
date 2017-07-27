@@ -78,7 +78,21 @@ namespace WebCenter.Web.Controllers
                     break;
             }
 
-            var list = Uof.IcontactService.GetAll(c => c.customer_id == customerId).ToList();
+            var list = Uof.IcontactService.GetAll(c => c.customer_id == customerId).Select(d => new
+            {
+                id = d.id,
+                customer_id = d.customer_id,
+                name = d.name,
+                mobile = d.mobile,
+                tel = d.tel,
+                position = d.position,
+                email = d.email,
+                wechat = d.wechat,
+                QQ = d.QQ,
+                type = d.type,
+                memo = d.memo,
+                responsable = d.responsable,
+            }).ToList();
 
             return Json(list, JsonRequestBehavior.AllowGet);
         }

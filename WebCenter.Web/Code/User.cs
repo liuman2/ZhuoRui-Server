@@ -214,6 +214,7 @@ namespace WebCenter.Web
         public int id { get; set; }
         public int? lecture_id { get; set; }
         public int? customer_id { get; set; }
+        public int? contact_id { get; set; }
         public string name { get; set; }
         public string contact { get; set; }
         public string mobile { get; set; }
@@ -368,5 +369,36 @@ namespace WebCenter.Web
         public string finance_review_moment { get; set; }
         public string submit_review_moment { get; set; }
         public string receipt_no { get; set; }
+    }
+
+    public class LectureContact
+    {
+        public int id { get; set; }
+        public int? customer_id { get; set; }
+        public string name { get; set; }
+        public string customer_name { get; set; }
+        public int? customer_type { get; set; }
+        public string mobile { get; set; }
+        public string tel { get; set; }
+        public string position { get; set; }
+        public string email { get; set; }
+        public string wechat { get; set; }
+        public string QQ { get; set; }
+        public string responsable { get; set; }
+        public string industry { get; set; }
+        public string business_nature { get; set; }
+        public string province { get; set; }
+        public string city { get; set; }
+        public string county { get; set; }
+        public string address { get; set; }
+        public int? salesman_id { get; set; }
+        public string salesman { get; set; }
+        public int? status { get; set; }
+    }
+
+    public class LectureContactRequest
+    {
+        public int? contact_id { get; set; }
+        public int? customer_id { get; set; }
     }
 }

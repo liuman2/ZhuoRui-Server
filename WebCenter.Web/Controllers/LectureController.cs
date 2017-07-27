@@ -270,6 +270,39 @@ namespace WebCenter.Web.Controllers
             return Json(new { lect = _l, attachments = atts, period = new { disabled = disabled, days = period } }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult OldDataUpdate()
+        {
+            //旧数据迁移
+            try
+            {
+                var dbLectureCustomers = Uof.Ilecture_customerService.GetAll(c => c.contact_id == null).ToList();
+                if (dbLectureCustomers != null && dbLectureCustomers.Count() > 0)
+                {
+                    foreach (var item in dbLectureCustomers)
+                    {
+                        var dbContact = Uof.IcontactService.GetAll(c => c.customer_id == item.customer_id).FirstOrDefault();
+                        if (dbContact != null)
+                        {
+                            item.contact_id = dbContact.id;
+                            try
+                            {
+                                Uof.Ilecture_customerService.UpdateEntity(item);
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }                                            
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return SuccessResult;
+        }
+
         public ActionResult GetDetails(int id, int size, int index)
         {
             size = 500;
@@ -302,6 +335,7 @@ namespace WebCenter.Web.Controllers
                     id = c.id,
                     lecture_id = c.lecture_id,
                     customer_id = c.customer_id,
+                    contact_id = c.contact_id,
                     code = c.customer.code,
                     name = c.customer.name,
                     industry = c.customer.industry,
@@ -309,13 +343,13 @@ namespace WebCenter.Web.Controllers
                     city = c.customer.city,
                     county = c.customer.county,
                     address = c.customer.address,
-                    contact = c.customer.contact,
-                    mobile = c.customer.mobile,
-                    tel = c.customer.tel,
+                    contact = c.contact.name,
+                    mobile = c.contact.mobile,
+                    tel = c.contact.tel,
                     fax = c.customer.fax,
-                    email = c.customer.email,
-                    QQ = c.customer.QQ,
-                    wechat = c.customer.wechat,
+                    email = c.contact.email,
+                    QQ = c.contact.QQ,
+                    wechat = c.contact.wechat,
                     source = c.customer.source,
                     creator_id = c.customer.creator_id,
                     salesman_id = c.customer.salesman_id,
@@ -374,19 +408,20 @@ namespace WebCenter.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveCustomer(int leactueId, int[] customerIds)
+        public ActionResult SaveCustomer(int leactueId, List<LectureContactRequest> request)
         {
             var oldMembers = Uof.Ilecture_customerService.GetAll(m => m.lecture_id == leactueId).ToList();
             var adds = new List<lecture_customer>();
 
             if (oldMembers.Count() == 0)
             {
-                foreach (var item in customerIds)
+                foreach (var item in request)
                 {
                     adds.Add(new lecture_customer()
                     {
                         lecture_id = leactueId,
-                        customer_id = item
+                        customer_id = item.customer_id,
+                        contact_id = item.contact_id
                     });
                 }
 
@@ -394,15 +429,16 @@ namespace WebCenter.Web.Controllers
                 return SuccessResult;
             }
 
-            foreach (var item in customerIds)
+            foreach (var item in request)
             {
-                var exist = oldMembers.Where(o => o.customer_id == item);
+                var exist = oldMembers.Where(o => o.customer_id == item.customer_id && o.contact_id == item.contact_id);
                 if (exist.Count() == 0)
                 {
                     adds.Add(new lecture_customer()
                     {
                         lecture_id = leactueId,
-                        customer_id = item
+                        customer_id = item.customer_id,
+                        contact_id = item.contact_id
                     });
                 }
             }
@@ -415,9 +451,9 @@ namespace WebCenter.Web.Controllers
             return SuccessResult;
         }
 
-        public ActionResult DeleteLeactureCustomer(int leactureId, int customerId)
+        public ActionResult DeleteLeactureCustomer(int leactureId, int contactId)
         {
-            var customerMember = Uof.Ilecture_customerService.GetAll(m => m.customer_id == customerId && m.lecture_id == leactureId).FirstOrDefault();
+            var customerMember = Uof.Ilecture_customerService.GetAll(m => m.contact_id == contactId && m.lecture_id == leactureId).FirstOrDefault();
 
             if (customerMember == null)
             {
@@ -453,11 +489,11 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
             var strUserId = userId.ToString();
 
-            var customerIds = Uof.Ilecture_customerService.GetAll(c=>c.lecture_id == lectureId).Select(m => m.customer_id).ToList();
-            Expression<Func<customer, bool>> excludeIds = m => true;
-            if (customerIds.Count() > 0)
+            var contactIds = Uof.Ilecture_customerService.GetAll(c=>c.lecture_id == lectureId).Select(m => m.contact_id).ToList();
+            Expression<Func<contact, bool>> excludeIds = m => true;
+            if (contactIds.Count() > 0)
             {
-                excludeIds = m => !customerIds.Contains(m.id);
+                excludeIds = m => !contactIds.Contains(m.id);
             }
 
             Expression<Func<customer, bool>> nameQuery = c => true;
@@ -467,29 +503,33 @@ namespace WebCenter.Web.Controllers
                 nameQuery = c => (c.name.IndexOf(name) > -1 || c.code.IndexOf(name) > -1);
             }
 
-            var list = Uof.IcustomerService.GetAll(nameQuery)
-                .Where(excludeIds)
+            var customerIds = Uof.IcustomerService.GetAll(nameQuery)
                 .Where(c => c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId) || userId == 1)
-                .OrderByDescending(item => item.id).Select(c => new
+                .Select(c=>c.id)
+                .ToList();
+
+
+
+            var list = Uof.IcontactService.GetAll(c => customerIds.Contains(c.customer_id))
+                .Where(excludeIds)
+                .OrderByDescending(item => item.id).Select(c => new LectureContact
                 {
                     id = c.id,
-                    code = c.code,
+                    customer_id = c.customer_id,
                     name = c.name,
-                    business_nature = c.business_nature,
-                    status = c.status,
-                    contact = c.contact,
                     mobile = c.mobile,
                     tel = c.tel,
+                    position = c.position,
                     email = c.email,
-                    salesman = c.member1.name,
-                    industry = c.industry,
-                    province = c.province,
-                    city = c.city,
-                    county = c.county,
-                    address = c.address
-                }).ToPagedList(index, size).ToList();
+                    wechat = c.wechat,
+                    QQ = c.QQ,
+                    responsable = c.responsable
+                }).ToPagedList(index, size);
 
-            var totalRecord = Uof.IcustomerService.GetAll(nameQuery).Count();
+            var totalRecord = Uof.IcontactService
+                .GetAll(c => customerIds.Contains(c.customer_id))
+                .Where(excludeIds)
+                .Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
@@ -503,6 +543,46 @@ namespace WebCenter.Web.Controllers
                 total_size = totalRecord,
                 total_page = totalPages
             };
+
+            if (list.Count > 0)
+            {
+                var listCustomerIds = list.Select(l => l.customer_id).Distinct().ToList();
+                var listCustomers = Uof.IcustomerService.GetAll(c => listCustomerIds.Contains(c.id)).Select(c => new
+                {
+                    id = c.id,
+                    name = c.name,
+                    industry = c.industry,
+                    business_nature = c.business_nature,
+                    province = c.province,
+                    city = c.city,
+                    county = c.county,
+                    address = c.address,
+                    salesman_id = c.salesman_id,
+                    salesman = c.member1.name,
+                    status = c.status,
+                }).ToList();
+
+                if (listCustomers!= null && listCustomers.Count() > 0)
+                {
+                    foreach (var item in list)
+                    {
+                        var c = listCustomers.Where(l => l.id == item.customer_id).FirstOrDefault();
+                        if (c != null)
+                        {
+                            item.customer_name = c.name;
+                            item.industry = c.industry;
+                            item.business_nature = c.business_nature;
+                            item.province = c.province;
+                            item.city = c.city;
+                            item.county = c.county;
+                            item.address = c.address;
+                            item.salesman_id = c.salesman_id;
+                            item.salesman = c.salesman;
+                            item.status = c.status;
+                        }
+                    }
+                }
+            }
 
             var result = new
             {

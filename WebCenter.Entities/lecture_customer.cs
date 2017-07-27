@@ -28,7 +28,12 @@ namespace WebCenter.Entities
     
         public Nullable<int> customer_id { get; set; }
     
-        public virtual lecture lecture { get; set; }
+    
+    
+        public Nullable<int> contact_id { get; set; }
+    
+        public virtual contact contact { get; set; }
         public virtual customer customer { get; set; }
+        public virtual lecture lecture { get; set; }
     }
 }

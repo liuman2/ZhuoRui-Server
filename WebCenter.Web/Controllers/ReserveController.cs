@@ -469,7 +469,21 @@ namespace WebCenter.Web.Controllers
                 mailling_county = _customer.mailling_county,
             };
 
-            var contacts = Uof.IcontactService.GetAll(c => c.customer_id == id).ToList();
+            var contacts = Uof.IcontactService.GetAll(c => c.customer_id == id).Select(c=> new
+            {
+                id = c.id,
+                customer_id = c.customer_id,
+                name = c.name,
+                mobile = c.mobile,
+                tel = c.tel,
+                position = c.position,
+                email = c.email,
+                wechat = c.wechat,
+                QQ = c.QQ,
+                type = c.type,
+                memo = c.memo,
+                responsable = c.responsable,
+            }).ToList();
             return Json(new { customer = customerEntity, contacts = contacts }, JsonRequestBehavior.AllowGet);
         }
                 

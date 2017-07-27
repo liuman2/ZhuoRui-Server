@@ -14,6 +14,11 @@ namespace WebCenter.Entities
     
     public partial class contact:BaseModel
     {
+        public contact()
+        {
+            this.lecture_customer = new HashSet<lecture_customer>();
+        }
+    
     
     
     
@@ -71,5 +76,7 @@ namespace WebCenter.Entities
     
     
         public string responsable { get; set; }
+    
+        public virtual ICollection<lecture_customer> lecture_customer { get; set; }
     }
 }
