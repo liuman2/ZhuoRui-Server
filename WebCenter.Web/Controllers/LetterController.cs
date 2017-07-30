@@ -292,6 +292,148 @@ namespace WebCenter.Web.Controllers
         }
 
         [HttpPost]
+        public ActionResult InsertLetter(mail l, List<InboxOrder> orders)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            l.creator_id = userId;
+            l.date_created = DateTime.Now;
+            l.review_status = 0;
+
+            var mails = new List<mail>();
+            foreach (var inboxOrder in orders)
+            {
+                mails.Add(new mail
+                {
+                    letter_type = l.letter_type,
+                    type = l.type,
+                    address = l.address,
+                    receiver = l.receiver,
+                    tel = l.tel,
+                    province = l.province,
+                    city = l.city,
+                    county = l.county,
+
+                    audit_id = inboxOrder.audit_id,
+                    order_source = inboxOrder.order_source,
+                    order_code = inboxOrder.order_code,
+                    order_id = inboxOrder.order_id,
+                    order_name = inboxOrder.order_name,
+                                        
+                    code = l.code,
+                    creator_id = l.creator_id,
+                    date_at = l.date_at,
+                    description = l.description,
+                    file_url = l.file_url,
+                    owner = l.owner,
+                    merchant = l.merchant,
+                    paymode = l.paymode,
+                    review_status = 0
+                });
+            }
+
+            var count = Uof.ImailService.AddEntities(mails);
+
+            if (count > 0)
+            {
+                try
+                {
+                    var dbMails = Uof.ImailService.GetAll(m => m.code == l.code).ToList();
+                    var waitdeals = new List<waitdeal>();
+                    var timelines = new List<timeline>();
+
+                    foreach (var item in dbMails)
+                    {
+                        waitdeals.Add(new waitdeal
+                        {
+                            source = "mail",
+                            source_id = item.id,
+                            user_id = item.audit_id,
+                            router = "letter_view",
+                            content = string.Format("您有一笔信件资料需要审核, 信件单号：{0}", item.code),
+                            read_status = 0
+                        });
+
+
+                        if (item.order_id != null)
+                        {
+                            var auditor = Uof.ImemberService.GetAll(m => m.id == item.audit_id).Select(m => m.name).FirstOrDefault();
+                            timelines.Add(new timeline
+                            {
+                                source_id = item.order_id,
+                                source_name = item.order_source,
+                                title = string.Format("新增{0}记录", item.type),
+                                is_system = 1,
+                                content = string.Format("{0}新建了一笔{1}记录, 审核人{2}, 信件单号: {3}，信件内容: {4}", arrs[3], item.type, auditor, item.code, item.letter_type)
+                            });                            
+                        }                       
+
+                    }
+
+                    Uof.IwaitdealService.AddEntities(waitdeals);
+                    if (timelines.Count() > 0)
+                    {
+                        Uof.ItimelineService.AddEntities(timelines);
+                    }                   
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+
+            //var _l = Uof.ImailService.AddEntity(l);
+            //if (_l != null)
+            //{
+            //    try
+            //    {
+            //        Uof.IwaitdealService.AddEntity(new waitdeal
+            //        {
+            //            source = "mail",
+            //            source_id = l.id,
+            //            user_id = l.audit_id,
+            //            router = l.type == "寄件" ? "letter_view" : "inbox_view",
+            //            content = string.Format("您有一笔信件资料需要审核, 信件单号：{0}", _l.code),
+            //            read_status = 0
+            //        });
+
+            //        if (_l.order_id != null)
+            //        {
+            //            var auditor = Uof.ImemberService.GetAll(m => m.id == _l.audit_id).Select(m => m.name).FirstOrDefault();
+
+            //            Uof.ItimelineService.AddEntity(new timeline()
+            //            {
+            //                source_id = _l.order_id,
+            //                source_name = _l.order_source,
+            //                title = string.Format("新增{0}记录", _l.type),
+            //                is_system = 1,
+            //                content = string.Format("{0}新建了一笔{1}记录, 审核人{2}, 信件单号: {3}，信件内容: {4}", arrs[3], _l.type, auditor, _l.code, _l.letter_type)
+            //            });
+            //        }
+            //    }
+            //    catch (Exception)
+            //    {
+            //    }
+            //}
+
+            return SuccessResult;
+        }
+
+        [HttpPost]
         public ActionResult InsertInbox(mail l, List<InboxOrder> inboxOrders)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
@@ -587,9 +729,9 @@ namespace WebCenter.Web.Controllers
                 creator_name = c.member1.name,
                 paymode = c.paymode,
 
-                province = c.province,
-                city = c.city,
-                county = c.county,
+                province = c.province ?? "",
+                city = c.city ?? "",
+                county = c.county ?? "",
 
             }).FirstOrDefault();
 

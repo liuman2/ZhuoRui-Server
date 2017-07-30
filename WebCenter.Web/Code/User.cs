@@ -401,4 +401,28 @@ namespace WebCenter.Web
         public int? contact_id { get; set; }
         public int? customer_id { get; set; }
     }
+
+    public class LectureJoinMember
+    {
+        public int? lectureId { get; set; }
+        public int? customerId { get; set; }
+        public int? contactId { get; set; }
+        public string customerName { get; set; }
+        public string businessNature { get; set; }
+        public string industry { get; set; }
+        public string province { get; set; }
+        public string city { get; set; }
+        public string county { get; set; }
+        public string address { get; set; }
+        public int? assistant_id { get; set; }
+        public string assistants { get; set; }
+        public int? salesman_id { get; set; }
+        public string salesman { get; set; }
+        public string contactName { get; set; }
+        public string mobile { get; set; }
+        public string tel { get; set; }
+        public string email { get; set; }
+        public string QQ { get; set; }
+        public string wechat { get; set; }
+    }   
 }

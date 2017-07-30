@@ -28,4 +28,20 @@ namespace WebCenter.Web
         public string 年检客服 { get; set; }
         public string 其他事项 { get; set; }
     }
+
+    public class ExcelLectureContact
+    {
+        public string 客户名称 { get; set; }
+        public string 业务性质 { get; set; }
+        public string 行业类别 { get; set; }
+        public string 联系人 { get; set; }
+        public string 手机 { get; set; }
+        public string 座机 { get; set; }
+        public string 邮箱 { get; set; }
+        public string 省份 { get; set; }
+        public string 城市 { get; set; }
+        public string 地区 { get; set; }
+        public string 地址 { get; set; }
+        public string 业务员 { get; set; }
+    }
 }

@@ -6,6 +6,7 @@ using Common;
 using System.Linq.Expressions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace WebCenter.Web.Controllers
 {
@@ -591,6 +592,176 @@ namespace WebCenter.Web.Controllers
             };
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public FileStreamResult Export(int lectureId)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                throw new Exception("您没登录");
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                throw new Exception("您没登录");
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var contacts = Uof.Ilecture_customerService.GetAll(l => l.lecture_id == lectureId && l.contact_id != null && l.customer_id != null).Select(l => new LectureJoinMember
+            {
+                customerId = l.customer_id,
+                lectureId = l.lecture_id,
+                contactId = l.contact_id,
+
+                //customerName = l.customer.name,
+                //businessNature = l.customer.business_nature,
+                //industry = l.customer.industry,
+                //province = l.customer.province,
+                //city = l.customer.city,
+                //county = l.customer.county,
+                //address = l.customer.address,
+                //assistant_id = l.customer.assistant_id,
+                //assistants = l.customer.assistants,
+                //salesman_id = l.customer.salesman_id,
+                //salesman = l.customer.member1.name,
+
+                //contactName = l.contact.name,
+                //mobile = l.contact.mobile,
+                //tel = l.contact.tel,
+                //email = l.contact.email,
+                //wechat = l.contact.wechat
+            }).ToList();
+
+            if (contacts == null)
+            {
+                throw new Exception("无数据可导出");
+            }
+
+            if (contacts.Count() == 0)
+            {
+                throw new Exception("无数据可导出");
+            }
+
+            if (contacts != null && contacts.Count() > 0)
+            {
+                var customerIds = contacts.Select(c => c.customerId).Distinct().ToList();
+                var customerList = Uof.IcustomerService.GetAll(c => customerIds.Contains(c.id)).Select(c => new
+                {
+                    id = c.id,
+                    name = c.name,
+                    business_nature = c.business_nature,
+                    industry = c.industry,
+                    province = c.province,
+                    city = c.city,
+                    county = c.county,
+                    address = c.address,
+                    assistant_id = c.assistant_id,
+                    assistants = c.assistants,
+                    salesman_id = c.salesman_id,
+                    salesman = c.member1.name,
+                }).ToList();
+
+                if (customerList != null && customerList.Count() > 0)
+                {
+                    foreach (var item in contacts)
+                    {
+                        var _customer = customerList.Where(c => c.id == item.customerId).FirstOrDefault();
+                        if (_customer != null)
+                        {
+                            item.customerName = _customer.name;
+                            item.businessNature = _customer.business_nature;
+                            item.industry = _customer.industry;
+                            item.province = _customer.province;
+                            item.city = _customer.city;
+                            item.county = _customer.county;
+                            item.address = _customer.address;
+                            item.assistant_id = _customer.assistant_id;
+                            item.assistants = _customer.assistants;
+                            item.salesman_id = _customer.salesman_id;
+                            item.salesman = _customer.salesman;
+                        }
+                    }
+                }
+
+                var contactIds = contacts.Select(c => c.contactId).Distinct().ToList();
+                var contactList = Uof.IcontactService.GetAll(c => contactIds.Contains(c.id)).Select(c => new
+                {
+                    id = c.id,
+                    contactName = c.name,
+                    mobile = c.mobile,
+                    tel = c.tel,
+                    email = c.email,
+                    wechat = c.wechat
+                }).ToList();
+
+                if (contactList != null && contactList.Count() > 0)
+                {
+                    foreach (var item in contacts)
+                    {
+                        var _contact = contactList.Where(c => c.id == item.contactId).FirstOrDefault();
+                        if (_contact != null)
+                        {
+                            item.contactName = _contact.contactName;
+                            item.mobile = _contact.mobile;
+                            item.tel = _contact.tel;
+                            item.email = _contact.email;
+                            item.wechat = _contact.wechat;
+                        }
+                    }
+                }
+            }
+
+            var strUserId = userId.ToString();
+            var myCustomers = contacts.Where(c => c.salesman_id == userId || c.assistant_id == userId || (c.assistants!= null && c.assistants.Contains(strUserId)) || userId == 1).ToList();
+
+            if (myCustomers.Count() > 0)
+            {
+                var exportList = myCustomers.Select(c => new ExcelLectureContact
+                {
+                    客户名称 = c.customerName,
+                    业务性质 = c.businessNature,
+                    行业类别 = c.industry,
+                    联系人 = c.contactName,
+                    手机 = c.mobile,
+                    座机 = c.tel,
+                    邮箱 = c.email,
+                    省份 = c.province,
+                    城市 = c.city,
+                    地区 = c.county,
+                    地址 = c.address,
+                    业务员 = c.salesman,
+                }).ToList();
+
+                var title = Uof.IlectureService.GetAll(l => l.id == lectureId).Select(l => l.title).FirstOrDefault();
+                if (string.IsNullOrEmpty(title))
+                {
+                    title = "参会客户名单";
+                } else
+                {
+                    title = title + "参会客户名单";
+                }
+                var sheet = ExportToExcel(exportList);
+                var fileName = title + ".xml";
+                var bytes = GenerateStreamFromString(sheet);
+                return File(bytes, "application/xml", fileName);
+            }                       
+
+            throw new Exception("您没登录");
+        }
+
+        public static Stream GenerateStreamFromString(string s)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
     }
 }
