@@ -403,17 +403,17 @@ namespace WebCenter.Web.Controllers
             Expression<Func<patent, bool>> waiterQuery4 = c => true;
             if (waiter_id != null)
             {
-                waiterQuery3 = c => c.waiter_id == waiter_id;
+                waiterQuery4 = c => c.waiter_id == waiter_id;
             }
             Expression<Func<patent, bool>> salesmanQuery4 = c => true;
             if (salesman_id != null)
             {
-                salesmanQuery3 = c => c.salesman_id == salesman_id;
+                salesmanQuery4 = c => c.salesman_id == salesman_id;
             }
             Expression<Func<patent, bool>> nameQuery4 = c => true;
             if (!string.IsNullOrEmpty(name))
             {
-                nameQuery3 = c => c.name.Contains(name);
+                nameQuery4 = c => c.name.Contains(name);
             }
             Expression<Func<patent, bool>> areaQuery4 = c => true;
             if (!string.IsNullOrEmpty(area))
@@ -1644,6 +1644,331 @@ namespace WebCenter.Web.Controllers
                             title = title,
                             is_system = 1,
                             content = string.Format("{0}{1}, 档案号{2}", arrs[3], title, dbPatent.code)
+                        });
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return SuccessResult;
+        }
+
+
+        public ActionResult OffOrders(string title, string order_type, string area)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            if (arrs.Length < 5)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var items = new List<AnnualWarning>();
+
+            #region 境外注册
+            if (string.IsNullOrEmpty(order_type) || order_type == "reg_abroad")
+            {
+                Expression<Func<reg_abroad, bool>> condition1 = c => c.order_status > 0;
+
+                Expression<Func<reg_abroad, bool>> nameQuery1 = c => true;
+                if (!string.IsNullOrEmpty(title))
+                {
+                    nameQuery1 = c => (c.name_cn.Contains(title) || c.name_en.Contains(title) || c.code.Contains(title));
+                }
+
+                Expression<Func<reg_abroad, bool>> areaQuery1 = c => true;
+                if (!string.IsNullOrEmpty(area))
+                {
+                    areaQuery1 = c => c.code.Contains(area);
+                }
+
+                var abroads = Uof.Ireg_abroadService
+                    .GetAll(condition1)
+                    .Where(nameQuery1)
+                    .Where(areaQuery1)
+                    .Select(a => new AnnualWarning
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name_cn ?? a.name_en,
+                        order_type = "reg_abroad",
+                        order_type_name = "境外注册",
+                        saleman = a.member4.name,
+                        waiter = a.member6.name,
+                        //assistant_name = a.member7.name,
+                        submit_review_date = a.submit_review_date,
+                        date_finish = a.date_finish,
+                        date_setup = a.date_setup,
+                        annual_date = a.annual_date,
+                        order_status = a.order_status,
+                        date_last = a.date_last,
+                        title_last = a.title_last,
+                    }).ToList();
+
+                if (abroads.Count() > 0)
+                {
+                    items.AddRange(abroads);
+                }
+            }
+            #endregion
+
+            #region 国内注册
+            if (string.IsNullOrEmpty(order_type) || order_type == "reg_internal")
+            {
+                Expression<Func<reg_internal, bool>> condition2 = c => c.order_status > 0;
+
+                Expression<Func<reg_internal, bool>> nameQuery2 = c => true;
+                if (!string.IsNullOrEmpty(title))
+                {
+                    nameQuery2 = c => (c.name_cn.Contains(title) || c.code.Contains(title));
+                }
+                Expression<Func<reg_internal, bool>> areaQuery2 = c => true;
+                if (!string.IsNullOrEmpty(area))
+                {
+                    areaQuery2 = c => c.code.Contains(area);
+                }
+
+                var internas = Uof.Ireg_internalService
+                    .GetAll(condition2)
+                    .Where(nameQuery2)
+                    .Where(areaQuery2)
+                    .Select(a => new AnnualWarning
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name_cn,
+                        order_type = "reg_internal",
+                        order_type_name = "境内注册",
+                        saleman = a.member5.name,
+                        waiter = a.member7.name,
+                        //assistant_name = a.member.name,
+                        submit_review_date = a.submit_review_date,
+                        date_finish = a.date_finish,
+                        date_setup = a.date_setup,
+                        annual_date = a.annual_date,
+                        order_status = a.order_status,
+                        date_last = a.date_last,
+                        title_last = a.title_last,
+                    }).ToList();
+
+                if (internas.Count() > 0)
+                {
+                    items.AddRange(internas);
+                }
+
+            }
+            #endregion
+
+            #region 商标注册     
+            if (string.IsNullOrEmpty(order_type) || order_type == "trademark")
+            {
+                Expression<Func<trademark, bool>> condition3 = c => c.order_status > 0;
+                               
+                Expression<Func<trademark, bool>> nameQuery3 = c => true;
+                if (!string.IsNullOrEmpty(title))
+                {
+                    nameQuery3 = c => (c.name.Contains(title) || c.code.Contains(title));
+                }
+                Expression<Func<trademark, bool>> areaQuery3 = c => true;
+                if (!string.IsNullOrEmpty(area))
+                {
+                    areaQuery3 = c => c.code.Contains(area);
+                }
+
+                var trademarks = Uof.ItrademarkService
+                    .GetAll(condition3)                    
+                    .Where(nameQuery3)
+                    .Where(areaQuery3)
+                    .Select(a => new AnnualWarning
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name,
+                        order_type = "trademark",
+                        order_type_name = "商标注册",
+                        saleman = a.member4.name,
+                        waiter = a.member6.name,
+                        //assistant_name = a.member.name,
+                        submit_review_date = a.submit_review_date,
+                        date_finish = a.date_finish,
+                        date_setup = a.date_regit,
+                        annual_date = a.annual_date,
+                        exten_period = a.exten_period,
+                        order_status = a.order_status,
+
+                    date_last = a.date_last,
+                        title_last = a.title_last,
+                    }).ToList();
+
+                if (trademarks.Count() > 0)
+                {
+                    items.AddRange(trademarks);
+                }
+            }
+            #endregion
+
+            #region 专利注册
+            if (string.IsNullOrEmpty(order_type) || order_type == "patent")
+            {
+
+                Expression<Func<patent, bool>> condition4 = c => c.order_status > 0;
+                
+                Expression<Func<patent, bool>> nameQuery4 = c => true;
+                if (!string.IsNullOrEmpty(title))
+                {
+                    nameQuery4 = c => (c.name.Contains(title) || c.code.Contains(title));
+                }
+                Expression<Func<patent, bool>> areaQuery4 = c => true;
+                if (!string.IsNullOrEmpty(area))
+                {
+                    areaQuery4 = c => c.code.Contains(area);
+                }
+
+                var patents = Uof.IpatentService
+                    .GetAll(condition4)
+                    .Where(nameQuery4)
+                    .Where(areaQuery4)
+                    .Select(a => new AnnualWarning
+                    {
+                        id = a.id,
+                        customer_id = a.customer_id,
+                        customer_name = a.customer.name,
+                        customer_code = a.customer.code,
+                        order_code = a.code,
+                        order_name = a.name,
+                        order_type = "patent",
+                        order_type_name = "专利注册",
+                        saleman = a.member4.name,
+                        waiter = a.member6.name,
+                        assistant_name = a.member.name,
+                        submit_review_date = a.submit_review_date,
+                        date_finish = a.date_finish,
+                        date_setup = a.date_regit,
+                        annual_date = a.annual_date,
+                        order_status = a.order_status,
+                        date_last = a.date_last,
+                        title_last = a.title_last,
+                    }).ToList();
+
+                if (patents.Count() > 0)
+                {
+                    items.AddRange(patents);
+                }
+            }
+            #endregion
+
+            var result = new
+            {
+                items = items
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Revert(int id, string type)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            //var organization_id = 0;
+            int.TryParse(arrs[0], out userId);
+            //int.TryParse(arrs[2], out organization_id);
+            var isSuccess = false;
+            switch (type)
+            {
+                case "reg_abroad":
+                    var a = Uof.Ireg_abroadService.GetAll(o=>o.id == id).FirstOrDefault();
+                    a.order_status = 0;
+                    isSuccess = Uof.Ireg_abroadService.UpdateEntity(a);
+                    if (isSuccess)
+                    {
+                        Uof.ItimelineService.AddEntity(new timeline()
+                        {
+                            source_id = id,
+                            source_name = "reg_abroad",
+                            title = "恢复年检",
+                            is_system = 1,
+                            content = string.Format("{0}恢复了订单年检, 档案号{1}", arrs[3], a.code)
+                        });
+                    }
+                    break;
+                case "reg_internal":
+                    var b = Uof.Ireg_internalService.GetAll(o => o.id == id).FirstOrDefault();
+                    b.order_status = 0;
+                    isSuccess = Uof.Ireg_internalService.UpdateEntity(b);
+                    if (isSuccess)
+                    {
+                        Uof.ItimelineService.AddEntity(new timeline()
+                        {
+                            source_id = id,
+                            source_name = "reg_internal",
+                            title = "恢复年检",
+                            is_system = 1,
+                            content = string.Format("{0}恢复了订单年检, 档案号{1}", arrs[3], b.code)
+                        });
+                    }
+                    break;
+                case "trademark":
+                    var c = Uof.ItrademarkService.GetAll(o => o.id == id).FirstOrDefault();
+                    c.order_status = 0;
+                    isSuccess = Uof.ItrademarkService.UpdateEntity(c);
+                    if (isSuccess)
+                    {
+                        Uof.ItimelineService.AddEntity(new timeline()
+                        {
+                            source_id = id,
+                            source_name = "trademark",
+                            title = "恢复年检",
+                            is_system = 1,
+                            content = string.Format("{0}恢复了订单年检, 档案号{1}", arrs[3], c.code)
+                        });
+                    }
+                    break;
+                case "patent":
+                    var d = Uof.IpatentService.GetAll(o => o.id == id).FirstOrDefault();
+                    d.order_status = 0;
+                    isSuccess = Uof.IpatentService.UpdateEntity(d);
+                    if (isSuccess)
+                    {
+                        Uof.ItimelineService.AddEntity(new timeline()
+                        {
+                            source_id = id,
+                            source_name = "patent",
+                            title = "恢复年检",
+                            is_system = 1,
+                            content = string.Format("{0}恢复了订单年检, 档案号{1}", arrs[3], d.code)
                         });
                     }
                     break;

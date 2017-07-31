@@ -75,3 +75,7 @@ call AddColumnUnlessExists(Database(), 'mail', 'county', 'varchar(20) DEFAULT NU
 call AddColumnUnlessExists(Database(), 'lecture_customer', 'contact_id', 'int(11) DEFAULT NULL COMMENT "联系人id"');
 ALTER TABLE lecture_customer ADD CONSTRAINT fk_lecture_customer_contact_id FOREIGN KEY (contact_id) REFERENCES contact(id);
 
+
+-- 2017-08-01
+INSERT INTO `menu` VALUES ('73', '4', 'logoff_order', 'fa fa-th', '免年检订单列表', '40');
+

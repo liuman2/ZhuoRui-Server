@@ -28,6 +28,7 @@ namespace WebCenter.Web
         public int? annual_year { get; set; }
         public int? month { get; set; }
         public int? exten_period { get; set; }
+        public int? order_status { get; set; }
 
         public DateTime? date_last { get; set; }
         public string title_last { get; set; }
