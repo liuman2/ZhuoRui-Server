@@ -125,7 +125,7 @@ namespace WebCenter.Web.Controllers
 
             Expression<Func<customer, bool>> condition = c => c.status == 1; // && c.salesman_id == userId;
             Expression<Func<customer, bool>> nameQuery = c => true;
-                
+
             if (!string.IsNullOrEmpty(name))
             {
                 nameQuery = c => (c.name.IndexOf(name) > -1 || c.code.IndexOf(name) > -1);
@@ -135,7 +135,7 @@ namespace WebCenter.Web.Controllers
             var strUserId = userId.ToString();
             Expression<Func<customer, bool>> permQuery = c => true;
             if (ops.Count() == 0)
-            {                
+            {
                 permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
             }
             else
@@ -152,25 +152,26 @@ namespace WebCenter.Web.Controllers
                 .Where(permQuery)
                 .OrderByDescending(item => item.id).Select(c => new Customer()
                 {
-                id = c.id,
-                code = c.code,
-                name = c.name,
-                contact = c.contact,
-                mobile = c.mobile,
-                tel = c.tel,
-                industry = c.industry,
-                province = c.province,
-                city = c.city,
-                county = c.county,
-                address = c.address,
-                salesman_id = c.salesman_id,
-                salesman = c.member1.name,
-                source = c.source,
-                source_id = c.source_id,
-                source_name = "",
-                assistant_id = c.assistant_id,
-                assistant_name = "",
-                assistants = c.assistants,
+                    id = c.id,
+                    code = c.code,
+                    name = c.name,
+                    contact = c.contact,
+                    mobile = c.mobile,
+                    tel = c.tel,
+                    industry = c.industry,
+                    province = c.province,
+                    city = c.city,
+                    county = c.county,
+                    address = c.address,
+                    salesman_id = c.salesman_id,
+                    salesman = c.member1.name,
+                    source = c.source,
+                    source_id = c.source_id,
+                    source_name = "",
+                    assistant_id = c.assistant_id,
+                    assistant_name = "",
+                    assistants = c.assistants,
+                    date_created = c.date_created,
                 }).ToPagedList(index, size).ToList();
 
             var totalRecord = Uof.IcustomerService.GetAll(condition)
@@ -232,6 +233,12 @@ namespace WebCenter.Web.Controllers
                             }
                         }
                     }
+                }
+
+                foreach (var item in list)
+                {
+                    var total = GetBusinessCountByCustomerId(item.id);
+                    item.business_count = total;
                 }
             }
 
@@ -1261,6 +1268,48 @@ namespace WebCenter.Web.Controllers
             writer.Flush();
             stream.Position = 0;
             return stream;
+        }
+
+        private int GetBusinessCountByCustomerId(int customerId)
+        {
+            var total = 0;
+
+            var regAborads = Uof.Ireg_abroadService
+                .GetAll(a => a.customer_id == customerId)
+                .OrderByDescending(a => a.code)
+                .Count();
+
+            total += regAborads;
+
+            var regInterals = Uof.Ireg_internalService
+                .GetAll(a => a.customer_id == customerId)
+                .OrderByDescending(a => a.code)
+                .Count();
+
+            total += regInterals;
+
+            var trademarks = Uof.ItrademarkService
+                .GetAll(a => a.customer_id == customerId)
+                .OrderByDescending(a => a.code)
+                .Count();
+
+            total += trademarks;
+
+            var patents = Uof.IpatentService
+                .GetAll(a => a.customer_id == customerId)
+                .OrderByDescending(a => a.code)
+                .Count();
+
+            total += patents;
+
+            var audits = Uof.IauditService
+                .GetAll(a => a.customer_id == customerId)
+                .OrderByDescending(a => a.code)
+                .Count();
+
+            total += audits;
+
+            return total;
         }
     }
 }

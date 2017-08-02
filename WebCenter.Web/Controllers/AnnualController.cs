@@ -1566,6 +1566,9 @@ namespace WebCenter.Web.Controllers
                 case 2:
                     title = "订单注销，不再年检";
                     break;
+                case 3:
+                    title = "订单暂不年检";
+                    break;
                 default:
                     break;
             }
