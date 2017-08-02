@@ -51,7 +51,7 @@ namespace WebCenter.Web
         public int? assistant_id { get; set; }
         public string assistant_name { get; set; }
         public string tel { get; set; }
-
+        public string business_nature { get; set; }
         public string fax { get; set; }
         public string email { get; set; }
         public string QQ { get; set; }
@@ -73,6 +73,8 @@ namespace WebCenter.Web
         public string mailling_province { get; set; }
         public string mailling_city { get; set; }
         public string mailling_county { get; set; }
+
+        public DateTime? date_created { get; set; }
 
         public List<Assistant> assistantList { get; set; }
         public List<Bank> banks { get; set; }

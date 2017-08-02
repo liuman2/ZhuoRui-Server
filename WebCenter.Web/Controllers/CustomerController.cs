@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Web.Script.Serialization;
+using System.IO;
 
 namespace WebCenter.Web.Controllers
 {
@@ -1178,6 +1179,88 @@ namespace WebCenter.Web.Controllers
             Uof.IcontactService.UpdateEntity(d);
 
             return Json(d, JsonRequestBehavior.AllowGet);
+        }
+
+        public FileStreamResult Export()
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                throw new Exception("您没登录");
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                throw new Exception("您没登录");
+            }
+
+            if (arrs.Length < 5)
+            {
+                throw new Exception("您没登录");
+            }
+
+            var userId = 0;
+            var deptId = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out deptId);
+
+            Expression<Func<customer, bool>> condition = c => c.status == 1;
+
+            var list = Uof.IcustomerService.GetAll(condition)
+                .OrderByDescending(item => item.id).Select(c => new Customer()
+                {
+                    id = c.id,
+                    code = c.code,
+                    name = c.name,
+                    mobile = c.mobile,
+                    tel = c.tel,
+                    industry = c.industry,
+                    province = c.province,
+                    city = c.city,
+                    county = c.county,
+                    address = c.address,
+                    salesman = c.member1.name,
+                    source = c.source,
+                    source_name = "",
+                    date_created = c.date_created,
+                    business_nature = c.business_nature,
+                   
+                }).OrderBy(c => c.id).ToList();
+
+            if (list != null && list.Count() > 0)
+            {
+                var exportList = list.Select(c => new ExcelCustomerContact
+                {
+                    ID = c.id,
+                    客户名称 = c.name,
+                    业务性质 = c.business_nature,
+                    行业类别 = c.industry,
+                    客户来源 = c.source,
+                    省份 = c.province,
+                    城市 = c.city,
+                    地区 = c.county,
+                    地址 = c.address,
+                    业务员 = c.salesman,
+                    创建日期 = c.date_created.Value.ToString("yyyy-MM-dd")
+                }).ToList();
+
+                var sheet = ExportToExcel(exportList);
+                var fileName = "客户列表.xml";
+                var bytes = GenerateStreamFromString(sheet);
+                return File(bytes, "application/xml", fileName);
+            }
+            throw new Exception("您没登录");
+        }
+        public static Stream GenerateStreamFromString(string s)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
     }
 }

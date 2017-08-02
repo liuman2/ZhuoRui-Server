@@ -44,4 +44,20 @@ namespace WebCenter.Web
         public string 地址 { get; set; }
         public string 业务员 { get; set; }
     }
+
+    public class ExcelCustomerContact
+    {
+        public int ID { get; set; }
+        public string 客户名称 { get; set; }
+        public string 业务性质 { get; set; }
+        public string 行业类别 { get; set; }
+        public string 客户来源 { get; set; }
+        //public string 介绍人 { get; set; }
+        public string 省份 { get; set; }
+        public string 城市 { get; set; }
+        public string 地区 { get; set; }
+        public string 地址 { get; set; }
+        public string 业务员 { get; set; }
+        public string 创建日期 { get; set; }
+    }
 }
