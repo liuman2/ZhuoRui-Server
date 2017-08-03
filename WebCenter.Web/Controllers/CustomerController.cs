@@ -1188,6 +1188,50 @@ namespace WebCenter.Web.Controllers
             return Json(d, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult TransferBack(int id)
+        {
+            var IsAuth = HttpContext.User.Identity.IsAuthenticated;
+            if (!IsAuth)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var c = Uof.IcustomerService.GetById(id);
+            if (c == null)
+            {
+                return ErrorResult;
+            }
+
+            // TODO: 生成客户编码
+            //c.code = GetNextCustomerCode(c.salesman_id.Value);
+            c.status = 0;
+            c.date_updated = DateTime.Now;
+
+            var r = Uof.IcustomerService.UpdateEntity(c);
+
+            if (r)
+            {
+                Uof.Icustomer_timelineService.AddEntity(new customer_timeline
+                {
+                    title = "转回意向客户",
+                    customer_id = c.id,
+                    content = string.Format("由正式客户转回意向客户, 操作人：{0}", arrs[3]),
+                    date_business = DateTime.Now,
+                    date_created = DateTime.Now,
+                    is_system = 1
+                });
+            }
+
+            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
+        }
+
         public FileStreamResult Export()
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
