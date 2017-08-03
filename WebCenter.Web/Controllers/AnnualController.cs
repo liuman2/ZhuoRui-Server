@@ -835,44 +835,61 @@ namespace WebCenter.Web.Controllers
 
 
             // 客户id
-            Expression<Func<annual_exam, bool>> customerQuery = c => true;
-            if (request.customer_id != null && request.customer_id.Value > 0)
-            {
-                customerQuery = c => (c.customer_id == request.customer_id);
-            }
+            //Expression<Func<annual_exam, bool>> customerQuery = c => true;
+            //if (request.customer_id != null && request.customer_id.Value > 0)
+            //{
+            //    customerQuery = c => (c.customer_id == request.customer_id);
+            //}
             // 订单状态
-            Expression<Func<annual_exam, bool>> statusQuery = c => true;
-            if (request.status != null)
-            {
-                if (request.status == 2)
-                {
-                    statusQuery = c => (c.status == 2 || c.status == 3);
-                }
-                else
-                {
-                    statusQuery = c => (c.status == request.status.Value);
-                }
-            }
+            //Expression<Func<annual_exam, bool>> statusQuery = c => true;
+            //if (request.status != null)
+            //{
+            //    if (request.status == 2)
+            //    {
+            //        statusQuery = c => (c.status == 2 || c.status == 3);
+            //    }
+            //    else
+            //    {
+            //        statusQuery = c => (c.status == request.status.Value);
+            //    }
+            //}
 
             // 成交开始日期
-            Expression<Func<annual_exam, bool>> date1Query = c => true;
-            Expression<Func<annual_exam, bool>> date2Query = c => true;
-            if (request.start_time != null)
+            //Expression<Func<annual_exam, bool>> date1Query = c => true;
+            //Expression<Func<annual_exam, bool>> date2Query = c => true;
+            //if (request.start_time != null)
+            //{
+            //    date1Query = c => (c.date_transaction >= request.start_time.Value);
+            //}
+            //// 成交结束日期
+            //if (request.end_time != null)
+            //{
+            //    var endTime = request.end_time.Value.AddDays(1);
+            //    date2Query = c => (c.date_transaction < endTime);
+            //}
+
+            Expression<Func<annual_exam, bool>> nameQuery = c => true;
+            if (!string.IsNullOrEmpty(request.name))
             {
-                date1Query = c => (c.date_transaction >= request.start_time.Value);
+                nameQuery = c => (c.name_cn.Contains(request.name) || c.name_en.Contains(request.name) || c.order_code.Contains(request.name));
             }
-            // 成交结束日期
-            if (request.end_time != null)
+
+            Expression<Func<annual_exam, bool>> areaQuery = c => true;
+            if (!string.IsNullOrEmpty(request.area))
             {
-                var endTime = request.end_time.Value.AddDays(1);
-                date2Query = c => (c.date_transaction < endTime);
+                areaQuery = c => c.order_code.Contains(request.area);
+            }
+
+            Expression<Func<annual_exam, bool>> typeQuery = c => true;
+            if (!string.IsNullOrEmpty(request.order_type))
+            {
+                typeQuery = c => c.type == request.order_type;
             }
 
             var list = Uof.Iannual_examService.GetAll(condition)
-                .Where(customerQuery)
-                .Where(statusQuery)
-                .Where(date1Query)
-                .Where(date2Query)
+                .Where(nameQuery)
+                .Where(areaQuery)
+                .Where(typeQuery)
                 .OrderByDescending(item => item.id).Select(c => new AnnualExamEntity
                 {
                     id = c.id,
@@ -902,7 +919,12 @@ namespace WebCenter.Web.Controllers
 
                 }).ToPagedList(request.index, request.size).ToList();
 
-            var totalRecord = Uof.Iannual_examService.GetAll(condition).Count();
+            var totalRecord = Uof.Iannual_examService
+                .GetAll(condition)
+                .Where(nameQuery)
+                .Where(areaQuery)
+                .Where(typeQuery)
+                .Count();
 
             var totalPages = 0;
             if (totalRecord > 0)

@@ -146,13 +146,13 @@
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_waiter" />
         <AssociationConnector Association="DataCenter.Entities.fk_abroad_assistant_id" />
-        <EntityTypeShape EntityType="DataCenter.Entities.mail" Width="1.5" PointX="13.625" PointY="22.75" />
-        <AssociationConnector Association="DataCenter.Entities.fk_mail_audit_id" />
-        <AssociationConnector Association="DataCenter.Entities.fk_mail_creator_id" />
         <EntityTypeShape EntityType="DataCenter.Entities.lecture_customer" Width="1.5" PointX="18.125" PointY="40.375" />
         <AssociationConnector Association="DataCenter.Entities.fk_lecture_customer_contact_id" />
         <AssociationConnector Association="DataCenter.Entities.customer_ibfk_lec" />
         <AssociationConnector Association="DataCenter.Entities.lecture_ibfk_lec" />
+        <EntityTypeShape EntityType="DataCenter.Entities.mail" Width="1.5" PointX="13.625" PointY="22.75" />
+        <AssociationConnector Association="DataCenter.Entities.fk_mail_audit_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_mail_creator_id" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

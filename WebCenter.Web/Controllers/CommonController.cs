@@ -710,8 +710,21 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member3.area.name,
-                        rate = a.rate ?? 1
+                        rate = a.rate ?? 1,
+                        logoff = a.logoff,
+                        logoff_memo = a.logoff_memo,
+
                     }).FirstOrDefault();
+
+                    if (printData.logoff == 1)
+                    {
+                        printData.others = "{\"others\":\"注销\"}";
+                    }
+                    if (printData.logoff == 1 && !string.IsNullOrEmpty(printData.logoff_memo))
+                    {
+                        var str = string.Format("注销, {0}", printData.logoff_memo);
+                        printData.others = "{\"others\":\""+ str + "\"}";
+                    }
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}其他", printData.area);
@@ -1034,8 +1047,8 @@ namespace WebCenter.Web.Controllers
                         交易币别 = a.currency,
                         公司中文名称 = a.name_cn,
                         公司英文名称 = a.name_en,
-                        公司股东 = a.shareholder,
-                        公司董事 = a.director,
+                        //公司股东 = a.shareholder,
+                        //公司董事 = a.director,
                         其他事项 = a.description,
                         助理 = a.member7.name,
                         客户名称 = a.customer.name,

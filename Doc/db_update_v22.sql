@@ -79,3 +79,7 @@ ALTER TABLE lecture_customer ADD CONSTRAINT fk_lecture_customer_contact_id FOREI
 -- 2017-08-01
 INSERT INTO `menu` VALUES ('73', '4', 'logoff_order', 'fa fa-th', '免年检订单列表', '40');
 
+
+-- 2017-08-03
+INSERT INTO `operation` VALUES ('6', '数据导出');
+

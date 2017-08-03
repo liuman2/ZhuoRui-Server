@@ -531,7 +531,7 @@
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="type" Type="varchar" MaxLength="10" />
           <Property Name="owner" Type="varchar" MaxLength="100" />
-          <Property Name="letter_type" Type="varchar" MaxLength="20" />
+          <Property Name="letter_type" Type="varchar" MaxLength="300" />
           <Property Name="merchant" Type="varchar" MaxLength="20" />
           <Property Name="code" Type="varchar" MaxLength="50" />
           <Property Name="date_at" Type="datetime" Precision="0" />
@@ -3106,15 +3106,6 @@
             <End Role="member" EntitySet="members" />
             <End Role="reg_abroad" EntitySet="reg_abroad" />
           </AssociationSet>
-          <EntitySet Name="mails" EntityType="DataCenter.Entities.mail" />
-          <AssociationSet Name="fk_mail_audit_id" Association="DataCenter.Entities.fk_mail_audit_id">
-            <End Role="member" EntitySet="members" />
-            <End Role="mail" EntitySet="mails" />
-          </AssociationSet>
-          <AssociationSet Name="fk_mail_creator_id" Association="DataCenter.Entities.fk_mail_creator_id">
-            <End Role="member" EntitySet="members" />
-            <End Role="mail" EntitySet="mails" />
-          </AssociationSet>
           <EntitySet Name="lecture_customer" EntityType="DataCenter.Entities.lecture_customer" />
           <AssociationSet Name="fk_lecture_customer_contact_id" Association="DataCenter.Entities.fk_lecture_customer_contact_id">
             <End Role="contact" EntitySet="contacts" />
@@ -3127,6 +3118,15 @@
           <AssociationSet Name="lecture_ibfk_lec" Association="DataCenter.Entities.lecture_ibfk_lec">
             <End Role="lecture" EntitySet="lectures" />
             <End Role="lecture_customer" EntitySet="lecture_customer" />
+          </AssociationSet>
+          <EntitySet Name="mails" EntityType="DataCenter.Entities.mail" />
+          <AssociationSet Name="fk_mail_audit_id" Association="DataCenter.Entities.fk_mail_audit_id">
+            <End Role="member" EntitySet="members" />
+            <End Role="mail" EntitySet="mails" />
+          </AssociationSet>
+          <AssociationSet Name="fk_mail_creator_id" Association="DataCenter.Entities.fk_mail_creator_id">
+            <End Role="member" EntitySet="members" />
+            <End Role="mail" EntitySet="mails" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
@@ -5447,6 +5447,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="lecture_customer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="lecture_id" Type="Int32" />
+          <Property Name="customer_id" Type="Int32" />
+          <Property Name="contact_id" Type="Int32" />
+          <NavigationProperty Name="contact" Relationship="DataCenter.Entities.fk_lecture_customer_contact_id" FromRole="lecture_customer" ToRole="contact" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.customer_ibfk_lec" FromRole="lecture_customer" ToRole="customer" />
+          <NavigationProperty Name="lecture" Relationship="DataCenter.Entities.lecture_ibfk_lec" FromRole="lecture_customer" ToRole="lecture" />
+        </EntityType>
+        <Association Name="fk_lecture_customer_contact_id">
+          <End Type="DataCenter.Entities.contact" Role="contact" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture_customer">
+              <PropertyRef Name="contact_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="customer_ibfk_lec">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture_customer">
+              <PropertyRef Name="customer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="lecture_ibfk_lec">
+          <End Type="DataCenter.Entities.lecture" Role="lecture" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lecture">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lecture_customer">
+              <PropertyRef Name="lecture_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="mail">
           <Key>
             <PropertyRef Name="id" />
@@ -5454,7 +5502,7 @@
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="type" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="owner" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="letter_type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="letter_type" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="merchant" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="date_at" Type="DateTime" />
@@ -5502,54 +5550,6 @@
             </Principal>
             <Dependent Role="mail">
               <PropertyRef Name="creator_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="lecture_customer">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="lecture_id" Type="Int32" />
-          <Property Name="customer_id" Type="Int32" />
-          <Property Name="contact_id" Type="Int32" />
-          <NavigationProperty Name="contact" Relationship="DataCenter.Entities.fk_lecture_customer_contact_id" FromRole="lecture_customer" ToRole="contact" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.customer_ibfk_lec" FromRole="lecture_customer" ToRole="customer" />
-          <NavigationProperty Name="lecture" Relationship="DataCenter.Entities.lecture_ibfk_lec" FromRole="lecture_customer" ToRole="lecture" />
-        </EntityType>
-        <Association Name="fk_lecture_customer_contact_id">
-          <End Type="DataCenter.Entities.contact" Role="contact" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="contact">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="lecture_customer">
-              <PropertyRef Name="contact_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="customer_ibfk_lec">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="lecture_customer">
-              <PropertyRef Name="customer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="lecture_ibfk_lec">
-          <End Type="DataCenter.Entities.lecture" Role="lecture" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.lecture_customer" Role="lecture_customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="lecture">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="lecture_customer">
-              <PropertyRef Name="lecture_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6603,6 +6603,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="lecture_customer">
+            <EntityTypeMapping TypeName="DataCenter.Entities.lecture_customer">
+              <MappingFragment StoreEntitySet="lecture_customer">
+                <ScalarProperty Name="contact_id" ColumnName="contact_id" />
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="lecture_id" ColumnName="lecture_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="mails">
             <EntityTypeMapping TypeName="DataCenter.Entities.mail">
               <MappingFragment StoreEntitySet="mail">
@@ -6632,16 +6642,6 @@
                 <ScalarProperty Name="letter_type" ColumnName="letter_type" />
                 <ScalarProperty Name="owner" ColumnName="owner" />
                 <ScalarProperty Name="type" ColumnName="type" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="lecture_customer">
-            <EntityTypeMapping TypeName="DataCenter.Entities.lecture_customer">
-              <MappingFragment StoreEntitySet="lecture_customer">
-                <ScalarProperty Name="contact_id" ColumnName="contact_id" />
-                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
-                <ScalarProperty Name="lecture_id" ColumnName="lecture_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -133,6 +133,10 @@ namespace WebCenter.Web
         /// 渠道商
         /// </summary>
         public string trader { get; set; }
+
+        public int? logoff { get; set; }
+
+        public string logoff_memo { get; set; }
     }
 
     public class ReceiptPrintData

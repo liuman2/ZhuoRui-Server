@@ -155,7 +155,7 @@ namespace WebCenter.Web.Controllers
                 .Where(date2Created)
                 .Where(nameQuery)
                 .Where(codeQuery)
-                .OrderByDescending(item => item.code).Select(c => new
+                .OrderByDescending(item => item.date_created).Select(c => new
                 {
                     id = c.id,
                     code = c.code,
@@ -245,6 +245,15 @@ namespace WebCenter.Web.Controllers
             aboad.review_status = -1;
             aboad.creator_id = userId;
             aboad.organization_id = GetOrgIdByUserId(userId); // organization_id;
+
+            if (aboad.customer_id != null)
+            {
+                var salesman_id = Uof.IcustomerService.GetAll(c => c.id == aboad.customer_id).Select(c => c.salesman_id).FirstOrDefault();
+                if (salesman_id != null)
+                {
+                    aboad.salesman_id = salesman_id;
+                }
+            }
 
             var nowYear = DateTime.Now.Year;
 
@@ -653,6 +662,15 @@ namespace WebCenter.Web.Controllers
             }
 
             var isChangeCurrency = reg.currency != dbReg.currency || reg.rate != dbReg.rate;
+
+            if (reg.customer_id != null)
+            {
+                var salesman_id = Uof.IcustomerService.GetAll(c => c.id == reg.customer_id).Select(c => c.salesman_id).FirstOrDefault();
+                if (salesman_id != null)
+                {
+                    reg.salesman_id = salesman_id;
+                }
+            }
 
             dbReg.customer_id = reg.customer_id;
             dbReg.name_cn = reg.name_cn;

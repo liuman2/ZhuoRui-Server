@@ -17,6 +17,8 @@ namespace WebCenter.Web
         public DateTime? end_create { get; set; }
         public string name { get; set; }
         public string code { get; set; }
+        public string order_type { get; set; }
+        public string area { get; set; }
     }
 
     public class TrademarkRequest : OrderSearchRequest
