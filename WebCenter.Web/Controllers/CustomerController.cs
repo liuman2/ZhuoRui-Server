@@ -276,7 +276,10 @@ namespace WebCenter.Web.Controllers
             Expression<Func<customer, bool>> nameQuery = c => true;
             Expression<Func<customer, bool>> permQuery = c => true;
             var strUserId = userId.ToString();
-            permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
+            if (userId != 1)
+            {
+                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
+            }            
 
             if (!string.IsNullOrEmpty(name))
             {
