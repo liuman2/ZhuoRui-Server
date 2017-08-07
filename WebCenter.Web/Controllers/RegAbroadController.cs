@@ -75,11 +75,11 @@ namespace WebCenter.Web.Controllers
             }
 
             // 客户id
-            Expression<Func<reg_abroad, bool>> customerQuery = c => true;
-            if (request.customer_id != null && request.customer_id.Value > 0)
-            {
-                customerQuery = c => (c.customer_id == request.customer_id);
-            }
+            //Expression<Func<reg_abroad, bool>> customerQuery = c => true;
+            //if (request.customer_id != null && request.customer_id.Value > 0)
+            //{
+            //    customerQuery = c => (c.customer_id == request.customer_id);
+            //}
             // 订单状态
             Expression<Func<reg_abroad, bool>> statusQuery = c => true;
             if (request.status != null)
@@ -107,54 +107,59 @@ namespace WebCenter.Web.Controllers
             }
 
             // 成交开始日期
-            Expression<Func<reg_abroad, bool>> date1Query = c => true;
-            Expression<Func<reg_abroad, bool>> date2Query = c => true;
-            if (request.start_time != null)
-            {
-                date1Query = c => (c.date_transaction >= request.start_time.Value);
-            }
-            // 成交结束日期
-            if (request.end_time != null)
-            {
-                var endTime = request.end_time.Value.AddDays(1);
-                date2Query = c => (c.date_transaction < endTime);
-            }
+            //Expression<Func<reg_abroad, bool>> date1Query = c => true;
+            //Expression<Func<reg_abroad, bool>> date2Query = c => true;
+            //if (request.start_time != null)
+            //{
+            //    date1Query = c => (c.date_transaction >= request.start_time.Value);
+            //}
+            //// 成交结束日期
+            //if (request.end_time != null)
+            //{
+            //    var endTime = request.end_time.Value.AddDays(1);
+            //    date2Query = c => (c.date_transaction < endTime);
+            //}
 
             // 录入开始日期
-            Expression<Func<reg_abroad, bool>> date1Created = c => true;
-            Expression<Func<reg_abroad, bool>> date2Created = c => true;
-            if (request.start_create != null)
-            {
-                date1Created = c => (c.date_created >= request.start_create.Value);
-            }
-            // 录入结束日期
-            if (request.end_create != null)
-            {
-                var endTime = request.end_create.Value.AddDays(1);
-                date2Created = c => (c.date_created < endTime);
-            }
+            //Expression<Func<reg_abroad, bool>> date1Created = c => true;
+            //Expression<Func<reg_abroad, bool>> date2Created = c => true;
+            //if (request.start_create != null)
+            //{
+            //    date1Created = c => (c.date_created >= request.start_create.Value);
+            //}
+            //// 录入结束日期
+            //if (request.end_create != null)
+            //{
+            //    var endTime = request.end_create.Value.AddDays(1);
+            //    date2Created = c => (c.date_created < endTime);
+            //}
 
             Expression<Func<reg_abroad, bool>> nameQuery = c => true;
             if (!string.IsNullOrEmpty(request.name))
             {
-                nameQuery = c => (c.name_cn.ToLower().Contains(request.name.ToLower()) || c.name_en.ToLower().Contains(request.name.ToLower()));
+                nameQuery = c => (
+                c.name_cn.ToLower().Contains(request.name.ToLower()) || 
+                c.name_en.ToLower().Contains(request.name.ToLower()) || 
+                c.code.ToLower().Contains(request.name.ToLower()));
             }
 
-            Expression<Func<reg_abroad, bool>> codeQuery = c => true;
-            if (!string.IsNullOrEmpty(request.code))
+            //Expression<Func<reg_abroad, bool>> codeQuery = c => true;
+            //if (!string.IsNullOrEmpty(request.code))
+            //{
+            //    codeQuery = c => c.code.ToLower().Contains(request.code.ToLower());
+            //}
+
+            Expression<Func<reg_abroad, bool>> areaQuery = c => true;
+            if (!string.IsNullOrEmpty(request.area))
             {
-                codeQuery = c => c.code.ToLower().Contains(request.code.ToLower());
+                areaQuery = c => c.code.Contains(request.area);
             }
 
-            var list = Uof.Ireg_abroadService.GetAll(condition)
-                .Where(customerQuery)
-                .Where(statusQuery)
-                .Where(date1Query)
-                .Where(date2Query)
-                .Where(date1Created)
-                .Where(date2Created)
+            var list = Uof.Ireg_abroadService
+                .GetAll(condition)                
+                .Where(statusQuery)                
                 .Where(nameQuery)
-                .Where(codeQuery)
+                .Where(areaQuery)
                 .OrderByDescending(item => item.date_created).Select(c => new
                 {
                     id = c.id,
@@ -188,15 +193,11 @@ namespace WebCenter.Web.Controllers
 
                 }).ToPagedList(request.index, request.size).ToList();
 
-            var totalRecord = Uof.Ireg_abroadService.GetAll(condition)
-                .Where(customerQuery)
+            var totalRecord = Uof.Ireg_abroadService
+                .GetAll(condition)
                 .Where(statusQuery)
-                .Where(date1Query)
-                .Where(date2Query)
-                .Where(date1Created)
-                .Where(date2Created)
                 .Where(nameQuery)
-                .Where(codeQuery)
+                .Where(areaQuery)
                 .Count();
 
             var totalPages = 0;
