@@ -126,15 +126,15 @@ namespace WebCenter.Web.Controllers
 
             var annualCount = GetAnnualCount(userId);
 
-            var customers = Uof.IcustomerService.GetAll(c => c.salesman_id == userId).Select(c => new
-            {
-                id = c.id,
-                code = c.code,
-                name = c.name,
-                salesman = c.member1.name,
-                contact = c.contact,
-                mobile = c.mobile
-            }).OrderByDescending(c => c.id).ToPagedList(1, 10).ToList();
+            //var customers = Uof.IcustomerService.GetAll(c => c.salesman_id == userId).Select(c => new
+            //{
+            //    id = c.id,
+            //    code = c.code,
+            //    name = c.name,
+            //    salesman = c.member1.name,
+            //    contact = c.contact,
+            //    mobile = c.mobile
+            //}).OrderByDescending(c => c.id).ToPagedList(1, 10).ToList();
 
             var res = new
             {
@@ -143,7 +143,7 @@ namespace WebCenter.Web.Controllers
                     customers_count = customerCount,
                     annuals_count = annualCount
                 },
-                customers = customers
+                //customers = customers
             };
 
             return Json(res, JsonRequestBehavior.AllowGet);

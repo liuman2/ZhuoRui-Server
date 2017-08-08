@@ -83,3 +83,26 @@ INSERT INTO `menu` VALUES ('73', '4', 'logoff_order', 'fa fa-th', '免年检订�
 -- 2017-08-03
 INSERT INTO `operation` VALUES ('6', '数据导出');
 
+
+-- 2017-08-08
+DROP TABLE IF EXISTS `schedule`;
+CREATE TABLE `schedule` (
+  `id` int(11) NOT NULL,
+  `title` varchar(120) DEFAULT NULL COMMENT '主题',
+  `start` datetime DEFAULT NULL COMMENT '开始时间',
+  `end` datetime DEFAULT NULL COMMENT '结束时间',
+  `color` varchar(50) DEFAULT NULL COMMENT '颜色',
+  `type`  int(11) DEFAULT NULL COMMENT '类型0-个人, 1-部分人, 2-全公司',
+  `people`  varchar(500) DEFAULT NULL COMMENT '参与人员',
+  `location` varchar(120) DEFAULT NULL COMMENT '地点',
+  `memo` varchar(300) DEFAULT NULL COMMENT '备注',
+  `attachment` varchar(300) DEFAULT NULL COMMENT '附件',
+  `created_id` int(11) NOT NULL COMMENT '创建人',
+  `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_id` int(11) NOT NULL COMMENT '修改人',
+  `date_updated` datetime DEFAULT NULL,
+
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `sequence` VALUES ('schedule', '1');
+
