@@ -182,7 +182,7 @@ namespace WebCenter.Web.Controllers
                         saleman = a.member4.name,
                         type = "",
                         currency = a.currency,
-                        area = a.member7.area.name, // a.member4.area.name,
+                        area = a.member.area.name, // a.member4.area.name,
                         rate = a.rate ?? 1,
                         region = a.region,
                         trader = a.customer1.name
