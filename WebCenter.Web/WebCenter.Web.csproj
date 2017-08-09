@@ -251,6 +251,7 @@
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReserveController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TimelineController.cs" />
     <Compile Include="Controllers\TrademarkController.cs" />
@@ -365,6 +366,7 @@
     <Folder Include="Views\Register\" />
     <Folder Include="Views\Report\" />
     <Folder Include="Views\Reserve\" />
+    <Folder Include="Views\Schedule\" />
     <Folder Include="Views\Settings\" />
     <Folder Include="Views\Timeline\" />
     <Folder Include="Views\User\" />

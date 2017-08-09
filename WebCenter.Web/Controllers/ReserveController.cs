@@ -82,7 +82,13 @@ namespace WebCenter.Web.Controllers
             }
 
 
-            var list = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Where(permQuery).OrderBy(item => item.id).Select(c => new Customer()
+            var list = Uof.IcustomerService
+                .GetAll(condition)
+                .Where(nameQuery)
+                .Where(permQuery)
+                .Where(c => c.is_delete != 1)
+                .OrderBy(item => item.id)
+                .Select(c => new Customer()
             {
                 id = c.id,
                 name = c.name,
@@ -97,7 +103,7 @@ namespace WebCenter.Web.Controllers
                 tel = c.tel
             }).ToPagedList(index, size).ToList();
 
-            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Where(permQuery).Count();
+            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Where(permQuery).Where(c => c.is_delete != 1).Count();
 
             if (list.Count > 0)
             {
@@ -189,7 +195,7 @@ namespace WebCenter.Web.Controllers
             //c.salesman_id = userId;
             c.organization_id = organization_id;
             c.status = 0;
-
+            c.is_delete = 0;
             var _c = Uof.IcustomerService.AddEntity(c);
 
             if (_c != null)

@@ -310,6 +310,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  IscheduleService IscheduleService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IsequenceService IsequenceService
     {
         get;

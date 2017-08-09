@@ -103,6 +103,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<Irole_operationService>().To<role_operationService>().InRequestScope();
 	
+	   kernel.Bind<IscheduleService>().To<scheduleService>().InRequestScope();
+	
 	   kernel.Bind<IsequenceService>().To<sequenceService>().InRequestScope();
 	
 	   kernel.Bind<IsettingService>().To<settingService>().InRequestScope();

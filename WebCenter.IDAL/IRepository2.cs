@@ -178,6 +178,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IscheduleRepository :IBaseRepository<schedule>
+    {         
+    }
+	
     public partial interface IsequenceRepository :IBaseRepository<sequence>
     {         
     }

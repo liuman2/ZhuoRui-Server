@@ -93,6 +93,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.Irole_operationRepository role_operationRepository { get { return new role_operationRepository(); } }
 	
+	public IDAL.IscheduleRepository scheduleRepository { get { return new scheduleRepository(); } }
+	
 	public IDAL.IsequenceRepository sequenceRepository { get { return new sequenceRepository(); } }
 	
 	public IDAL.IsettingRepository settingRepository { get { return new settingRepository(); } }

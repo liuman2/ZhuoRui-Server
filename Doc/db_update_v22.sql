@@ -84,7 +84,7 @@ INSERT INTO `menu` VALUES ('73', '4', 'logoff_order', 'fa fa-th', '免年检订�
 INSERT INTO `operation` VALUES ('6', '数据导出');
 
 
--- 2017-08-08
+-- 2017-08-09
 DROP TABLE IF EXISTS `schedule`;
 CREATE TABLE `schedule` (
   `id` int(11) NOT NULL,
@@ -105,4 +105,8 @@ CREATE TABLE `schedule` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `sequence` VALUES ('schedule', '1');
+
+call AddColumnUnlessExists(Database(), 'customer', 'is_delete', 'tinyint(3) DEFAULT NULL COMMENT "是否删除"');
+call AddColumnUnlessExists(Database(), 'timeline', 'creator_id', 'int(11) DEFAULT NULL COMMENT "创建人"');
+ALTER TABLE timeline ADD CONSTRAINT fk_timeline_creator_id FOREIGN KEY (creator_id) REFERENCES member(id);
 

@@ -221,6 +221,9 @@
     <Compile Include="role_operation.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="schedule.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="sequence.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

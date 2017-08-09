@@ -55,5 +55,11 @@ namespace WebCenter.Entities
     
     
         public Nullable<sbyte> log_type { get; set; }
+    
+    
+    
+        public Nullable<int> creator_id { get; set; }
+    
+        public virtual member member { get; set; }
     }
 }

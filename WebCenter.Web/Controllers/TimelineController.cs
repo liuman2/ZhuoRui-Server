@@ -86,6 +86,22 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Add(timeline timeLine)
         {
+            var auth = HttpContext.User.Identity.IsAuthenticated;
+            if (!auth)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
             if (timeLine.source_name == "annual")
             {
                 var annualExam = Uof.Iannual_examService.GetAll(a => a.id == timeLine.source_id).Select(a => new
@@ -105,6 +121,7 @@ namespace WebCenter.Web.Controllers
             }
 
             timeLine.is_system = 0;
+            timeLine.creator_id = userId;
             if (timeLine.date_business == null)
             {
                 timeLine.date_business = DateTime.Now;

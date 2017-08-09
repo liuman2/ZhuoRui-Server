@@ -443,6 +443,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class scheduleService:BaseService<schedule>,IscheduleService
+    {   
+        public scheduleService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.scheduleRepository;
+        }  
+    }
+	
 	public partial class sequenceService:BaseService<sequence>,IsequenceService
     {   
         public sequenceService()

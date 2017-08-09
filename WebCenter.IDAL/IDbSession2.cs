@@ -142,6 +142,9 @@ namespace WebCenter.IDAL
 		IDAL.Irole_operationRepository role_operationRepository { get; }
 	  
 
+		IDAL.IscheduleRepository scheduleRepository { get; }
+	  
+
 		IDAL.IsequenceRepository sequenceRepository { get; }
 	  
 

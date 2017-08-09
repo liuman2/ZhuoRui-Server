@@ -182,6 +182,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface IscheduleService:IBaseService<schedule>
+    {   
+    }
+	
 	public partial interface IsequenceService:IBaseService<sequence>
     {   
     }

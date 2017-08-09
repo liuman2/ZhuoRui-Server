@@ -94,6 +94,8 @@ namespace WebCenter.IServices
 	
 	  Irole_operationService Irole_operationService{get;set;} 
 	
+	  IscheduleService IscheduleService{get;set;} 
+	
 	  IsequenceService IsequenceService{get;set;} 
 	
 	  IsettingService IsettingService{get;set;} 

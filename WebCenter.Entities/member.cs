@@ -40,8 +40,6 @@ namespace WebCenter.Entities
             this.audits4 = new HashSet<audit>();
             this.audits5 = new HashSet<audit>();
             this.audits6 = new HashSet<audit>();
-            this.customers = new HashSet<customer>();
-            this.customers1 = new HashSet<customer>();
             this.histories = new HashSet<history>();
             this.histories1 = new HashSet<history>();
             this.histories2 = new HashSet<history>();
@@ -92,6 +90,9 @@ namespace WebCenter.Entities
             this.reg_abroad7 = new HashSet<reg_abroad>();
             this.mails = new HashSet<mail>();
             this.mails1 = new HashSet<mail>();
+            this.timelines = new HashSet<timeline>();
+            this.customers = new HashSet<customer>();
+            this.customers1 = new HashSet<customer>();
         }
     
     
@@ -183,8 +184,6 @@ namespace WebCenter.Entities
         public virtual ICollection<audit> audits4 { get; set; }
         public virtual ICollection<audit> audits5 { get; set; }
         public virtual ICollection<audit> audits6 { get; set; }
-        public virtual ICollection<customer> customers { get; set; }
-        public virtual ICollection<customer> customers1 { get; set; }
         public virtual ICollection<history> histories { get; set; }
         public virtual ICollection<history> histories1 { get; set; }
         public virtual ICollection<history> histories2 { get; set; }
@@ -235,5 +234,8 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad7 { get; set; }
         public virtual ICollection<mail> mails { get; set; }
         public virtual ICollection<mail> mails1 { get; set; }
+        public virtual ICollection<timeline> timelines { get; set; }
+        public virtual ICollection<customer> customers { get; set; }
+        public virtual ICollection<customer> customers1 { get; set; }
     }
 }

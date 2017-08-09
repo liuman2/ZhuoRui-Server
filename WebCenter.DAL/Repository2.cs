@@ -222,6 +222,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class scheduleRepository :BaseRepository<schedule>,IscheduleRepository
+    {
+         
+    }
+	
 	public partial class sequenceRepository :BaseRepository<sequence>,IsequenceRepository
     {
          

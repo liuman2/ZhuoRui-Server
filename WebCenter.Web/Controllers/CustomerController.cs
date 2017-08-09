@@ -66,14 +66,14 @@ namespace WebCenter.Web.Controllers
                 condition = tmp;
             }
 
-            var list = Uof.IcustomerService.GetAll(condition).Where(permQuery).OrderBy(item => item.id).Select(c => new
+            var list = Uof.IcustomerService.GetAll(condition).Where(permQuery).Where(c=>c.is_delete != 1).OrderBy(item => item.id).Select(c => new
             {
                 id = c.id,
                 code = c.code,
                 name = c.name
             }).ToPagedList(index, size).ToList();
 
-            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(permQuery).Count();
+            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(permQuery).Where(c => c.is_delete != 1).Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
@@ -150,6 +150,7 @@ namespace WebCenter.Web.Controllers
             var list = Uof.IcustomerService.GetAll(condition)
                 .Where(nameQuery)
                 .Where(permQuery)
+                .Where(c => c.is_delete != 1)
                 .OrderByDescending(item => item.id).Select(c => new Customer()
                 {
                     id = c.id,
@@ -176,7 +177,9 @@ namespace WebCenter.Web.Controllers
 
             var totalRecord = Uof.IcustomerService.GetAll(condition)
                 .Where(nameQuery)
-                .Where(permQuery).Count();
+                .Where(permQuery)
+                .Where(c => c.is_delete != 1)
+                .Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
@@ -289,6 +292,7 @@ namespace WebCenter.Web.Controllers
             var list = Uof.IcustomerService.GetAll(condition)
                 .Where(nameQuery)
                 .Where(permQuery)
+                .Where(c => c.is_delete != 1)
                 .OrderByDescending(item => item.id).Select(c => new
                 {
                     id = c.id,
@@ -312,7 +316,7 @@ namespace WebCenter.Web.Controllers
                     salesman = c.member1.name,
                 }).ToPagedList(index, size).ToList();
 
-            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Count();
+            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Where(c => c.is_delete != 1).Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
@@ -362,7 +366,7 @@ namespace WebCenter.Web.Controllers
             c.status = 1;
 
             c.code = GetNextCustomerCode(c.salesman_id.Value);
-
+            c.is_delete = 0;
             var _c = Uof.IcustomerService.AddEntity(c);
 
             if (_c != null)
@@ -822,6 +826,7 @@ namespace WebCenter.Web.Controllers
 
             var list = Uof.IcustomerService.GetAll(condition)
                 .Where(nameQuery)
+                .Where(c => c.is_delete != 1)
                 .OrderByDescending(item => item.id).Select(c => new
                 {
                     id = c.id,
@@ -843,7 +848,7 @@ namespace WebCenter.Web.Controllers
 
                 }).ToPagedList(index, size).ToList();
 
-            var totalRecord = Uof.IcustomerService.GetAll(condition).Count();
+            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(c => c.is_delete != 1).Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
@@ -1260,7 +1265,7 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out deptId);
 
-            Expression<Func<customer, bool>> condition = c => c.status == 1;
+            Expression<Func<customer, bool>> condition = c => c.status == 1 && c.is_delete != 1;
 
             var list = Uof.IcustomerService.GetAll(condition)
                 .OrderByDescending(item => item.id).Select(c => new Customer()
