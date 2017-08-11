@@ -1051,6 +1051,7 @@ namespace WebCenter.Web.Controllers
                         //公司董事 = a.director,
                         其他事项 = a.description,
                         助理 = a.member7.name,
+                        客户ID = a.customer_id,
                         客户名称 = a.customer.name,
                         年检客服 = a.member6.name,
                         //成交日期 = a.date_transaction,
@@ -1061,7 +1062,11 @@ namespace WebCenter.Web.Controllers
                         汇率 = a.rate.ToString(),
                         注册地区 = a.region,
                         注册地址 = a.address,
-                        注册编号 = a.reg_no
+                        注册编号 = a.reg_no,
+                        订单归属人ID = a.creator_id,
+                        订单归属人 = a.member.name,
+                        客户归属ID = a.salesman_id,
+                        客户归属 = a.member4.name,
                     }).ToList();
 
                     var sheet = ExportToExcel(abroads);

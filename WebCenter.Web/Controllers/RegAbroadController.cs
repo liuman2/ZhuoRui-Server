@@ -410,8 +410,11 @@ namespace WebCenter.Web.Controllers
                 manager_id = a.manager_id,
                 manager_name = a.member2.name,
 
-                assistant_id = a.assistant_id,
-                assistant_name = a.member7.name,
+                // TODO: 
+                //assistant_id = a.assistant_id,
+                //assistant_name = a.member7.name,
+                assistant_id = a.creator_id,
+                assistant_name = a.member.name,
 
                 status = a.status,
                 review_status = a.review_status,
@@ -534,8 +537,9 @@ namespace WebCenter.Web.Controllers
                 manager_id = a.manager_id,
                 manager_name = a.member2.name,
 
-                assistant_id = a.assistant_id,
-                assistant_name = a.member7.name,
+                // TODO:  修改成订单归属
+                assistant_id = a.creator_id, 
+                assistant_name = a.member.name,
 
                 status = a.status,
                 review_status = a.review_status,
@@ -698,7 +702,7 @@ namespace WebCenter.Web.Controllers
             dbReg.description = reg.description;
             dbReg.currency = reg.currency;
             dbReg.rate = reg.rate;
-            dbReg.assistant_id = reg.assistant_id;
+            //dbReg.assistant_id = reg.assistant_id;
             dbReg.shareholder = reg.shareholder;
 
             dbReg.trader_id = reg.trader_id;

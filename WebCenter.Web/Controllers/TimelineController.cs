@@ -19,7 +19,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult UpdateOldData()
         {
-            var oldList = Uof.ItimelineService.GetAll(t => t.source_name == "annual").OrderBy(t=>t.id).ToPagedList(1, 500).ToList();
+            var oldList = Uof.ItimelineService.GetAll(t => t.source_name == "annual").OrderBy(t => t.id).ToPagedList(1, 500).ToList();
 
             var oldTimeList = new List<timeline>();
 
@@ -42,7 +42,7 @@ namespace WebCenter.Web.Controllers
                 if (oldTimeList != null && oldTimeList.Count > 0)
                 {
                     Uof.ItimelineService.UpdateEntities(oldTimeList);
-                }                
+                }
             }
 
             return SuccessResult;
@@ -74,7 +74,20 @@ namespace WebCenter.Web.Controllers
                 nameQuery = c => (c.title.IndexOf(name) > -1 || c.content.IndexOf(name) > -1);
             }
 
-            var list = Uof.ItimelineService.GetAll(t => t.source_id == source_id && t.source_name == source_name).Where(nameQuery).OrderByDescending(c => c.date_created).ToList();
+            var list = Uof.ItimelineService.GetAll(t => t.source_id == source_id && t.source_name == source_name).Where(nameQuery).OrderByDescending(c => c.date_created).Select(t => new TimeLine
+            {
+                id = t.id,
+                content = t.content,
+                creator_id = t.creator_id,
+                date_business = t.date_business,
+                date_created = t.date_created,
+                date_updated = t.date_updated,
+                is_system = t.is_system,
+                log_type = t.log_type,
+                source_id = t.source_id,
+                source_name = t.source_name,
+                title = t.title,
+            }).ToList();
 
             var result = new
             {
@@ -202,13 +215,13 @@ namespace WebCenter.Web.Controllers
                 {
                     case "reg_abroad":
                         var dbAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
-                        dbAbroad.date_last  = dateLast;
+                        dbAbroad.date_last = dateLast;
                         dbAbroad.title_last = titleLast;
                         Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
                         break;
                     case "reg_internal":
                         var dbInternal = Uof.Ireg_internalService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
-                        dbInternal.date_last  = dateLast;
+                        dbInternal.date_last = dateLast;
                         dbInternal.title_last = titleLast;
                         Uof.Ireg_internalService.UpdateEntity(dbInternal);
                         break;
@@ -341,7 +354,20 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
-            var c = Uof.ItimelineService.GetById(id);
+            var c = Uof.ItimelineService.GetAll(t => t.id == id).Select(t => new TimeLine
+            {
+                id = t.id,
+                content = t.content,
+                creator_id = t.creator_id,
+                date_business = t.date_business,
+                date_created = t.date_created,
+                date_updated = t.date_updated,
+                is_system = t.is_system,
+                log_type = t.log_type,
+                source_id = t.source_id,
+                source_name = t.source_name,
+                title = t.source_name,                
+            }).FirstOrDefault();
             if (c == null)
             {
                 return ErrorResult;

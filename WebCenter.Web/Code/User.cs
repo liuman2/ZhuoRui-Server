@@ -428,5 +428,20 @@ namespace WebCenter.Web
         public string email { get; set; }
         public string QQ { get; set; }
         public string wechat { get; set; }
-    }   
+    }
+
+    public partial class TimeLine
+    {
+        public int id { get; set; }
+        public int? source_id { get; set; }
+        public string source_name { get; set; }
+        public string title { get; set; }
+        public string content { get; set; }
+        public DateTime? date_created { get; set; }
+        public DateTime? date_updated { get; set; }
+        public DateTime? date_business { get; set; }
+        public int? is_system { get; set; }
+        public int? log_type { get; set; }
+        public int? creator_id { get; set; }
+    }
 }

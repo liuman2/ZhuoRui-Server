@@ -11,6 +11,7 @@ namespace WebCenter.Web
         public string 档案号 { get; set; }
         public string 公司中文名称 { get; set; }
         public string 公司英文名称 { get; set; }
+        public int? 客户ID { get; set; }
         public string 客户名称 { get; set; }
         public string 注册地区 { get; set; }
         public string 公司董事 { get; set; }
@@ -27,6 +28,10 @@ namespace WebCenter.Web
         public string 助理 { get; set; }
         public string 年检客服 { get; set; }
         public string 其他事项 { get; set; }
+        public int? 订单归属人ID { get; set; }
+        public string 订单归属人 { get; set; }
+        public int? 客户归属ID { get; set; }
+        public string 客户归属 { get; set; }
     }
 
     public class ExcelLectureContact
