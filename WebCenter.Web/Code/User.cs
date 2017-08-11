@@ -444,4 +444,31 @@ namespace WebCenter.Web
         public int? log_type { get; set; }
         public int? creator_id { get; set; }
     }
+
+    public class SimplePeople
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+    }
+
+    public class ScheduleEntity
+    {
+        public int id { get; set; }
+        public string title { get; set; }
+        public DateTime? start { get; set; }
+        public DateTime? end { get; set; }
+        public string color { get; set; }
+        public int? type { get; set; }
+        public string people { get; set; }
+        public List<SimplePeople> peoples { get; set; }
+        public string location { get; set; }
+        public string memo { get; set; }
+        public string attachment { get; set; }
+        public int created_id { get; set; }
+        public string creator { get; set; }
+        public DateTime? date_created { get; set; }
+        public int updated_id { get; set; }
+        public string updator { get; set; }
+        public DateTime? date_updated { get; set; }
+    }
 }
