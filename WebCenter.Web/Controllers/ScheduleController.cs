@@ -83,6 +83,7 @@ namespace WebCenter.Web.Controllers
             dbSchedule.people = _schedule.people;
             dbSchedule.start = _schedule.start;
             dbSchedule.type = _schedule.type;
+            dbSchedule.all_day = _schedule.all_day;
 
             var result = Uof.IscheduleService.UpdateEntity(dbSchedule);
             return Json(new { success = result, message = "更新成功" }, JsonRequestBehavior.AllowGet);
@@ -145,14 +146,14 @@ namespace WebCenter.Web.Controllers
                 date_updated = s.date_updated,
                 creator = "",
                 end = s.end,
-                location = s.location,
+                location = s.location ?? "",
                 memo = s.memo,
                 people = s.people,
                 start = s.start,
                 title = s.title,
                 type = s.type,
                 updated_id = s.updated_id,
-
+                all_day = s.all_day,
             }).ToList();
 
             if (list.Count == 0)
@@ -171,6 +172,7 @@ namespace WebCenter.Web.Controllers
             foreach (var item in list)
             {
                 item.editable = item.created_id == userId;
+                item.allDay = item.all_day == 1;
 
                 var creator = memberList.Where(m => m.id == item.created_id).FirstOrDefault();
                 if (creator != null)
@@ -218,6 +220,7 @@ namespace WebCenter.Web.Controllers
                 title = s.title,
                 type = s.type,
                 updated_id = s.updated_id,
+                all_day = s.all_day,
 
             }).FirstOrDefault();
 

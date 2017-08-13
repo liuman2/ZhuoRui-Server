@@ -471,5 +471,7 @@ namespace WebCenter.Web
         public string updator { get; set; }
         public DateTime? date_updated { get; set; }
         public bool editable { get; set; }
+        public int? all_day { get; set; }
+        public bool allDay { get; set; }
     }
 }

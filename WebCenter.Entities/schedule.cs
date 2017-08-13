@@ -71,5 +71,9 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
+    
+    
+    
+        public Nullable<sbyte> all_day { get; set; }
     }
 }

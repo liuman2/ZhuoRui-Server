@@ -110,3 +110,5 @@ call AddColumnUnlessExists(Database(), 'customer', 'is_delete', 'tinyint(3) DEFA
 call AddColumnUnlessExists(Database(), 'timeline', 'creator_id', 'int(11) DEFAULT NULL COMMENT "创建人"');
 ALTER TABLE timeline ADD CONSTRAINT fk_timeline_creator_id FOREIGN KEY (creator_id) REFERENCES member(id);
 
+call AddColumnUnlessExists(Database(), 'schedule', 'all_day', 'tinyint(3) DEFAULT NULL');
+

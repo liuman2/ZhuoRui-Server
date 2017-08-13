@@ -921,6 +921,7 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="updated_id" Type="int" Nullable="false" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="all_day" Type="tinyint" />
         </EntityType>
         <EntityType Name="sequence">
           <Key>
@@ -5450,6 +5451,7 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="updated_id" Type="Int32" Nullable="false" />
           <Property Name="date_updated" Type="DateTime" />
+          <Property Name="all_day" Type="SByte" />
         </EntityType>
         <Association Name="accounting_ibfk_customer">
           <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
@@ -6729,6 +6731,7 @@
           <EntitySetMapping Name="schedules">
             <EntityTypeMapping TypeName="DataCenter.Entities.schedule">
               <MappingFragment StoreEntitySet="schedule">
+                <ScalarProperty Name="all_day" ColumnName="all_day" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="updated_id" ColumnName="updated_id" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
