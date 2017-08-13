@@ -470,5 +470,6 @@ namespace WebCenter.Web
         public int updated_id { get; set; }
         public string updator { get; set; }
         public DateTime? date_updated { get; set; }
+        public bool editable { get; set; }
     }
 }

@@ -170,6 +170,8 @@ namespace WebCenter.Web.Controllers
 
             foreach (var item in list)
             {
+                item.editable = item.created_id == userId;
+
                 var creator = memberList.Where(m => m.id == item.created_id).FirstOrDefault();
                 if (creator != null)
                 {

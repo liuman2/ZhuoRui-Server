@@ -28,6 +28,7 @@ namespace WebCenter.Web.Controllers
             {
                 id = m.id,
                 name = m.name,
+                text = m.name,
                 english_name = m.english_name,
                 username = m.username,
                 department = m.organization.name,
