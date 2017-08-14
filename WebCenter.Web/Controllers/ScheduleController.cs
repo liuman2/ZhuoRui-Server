@@ -117,6 +117,104 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetToday()
+        {
+            var auth = HttpContext.User.Identity.IsAuthenticated;
+            if (!auth)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+            var strUserId = userId.ToString();
+
+            var dt1 = DateTime.Today;
+            var dt2 = DateTime.Today.AddDays(1);
+
+            var list = Uof.IscheduleService
+                .GetAll(s => s.created_id == userId || s.type == 2 || (s.type == 1 && s.people.Contains(strUserId)))
+                .Where(s=>s.start.Value >= dt1 && s.start < dt2)
+                .Select(s => new ScheduleEntity
+            {
+                id = s.id,
+                attachment = s.attachment,
+                color = s.color,
+                created_id = s.created_id,
+                date_created = s.date_created,
+                date_updated = s.date_updated,
+                creator = "",
+                end = s.end,
+                location = s.location ?? "",
+                memo = s.memo ?? "",
+                people = s.people,
+                start = s.start,
+                title = s.title,
+                type = s.type,
+                updated_id = s.updated_id,
+                all_day = s.all_day,
+            }).ToList();
+
+            if (list.Count == 0)
+            {
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+
+            var newList = new List<ScheduleEntity>();
+
+            var memberList = Uof.ImemberService.GetAll().Select(m => new SimplePeople
+            {
+                id = m.id,
+                name = m.name,
+            }).ToList();
+
+            foreach (var item in list)
+            {
+                item.editable = item.created_id == userId;
+                item.allDay = item.all_day == 1;
+
+                if (item.end != null && item.end.Value.ToString("yyyy-MM-dd") == DateTime.Today.ToString("yyyy-MM-dd"))
+                {
+                    item.timeStr = string.Format("{0}-{1}", item.start.Value.ToString("HH:mm"), item.end.Value.ToString("HH:mm"));
+                } else
+                {
+                    item.timeStr = string.Format("{0}", item.start.Value.ToString("HH:mm"));
+                }
+
+                var creator = memberList.Where(m => m.id == item.created_id).FirstOrDefault();
+                if (creator != null)
+                {
+                    item.creator = creator.name;
+                }
+
+                if (item.type != 1)
+                {
+                    newList.Add(item);
+                }
+
+                if (item.type == 1)
+                {
+                    var isIn = CheckPeopleIn(strUserId, item);
+                    if (!isIn)
+                    {
+                        continue;
+                    }
+
+                    item.peoples = GetSimplePeopleList(item.people, memberList);
+                    newList.Add(item);
+                }
+            }
+
+            return Json(newList, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Search()
         {
             var auth = HttpContext.User.Identity.IsAuthenticated;

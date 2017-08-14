@@ -473,5 +473,6 @@ namespace WebCenter.Web
         public bool editable { get; set; }
         public int? all_day { get; set; }
         public bool allDay { get; set; }
+        public string timeStr { get; set; }
     }
 }
