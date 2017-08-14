@@ -147,7 +147,7 @@ namespace WebCenter.Web.Controllers
                 creator = "",
                 end = s.end,
                 location = s.location ?? "",
-                memo = s.memo,
+                memo = s.memo ?? "",
                 people = s.people,
                 start = s.start,
                 title = s.title,
