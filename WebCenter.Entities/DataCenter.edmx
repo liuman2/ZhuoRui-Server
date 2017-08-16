@@ -922,6 +922,13 @@
           <Property Name="updated_id" Type="int" Nullable="false" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="all_day" Type="tinyint" />
+          <Property Name="is_repeat" Type="tinyint" />
+          <Property Name="is_done" Type="tinyint" />
+          <Property Name="property" Type="tinyint" />
+          <Property Name="meeting_type" Type="varchar" MaxLength="20" />
+          <Property Name="presenter_id" Type="int" />
+          <Property Name="repeat_type" Type="tinyint" />
+          <Property Name="repeat_dow" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="sequence">
           <Key>
@@ -5452,6 +5459,13 @@
           <Property Name="updated_id" Type="Int32" Nullable="false" />
           <Property Name="date_updated" Type="DateTime" />
           <Property Name="all_day" Type="SByte" />
+          <Property Name="is_repeat" Type="SByte" />
+          <Property Name="is_done" Type="SByte" />
+          <Property Name="property" Type="SByte" />
+          <Property Name="meeting_type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="presenter_id" Type="Int32" />
+          <Property Name="repeat_type" Type="SByte" />
+          <Property Name="repeat_dow" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="accounting_ibfk_customer">
           <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
@@ -6731,6 +6745,13 @@
           <EntitySetMapping Name="schedules">
             <EntityTypeMapping TypeName="DataCenter.Entities.schedule">
               <MappingFragment StoreEntitySet="schedule">
+                <ScalarProperty Name="repeat_dow" ColumnName="repeat_dow" />
+                <ScalarProperty Name="repeat_type" ColumnName="repeat_type" />
+                <ScalarProperty Name="presenter_id" ColumnName="presenter_id" />
+                <ScalarProperty Name="meeting_type" ColumnName="meeting_type" />
+                <ScalarProperty Name="property" ColumnName="property" />
+                <ScalarProperty Name="is_done" ColumnName="is_done" />
+                <ScalarProperty Name="is_repeat" ColumnName="is_repeat" />
                 <ScalarProperty Name="all_day" ColumnName="all_day" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="updated_id" ColumnName="updated_id" />

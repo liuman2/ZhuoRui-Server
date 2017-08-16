@@ -112,3 +112,18 @@ ALTER TABLE timeline ADD CONSTRAINT fk_timeline_creator_id FOREIGN KEY (creator_
 
 call AddColumnUnlessExists(Database(), 'schedule', 'all_day', 'tinyint(3) DEFAULT NULL');
 
+
+-- 2017-08-16
+call AddColumnUnlessExists(Database(), 'schedule', 'is_repeat', 'tinyint(3) DEFAULT NULL COMMENT "是否重复"');
+call AddColumnUnlessExists(Database(), 'schedule', 'repeat_type', 'tinyint(3) DEFAULT NULL COMMENT "0: 天, 1: 周, 2: 月, 3: 年"');
+call AddColumnUnlessExists(Database(), 'schedule', 'repeat_dow', 'varchar(20) DEFAULT NULL COMMENT "重复的星期，值0-6(周日-周六)"');
+call AddColumnUnlessExists(Database(), 'schedule', 'is_done', 'tinyint(3) DEFAULT NULL COMMENT "是否完成"');
+call AddColumnUnlessExists(Database(), 'schedule', 'property', 'tinyint(3) DEFAULT NULL COMMENT "性质：0:会议, 1: 拜访客户, 2: 其它"');
+call AddColumnUnlessExists(Database(), 'schedule', 'meeting_type', 'varchar(20) DEFAULT NULL COMMENT "会议类型"');
+call AddColumnUnlessExists(Database(), 'schedule', 'presenter_id', 'int(11) DEFAULT NULL COMMENT "主持人"');
+
+
+
+
+
+

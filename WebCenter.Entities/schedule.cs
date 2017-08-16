@@ -75,5 +75,33 @@ namespace WebCenter.Entities
     
     
         public Nullable<sbyte> all_day { get; set; }
+    
+    
+    
+        public Nullable<sbyte> is_repeat { get; set; }
+    
+    
+    
+        public Nullable<sbyte> is_done { get; set; }
+    
+    
+    
+        public Nullable<sbyte> property { get; set; }
+    
+    
+    
+        public string meeting_type { get; set; }
+    
+    
+    
+        public Nullable<int> presenter_id { get; set; }
+    
+    
+    
+        public Nullable<sbyte> repeat_type { get; set; }
+    
+    
+    
+        public string repeat_dow { get; set; }
     }
 }
