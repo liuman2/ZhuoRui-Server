@@ -1000,6 +1000,32 @@ namespace WebCenter.Web.Controllers
                 orders.AddRange(audits);
             }
 
+            ///
+            var accountings = Uof.IaccountingService
+                .GetAll(a => a.customer_id == customerId)
+                .OrderByDescending(a => a.code)
+                .Select(a => new FinanceCheck
+                {
+                    id = a.id,
+                    order_code = a.code,
+                    order_name = a.name,
+                    order_type = "accounting",
+                    order_type_name = "国内记账",
+                    review_status = a.review_status,
+                    status = a.status,
+                    salesman = a.member5.name,
+                    waitor = "-",
+                    amount_transaction = a.amount_transaction,
+                    date_transaction = a.date_transaction,
+                    date_created = a.date_created,
+                    date_setup = a.date_created,
+                }).ToList();
+            if (accountings.Count() > 0)
+            {
+                orders.AddRange(accountings);
+            }
+
+
             //var annuals = Uof.Iannual_examService.GetAll(a => a.customer_id == customerId).OrderByDescending(a => a.id).Select(a => a.date_transaction).ToList();
             //if (annuals.Count() > 0)
             //{
