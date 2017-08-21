@@ -85,6 +85,20 @@ namespace WebCenter.Web.Controllers
             dbSchedule.type = _schedule.type;
             dbSchedule.all_day = _schedule.all_day;
 
+            dbSchedule.is_done = _schedule.is_done;
+            dbSchedule.is_repeat = _schedule.is_repeat;
+            dbSchedule.meeting_type = _schedule.meeting_type;
+            dbSchedule.presenter_id = _schedule.presenter_id;
+            dbSchedule.repeat_type = _schedule.repeat_type;
+            dbSchedule.repeat_dow = _schedule.repeat_dow;
+            dbSchedule.property = _schedule.property;
+
+            if (_schedule.property != 0)
+            {
+                dbSchedule.meeting_type = null;
+                dbSchedule.presenter_id = null;
+            }
+
             var result = Uof.IscheduleService.UpdateEntity(dbSchedule);
             return Json(new { success = result, message = "更新成功" }, JsonRequestBehavior.AllowGet);
         }
@@ -160,7 +174,17 @@ namespace WebCenter.Web.Controllers
                 type = s.type,
                 updated_id = s.updated_id,
                 all_day = s.all_day,
-            }).ToList();
+
+                is_repeat = s.is_repeat,
+                repeat_type = s.repeat_type,
+                repeat_dow = s.repeat_dow,
+                is_done = s.is_done,
+                property = s.property,
+                meeting_type = s.meeting_type,
+                presenter_id = s.presenter_id,
+                presenter = "",
+
+                }).ToList();
 
             if (list.Count == 0)
             {
@@ -192,6 +216,15 @@ namespace WebCenter.Web.Controllers
                 if (creator != null)
                 {
                     item.creator = creator.name;
+                }
+
+                if (item.presenter_id != null)
+                {
+                    var presenter = memberList.Where(m => m.id == item.presenter_id).FirstOrDefault();
+                    if (presenter != null)
+                    {
+                        item.presenter = presenter.name;
+                    }
                 }
 
                 if (item.type != 1)
@@ -252,6 +285,16 @@ namespace WebCenter.Web.Controllers
                 type = s.type,
                 updated_id = s.updated_id,
                 all_day = s.all_day,
+
+                is_repeat = s.is_repeat,
+                repeat_type = s.repeat_type,
+                repeat_dow = s.repeat_dow,
+                is_done = s.is_done,
+                property = s.property ?? null,
+                meeting_type = s.meeting_type,
+                presenter_id = s.presenter_id,
+                presenter = "",
+
             }).ToList();
 
             if (list.Count == 0)
@@ -276,6 +319,15 @@ namespace WebCenter.Web.Controllers
                 if (creator != null)
                 {
                     item.creator = creator.name;
+                }
+
+                if (item.presenter_id != null)
+                {
+                    var presenter = memberList.Where(m => m.id == item.presenter_id).FirstOrDefault();
+                    if (presenter != null)
+                    {
+                        item.presenter = presenter.name;
+                    }
                 }
 
                 if (item.type != 1)

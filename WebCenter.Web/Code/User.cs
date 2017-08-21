@@ -474,5 +474,15 @@ namespace WebCenter.Web
         public int? all_day { get; set; }
         public bool allDay { get; set; }
         public string timeStr { get; set; }
+
+        public int? is_repeat { get; set; }
+        public int? repeat_type { get; set; }
+        public string repeat_dow { get; set; }
+        public int? is_done { get; set; }
+        public int? property { get; set; }
+        public string meeting_type { get; set; }
+        public int? presenter_id { get; set; }
+        public string presenter { get; set; }
+
     }
 }
