@@ -24,7 +24,8 @@ namespace WebCenter.Web.Controllers
                 nameQuery = c => (c.title.IndexOf(name) > -1 || c.content.IndexOf(name) > -1);
             }
 
-            var list = Uof.Icustomer_timelineService.GetAll(t => t.customer_id == id).Where(nameQuery).Select(t=> new {
+            var list = Uof.Icustomer_timelineService.GetAll(t => t.customer_id == id).Where(nameQuery).Select(t=> new TimeLine
+            {
                 id = t.id,
                 customer_id = t.customer_id,
                 title = t.title,
@@ -32,6 +33,8 @@ namespace WebCenter.Web.Controllers
                 is_system = t.is_system,
                 date_business = t.date_business,
                 date_created = t.date_created,
+                creator_id = t.creator_id,
+                creator = t.member.name,
             }).OrderByDescending(c => c.date_created).ToList();
 
             var _customer = Uof.IcustomerService.GetAll(c => c.id == id).Select(c => new {
@@ -50,7 +53,24 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Add(customer_timeline t)
         {
+            var auth = HttpContext.User.Identity.IsAuthenticated;
+            if (!auth)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
             t.is_system = 0;
+            t.creator_id = userId;
             if (t.date_business == null)
             {
                 t.date_business = DateTime.Now;
@@ -99,7 +119,18 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
-            var c = Uof.Icustomer_timelineService.GetById(id);
+            var c = Uof.Icustomer_timelineService.GetAll(t => t.id == id).Select(t => new TimeLine
+            {
+                id = t.id,
+                content = t.content,
+                creator_id = t.creator_id,
+                date_business = t.date_business,
+                date_created = t.date_created,
+                date_updated = t.date_updated,
+                is_system = t.is_system,                
+                title = t.title,
+                creator = t.member.name
+            }).FirstOrDefault(); ;
             if (c == null)
             {
                 return ErrorResult;

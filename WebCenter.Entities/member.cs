@@ -93,6 +93,7 @@ namespace WebCenter.Entities
             this.timelines = new HashSet<timeline>();
             this.customers = new HashSet<customer>();
             this.customers1 = new HashSet<customer>();
+            this.customer_timeline = new HashSet<customer_timeline>();
         }
     
     
@@ -237,5 +238,6 @@ namespace WebCenter.Entities
         public virtual ICollection<timeline> timelines { get; set; }
         public virtual ICollection<customer> customers { get; set; }
         public virtual ICollection<customer> customers1 { get; set; }
+        public virtual ICollection<customer_timeline> customer_timeline { get; set; }
     }
 }

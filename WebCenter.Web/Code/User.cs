@@ -433,6 +433,7 @@ namespace WebCenter.Web
     public partial class TimeLine
     {
         public int id { get; set; }
+        public int? customer_id { get; set; }
         public int? source_id { get; set; }
         public string source_name { get; set; }
         public string title { get; set; }
@@ -443,6 +444,7 @@ namespace WebCenter.Web
         public int? is_system { get; set; }
         public int? log_type { get; set; }
         public int? creator_id { get; set; }
+        public string creator { get; set; }
     }
 
     public class SimplePeople

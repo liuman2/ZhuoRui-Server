@@ -347,6 +347,7 @@
           <Property Name="date_business" Type="datetime" Precision="0" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="creator_id" Type="int" />
         </EntityType>
         <EntityType Name="dictionary">
           <Key>
@@ -1732,6 +1733,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_customer_timeline_creator_id">
+          <End Role="member" Type="Self.member" Multiplicity="0..1" />
+          <End Role="customer_timeline" Type="Self.customer_timeline" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="customer_timeline">
+              <PropertyRef Name="creator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_internal_assistant_id">
           <End Role="member" Type="Self.member" Multiplicity="0..1" />
           <End Role="reg_internal" Type="Self.reg_internal" Multiplicity="*" />
@@ -2543,6 +2556,10 @@
             <End Role="member" EntitySet="member" />
             <End Role="lecture" EntitySet="lecture" />
           </AssociationSet>
+          <AssociationSet Name="fk_customer_timeline_creator_id" Association="Self.fk_customer_timeline_creator_id">
+            <End Role="member" EntitySet="member" />
+            <End Role="customer_timeline" EntitySet="customer_timeline" />
+          </AssociationSet>
           <AssociationSet Name="fk_internal_assistant_id" Association="Self.fk_internal_assistant_id">
             <End Role="member" EntitySet="member" />
             <End Role="reg_internal" EntitySet="reg_internal" />
@@ -3179,6 +3196,10 @@
             <End Role="customer" EntitySet="customers" />
             <End Role="trademark" EntitySet="trademarks" />
           </AssociationSet>
+          <AssociationSet Name="fk_customer_timeline_creator_id" Association="DataCenter.Entities.fk_customer_timeline_creator_id">
+            <End Role="member" EntitySet="members" />
+            <End Role="customer_timeline" EntitySet="customer_timeline" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -3280,6 +3301,8 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
           <NavigationProperty Name="customer" Relationship="DataCenter.Entities.timeline_ibfk_customer" FromRole="customer_timeline" ToRole="customer" />
+          <Property Name="creator_id" Type="Int32" />
+          <NavigationProperty Name="member" Relationship="DataCenter.Entities.fk_customer_timeline_creator_id" FromRole="customer_timeline" ToRole="member" />
         </EntityType>
         <EntityType Name="role_member">
           <Key>
@@ -3461,6 +3484,7 @@
           <NavigationProperty Name="timelines" Relationship="DataCenter.Entities.fk_timeline_creator_id" FromRole="member" ToRole="timeline" />
           <NavigationProperty Name="customers" Relationship="DataCenter.Entities.member_ibfk_creator" FromRole="member" ToRole="customer" />
           <NavigationProperty Name="customers1" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="member" ToRole="customer" />
+          <NavigationProperty Name="customer_timeline" Relationship="DataCenter.Entities.fk_customer_timeline_creator_id" FromRole="member" ToRole="customer_timeline" />
           </EntityType>
         <Association Name="member_ibfk_3">
           <End Type="DataCenter.Entities.area" Role="area" Multiplicity="0..1" />
@@ -5647,6 +5671,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_customer_timeline_creator_id">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.customer_timeline" Role="customer_timeline" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="customer_timeline">
+              <PropertyRef Name="creator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5743,6 +5779,7 @@
           <EntitySetMapping Name="customer_timeline">
             <EntityTypeMapping TypeName="DataCenter.Entities.customer_timeline">
               <MappingFragment StoreEntitySet="customer_timeline">
+                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="date_business" ColumnName="date_business" />

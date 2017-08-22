@@ -48,6 +48,11 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
+    
+    
+        public Nullable<int> creator_id { get; set; }
+    
         public virtual customer customer { get; set; }
+        public virtual member member { get; set; }
     }
 }

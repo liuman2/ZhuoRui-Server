@@ -122,6 +122,9 @@ call AddColumnUnlessExists(Database(), 'schedule', 'property', 'tinyint(3) DEFAU
 call AddColumnUnlessExists(Database(), 'schedule', 'meeting_type', 'varchar(20) DEFAULT NULL COMMENT "会议类型"');
 call AddColumnUnlessExists(Database(), 'schedule', 'presenter_id', 'int(11) DEFAULT NULL COMMENT "主持人"');
 
+-- 2017-08-22
+call AddColumnUnlessExists(Database(), 'customer_timeline', 'creator_id', 'int(11) DEFAULT NULL COMMENT "创建人"');
+ALTER TABLE customer_timeline ADD CONSTRAINT fk_customer_timeline_creator_id FOREIGN KEY (creator_id) REFERENCES member(id);
 
 
 

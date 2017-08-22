@@ -87,6 +87,7 @@ namespace WebCenter.Web.Controllers
                 source_id = t.source_id,
                 source_name = t.source_name,
                 title = t.title,
+                creator = t.member.name
             }).ToList();
 
             var result = new
@@ -366,7 +367,8 @@ namespace WebCenter.Web.Controllers
                 log_type = t.log_type,
                 source_id = t.source_id,
                 source_name = t.source_name,
-                title = t.source_name,                
+                title = t.source_name,
+                creator = t.member.name
             }).FirstOrDefault();
             if (c == null)
             {

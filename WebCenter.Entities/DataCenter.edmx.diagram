@@ -155,6 +155,7 @@
         <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.timeline_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_customer" />
+        <AssociationConnector Association="DataCenter.Entities.fk_customer_timeline_creator_id" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
