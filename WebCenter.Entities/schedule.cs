@@ -103,5 +103,9 @@ namespace WebCenter.Entities
     
     
         public string repeat_dow { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> repeat_end { get; set; }
     }
 }

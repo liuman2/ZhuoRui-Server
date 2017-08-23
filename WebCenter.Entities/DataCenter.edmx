@@ -930,6 +930,7 @@
           <Property Name="presenter_id" Type="int" />
           <Property Name="repeat_type" Type="tinyint" />
           <Property Name="repeat_dow" Type="varchar" MaxLength="20" />
+          <Property Name="repeat_end" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="sequence">
           <Key>
@@ -5490,6 +5491,7 @@
           <Property Name="presenter_id" Type="Int32" />
           <Property Name="repeat_type" Type="SByte" />
           <Property Name="repeat_dow" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="repeat_end" Type="DateTime" />
         </EntityType>
         <Association Name="accounting_ibfk_customer">
           <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
@@ -6782,6 +6784,7 @@
           <EntitySetMapping Name="schedules">
             <EntityTypeMapping TypeName="DataCenter.Entities.schedule">
               <MappingFragment StoreEntitySet="schedule">
+                <ScalarProperty Name="repeat_end" ColumnName="repeat_end" />
                 <ScalarProperty Name="repeat_dow" ColumnName="repeat_dow" />
                 <ScalarProperty Name="repeat_type" ColumnName="repeat_type" />
                 <ScalarProperty Name="presenter_id" ColumnName="presenter_id" />

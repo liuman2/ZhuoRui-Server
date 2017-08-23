@@ -126,6 +126,7 @@ call AddColumnUnlessExists(Database(), 'schedule', 'presenter_id', 'int(11) DEFA
 call AddColumnUnlessExists(Database(), 'customer_timeline', 'creator_id', 'int(11) DEFAULT NULL COMMENT "创建人"');
 ALTER TABLE customer_timeline ADD CONSTRAINT fk_customer_timeline_creator_id FOREIGN KEY (creator_id) REFERENCES member(id);
 
+call AddColumnUnlessExists(Database(), 'schedule', 'repeat_end', 'datetime DEFAULT NULL COMMENT "重复截止日"');
 
 
 

@@ -61,6 +61,9 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Warning(int? customer_id, int? waiter_id, int? salesman_id, string name, string area)
         {
+            waiter_id = null;
+            salesman_id = null;
+
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
             {
@@ -125,7 +128,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<reg_abroad, bool>> nameQuery1 = c => true;
             if (!string.IsNullOrEmpty(name))
             {
-                nameQuery1 = c => (c.name_cn.Contains(name) || c.name_en.Contains(name));
+                nameQuery1 = c => (c.name_cn.Contains(name) || c.name_en.Contains(name) || c.code.Contains(name));
             }
             Expression<Func<reg_abroad, bool>> areaQuery1 = c => true;
             if (!string.IsNullOrEmpty(area))
@@ -164,8 +167,9 @@ namespace WebCenter.Web.Controllers
 
             if (abroads.Count() > 0)
             {
-                var newList = abroads.Where(a => 
-                (a.annual_date == null && ( a.date_setup.Value.AddMonths(12 - abroadMonth) <= DateTime.Today || (new DateTime(DateTime.Now.Year, a.date_setup.Value.Month, 1)).AddMonths(-abroadMonth) <= DateTime.Today)) || 
+                var newList = abroads.Where(a =>
+                 //(a.annual_date == null && (a.date_setup.Value.AddMonths(12 - abroadMonth) <= DateTime.Today || (new DateTime(DateTime.Now.Year, a.date_setup.Value.Month, 1)).AddMonths(-abroadMonth) <= DateTime.Today)) ||
+                (a.annual_date == null && (a.date_setup.Value.AddMonths(12 - abroadMonth) <= DateTime.Today)) ||
                 (a.annual_date != null && a.annual_date.Value.AddMonths(12 - abroadMonth) <= DateTime.Today)).ToList();
                 items.AddRange(newList);
             }
@@ -237,7 +241,7 @@ namespace WebCenter.Web.Controllers
                 Expression<Func<reg_internal, bool>> nameQuery2 = c => true;
                 if (!string.IsNullOrEmpty(name))
                 {
-                    nameQuery2 = c => c.name_cn.Contains(name);
+                    nameQuery2 = c => (c.name_cn.Contains(name) || c.code.Contains(name));
                 }
                 Expression<Func<reg_internal, bool>> areaQuery2 = c => true;
                 if (!string.IsNullOrEmpty(area))
@@ -302,7 +306,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<trademark, bool>> nameQuery3 = c => true;
             if (!string.IsNullOrEmpty(name))
             {
-                nameQuery3 = c => c.name.Contains(name);
+                nameQuery3 = c => (c.name.Contains(name) || c.code.Contains(name));
             }
             Expression<Func<trademark, bool>> areaQuery3 = c => true;
             if (!string.IsNullOrEmpty(area))
@@ -413,7 +417,7 @@ namespace WebCenter.Web.Controllers
             Expression<Func<patent, bool>> nameQuery4 = c => true;
             if (!string.IsNullOrEmpty(name))
             {
-                nameQuery4 = c => c.name.Contains(name);
+                nameQuery4 = c => (c.name.Contains(name) || c.code.Contains(name));
             }
             Expression<Func<patent, bool>> areaQuery4 = c => true;
             if (!string.IsNullOrEmpty(area))
@@ -1680,7 +1684,7 @@ namespace WebCenter.Web.Controllers
         }
 
 
-        public ActionResult OffOrders(string title, string order_type, string area)
+        public ActionResult OffOrders(string title, int? order_status, string area)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
@@ -1702,10 +1706,18 @@ namespace WebCenter.Web.Controllers
 
             var items = new List<AnnualWarning>();
 
+            string order_type = null;
+
             #region 境外注册
             if (string.IsNullOrEmpty(order_type) || order_type == "reg_abroad")
             {
                 Expression<Func<reg_abroad, bool>> condition1 = c => c.order_status > 0;
+
+                Expression<Func<reg_abroad, bool>> statusQuery1 = c => true;
+                if (order_status != null)
+                {
+                    statusQuery1 = c => c.order_status == order_status;
+                }
 
                 Expression<Func<reg_abroad, bool>> nameQuery1 = c => true;
                 if (!string.IsNullOrEmpty(title))
@@ -1723,6 +1735,7 @@ namespace WebCenter.Web.Controllers
                     .GetAll(condition1)
                     .Where(nameQuery1)
                     .Where(areaQuery1)
+                    .Where(statusQuery1)
                     .Select(a => new AnnualWarning
                     {
                         id = a.id,
@@ -1743,6 +1756,8 @@ namespace WebCenter.Web.Controllers
                         order_status = a.order_status,
                         date_last = a.date_last,
                         title_last = a.title_last,
+                        annual_year = a.annual_year,
+                        month = DateTime.Today.Month - a.date_setup.Value.Month,
                     }).ToList();
 
                 if (abroads.Count() > 0)
@@ -1768,10 +1783,17 @@ namespace WebCenter.Web.Controllers
                     areaQuery2 = c => c.code.Contains(area);
                 }
 
+                Expression<Func<reg_internal, bool>> statusQuery2 = c => true;
+                if (order_status != null)
+                {
+                    statusQuery2 = c => c.order_status == order_status;
+                }
+
                 var internas = Uof.Ireg_internalService
                     .GetAll(condition2)
                     .Where(nameQuery2)
                     .Where(areaQuery2)
+                    .Where(statusQuery2)
                     .Select(a => new AnnualWarning
                     {
                         id = a.id,
@@ -1792,6 +1814,8 @@ namespace WebCenter.Web.Controllers
                         order_status = a.order_status,
                         date_last = a.date_last,
                         title_last = a.title_last,
+                        annual_year = a.annual_year,
+                        month = DateTime.Today.Month - a.date_setup.Value.Month,
                     }).ToList();
 
                 if (internas.Count() > 0)
@@ -1818,10 +1842,17 @@ namespace WebCenter.Web.Controllers
                     areaQuery3 = c => c.code.Contains(area);
                 }
 
+                Expression<Func<trademark, bool>> statusQuery3 = c => true;
+                if (order_status != null)
+                {
+                    statusQuery3 = c => c.order_status == order_status;
+                }
+
                 var trademarks = Uof.ItrademarkService
                     .GetAll(condition3)                    
                     .Where(nameQuery3)
                     .Where(areaQuery3)
+                    .Where(statusQuery3)
                     .Select(a => new AnnualWarning
                     {
                         id = a.id,
@@ -1841,9 +1872,10 @@ namespace WebCenter.Web.Controllers
                         annual_date = a.annual_date,
                         exten_period = a.exten_period,
                         order_status = a.order_status,
-
-                    date_last = a.date_last,
+                        annual_year = a.annual_year,
+                        date_last = a.date_last,
                         title_last = a.title_last,
+
                     }).ToList();
 
                 if (trademarks.Count() > 0)
@@ -1870,10 +1902,17 @@ namespace WebCenter.Web.Controllers
                     areaQuery4 = c => c.code.Contains(area);
                 }
 
+                Expression<Func<patent, bool>> statusQuery4 = c => true;
+                if (order_status != null)
+                {
+                    statusQuery4 = c => c.order_status == order_status;
+                }
+
                 var patents = Uof.IpatentService
                     .GetAll(condition4)
                     .Where(nameQuery4)
                     .Where(areaQuery4)
+                    .Where(statusQuery4)
                     .Select(a => new AnnualWarning
                     {
                         id = a.id,
@@ -1894,6 +1933,8 @@ namespace WebCenter.Web.Controllers
                         order_status = a.order_status,
                         date_last = a.date_last,
                         title_last = a.title_last,
+                        annual_year = a.annual_year,
+                        month = (a.date_regit != null) ? (DateTime.Today.Month - a.date_regit.Value.Month) : 0,
                     }).ToList();
 
                 if (patents.Count() > 0)
