@@ -163,6 +163,7 @@ namespace WebCenter.Web.Controllers
 
                     date_last = a.date_last,
                     title_last = a.title_last,
+                    date_wait = a.date_wait,
                 }).ToList();
 
             if (abroads.Count() > 0)
@@ -275,6 +276,7 @@ namespace WebCenter.Web.Controllers
 
                         date_last = a.date_last,
                         title_last = a.title_last,
+                        date_wait = a.date_wait,
                     }).ToList();
 
                 if (internas.Count() > 0)
@@ -341,6 +343,7 @@ namespace WebCenter.Web.Controllers
 
                     date_last = a.date_last,
                     title_last = a.title_last,
+                    date_wait = a.date_wait,
                 }).ToList();
 
             if (trademarks.Count() > 0)
@@ -451,6 +454,7 @@ namespace WebCenter.Web.Controllers
 
                     date_last = a.date_last,
                     title_last = a.title_last,
+                    date_wait = a.date_wait,
                 }).ToList();
 
             if (patents.Count() > 0)

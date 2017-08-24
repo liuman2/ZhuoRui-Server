@@ -149,26 +149,31 @@ namespace WebCenter.Web.Controllers
                 {
                     case "reg_abroad":
                         var dbAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == r.source_id).FirstOrDefault();
-                        dbAbroad.date_last = r.date_business;
+                        dbAbroad.date_last = r.date_created;
                         dbAbroad.title_last = r.content;
+                        dbAbroad.date_wait = r.date_business;
+
                         Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
                         break;
                     case "reg_internal":
                         var dbInternal = Uof.Ireg_internalService.GetAll(a => a.id == r.source_id).FirstOrDefault();
-                        dbInternal.date_last = r.date_business;
+                        dbInternal.date_last = r.date_created;
                         dbInternal.title_last = r.content;
+                        dbInternal.date_wait = r.date_business;
                         Uof.Ireg_internalService.UpdateEntity(dbInternal);
                         break;
                     case "trademark":
                         var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == r.source_id).FirstOrDefault();
-                        dbTrademark.date_last = r.date_business;
+                        dbTrademark.date_last = r.date_created;
                         dbTrademark.title_last = r.content;
+                        dbTrademark.date_wait = r.date_business;
                         Uof.ItrademarkService.UpdateEntity(dbTrademark);
                         break;
                     case "patent":
                         var dbPatent = Uof.IpatentService.GetAll(a => a.id == r.source_id).FirstOrDefault();
-                        dbPatent.date_last = r.date_business;
+                        dbPatent.date_last = r.date_created;
                         dbPatent.title_last = r.content;
+                        dbPatent.date_wait = r.date_business;
                         Uof.IpatentService.UpdateEntity(dbPatent);
                         break;
                     default:
@@ -205,11 +210,13 @@ namespace WebCenter.Web.Controllers
                     .FirstOrDefault();
 
                 DateTime? dateLast = null;
+                DateTime? dateWait = null;
                 var titleLast = "";
                 if (preTimeline != null)
                 {
-                    dateLast = preTimeline.date_business;
+                    dateLast = preTimeline.date_created;
                     titleLast = preTimeline.content;
+                    dateWait = preTimeline.date_business;
                 }
 
                 switch (timeline.source_name)
@@ -218,24 +225,28 @@ namespace WebCenter.Web.Controllers
                         var dbAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
                         dbAbroad.date_last = dateLast;
                         dbAbroad.title_last = titleLast;
+                        dbAbroad.date_wait = dateWait;
                         Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
                         break;
                     case "reg_internal":
                         var dbInternal = Uof.Ireg_internalService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
                         dbInternal.date_last = dateLast;
                         dbInternal.title_last = titleLast;
+                        dbInternal.date_wait = dateWait;
                         Uof.Ireg_internalService.UpdateEntity(dbInternal);
                         break;
                     case "trademark":
                         var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
                         dbTrademark.date_last = dateLast;
                         dbTrademark.title_last = titleLast;
+                        dbTrademark.date_wait = dateWait;
                         Uof.ItrademarkService.UpdateEntity(dbTrademark);
                         break;
                     case "patent":
                         var dbPatent = Uof.IpatentService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
                         dbPatent.date_last = dateLast;
                         dbPatent.title_last = titleLast;
+                        dbPatent.date_wait = dateWait;
                         Uof.IpatentService.UpdateEntity(dbPatent);
                         break;
                     default:
@@ -259,26 +270,30 @@ namespace WebCenter.Web.Controllers
                 {
                     case "reg_abroad":
                         var dbAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
-                        dbAbroad.date_last = timeline.date_business;
+                        dbAbroad.date_last = timeline.date_created;
                         dbAbroad.title_last = timeline.content;
+                        dbAbroad.date_wait = timeline.date_business;
                         Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
                         break;
                     case "reg_internal":
                         var dbInternal = Uof.Ireg_internalService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
-                        dbInternal.date_last = timeline.date_business;
+                        dbInternal.date_last = timeline.date_created;
                         dbInternal.title_last = timeline.content;
+                        dbInternal.date_wait = timeline.date_business;
                         Uof.Ireg_internalService.UpdateEntity(dbInternal);
                         break;
                     case "trademark":
                         var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
-                        dbTrademark.date_last = timeline.date_business;
+                        dbTrademark.date_last = timeline.date_created;
                         dbTrademark.title_last = timeline.content;
+                        dbTrademark.date_wait = timeline.date_business;
                         Uof.ItrademarkService.UpdateEntity(dbTrademark);
                         break;
                     case "patent":
                         var dbPatent = Uof.IpatentService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
-                        dbPatent.date_last = timeline.date_business;
+                        dbPatent.date_last = timeline.date_created;
                         dbPatent.title_last = timeline.content;
+                        dbPatent.date_wait = timeline.date_business;
                         Uof.IpatentService.UpdateEntity(dbPatent);
                         break;
                     default:
@@ -312,10 +327,12 @@ namespace WebCenter.Web.Controllers
 
 
                 DateTime? dateLast = null;
+                DateTime? dateWait = null;
                 var titleLast = "";
                 if (preTimeline != null)
                 {
-                    dateLast = preTimeline.date_business;
+                    dateLast = preTimeline.date_created;
+                    dateWait = preTimeline.date_business;
                     titleLast = preTimeline.content;
                 }
 
@@ -325,24 +342,28 @@ namespace WebCenter.Web.Controllers
                         var dbAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
                         dbAbroad.date_last = dateLast;
                         dbAbroad.title_last = titleLast;
+                        dbAbroad.date_wait = dateWait;
                         Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
                         break;
                     case "reg_internal":
                         var dbInternal = Uof.Ireg_internalService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
                         dbInternal.date_last = dateLast;
                         dbInternal.title_last = titleLast;
+                        dbInternal.date_wait = dateWait;
                         Uof.Ireg_internalService.UpdateEntity(dbInternal);
                         break;
                     case "trademark":
                         var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
                         dbTrademark.date_last = dateLast;
                         dbTrademark.title_last = titleLast;
+                        dbTrademark.date_wait = dateWait;
                         Uof.ItrademarkService.UpdateEntity(dbTrademark);
                         break;
                     case "patent":
                         var dbPatent = Uof.IpatentService.GetAll(a => a.id == timeline.source_id).FirstOrDefault();
                         dbPatent.date_last = dateLast;
                         dbPatent.title_last = titleLast;
+                        dbPatent.date_wait = dateWait;
                         Uof.IpatentService.UpdateEntity(dbPatent);
                         break;
                     default:

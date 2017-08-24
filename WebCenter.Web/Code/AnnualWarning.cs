@@ -32,6 +32,8 @@ namespace WebCenter.Web
 
         public DateTime? date_last { get; set; }
         public string title_last { get; set; }
+        public DateTime? date_wait { get; set; }
+        
     }
 
     public class FinanceCheck

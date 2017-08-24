@@ -129,5 +129,15 @@ ALTER TABLE customer_timeline ADD CONSTRAINT fk_customer_timeline_creator_id FOR
 call AddColumnUnlessExists(Database(), 'schedule', 'repeat_end', 'datetime DEFAULT NULL COMMENT "重复截止日"');
 
 
-
+-- 2017-08-24
+call AddColumnUnlessExists(Database(), 'reg_internal', 'trader_id', 'int(11) DEFAULT NULL COMMENT "渠道商"');
+ALTER TABLE reg_internal ADD CONSTRAINT fk_reg_internal_trader_id FOREIGN KEY (trader_id) REFERENCES customer(id);
+call AddColumnUnlessExists(Database(), 'trademark', 'trader_id', 'int(11) DEFAULT NULL COMMENT "渠道商"');
+ALTER TABLE trademark ADD CONSTRAINT fk_trademark_trader_id FOREIGN KEY (trader_id) REFERENCES customer(id);
+call AddColumnUnlessExists(Database(), 'patent', 'trader_id', 'int(11) DEFAULT NULL COMMENT "渠道商"');
+ALTER TABLE patent ADD CONSTRAINT fk_patent_trader_id FOREIGN KEY (trader_id) REFERENCES customer(id);
+call AddColumnUnlessExists(Database(), 'reg_abroad', 'date_wait', 'datetime DEFAULT NULL COMMENT "待办日期"');
+call AddColumnUnlessExists(Database(), 'reg_internal', 'date_wait', 'datetime DEFAULT NULL COMMENT "待办日期"');
+call AddColumnUnlessExists(Database(), 'trademark', 'date_wait', 'datetime DEFAULT NULL COMMENT "待办日期"');
+call AddColumnUnlessExists(Database(), 'patent', 'date_wait', 'datetime DEFAULT NULL COMMENT "待办日期"');
 

@@ -156,6 +156,9 @@
         <AssociationConnector Association="DataCenter.Entities.timeline_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.fk_customer_timeline_creator_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_patent_trader_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_reg_internal_trader_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_trademark_trader_id" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
