@@ -1111,13 +1111,35 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult UpdateCreator(int id, int creator_id)
+        public ActionResult UpdateCreator(int id, int creator_id, string creator)
         {
+            var auth = HttpContext.User.Identity.IsAuthenticated;
+            if (!auth)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var reg = Uof.ItrademarkService.GetAll(r => r.id == id).FirstOrDefault();
             if (reg != null)
             {
                 reg.creator_id = creator_id;
                 Uof.ItrademarkService.UpdateEntity(reg);
+
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = reg.id,
+                    source_name = "trademark",
+                    title = "修改订单归属人",
+                    is_system = 1,
+                    content = string.Format("{0}把订单归属人修改为{1}", arrs[3], creator)
+                });
             }
 
             return SuccessResult;
