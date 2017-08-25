@@ -385,7 +385,9 @@ namespace WebCenter.Web.Controllers
                 review_status = a.review_status,
                 description = a.description,
                 order_status = a.order_status ?? 0,
-                date_regit = a.date_regit
+                date_regit = a.date_regit,
+
+                creator = a.member1.name,
 
             }).FirstOrDefault();
 
@@ -446,7 +448,9 @@ namespace WebCenter.Web.Controllers
                 submit_review_moment = a.submit_review_moment,
                 description = a.description,
                 order_status = a.order_status ?? 0,
-                date_regit = a.date_regit
+                date_regit = a.date_regit,
+
+                creator = a.member1.name,
 
             }).FirstOrDefault();
 
@@ -1096,6 +1100,18 @@ namespace WebCenter.Web.Controllers
             }
             
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdateCreator(int id, int creator_id)
+        {
+            var reg = Uof.IpatentService.GetAll(r => r.id == id).FirstOrDefault();
+            if (reg != null)
+            {
+                reg.creator_id = creator_id;
+                Uof.IpatentService.UpdateEntity(reg);
+            }
+
+            return SuccessResult;
         }
     }
 }

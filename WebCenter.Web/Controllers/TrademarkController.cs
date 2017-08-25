@@ -393,7 +393,9 @@ namespace WebCenter.Web.Controllers
                 order_status = a.order_status ?? 0,
                 status = a.status,
                 review_status = a.review_status,
-                description = a.description
+                description = a.description,
+
+                creator = a.member1.name,
 
             }).FirstOrDefault();
 
@@ -462,7 +464,8 @@ namespace WebCenter.Web.Controllers
                 finance_review_moment = a.finance_review_moment,
                 submit_review_moment = a.submit_review_moment,
                 order_status = a.order_status ?? 0,
-                description = a.description
+                description = a.description,
+                creator = a.member1.name,
 
             }).FirstOrDefault();
 
@@ -1106,6 +1109,18 @@ namespace WebCenter.Web.Controllers
             }
 
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdateCreator(int id, int creator_id)
+        {
+            var reg = Uof.ItrademarkService.GetAll(r => r.id == id).FirstOrDefault();
+            if (reg != null)
+            {
+                reg.creator_id = creator_id;
+                Uof.ItrademarkService.UpdateEntity(reg);
+            }
+
+            return SuccessResult;
         }
     }
 }

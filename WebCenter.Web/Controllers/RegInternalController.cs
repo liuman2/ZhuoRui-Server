@@ -434,6 +434,7 @@ namespace WebCenter.Web.Controllers
 
                 assistant_id = a.assistant_id,
                 assistant_name = a.member.name,
+                creator = a.member1.name,
 
                 status = a.status,
                 review_status = a.review_status,
@@ -650,6 +651,7 @@ namespace WebCenter.Web.Controllers
 
                 assistant_id = a.assistant_id,
                 assistant_name = a.member.name,
+                creator = a.member1.name,
 
                 status = a.status,
                 review_status = a.review_status,
@@ -1926,6 +1928,18 @@ namespace WebCenter.Web.Controllers
             var list = Uof.Ihistory_shareholderService.GetAll(s => s.master_id == master_id && s.source == source && s.type == type).OrderByDescending(s => s.id).ToList();
 
             return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdateCreator(int id, int creator_id)
+        {
+            var reg = Uof.Ireg_internalService.GetAll(r => r.id == id).FirstOrDefault();
+            if (reg != null)
+            {
+                reg.creator_id = creator_id;
+                Uof.Ireg_internalService.UpdateEntity(reg);
+            }
+
+            return SuccessResult;
         }
     }
 }

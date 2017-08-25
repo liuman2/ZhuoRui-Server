@@ -415,6 +415,7 @@ namespace WebCenter.Web.Controllers
                 //assistant_name = a.member7.name,
                 assistant_id = a.creator_id,
                 assistant_name = a.member.name,
+                creator = a.member.name,
 
                 status = a.status,
                 review_status = a.review_status,
@@ -540,6 +541,7 @@ namespace WebCenter.Web.Controllers
                 // TODO:  修改成订单归属
                 assistant_id = a.creator_id, 
                 assistant_name = a.member.name,
+                creator = a.member.name,
 
                 status = a.status,
                 review_status = a.review_status,
@@ -1499,6 +1501,18 @@ namespace WebCenter.Web.Controllers
             var list = Uof.Ihistory_shareholderService.GetAll(s => s.master_id == master_id && s.source == source && s.type == type).OrderByDescending(s=>s.id).ToList();
 
             return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdateCreator(int id, int creator_id)
+        {
+            var reg = Uof.Ireg_abroadService.GetAll(r => r.id == id).FirstOrDefault();
+            if (reg != null)
+            {
+                reg.creator_id = creator_id;
+                Uof.Ireg_abroadService.UpdateEntity(reg);
+            }
+
+            return SuccessResult;
         }
     }
 }
