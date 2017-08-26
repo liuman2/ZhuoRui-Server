@@ -458,6 +458,7 @@ namespace WebCenter.Web
         public int id { get; set; }
         public string title { get; set; }
         public DateTime? start { get; set; }
+        public DateTime? repeat_start { get; set; }
         public DateTime? end { get; set; }
         public string color { get; set; }
         public int? type { get; set; }
@@ -485,6 +486,8 @@ namespace WebCenter.Web
         public string meeting_type { get; set; }
         public int? presenter_id { get; set; }
         public string presenter { get; set; }
+        public DateTime? repeat_end { get; set; }
+        public List<int> dow { get; set; }
 
     }
 }

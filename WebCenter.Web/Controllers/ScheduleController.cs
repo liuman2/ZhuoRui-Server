@@ -155,7 +155,7 @@ namespace WebCenter.Web.Controllers
 
             var list = Uof.IscheduleService
                 .GetAll(s => s.created_id == userId || s.type == 2 || (s.type == 1 && s.people.Contains(strUserId)))
-                .Where(s=>s.start.Value >= dt1 && s.start < dt2)
+                .Where(s=>(s.start.Value >= dt1 && s.start < dt2) && s.is_repeat == 0)
                 .Select(s => new ScheduleEntity
             {
                 id = s.id,
@@ -185,6 +185,78 @@ namespace WebCenter.Web.Controllers
                 presenter = "",
 
                 }).ToList();
+
+            var repeatList = Uof.IscheduleService
+                .GetAll(s => s.created_id == userId || s.type == 2 || (s.type == 1 && s.people.Contains(strUserId)))
+                .Where(s => s.is_repeat == 1 && s.repeat_end >= dt1)
+                .Select(s => new ScheduleEntity
+                {
+                    id = s.id,
+                    attachment = s.attachment,
+                    color = s.color,
+                    created_id = s.created_id,
+                    date_created = s.date_created,
+                    date_updated = s.date_updated,
+                    creator = "",
+                    end = s.end,
+                    location = s.location ?? "",
+                    memo = s.memo ?? "",
+                    people = s.people,
+                    start = s.start,
+                    title = s.title,
+                    type = s.type,
+                    updated_id = s.updated_id,
+                    all_day = s.all_day,
+                    is_repeat = s.is_repeat,
+                    repeat_type = s.repeat_type,
+                    repeat_dow = s.repeat_dow,
+                    is_done = s.is_done,
+                    property = s.property,
+                    meeting_type = s.meeting_type,
+                    presenter_id = s.presenter_id,
+                    presenter = "",
+
+                }).ToList();
+
+            var newRepeatList = new List<ScheduleEntity>();
+
+            if (repeatList.Count() > 0)
+            {
+                foreach (var item in repeatList)
+                {
+                    if (item.repeat_type == 1)
+                    {                        
+                        var todayWeek = (int)DateTime.Today.DayOfWeek;
+                        var index = item.repeat_dow.IndexOf(todayWeek.ToString());
+                        if (index >  -1)
+                        {
+                            newRepeatList.Add(item);
+                        }
+                    }
+                    if (item.repeat_type == 2)
+                    {
+                        int month = DateTime.Today.Month - item.start.Value.Month;
+                        if (item.start.Value.AddMonths(month).Date == DateTime.Today)
+                        {
+                            newRepeatList.Add(item);
+                        }
+                    }
+
+                    if (item.repeat_type == 3)
+                    {
+                        int year = DateTime.Today.Year - item.start.Value.Year;
+                        if (item.start.Value.AddYears(year).Date == DateTime.Today)
+                        {
+                            newRepeatList.Add(item);
+                        }
+                    }
+                }
+            }
+
+            if (newRepeatList.Count() > 0)
+            {
+                list.AddRange(newRepeatList);
+            }
 
             if (list.Count == 0)
             {
@@ -289,6 +361,7 @@ namespace WebCenter.Web.Controllers
                 is_repeat = s.is_repeat,
                 repeat_type = s.repeat_type,
                 repeat_dow = s.repeat_dow,
+                repeat_end = s.repeat_end,
                 is_done = s.is_done,
                 property = s.property ?? null,
                 meeting_type = s.meeting_type,
@@ -310,10 +383,27 @@ namespace WebCenter.Web.Controllers
                 name = m.name,
             }).ToList();
 
+            var repeatList = new List<ScheduleEntity>();
+
             foreach (var item in list)
             {
                 item.editable = item.created_id == userId;
                 item.allDay = item.all_day == 1;
+
+                if (item.repeat_type == 1)
+                {
+                    var dows = item.repeat_dow.Split(',');
+                    if (dows.Count() > 0)
+                    {
+                        item.dow = new List<int>();
+                        foreach (var dow in dows)
+                        {
+                            int iDow = 0;
+                            int.TryParse(dow, out iDow);
+                            item.dow.Add(iDow);
+                        }
+                    }
+                }
 
                 var creator = memberList.Where(m => m.id == item.created_id).FirstOrDefault();
                 if (creator != null)
@@ -346,6 +436,101 @@ namespace WebCenter.Web.Controllers
                     item.peoples = GetSimplePeopleList(item.people, memberList);
                     newList.Add(item);
                 }
+
+                if (item.is_repeat == 1)
+                {
+                    item.repeat_start = item.start;
+
+                    if (item.repeat_type == 2)
+                    {
+                        int year = item.repeat_end.Value.Year - item.start.Value.Year;
+                        int month = item.repeat_end.Value.Month - item.start.Value.Month;
+                        int total = year * 12 + month;
+                        for (int i = 0; i < total; i++)
+                        {
+                            var repeatItem = new ScheduleEntity
+                            {
+                                id = item.id,
+                                attachment = item.attachment,
+                                color = item.color,
+                                created_id = item.created_id,
+                                date_created = item.date_created,
+                                date_updated = item.date_updated,
+                                creator = item.creator,
+                                end = item.end,
+                                location = item.location ?? "",
+                                memo = item.memo ?? "",
+                                people = item.people,
+                                start = item.start.Value.AddMonths(i + 1),
+                                title = item.title,
+                                type = item.type,
+                                updated_id = item.updated_id,
+                                all_day = item.all_day,
+
+                                is_repeat = item.is_repeat,
+                                repeat_type = item.repeat_type,
+                                repeat_dow = item.repeat_dow,
+                                repeat_end = item.repeat_end,
+                                is_done = item.is_done,
+                                property = item.property ?? null,
+                                meeting_type = item.meeting_type,
+                                presenter_id = item.presenter_id,
+                                presenter = item.presenter,
+
+                                editable = item.editable,
+                                allDay = item.allDay,
+                                repeat_start = item.start,
+                            };
+                            repeatList.Add(repeatItem);
+                        }
+                    }
+                    if (item.repeat_type == 3)
+                    {
+                        int total = item.repeat_end.Value.Year - item.start.Value.Year;
+                        for (int i = 0; i < total; i++)
+                        {
+                            var repeatItem = new ScheduleEntity
+                            {
+                                id = item.id,
+                                attachment = item.attachment,
+                                color = item.color,
+                                created_id = item.created_id,
+                                date_created = item.date_created,
+                                date_updated = item.date_updated,
+                                creator = item.creator,
+                                end = item.end,
+                                location = item.location ?? "",
+                                memo = item.memo ?? "",
+                                people = item.people,
+                                start = item.start.Value.AddYears(i + 1),
+                                title = item.title,
+                                type = item.type,
+                                updated_id = item.updated_id,
+                                all_day = item.all_day,
+
+                                is_repeat = item.is_repeat,
+                                repeat_type = item.repeat_type,
+                                repeat_dow = item.repeat_dow,
+                                repeat_end = item.repeat_end,
+                                is_done = item.is_done,
+                                property = item.property ?? null,
+                                meeting_type = item.meeting_type,
+                                presenter_id = item.presenter_id,
+                                presenter = item.presenter,
+
+                                editable = item.editable,
+                                allDay = item.allDay,
+                                repeat_start = item.start,
+                            };
+                            repeatList.Add(repeatItem);
+                        }
+                    }
+                }
+            }
+
+            if (repeatList.Count() > 0)
+            {
+                newList.AddRange(repeatList);
             }
 
             return Json(newList, JsonRequestBehavior.AllowGet);
