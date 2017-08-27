@@ -397,6 +397,9 @@ namespace WebCenter.Web.Controllers
 
                 creator = a.member1.name,
 
+                trader_id = a.trader_id,
+                trader_name = a.customer1.name,
+
             }).FirstOrDefault();
 
             return Json(reg, JsonRequestBehavior.AllowGet);
@@ -467,6 +470,9 @@ namespace WebCenter.Web.Controllers
                 description = a.description,
                 creator = a.member1.name,
 
+                trader_id = a.trader_id,
+                trader_name = a.customer1.name
+
             }).FirstOrDefault();
 
             var list = Uof.IincomeService.GetAll(i => i.source_id == dbTrademar.id && i.source_name == "trademark").Select(i => new {
@@ -515,35 +521,35 @@ namespace WebCenter.Web.Controllers
         {
             var dbTrade = Uof.ItrademarkService.GetById(trade.id);
 
-            if (trade.customer_id == dbTrade.customer_id &&
-                trade.type == dbTrade.type &&
-                trade.name == dbTrade.name &&
-                trade.applicant == dbTrade.applicant &&
-                trade.address == dbTrade.address &&
-                trade.trademark_type == dbTrade.trademark_type &&
-                trade.region == dbTrade.region &&
-                trade.reg_mode == dbTrade.reg_mode &&
-                trade.date_transaction == dbTrade.date_transaction &&
-                trade.amount_transaction == dbTrade.amount_transaction &&
-                trade.currency == dbTrade.currency &&
-                //trade.date_receipt == dbTrade.date_receipt &&
-                //trade.date_accept == dbTrade.date_accept &&
-                //trade.date_trial == dbTrade.date_trial &&
-                //trade.date_regit == dbTrade.date_regit &&
-                //trade.date_exten == dbTrade.date_exten &&
-                //trade.progress == dbTrade.progress &&
+            //if (trade.customer_id == dbTrade.customer_id &&
+            //    trade.type == dbTrade.type &&
+            //    trade.name == dbTrade.name &&
+            //    trade.applicant == dbTrade.applicant &&
+            //    trade.address == dbTrade.address &&
+            //    trade.trademark_type == dbTrade.trademark_type &&
+            //    trade.region == dbTrade.region &&
+            //    trade.reg_mode == dbTrade.reg_mode &&
+            //    trade.date_transaction == dbTrade.date_transaction &&
+            //    trade.amount_transaction == dbTrade.amount_transaction &&
+            //    trade.currency == dbTrade.currency &&
+            //    //trade.date_receipt == dbTrade.date_receipt &&
+            //    //trade.date_accept == dbTrade.date_accept &&
+            //    //trade.date_trial == dbTrade.date_trial &&
+            //    //trade.date_regit == dbTrade.date_regit &&
+            //    //trade.date_exten == dbTrade.date_exten &&
+            //    //trade.progress == dbTrade.progress &&
 
-                trade.salesman_id == dbTrade.salesman_id &&
-                trade.waiter_id == dbTrade.waiter_id &&
-                trade.manager_id == dbTrade.manager_id && 
-                trade.description == dbTrade.description &&
-                trade.currency == dbTrade.currency &&
-                trade.rate == dbTrade.rate &&
-                trade.assistant_id == dbTrade.assistant_id
-                )
-            {
-                return Json(new { id = trade.id }, JsonRequestBehavior.AllowGet);
-            }
+            //    trade.salesman_id == dbTrade.salesman_id &&
+            //    trade.waiter_id == dbTrade.waiter_id &&
+            //    trade.manager_id == dbTrade.manager_id && 
+            //    trade.description == dbTrade.description &&
+            //    trade.currency == dbTrade.currency &&
+            //    trade.rate == dbTrade.rate &&
+            //    trade.assistant_id == dbTrade.assistant_id
+            //    )
+            //{
+            //    return Json(new { id = trade.id }, JsonRequestBehavior.AllowGet);
+            //}
 
             var identityName = HttpContext.User.Identity.Name;
             var arrs = identityName.Split('|');
@@ -579,6 +585,8 @@ namespace WebCenter.Web.Controllers
             dbTrade.waiter_id = trade.waiter_id;
             dbTrade.manager_id = trade.manager_id;
             dbTrade.description = trade.description;
+
+            dbTrade.trader_id = trade.trader_id;
 
             dbTrade.date_updated = DateTime.Now;
 

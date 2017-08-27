@@ -388,6 +388,8 @@ namespace WebCenter.Web.Controllers
                 date_regit = a.date_regit,
 
                 creator = a.member1.name,
+                trader_id = a.trader_id,
+                trader_name = a.customer1.name,
 
             }).FirstOrDefault();
 
@@ -451,6 +453,8 @@ namespace WebCenter.Web.Controllers
                 date_regit = a.date_regit,
 
                 creator = a.member1.name,
+                trader_id = a.trader_id,
+                trader_name = a.customer1.name,
 
             }).FirstOrDefault();
 
@@ -500,34 +504,34 @@ namespace WebCenter.Web.Controllers
         {
             var dbPatent = Uof.IpatentService.GetById(_patent.id);
 
-            if (_patent.customer_id == dbPatent.customer_id &&
-                _patent.type == dbPatent.type &&
-                _patent.name == dbPatent.name &&
-                _patent.applicant == dbPatent.applicant &&
-                _patent.address == dbPatent.address &&
-                _patent.card_no == dbPatent.card_no &&
-                _patent.designer == dbPatent.designer &&                
-                _patent.patent_type == dbPatent.patent_type &&
-                _patent.patent_purpose == dbPatent.patent_purpose &&
-                _patent.reg_mode == dbPatent.reg_mode &&
-                _patent.date_transaction == dbPatent.date_transaction &&
-                _patent.amount_transaction == dbPatent.amount_transaction &&
-                _patent.currency == dbPatent.currency &&
-                _patent.date_empower == dbPatent.date_empower &&
-                _patent.date_accept == dbPatent.date_accept &&                
-                _patent.progress == dbPatent.progress &&                
-                _patent.waiter_id == dbPatent.waiter_id &&
-                _patent.salesman_id == dbPatent.salesman_id &&
-                _patent.manager_id == dbPatent.manager_id && 
-                _patent.description == dbPatent.description &&
-                _patent.currency == dbPatent.currency &&
-                _patent.rate == dbPatent.rate &&
-                _patent.date_regit == dbPatent.date_regit &&
-                _patent.assistant_id == dbPatent.assistant_id
-                )
-            {
-                return Json(new { id = _patent.id }, JsonRequestBehavior.AllowGet);
-            }
+            //if (_patent.customer_id == dbPatent.customer_id &&
+            //    _patent.type == dbPatent.type &&
+            //    _patent.name == dbPatent.name &&
+            //    _patent.applicant == dbPatent.applicant &&
+            //    _patent.address == dbPatent.address &&
+            //    _patent.card_no == dbPatent.card_no &&
+            //    _patent.designer == dbPatent.designer &&                
+            //    _patent.patent_type == dbPatent.patent_type &&
+            //    _patent.patent_purpose == dbPatent.patent_purpose &&
+            //    _patent.reg_mode == dbPatent.reg_mode &&
+            //    _patent.date_transaction == dbPatent.date_transaction &&
+            //    _patent.amount_transaction == dbPatent.amount_transaction &&
+            //    _patent.currency == dbPatent.currency &&
+            //    _patent.date_empower == dbPatent.date_empower &&
+            //    _patent.date_accept == dbPatent.date_accept &&                
+            //    _patent.progress == dbPatent.progress &&                
+            //    _patent.waiter_id == dbPatent.waiter_id &&
+            //    _patent.salesman_id == dbPatent.salesman_id &&
+            //    _patent.manager_id == dbPatent.manager_id && 
+            //    _patent.description == dbPatent.description &&
+            //    _patent.currency == dbPatent.currency &&
+            //    _patent.rate == dbPatent.rate &&
+            //    _patent.date_regit == dbPatent.date_regit &&
+            //    _patent.assistant_id == dbPatent.assistant_id
+            //    )
+            //{
+            //    return Json(new { id = _patent.id }, JsonRequestBehavior.AllowGet);
+            //}
 
             var identityName = HttpContext.User.Identity.Name;
             var arrs = identityName.Split('|');
@@ -563,6 +567,7 @@ namespace WebCenter.Web.Controllers
             dbPatent.description = _patent.description;
             dbPatent.date_updated = DateTime.Now;
             dbPatent.date_regit = _patent.date_regit;
+            dbPatent.trader_id = _patent.trader_id;
             var r = Uof.IpatentService.UpdateEntity(dbPatent);
 
             if (r)

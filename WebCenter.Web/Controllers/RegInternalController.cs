@@ -451,6 +451,10 @@ namespace WebCenter.Web.Controllers
                 director_card_no = a.director_card_no,
                 capital = a.capital,
                 date_created = a.date_created,
+
+                trader_id = a.trader_id,
+                trader_name = a.customer1.name,
+
             }).FirstOrDefault();
             #endregion
 
@@ -673,6 +677,9 @@ namespace WebCenter.Web.Controllers
                 capital = a.capital,
                 date_created = a.date_created,
 
+                trader_id = a.trader_id,
+                trader_name = a.customer1.name,
+
             }).FirstOrDefault();
 
             #region 旧数据处理
@@ -875,6 +882,8 @@ namespace WebCenter.Web.Controllers
             dbReg.biz_address = reginternal.biz_address;
             dbReg.director_card_no = reginternal.director_card_no;
             dbReg.capital = reginternal.capital;
+
+            dbReg.trader_id = reginternal.trader_id;
 
             var r = Uof.Ireg_internalService.UpdateEntity(dbReg);
 
