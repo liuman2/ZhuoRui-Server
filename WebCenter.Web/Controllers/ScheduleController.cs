@@ -93,6 +93,8 @@ namespace WebCenter.Web.Controllers
             dbSchedule.repeat_dow = _schedule.repeat_dow;
             dbSchedule.property = _schedule.property;
 
+            dbSchedule.repeat_end = _schedule.repeat_end;
+
             if (_schedule.property != 0)
             {
                 dbSchedule.meeting_type = null;
