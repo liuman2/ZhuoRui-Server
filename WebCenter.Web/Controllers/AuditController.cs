@@ -46,7 +46,7 @@ namespace WebCenter.Web.Controllers
             var ops = arrs[4].Split(',');
             if (ops.Count() == 0)
             {
-                condition = c => (c.salesman_id == userId || c.assistant_id == userId);
+                condition = c => (c.salesman_id == userId || c.assistant_id == userId || c.creator_id == userId);
             }
             else
             {
@@ -56,7 +56,7 @@ namespace WebCenter.Web.Controllers
                 {
                     if (hasDepart == null)
                     {
-                        condition = c => (c.salesman_id == userId || c.assistant_id == userId);
+                        condition = c => (c.salesman_id == userId || c.assistant_id == userId || c.creator_id == userId);
                     }
                     else
                     {
