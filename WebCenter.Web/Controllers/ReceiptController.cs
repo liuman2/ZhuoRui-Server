@@ -236,6 +236,83 @@ namespace WebCenter.Web.Controllers
             return Json(printData, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Search(OrderSearchRequest request)
+        {
+            //var r = HttpContext.User.Identity.IsAuthenticated;
+            //if (!r)
+            //{
+            //    return new HttpUnauthorizedResult();
+            //}
+
+            //var identityName = HttpContext.User.Identity.Name;
+            //var arrs = identityName.Split('|');
+            //if (arrs.Length == 0)
+            //{
+            //    return new HttpUnauthorizedResult();
+            //}
+
+            //if (arrs.Length < 5)
+            //{
+            //    return new HttpUnauthorizedResult();
+            //}
+
+            //var userId = 0;
+            //var deptId = 0;
+            //int.TryParse(arrs[0], out userId);
+            //int.TryParse(arrs[2], out deptId);
+            
+            Expression<Func<receipt, bool>> query = c => true;
+            
+            var list = Uof.IreceiptService
+                .GetAll(query)
+                .OrderByDescending(item => item.date_created).Select(c => new ReceiptEntity
+                {
+                    id = c.id,
+                    code = c.code,
+                    order_code = "",
+                    order_id = c.order_id,
+                    order_source = c.order_source,
+                    order_name = "",
+                    date_created = c.date_created,
+                    memo = c.memo,
+                }).ToPagedList(request.index, request.size).ToList();
+
+            var totalRecord = Uof.IreceiptService
+                .GetAll(query)
+                .Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + request.size - 1) / request.size;
+            }
+            var page = new
+            {
+                current_index = request.index,
+                current_size = request.size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+
+            if (list.Count() > 0)
+            {
+                foreach (var item in list)
+                {
+                    item.no = item.date_created.Value.ToString("yyyyMMdd") + item.code;
+                }
+
+                list = list.OrderBy(i => i.no).ToList();
+            }
+
+            var result = new
+            {
+                page = page,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         private string GetCodeByDate(DateTime today)
         {
             var code = Uof.IreceiptService.GetAll(r => r.date_created == today)

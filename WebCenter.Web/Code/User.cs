@@ -498,4 +498,17 @@ namespace WebCenter.Web
         public List<int> dow { get; set; }
 
     }
+
+    public class ReceiptEntity
+    {
+        public int id { get; set; }
+        public string no { get; set; }
+        public string code { get; set; }
+        public string order_code { get; set; }
+        public int? order_id { get; set; }
+        public string order_source { get; set; }
+        public string order_name { get; set; }
+        public DateTime? date_created { get; set; }
+        public string memo { get; set; }
+    }
 }

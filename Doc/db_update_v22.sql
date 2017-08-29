@@ -151,6 +151,8 @@ ALTER TABLE audit ADD CONSTRAINT fk_audit_trader_id FOREIGN KEY (trader_id) REFE
 call AddColumnUnlessExists(Database(), 'sub_audit', 'trader_id', 'int(11) DEFAULT NULL COMMENT "渠道商"');
 ALTER TABLE sub_audit ADD CONSTRAINT fk_sub_audit_trader_id FOREIGN KEY (trader_id) REFERENCES customer(id);
 
+INSERT INTO `menu` VALUES ('74', '4', 'receipt_list', 'fa fa-th', '收据列表', '41');
+
 
 
 
