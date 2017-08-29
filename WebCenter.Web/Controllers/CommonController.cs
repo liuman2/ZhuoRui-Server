@@ -364,7 +364,8 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate ?? 1
+                        rate = a.rate ?? 1,
+                        trader = a.customer1.name,
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -447,7 +448,8 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member5.area.name,
-                        rate = a.rate ?? 1
+                        rate = a.rate ?? 1,
+                        trader = a.customer1.name,
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction!=null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -530,7 +532,8 @@ namespace WebCenter.Web.Controllers
                         type = a.patent_type,
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate ?? 1
+                        rate = a.rate ?? 1,
+                        trader = a.customer1.name,
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -614,7 +617,8 @@ namespace WebCenter.Web.Controllers
                         currency = a.currency,
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
-                        region = a.region
+                        region = a.region,
+                        trader = a.customer1.name,
                     }).FirstOrDefault();
 
                     if (!string.IsNullOrEmpty(printData.region))
@@ -817,7 +821,8 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate ?? 1
+                        rate = a.rate ?? 1,
+                        trader = a.customer1.name,
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -887,7 +892,7 @@ namespace WebCenter.Web.Controllers
                         customer_name = "",
                         company_cn = "", //a.applicant,
                         company_en = "",
-                        creator = a.member1.name,
+                        creator = a.member2.name,
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "", //a.reg_mode,
@@ -905,6 +910,7 @@ namespace WebCenter.Web.Controllers
                         area = a.member5.area.name,
                         rate = 1,
                         region = "", //a.region
+                        trader = a.customer.name,                        
                     }).FirstOrDefault();
 
                     //if (!string.IsNullOrEmpty(printData.region))

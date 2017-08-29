@@ -286,6 +286,15 @@ namespace WebCenter.Web.Controllers
             //trade.salesman_id = userId;
             trade.organization_id = GetOrgIdByUserId(userId); // organization_id;
 
+            if (trade.customer_id != null)
+            {
+                var salesman_id = Uof.IcustomerService.GetAll(c => c.id == trade.customer_id).Select(c => c.salesman_id).FirstOrDefault();
+                if (salesman_id != null)
+                {
+                    trade.salesman_id = salesman_id;
+                }
+            }
+
             trade.order_status = 0;
             var nowYear = DateTime.Now.Year;
             if (oldRequest.is_old == 0)

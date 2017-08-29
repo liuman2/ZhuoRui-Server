@@ -169,6 +169,10 @@ namespace WebCenter.Web
         public string source { get; set; }
         public int? source_id { get; set; }
         public string source_code { get; set; }
+
+        public int? trader_id { get; set; }
+        public string trader_name { get; set; }
+        public string creator { get; set; }
     }
 
     public class SubAudit
@@ -211,6 +215,10 @@ namespace WebCenter.Web
         public string salesman { get; set; }
         public string accountant_name { get; set; }
         public string manager_name { get; set; }
+
+        public int? trader_id { get; set; }
+        public string trader_name { get; set; }
+        public string creator { get; set; }
     }
 
     public class LectureCustomer

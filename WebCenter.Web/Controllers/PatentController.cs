@@ -286,6 +286,15 @@ namespace WebCenter.Web.Controllers
             _patent.organization_id = GetOrgIdByUserId(userId); //organization_id;
             _patent.order_status = 0;
 
+            if (_patent.customer_id != null)
+            {
+                var salesman_id = Uof.IcustomerService.GetAll(c => c.id == _patent.customer_id).Select(c => c.salesman_id).FirstOrDefault();
+                if (salesman_id != null)
+                {
+                    _patent.salesman_id = salesman_id;
+                }
+            }
+
             var nowYear = DateTime.Now.Year;
             if (oldRequest.is_old == 0)
             {

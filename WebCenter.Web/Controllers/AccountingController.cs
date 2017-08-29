@@ -527,6 +527,7 @@ namespace WebCenter.Web.Controllers
                 id = a.id,
                 customer_id = a.customer_id,
                 customer_name = a.customer.name,
+                salesman = a.customer.member1.name ?? "",
                 industry = a.customer.industry,
                 province = a.customer.province ?? "",
                 city = a.customer.city ?? "",
@@ -554,6 +555,8 @@ namespace WebCenter.Web.Controllers
                 source_id = a.source_id,
                 source_code = a.source_code,
                 pay_notify = a.pay_notify,
+
+                creator = a.member1.name,
 
                 //salesman_id = a.salesman_id,
                 //salesman = a.member5.name,
@@ -612,6 +615,7 @@ namespace WebCenter.Web.Controllers
                     review_status = a.review_status,
                     creator_id = a.creator_id,
                     creator_name = a.member2.name,
+                    creator = a.member2.name,
                     accountant_id = a.accountant_id,
                     accountan_name = a.member.name,
                     assistant_id = a.assistant_id,
@@ -627,7 +631,10 @@ namespace WebCenter.Web.Controllers
                     invoice_account = a.invoice_account,
 
                     pay_mode = a.pay_mode,
-                    
+
+                    trader_id = a.trader_id,
+                    trader_name = a.customer.name,
+
                 })
                 .ToList();
 
@@ -672,7 +679,7 @@ namespace WebCenter.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddItem(accounting_item item)
+        public ActionResult AddItem(accounting_item item, int? customer_id)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
@@ -696,7 +703,18 @@ namespace WebCenter.Web.Controllers
             item.currency = "人民币";
             item.rate = 1;
             item.review_status = -1;
-            
+            item.creator_id = userId;
+
+            if (customer_id != null)
+            {
+                var salesman_id = Uof.IcustomerService.GetAll(c => c.id == customer_id).Select(c => c.salesman_id).FirstOrDefault();
+                if (salesman_id != null)
+                {
+                    item.salesman_id = salesman_id;
+                }
+            }
+
+
             var dbItem = Uof.Iaccounting_itemService.AddEntity(item);
 
             var timelines = new List<timeline>();
@@ -746,7 +764,7 @@ namespace WebCenter.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateItem(accounting_item item)
+        public ActionResult UpdateItem(accounting_item item, int? customer_id)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;
             if (!r)
@@ -781,6 +799,17 @@ namespace WebCenter.Web.Controllers
             dbItem.assistant_id = item.assistant_id;
             dbItem.tax = item.tax;
             dbItem.pay_mode = item.pay_mode;
+            dbItem.trader_id = item.trader_id;
+
+            if (customer_id != null)
+            {
+                var salesman_id = Uof.IcustomerService.GetAll(c => c.id == customer_id).Select(c => c.salesman_id).FirstOrDefault();
+                if (salesman_id != null)
+                {
+                    dbItem.salesman_id = salesman_id;
+                }
+            }
+
 
             if (item.tax == 1)
             {

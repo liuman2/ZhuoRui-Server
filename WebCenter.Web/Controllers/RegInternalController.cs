@@ -276,6 +276,16 @@ namespace WebCenter.Web.Controllers
             reginternal.review_status = -1;
             reginternal.creator_id = userId;
             //reginternal.salesman_id = userId;
+
+            if (reginternal.customer_id != null)
+            {
+                var salesman_id = Uof.IcustomerService.GetAll(c => c.id == reginternal.customer_id).Select(c => c.salesman_id).FirstOrDefault();
+                if (salesman_id != null)
+                {
+                    reginternal.salesman_id = salesman_id;
+                }
+            }
+
             reginternal.organization_id = GetOrgIdByUserId(userId); // organization_id;
             reginternal.order_status = 0;
             var nowYear = DateTime.Now.Year;

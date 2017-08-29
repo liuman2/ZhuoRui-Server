@@ -148,6 +148,10 @@ namespace WebCenter.Entities
     
         public Nullable<sbyte> pay_mode { get; set; }
     
+    
+    
+        public Nullable<int> trader_id { get; set; }
+    
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }
@@ -155,5 +159,6 @@ namespace WebCenter.Entities
         public virtual member member4 { get; set; }
         public virtual member member5 { get; set; }
         public virtual member member6 { get; set; }
+        public virtual customer customer { get; set; }
     }
 }

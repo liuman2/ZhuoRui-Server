@@ -159,6 +159,9 @@
         <AssociationConnector Association="DataCenter.Entities.fk_patent_trader_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_reg_internal_trader_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_trademark_trader_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_trader_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_audit_trader_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_sub_audit_trader_id" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

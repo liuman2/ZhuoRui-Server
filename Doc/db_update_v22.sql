@@ -141,3 +141,23 @@ call AddColumnUnlessExists(Database(), 'reg_internal', 'date_wait', 'datetime DE
 call AddColumnUnlessExists(Database(), 'trademark', 'date_wait', 'datetime DEFAULT NULL COMMENT "待办日期"');
 call AddColumnUnlessExists(Database(), 'patent', 'date_wait', 'datetime DEFAULT NULL COMMENT "待办日期"');
 
+-- 2017-08-28
+call AddColumnUnlessExists(Database(), 'accounting_item', 'trader_id', 'int(11) DEFAULT NULL COMMENT "渠道商"');
+ALTER TABLE accounting_item ADD CONSTRAINT fk_accounting_item_trader_id FOREIGN KEY (trader_id) REFERENCES customer(id);
+
+call AddColumnUnlessExists(Database(), 'audit', 'trader_id', 'int(11) DEFAULT NULL COMMENT "渠道商"');
+ALTER TABLE audit ADD CONSTRAINT fk_audit_trader_id FOREIGN KEY (trader_id) REFERENCES customer(id);
+
+call AddColumnUnlessExists(Database(), 'sub_audit', 'trader_id', 'int(11) DEFAULT NULL COMMENT "渠道商"');
+ALTER TABLE sub_audit ADD CONSTRAINT fk_sub_audit_trader_id FOREIGN KEY (trader_id) REFERENCES customer(id);
+
+
+
+
+
+
+
+
+
+
+

@@ -268,7 +268,16 @@ namespace WebCenter.Web.Controllers
             _audit.creator_id = userId;
             //_audit.salesman_id = userId;
             _audit.organization_id = GetOrgIdByUserId(userId); //organization_id;
-                        
+
+            if (_audit.customer_id != null)
+            {
+                var salesman_id = Uof.IcustomerService.GetAll(c => c.id == _audit.customer_id).Select(c => c.salesman_id).FirstOrDefault();
+                if (salesman_id != null)
+                {
+                    _audit.salesman_id = salesman_id;
+                }
+            }
+
             var nowYear = DateTime.Now.Year;
             if (oldRequest.is_old == 0)
             {
@@ -385,6 +394,10 @@ namespace WebCenter.Web.Controllers
                 description = a.description,
                 source_code = a.source_code,
 
+                trader_id = a.trader_id,
+                trader_name = a.customer1.name,
+                creator = a.member1.name,
+
             }).FirstOrDefault();
 
             return Json(reg, JsonRequestBehavior.AllowGet);
@@ -446,7 +459,11 @@ namespace WebCenter.Web.Controllers
                 review_status = a.review_status,
                 finance_review_moment = a.finance_review_moment,
                 submit_review_moment = a.submit_review_moment,
-                description = a.description
+                description = a.description,
+
+                trader_id = a.trader_id,
+                trader_name = a.customer1.name,
+                creator = a.member1.name,
             }).FirstOrDefault();
 
             var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "audit").Select(i => new {
@@ -533,6 +550,10 @@ namespace WebCenter.Web.Controllers
                 finance_review_moment = a.finance_review_moment,
                 submit_review_moment = a.submit_review_moment,
 
+                trader_id = a.trader_id,
+                trader_name = a.customer1.name,
+                creator = a.member1.name,
+
             });
 
             return Json(new { order = reg, incomes = incomes, subs = subs, banks = banks }, JsonRequestBehavior.AllowGet);
@@ -542,39 +563,39 @@ namespace WebCenter.Web.Controllers
         {
             var dbAudit = Uof.IauditService.GetById(_audit.id);
 
-            if (_audit.customer_id == dbAudit.customer_id &&
-                _audit.name_cn == dbAudit.name_cn &&
-                _audit.name_en == dbAudit.name_en &&
-                _audit.date_setup == dbAudit.date_setup &&
-                _audit.type == dbAudit.type &&
-                _audit.address == dbAudit.address &&
-                _audit.business_area == dbAudit.business_area &&
-                _audit.trade_mode == dbAudit.trade_mode &&
-                _audit.has_parent == dbAudit.has_parent &&
-                _audit.account_number == dbAudit.account_number &&
-                _audit.account_period == dbAudit.account_period &&
-                _audit.account_period2 == dbAudit.account_period2 &&
-                _audit.date_year_end == dbAudit.date_year_end &&
-                _audit.turnover == dbAudit.turnover &&
-                _audit.amount_bank == dbAudit.amount_bank &&
-                _audit.bill_number == dbAudit.bill_number &&
-                _audit.accounting_standard == dbAudit.accounting_standard &&
-                _audit.cost_accounting == dbAudit.cost_accounting &&
-                _audit.progress == dbAudit.progress &&
-                _audit.date_transaction == dbAudit.date_transaction &&
-                _audit.amount_transaction == dbAudit.amount_transaction &&
-                _audit.accountant_id == dbAudit.accountant_id &&
-                _audit.turnover_currency == dbAudit.turnover_currency &&
-                _audit.manager_id == dbAudit.manager_id &&
-                _audit.salesman_id == dbAudit.salesman_id &&
-                _audit.description == dbAudit.description &&
-                _audit.currency == dbAudit.currency &&
-                _audit.rate == dbAudit.rate &&
-                _audit.assistant_id == dbAudit.assistant_id
-                )
-            {
-                return Json(new { id = _audit.id }, JsonRequestBehavior.AllowGet);
-            }
+            //if (_audit.customer_id == dbAudit.customer_id &&
+            //    _audit.name_cn == dbAudit.name_cn &&
+            //    _audit.name_en == dbAudit.name_en &&
+            //    _audit.date_setup == dbAudit.date_setup &&
+            //    _audit.type == dbAudit.type &&
+            //    _audit.address == dbAudit.address &&
+            //    _audit.business_area == dbAudit.business_area &&
+            //    _audit.trade_mode == dbAudit.trade_mode &&
+            //    _audit.has_parent == dbAudit.has_parent &&
+            //    _audit.account_number == dbAudit.account_number &&
+            //    _audit.account_period == dbAudit.account_period &&
+            //    _audit.account_period2 == dbAudit.account_period2 &&
+            //    _audit.date_year_end == dbAudit.date_year_end &&
+            //    _audit.turnover == dbAudit.turnover &&
+            //    _audit.amount_bank == dbAudit.amount_bank &&
+            //    _audit.bill_number == dbAudit.bill_number &&
+            //    _audit.accounting_standard == dbAudit.accounting_standard &&
+            //    _audit.cost_accounting == dbAudit.cost_accounting &&
+            //    _audit.progress == dbAudit.progress &&
+            //    _audit.date_transaction == dbAudit.date_transaction &&
+            //    _audit.amount_transaction == dbAudit.amount_transaction &&
+            //    _audit.accountant_id == dbAudit.accountant_id &&
+            //    _audit.turnover_currency == dbAudit.turnover_currency &&
+            //    _audit.manager_id == dbAudit.manager_id &&
+            //    _audit.salesman_id == dbAudit.salesman_id &&
+            //    _audit.description == dbAudit.description &&
+            //    _audit.currency == dbAudit.currency &&
+            //    _audit.rate == dbAudit.rate &&
+            //    _audit.assistant_id == dbAudit.assistant_id
+            //    )
+            //{
+            //    return Json(new { id = _audit.id }, JsonRequestBehavior.AllowGet);
+            //}
 
             var identityName = HttpContext.User.Identity.Name;
             var arrs = identityName.Split('|');
@@ -615,6 +636,8 @@ namespace WebCenter.Web.Controllers
             dbAudit.date_updated = DateTime.Now;
             dbAudit.turnover_currency = _audit.turnover_currency;
             dbAudit.assistant_id = _audit.assistant_id;
+
+            dbAudit.trader_id = _audit.trader_id;
 
             var r = Uof.IauditService.UpdateEntity(dbAudit);
 

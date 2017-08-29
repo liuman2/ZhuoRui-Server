@@ -45,6 +45,15 @@ namespace WebCenter.Web.Controllers
             subAudit.creator_id = userId;
             subAudit.customer_id = custId;
 
+            if (subAudit.customer_id != null)
+            {
+                var salesman_id = Uof.IcustomerService.GetAll(c => c.id == subAudit.customer_id).Select(c => c.salesman_id).FirstOrDefault();
+                if (salesman_id != null)
+                {
+                    subAudit.salesman_id = salesman_id;
+                }
+            }
+
             var newAbroad = Uof.Isub_auditService.AddEntity(subAudit);
             if (newAbroad == null)
             {
@@ -114,6 +123,11 @@ namespace WebCenter.Web.Controllers
                 description = a.description,
                 finance_review_moment = a.finance_review_moment,
                 submit_review_moment = a.submit_review_moment,
+
+                trader_id = a.trader_id,
+                trader_name = a.customer1.name,
+                creator = a.member1.name,
+
             }).FirstOrDefault();
 
             return Json(sub, JsonRequestBehavior.AllowGet);
@@ -123,29 +137,29 @@ namespace WebCenter.Web.Controllers
         {
             var dbAudit = Uof.Isub_auditService.GetById(_audit.id);
 
-            if (_audit.account_period == dbAudit.account_period &&
-                _audit.account_period2 == dbAudit.account_period2 &&
-                _audit.date_year_end == dbAudit.date_year_end &&
-                _audit.turnover == dbAudit.turnover &&
-                _audit.amount_bank == dbAudit.amount_bank &&
-                _audit.bill_number == dbAudit.bill_number &&
-                _audit.accounting_standard == dbAudit.accounting_standard &&
-                _audit.cost_accounting == dbAudit.cost_accounting &&
-                _audit.progress == dbAudit.progress &&
-                _audit.date_transaction == dbAudit.date_transaction &&
-                _audit.amount_transaction == dbAudit.amount_transaction &&
-                _audit.accountant_id == dbAudit.accountant_id &&
-                _audit.turnover_currency == dbAudit.turnover_currency &&
-                _audit.manager_id == dbAudit.manager_id &&
-                _audit.salesman_id == dbAudit.salesman_id &&
-                _audit.description == dbAudit.description &&
-                _audit.currency == dbAudit.currency &&
-                _audit.rate == dbAudit.rate &&
-                _audit.assistant_id == dbAudit.assistant_id
-                )
-            {
-                return Json(new { id = _audit.id }, JsonRequestBehavior.AllowGet);
-            }
+            //if (_audit.account_period == dbAudit.account_period &&
+            //    _audit.account_period2 == dbAudit.account_period2 &&
+            //    _audit.date_year_end == dbAudit.date_year_end &&
+            //    _audit.turnover == dbAudit.turnover &&
+            //    _audit.amount_bank == dbAudit.amount_bank &&
+            //    _audit.bill_number == dbAudit.bill_number &&
+            //    _audit.accounting_standard == dbAudit.accounting_standard &&
+            //    _audit.cost_accounting == dbAudit.cost_accounting &&
+            //    _audit.progress == dbAudit.progress &&
+            //    _audit.date_transaction == dbAudit.date_transaction &&
+            //    _audit.amount_transaction == dbAudit.amount_transaction &&
+            //    _audit.accountant_id == dbAudit.accountant_id &&
+            //    _audit.turnover_currency == dbAudit.turnover_currency &&
+            //    _audit.manager_id == dbAudit.manager_id &&
+            //    _audit.salesman_id == dbAudit.salesman_id &&
+            //    _audit.description == dbAudit.description &&
+            //    _audit.currency == dbAudit.currency &&
+            //    _audit.rate == dbAudit.rate &&
+            //    _audit.assistant_id == dbAudit.assistant_id
+            //    )
+            //{
+            //    return Json(new { id = _audit.id }, JsonRequestBehavior.AllowGet);
+            //}
 
             var identityName = HttpContext.User.Identity.Name;
             var arrs = identityName.Split('|');
@@ -176,6 +190,8 @@ namespace WebCenter.Web.Controllers
             dbAudit.date_updated = DateTime.Now;
             dbAudit.turnover_currency = _audit.turnover_currency;
             dbAudit.assistant_id = _audit.assistant_id;
+
+            dbAudit.trader_id = _audit.trader_id;
 
             var r = Uof.Isub_auditService.UpdateEntity(dbAudit);
 
