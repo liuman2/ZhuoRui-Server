@@ -264,7 +264,10 @@ namespace WebCenter.Web.Controllers
                         customer_name = a.customer.name,
                         company_cn = a.name_cn,
                         company_en = a.name_en,
-                        creator = a.member1.name,
+
+                        //creator = a.member1.name,
+                        //saleman = a.member4.name,
+
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "",
@@ -275,13 +278,86 @@ namespace WebCenter.Web.Controllers
                         pay_way = "",
                         project = "",
                         reason = "年检",
-                        received = 0,
-                        saleman = a.member4.name,
+                        received = 0,                        
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate ?? 1
+                        rate = a.rate ?? 1,
+
+                        orderid = a.order_id,
+                        ordersource = a.type,
+                        
                     }).FirstOrDefault();
+
+                    if (printData != null)
+                    {
+                        switch (printData.ordersource)
+                        {
+                            case "reg_abroad":
+                                var sabroad = Uof.Ireg_abroadService.GetAll(a => a.id == printData.orderid).Select(a => new
+                                {
+                                    creator = a.member.name,
+                                    saleman = a.member4.name,
+                                    trader = a.customer1.name
+                                }).FirstOrDefault();
+
+                                if (sabroad != null)
+                                {
+                                    printData.creator = sabroad.creator;
+                                    printData.saleman = sabroad.saleman;
+                                    printData.trader = sabroad.trader;
+                                }
+                                break;
+                            case "reg_internal":
+                                var sinternal = Uof.Ireg_internalService.GetAll(a => a.id == printData.orderid).Select(a => new
+                                {
+                                    creator = a.member1.name,
+                                    saleman = a.member5.name,
+                                    trader = a.customer1.name
+                                }).FirstOrDefault();
+
+                                if (sinternal != null)
+                                {
+                                    printData.creator = sinternal.creator;
+                                    printData.saleman = sinternal.saleman;
+                                    printData.trader = sinternal.trader;
+                                }
+                                break;
+                            case "trademark":
+                                var strademark = Uof.ItrademarkService.GetAll(a => a.id == printData.orderid).Select(a => new
+                                {
+                                    creator = a.member1.name,
+                                    saleman = a.member4.name,
+                                    trader = a.customer1.name
+                                }).FirstOrDefault();
+
+                                if (strademark != null)
+                                {
+                                    printData.creator = strademark.creator;
+                                    printData.saleman = strademark.saleman;
+                                    printData.trader = strademark.trader;
+                                }
+
+                                break;
+                            case "patent":                                
+                                var spatent = Uof.IpatentService.GetAll(a => a.id == printData.orderid).Select(a => new
+                                {
+                                    creator = a.member1.name,
+                                    saleman = a.member4.name,
+                                    trader = a.customer1.name
+                                }).FirstOrDefault();
+
+                                if (spatent != null)
+                                {
+                                    printData.creator = spatent.creator;
+                                    printData.saleman = spatent.saleman;
+                                    printData.trader = spatent.trader;
+                                }
+                                break;                            
+                            default:
+                                break;
+                        }
+                    }
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
 

@@ -49,6 +49,9 @@ namespace WebCenter.Web
         /// </summary>
         public string others { get; set; }
 
+        public int? orderid { get; set; }
+        public string ordersource { get; set; }
+
         /// <summary>
         /// 订单名称
         /// </summary>

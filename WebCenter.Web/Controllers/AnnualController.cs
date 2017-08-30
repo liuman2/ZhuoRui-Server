@@ -463,7 +463,17 @@ namespace WebCenter.Web.Controllers
             }
             #endregion
 
-            items = items.OrderBy(i => i.date_setup).ToList();
+            
+
+            if (items.Count > 0)
+            {
+                foreach (var item in items)
+                {
+                    item.setup_day = item.date_setup.Value.ToString("MM-dd");
+                }
+            }
+
+            items = items.OrderBy(i => i.setup_day).ToList();
 
             var result = new
             {
@@ -903,7 +913,7 @@ namespace WebCenter.Web.Controllers
                 .OrderByDescending(item => item.id).Select(c => new AnnualExamEntity
                 {
                     id = c.id,
-                    code = c.code,
+                    code = c.order_code,
                     customer_id = c.customer_id,
                     customer_code = c.customer.code,
                     type = c.type,
