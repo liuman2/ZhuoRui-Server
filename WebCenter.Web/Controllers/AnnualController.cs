@@ -151,7 +151,11 @@ namespace WebCenter.Web.Controllers
                     order_name = a.name_cn ?? a.name_en,
                     order_type = "reg_abroad",
                     order_type_name = "境外注册",
-                    saleman = a.member4.name,
+                    //saleman = a.member4.name,
+
+                    //salesman_id = a.customer.salesman_id,
+                    saleman = a.customer.member1.name ?? "",
+
                     waiter = a.member6.name,
                     assistant_name = a.member7.name,
                     submit_review_date = a.submit_review_date,
@@ -265,7 +269,8 @@ namespace WebCenter.Web.Controllers
                         order_name = a.name_cn,
                         order_type = "reg_internal",
                         order_type_name = "境内注册",
-                        saleman = a.member5.name,
+                        //saleman = a.member5.name,                        
+                        saleman = a.customer.member1.name ?? "",
                         waiter = a.member7.name,
                         assistant_name = a.member.name,
                         submit_review_date = a.submit_review_date,
@@ -331,7 +336,9 @@ namespace WebCenter.Web.Controllers
                     order_name = a.name,
                     order_type = "trademark",
                     order_type_name = "商标注册",
-                    saleman = a.member4.name,
+                    //saleman = a.member4.name,
+                    saleman = a.customer.member1.name ?? "",
+
                     waiter = a.member6.name,
                     assistant_name = a.member.name,
                     submit_review_date = a.submit_review_date,
@@ -443,7 +450,9 @@ namespace WebCenter.Web.Controllers
                     order_name = a.name,
                     order_type = "patent",
                     order_type_name = "专利注册",
-                    saleman = a.member4.name,
+                    //saleman = a.member4.name,
+                    saleman = a.customer.member1.name ?? "",
+
                     waiter = a.member6.name,
                     assistant_name = a.member.name,
                     submit_review_date = a.submit_review_date,
@@ -983,7 +992,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetView(int id)
         {
-            var annua = Uof.Iannual_examService.GetAll(a => a.id == id).Select(a => new
+            var annua = Uof.Iannual_examService.GetAll(a => a.id == id).Select(a => new AnnualEntity
             {
                 id = a.id,
                 code = a.code,
@@ -1018,6 +1027,27 @@ namespace WebCenter.Web.Controllers
                 submit_review_moment = a.submit_review_moment
 
             }).FirstOrDefault();
+
+            switch (annua.type)
+            {
+                case "reg_abroad":
+                    var abroad = Uof.Ireg_abroadService.GetAll(a => a.code == annua.order_code).FirstOrDefault();
+                    if (abroad != null)
+                    {
+                        annua.name_cn = abroad.name_cn;
+                        annua.name_en = abroad.name_en;
+                    }
+                    break;
+                case "reg_internal":
+                    var dbinternal = Uof.Ireg_internalService.GetAll(a => a.code == annua.order_code).FirstOrDefault();
+                    if (dbinternal != null)
+                    {
+                        annua.name_cn = dbinternal.name_cn;
+                    }
+                    break;
+                default:
+                    break;
+            }
 
             var list = Uof.IincomeService.GetAll(i => i.source_id == annua.id && i.source_name == "annual").Select(i => new {
                 id = i.id,
@@ -1762,7 +1792,8 @@ namespace WebCenter.Web.Controllers
                         order_name = a.name_cn ?? a.name_en,
                         order_type = "reg_abroad",
                         order_type_name = "境外注册",
-                        saleman = a.member4.name,
+                        //saleman = a.member4.name,
+                        saleman = a.customer.member1.name ?? "",
                         waiter = a.member6.name,
                         //assistant_name = a.member7.name,
                         submit_review_date = a.submit_review_date,
@@ -1820,7 +1851,8 @@ namespace WebCenter.Web.Controllers
                         order_name = a.name_cn,
                         order_type = "reg_internal",
                         order_type_name = "境内注册",
-                        saleman = a.member5.name,
+                        //saleman = a.member5.name,
+                        saleman = a.customer.member1.name ?? "",
                         waiter = a.member7.name,
                         //assistant_name = a.member.name,
                         submit_review_date = a.submit_review_date,
@@ -1879,7 +1911,8 @@ namespace WebCenter.Web.Controllers
                         order_name = a.name,
                         order_type = "trademark",
                         order_type_name = "商标注册",
-                        saleman = a.member4.name,
+                        //saleman = a.member4.name,
+                        saleman = a.customer.member1.name ?? "",
                         waiter = a.member6.name,
                         //assistant_name = a.member.name,
                         submit_review_date = a.submit_review_date,
@@ -1939,7 +1972,8 @@ namespace WebCenter.Web.Controllers
                         order_name = a.name,
                         order_type = "patent",
                         order_type_name = "专利注册",
-                        saleman = a.member4.name,
+                        //saleman = a.member4.name,
+                        saleman = a.customer.member1.name ?? "",
                         waiter = a.member6.name,
                         assistant_name = a.member.name,
                         submit_review_date = a.submit_review_date,

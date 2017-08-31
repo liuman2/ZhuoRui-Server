@@ -143,6 +143,86 @@ namespace WebCenter.Web.Controllers
             return Json(new { result = true, url = photoUrl, name = _fileName.Length > 20 ? _fileName.Substring(0, 20) : _fileName }, JsonRequestBehavior.AllowGet);
         }
 
+        private void ResetMan(PrintData printData)
+        {
+            switch (printData.ordersource)
+            {
+                case "reg_abroad":
+                    var sabroad = Uof.Ireg_abroadService.GetAll(a => a.id == printData.orderid).Select(a => new
+                    {
+                        creator = a.member.name,
+                        saleman = a.member4.name,
+                        trader = a.customer1.name,
+                        name_cn = a.name_cn,
+                        name_en = a.name_en,
+                    }).FirstOrDefault();
+
+                    if (sabroad != null)
+                    {
+                        printData.creator = sabroad.creator;
+                        printData.saleman = sabroad.saleman;
+                        printData.trader = sabroad.trader;
+                        printData.company_cn = sabroad.name_cn;
+                        printData.company_en = sabroad.name_en;
+                    }
+                    break;
+                case "reg_internal":
+                    var sinternal = Uof.Ireg_internalService.GetAll(a => a.id == printData.orderid).Select(a => new
+                    {
+                        creator = a.member1.name,
+                        saleman = a.member5.name,
+                        trader = a.customer1.name,
+                        name_cn = a.name_cn,
+
+                    }).FirstOrDefault();
+
+                    if (sinternal != null)
+                    {
+                        printData.creator = sinternal.creator;
+                        printData.saleman = sinternal.saleman;
+                        printData.trader = sinternal.trader;
+                        printData.company_cn = sinternal.name_cn;
+                    }
+                    break;
+                case "trademark":
+                    var strademark = Uof.ItrademarkService.GetAll(a => a.id == printData.orderid).Select(a => new
+                    {
+                        creator = a.member1.name,
+                        saleman = a.member4.name,
+                        trader = a.customer1.name,
+                        name = a.name,
+                    }).FirstOrDefault();
+
+                    if (strademark != null)
+                    {
+                        printData.creator = strademark.creator;
+                        printData.saleman = strademark.saleman;
+                        printData.trader = strademark.trader;
+                        printData.ordername = strademark.name;
+                    }
+
+                    break;
+                case "patent":
+                    var spatent = Uof.IpatentService.GetAll(a => a.id == printData.orderid).Select(a => new
+                    {
+                        creator = a.member1.name,
+                        saleman = a.member4.name,
+                        trader = a.customer1.name,
+                        name = a.name,
+                    }).FirstOrDefault();
+
+                    if (spatent != null)
+                    {
+                        printData.creator = spatent.creator;
+                        printData.saleman = spatent.saleman;
+                        printData.trader = spatent.trader;
+                        printData.ordername = spatent.name;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
 
         public ActionResult GetPrintData(int id, string name)
         {
@@ -179,7 +259,8 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "境外注册",
                         received = 0,
-                        saleman = a.member4.name,
+                        //saleman = a.member4.name,
+                        saleman = a.customer.member1.name,
                         type = "",
                         currency = a.currency,
                         area = a.member.area.name, // a.member4.area.name,
@@ -229,13 +310,15 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "境外注册",
                         received = 0,
-                        saleman = a.member4.name,
+                        //saleman = a.member4.name,
+                        saleman = a.customer.member1.name,
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
                         region = a.region
                     }).FirstOrDefault();
+
 
                     if (!string.IsNullOrEmpty(printData.region))
                     {
@@ -291,72 +374,7 @@ namespace WebCenter.Web.Controllers
 
                     if (printData != null)
                     {
-                        switch (printData.ordersource)
-                        {
-                            case "reg_abroad":
-                                var sabroad = Uof.Ireg_abroadService.GetAll(a => a.id == printData.orderid).Select(a => new
-                                {
-                                    creator = a.member.name,
-                                    saleman = a.member4.name,
-                                    trader = a.customer1.name
-                                }).FirstOrDefault();
-
-                                if (sabroad != null)
-                                {
-                                    printData.creator = sabroad.creator;
-                                    printData.saleman = sabroad.saleman;
-                                    printData.trader = sabroad.trader;
-                                }
-                                break;
-                            case "reg_internal":
-                                var sinternal = Uof.Ireg_internalService.GetAll(a => a.id == printData.orderid).Select(a => new
-                                {
-                                    creator = a.member1.name,
-                                    saleman = a.member5.name,
-                                    trader = a.customer1.name
-                                }).FirstOrDefault();
-
-                                if (sinternal != null)
-                                {
-                                    printData.creator = sinternal.creator;
-                                    printData.saleman = sinternal.saleman;
-                                    printData.trader = sinternal.trader;
-                                }
-                                break;
-                            case "trademark":
-                                var strademark = Uof.ItrademarkService.GetAll(a => a.id == printData.orderid).Select(a => new
-                                {
-                                    creator = a.member1.name,
-                                    saleman = a.member4.name,
-                                    trader = a.customer1.name
-                                }).FirstOrDefault();
-
-                                if (strademark != null)
-                                {
-                                    printData.creator = strademark.creator;
-                                    printData.saleman = strademark.saleman;
-                                    printData.trader = strademark.trader;
-                                }
-
-                                break;
-                            case "patent":                                
-                                var spatent = Uof.IpatentService.GetAll(a => a.id == printData.orderid).Select(a => new
-                                {
-                                    creator = a.member1.name,
-                                    saleman = a.member4.name,
-                                    trader = a.customer1.name
-                                }).FirstOrDefault();
-
-                                if (spatent != null)
-                                {
-                                    printData.creator = spatent.creator;
-                                    printData.saleman = spatent.saleman;
-                                    printData.trader = spatent.trader;
-                                }
-                                break;                            
-                            default:
-                                break;
-                        }
+                        ResetMan(printData);
                     }
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -401,7 +419,10 @@ namespace WebCenter.Web.Controllers
                         area = a.member4.area.name,
                         rate = a.rate ?? 1
                     }).FirstOrDefault();
-
+                    if (printData != null)
+                    {
+                        ResetMan(printData);
+                    }
                     printData.date = annualLine.date_pay != null ? annualLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
 
                     printData.project = string.Format("{0}年报", printData.area);
@@ -436,7 +457,7 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "审计",
                         received = 0,
-                        saleman = a.member4.name,
+                        //saleman = a.customer.member1.name,
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
@@ -479,7 +500,8 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "审计",
                         received = 0,
-                        saleman = a.member4.name,
+                        //saleman = a.member4.name,
+                        saleman = a.customer.member1.name,
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
@@ -520,7 +542,8 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "国内注册",
                         received = 0,
-                        saleman = a.member5.name,
+                        //saleman = a.member5.name,
+                        saleman = a.customer.member1.name,
                         type = "",
                         currency = a.currency,
                         area = a.member5.area.name,
@@ -563,7 +586,8 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "国内注册",
                         received = 0,
-                        saleman = a.member5.name,
+                        //saleman = a.member5.name,
+                        saleman = a.customer.member1.name,
                         type = "",
                         currency = a.currency,
                         area = a.member5.area.name,
@@ -604,7 +628,8 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "专利注册",
                         received = 0,
-                        saleman = a.member4.name,
+                        //saleman = a.member4.name,
+                        saleman = a.customer.member1.name,
                         type = a.patent_type,
                         currency = a.currency,
                         area = a.member4.area.name,
@@ -647,7 +672,8 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "专利注册",
                         received = 0,
-                        saleman = a.member4.name,
+                        //saleman = a.member4.name,
+                        saleman = a.customer.member1.name,
                         type = a.patent_type,
                         currency = a.currency,
                         area = a.member4.area.name,
@@ -688,7 +714,8 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "商标注册",
                         received = 0,
-                        saleman = a.member4.name,
+                        //saleman = a.member4.name,
+                        saleman = a.customer.member1.name,
                         type = a.trademark_type,
                         currency = a.currency,
                         area = a.member4.area.name,
@@ -737,7 +764,8 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "商标注册",
                         received = 0,
-                        saleman = a.member4.name,
+                        //saleman = a.member4.name,
+                        saleman = a.customer.member1.name,
                         type = a.trademark_type,
                         currency = a.currency,
                         area = a.member4.area.name,
@@ -893,7 +921,8 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "审计",
                         received = 0,
-                        saleman = a.member4.name,
+                        //saleman = a.member4.name,
+                        saleman = a.customer.member1.name,
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
@@ -936,7 +965,8 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "审计",
                         received = 0,
-                        saleman = a.member4.name,
+                        //saleman = a.member4.name,
+                        saleman = a.customer.member1.name,
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
@@ -980,7 +1010,8 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "代理记账",
                         received = 0,
-                        saleman = a.member5.name,
+                        //saleman = a.member5.name,
+                        saleman = a.customer.member1.name,
                         type = "", //a.trademark_type,
                         currency = a.currency,
                         area = a.member5.area.name,
@@ -1037,7 +1068,8 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "代理记账",
                         received = 0,
-                        saleman = a.member5.name,
+                        //saleman = a.member5.name,
+                        saleman = a.customer.member1.name,
                         type = "", //a.trademark_type,
                         currency = a.currency,
                         area = a.member5.area.name,
@@ -1147,8 +1179,8 @@ namespace WebCenter.Web.Controllers
                         注册编号 = a.reg_no,
                         订单归属人ID = a.creator_id,
                         订单归属人 = a.member.name,
-                        客户归属ID = a.salesman_id,
-                        客户归属 = a.member4.name,
+                        客户归属ID = a.customer.salesman_id,
+                        客户归属 = a.customer.member1.name,
                     }).ToList();
 
                     var sheet = ExportToExcel(abroads);

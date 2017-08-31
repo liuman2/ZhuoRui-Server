@@ -160,8 +160,11 @@ namespace WebCenter.Web.Controllers
                     amount_income = 0,
                     amount_unreceive = 0,
                     progress = c.progress,
-                    salesman_id = c.salesman_id,
-                    salesman_name = c.member4.name,
+                    //salesman_id = c.salesman_id,
+                    //salesman_name = c.member4.name,
+
+                    salesman_id = c.member1.id,
+                    salesman_name = c.member1.name,
 
                     assistant_id = c.assistant_id,
                     assistant_name = c.member6.name,
@@ -379,8 +382,12 @@ namespace WebCenter.Web.Controllers
                 currency = a.currency,
                 rate = a.rate,
 
-                salesman_id = a.salesman_id,
-                salesman = a.member4.name,
+                //salesman_id = a.salesman_id,
+                //salesman = a.member4.name,
+
+                salesman_id = a.member1.id,
+                salesman = a.member1.name,
+
                 accountant_id = a.accountant_id,
                 accountant_name = a.member.name,
                 manager_id = a.manager_id,
@@ -445,8 +452,12 @@ namespace WebCenter.Web.Controllers
                 currency = a.currency,
                 rate = a.rate ?? 1,
 
-                salesman_id = a.salesman_id,
-                salesman = a.member4.name,
+                //salesman_id = a.salesman_id,
+                //salesman = a.member4.name,
+
+                salesman_id = a.customer.salesman_id,
+                salesman = a.customer.member1.name,
+
                 accountant_id = a.accountant_id,
                 accountant_name = a.member.name,
                 manager_id = a.manager_id,
@@ -536,8 +547,12 @@ namespace WebCenter.Web.Controllers
                 date_finish = a.date_finish,
                 currency = a.currency,
                 rate = a.rate,
-                salesman_id = a.salesman_id,
-                salesman = a.member4.name,
+                //salesman_id = a.salesman_id,
+                //salesman = a.member4.name,
+
+                salesman_id = a.customer.salesman_id,
+                salesman = a.customer.member1.name,
+
                 accountant_id = a.accountant_id,
                 accountant_name = a.member.name,
                 manager_id = a.manager_id,
@@ -1338,7 +1353,8 @@ namespace WebCenter.Web.Controllers
                         date_finish = i.date_finish,
                         date_setup = i.date_setup,
                         address = i.address,
-                        salesman = i.member5.name
+                        //salesman = i.member5.name
+                        salesman = i.customer.member1.name,
                     }).FirstOrDefault();
 
                     return Json(internals, JsonRequestBehavior.AllowGet);
@@ -1364,7 +1380,8 @@ namespace WebCenter.Web.Controllers
                         date_finish = i.date_finish,
                         date_setup = i.date_setup,
                         address = i.address,
-                        salesman = i.member4.name
+                        //salesman = i.member4.name
+                        salesman = i.customer.member1.name,
                     }).FirstOrDefault();
 
                     return Json(abroads, JsonRequestBehavior.AllowGet);

@@ -511,4 +511,39 @@ namespace WebCenter.Web
         public DateTime? date_created { get; set; }
         public string memo { get; set; }
     }
+
+    public class AnnualEntity
+    {
+        public int id { get; set; }
+        public string code { get; set; }
+        public int? customer_id { get; set; }
+        public string customer_name { get; set; }
+        public string customer_code { get; set; }
+        public string type { get; set; }
+        public string order_code { get; set; }
+        public string name_cn { get; set; }
+        public string name_en { get; set; }
+        public DateTime? date_transaction { get; set; }
+        public float? amount_transaction { get; set; }
+        public string currency { get; set; }
+        public float? rate { get; set; }
+        public string description { get; set; }
+        public string progress { get; set; }
+        public int? salesman_id { get; set; }
+        public string salesman { get; set; }
+        public int? waiter_id { get; set; }
+        public string waiter_name { get; set; }
+        public int? accountant_id { get; set; }
+        public string accountant_name { get; set; }
+
+        public int? assistant_id { get; set; }
+        public string assistant_name { get; set; }
+
+        public DateTime? date_finish { get; set; }
+
+        public sbyte? status { get; set; }
+        public int? review_status { get; set; }
+        public string finance_review_moment { get; set; }
+        public string submit_review_moment { get; set; }
+    }
 }

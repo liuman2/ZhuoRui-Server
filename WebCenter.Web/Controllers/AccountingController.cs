@@ -228,8 +228,11 @@ namespace WebCenter.Web.Controllers
                     amount_transaction = c.amount_transaction,
                     amount_income = 0,
                     amount_unreceive = 0,
-                    salesman_id = c.salesman_id,
-                    salesman_name = c.member5.name,
+                    //salesman_id = c.salesman_id,
+                    //salesman_name = c.member5.name,
+
+                    salesman_id = c.customer.salesman_id,
+                    salesman_name = c.customer.member1.name ?? "",
 
                     assistant_id = c.assistant_id,
                     assistant_name = c.member.name,
@@ -474,8 +477,12 @@ namespace WebCenter.Web.Controllers
                 source_id = a.source_id,
                 source_code = a.source_code,
 
-                salesman_id = a.salesman_id,
-                salesman = a.member5.name,               
+                //salesman_id = a.salesman_id,
+                //salesman = a.member5.name,
+
+                salesman_id = a.customer.salesman_id,
+                salesman = a.customer.member1.name ?? "",
+
                 manager_id = a.manager_id,
                 manager_name = a.member3.name,
                 finance_reviewer_id = a.finance_reviewer_id,
@@ -602,8 +609,12 @@ namespace WebCenter.Web.Controllers
                     currency = a.currency,
                     rate = a.rate,
 
-                    salesman_id = a.salesman_id,
-                    salesman = a.member5.name,
+                    //salesman_id = a.salesman_id,
+                    //salesman = a.member5.name,
+
+                    salesman_id = a.customer.salesman_id,
+                    salesman_name = a.customer.member1.name,
+
                     manager_id = a.manager_id,
                     manager_name = a.member4.name,
                     finance_reviewer_id = a.finance_reviewer_id,

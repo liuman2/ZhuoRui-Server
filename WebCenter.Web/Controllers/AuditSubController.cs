@@ -111,8 +111,12 @@ namespace WebCenter.Web.Controllers
                 date_finish = a.date_finish,
                 currency = a.currency,
                 rate = a.rate,
-                salesman_id = a.salesman_id,
-                salesman = a.member4.name,
+                //salesman_id = a.salesman_id,
+                //salesman = a.member4.name,
+
+                salesman_id = a.customer.salesman_id,
+                salesman = a.customer.member1.name,
+
                 accountant_id = a.accountant_id,
                 accountant_name = a.member.name,
                 manager_id = a.manager_id,

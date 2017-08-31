@@ -61,7 +61,8 @@ namespace WebCenter.Web.Controllers
                     order_type_name = "境外注册",
                     review_status = a.review_status,
                     status = a.status,
-                    salesman = a.member4.name,
+                    //salesman = a.member4.name,
+                    salesman = a.customer.member1.name,
                     amount_transaction = a.amount_transaction
 
                 }).ToList();
@@ -113,7 +114,8 @@ namespace WebCenter.Web.Controllers
                     order_type_name = "境内注册",
                     review_status = a.review_status,
                     status = a.status,
-                    salesman = a.member5.name,
+                    //salesman = a.member5.name,
+                    salesman = a.customer.member1.name,
                     amount_transaction = a.amount_transaction
 
                 }).ToList();
@@ -165,7 +167,8 @@ namespace WebCenter.Web.Controllers
                     order_type_name = "商标",
                     review_status = a.review_status,
                     status = a.status,
-                    salesman = a.member4.name,
+                    //salesman = a.member4.name,
+                    salesman = a.customer.member1.name,
                     amount_transaction = a.amount_transaction
 
                 }).ToList();
@@ -216,7 +219,8 @@ namespace WebCenter.Web.Controllers
                     order_type_name = "专利",
                     review_status = a.review_status,
                     status = a.status,
-                    salesman = a.member4.name,
+                    //salesman = a.member4.name,
+                    salesman = a.customer.member1.name,
                     amount_transaction = a.amount_transaction
 
                 }).ToList();
@@ -267,7 +271,8 @@ namespace WebCenter.Web.Controllers
                     order_type_name = "审计",
                     review_status = a.review_status,
                     status = a.status,
-                    salesman = a.member4.name,
+                    //salesman = a.member4.name,
+                    salesman = a.customer.member1.name,
                     amount_transaction = a.amount_transaction
 
                 }).ToList();
@@ -318,7 +323,8 @@ namespace WebCenter.Web.Controllers
                     order_type_name = "年检",
                     review_status = a.review_status,
                     status = a.status,
-                    salesman = a.member4.name,
+                    //salesman = a.member4.name,
+                    salesman = a.customer.member1.name,
                     amount_transaction = a.amount_transaction
 
                 }).ToList();
@@ -370,7 +376,7 @@ namespace WebCenter.Web.Controllers
                     source = a.source,
                     review_status = a.review_status,
                     status = a.status,
-                    salesman = a.member2.name,
+                    salesman = a.member2.name,                    
                     amount_transaction = a.amount_transaction
 
                 }).ToList();
@@ -426,7 +432,8 @@ namespace WebCenter.Web.Controllers
                     order_type_name = "记账",
                     review_status = a.review_status,
                     status = a.status,
-                    salesman = a.member4.name,
+                    //salesman = a.member4.name,
+                    salesman = a.customer.member1.name,
                     amount_transaction = a.amount_transaction
 
                 }).ToList();
@@ -524,7 +531,8 @@ namespace WebCenter.Web.Controllers
                         order_type_name = "境外注册",
                         review_status = a.review_status,
                         status = a.status,
-                        salesman = a.member4.name,
+                        //salesman = a.member4.name,
+                        salesman = a.customer.member1.name,
                         amount_transaction = a.amount_transaction
 
                     }).ToList();
@@ -588,7 +596,8 @@ namespace WebCenter.Web.Controllers
                         order_type_name = "境内注册",
                         review_status = a.review_status,
                         status = a.status,
-                        salesman = a.member5.name,
+                        //salesman = a.member5.name,
+                        salesman = a.customer.member1.name,
                         amount_transaction = a.amount_transaction
 
                     }).ToList();
@@ -652,7 +661,8 @@ namespace WebCenter.Web.Controllers
                         order_type_name = "商标",
                         review_status = a.review_status,
                         status = a.status,
-                        salesman = a.member4.name,
+                        //salesman = a.member4.name,
+                        salesman = a.customer.member1.name,
                         amount_transaction = a.amount_transaction
 
                     }).ToList();
@@ -715,7 +725,8 @@ namespace WebCenter.Web.Controllers
                         order_type_name = "专利",
                         review_status = a.review_status,
                         status = a.status,
-                        salesman = a.member4.name,
+                        //salesman = a.member4.name,
+                        salesman = a.customer.member1.name,
                         amount_transaction = a.amount_transaction
 
                     }).ToList();
@@ -795,7 +806,8 @@ namespace WebCenter.Web.Controllers
                         review_status = a.review_status,
                         type = a.type,
                         status = a.status,
-                        salesman = a.member4.name,
+                        //salesman = a.member4.name,
+                        salesman = a.customer.member1.name,
                         amount_transaction = a.amount_transaction
 
                     }).ToList();
@@ -861,7 +873,8 @@ namespace WebCenter.Web.Controllers
                         order_type_name = "年检",
                         review_status = a.review_status,
                         status = a.status,
-                        salesman = a.member4.name,
+                        //salesman = a.member4.name,
+                        salesman = a.customer.member1.name,
                         amount_transaction = a.amount_transaction
 
                     }).ToList();
@@ -992,7 +1005,8 @@ namespace WebCenter.Web.Controllers
                         order_type_name = "记账",
                         review_status = a.review_status,
                         status = a.status,
-                        salesman = a.member4.name,
+                        //salesman = a.member4.name,
+                        salesman = a.customer.member1.name,
                         amount_transaction = a.amount_transaction
 
                     }).ToList();

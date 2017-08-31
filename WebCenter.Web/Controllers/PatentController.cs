@@ -177,8 +177,11 @@ namespace WebCenter.Web.Controllers
                     amount_transaction = c.amount_transaction,
                     amount_income = 0,
                     amount_unreceive = 0,
-                    salesman_id = c.salesman_id,
-                    salesman_name = c.member4.name,
+                    //salesman_id = c.salesman_id,
+                    //salesman_name = c.member4.name,
+
+                    salesman_id = c.customer.salesman_id,
+                    salesman_name = c.customer.member1.name,
 
                     assistant_id = c.assistant_id,
                     assistant_name = c.member.name,
@@ -380,8 +383,12 @@ namespace WebCenter.Web.Controllers
                 date_inspection = a.date_inspection,
                 progress = a.progress,
 
-                salesman_id = a.salesman_id,
-                salesman = a.member4.name,
+                //salesman_id = a.salesman_id,
+                //salesman = a.member4.name,
+
+                salesman_id = a.customer.salesman_id,
+                salesman = a.customer.member1.name,
+
                 waiter_id = a.waiter_id,
                 waiter_name = a.member6.name,
                 manager_id = a.manager_id,
@@ -443,8 +450,11 @@ namespace WebCenter.Web.Controllers
                 date_finish = a.date_finish,
                 progress = a.progress,
 
-                salesman_id = a.salesman_id,
-                salesman = a.member4.name,
+                //salesman_id = a.salesman_id,
+                //salesman = a.member4.name,
+                salesman_id = a.customer.salesman_id,
+                salesman = a.customer.member1.name,
+
                 waiter_id = a.waiter_id,
                 waiter_name = a.member6.name,
                 manager_id = a.manager_id,

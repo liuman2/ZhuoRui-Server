@@ -433,8 +433,11 @@ namespace WebCenter.Web.Controllers
                 invoice_bank = a.invoice_bank,
                 invoice_account = a.invoice_account,
 
-                salesman_id = a.salesman_id,
-                salesman = a.member5.name,
+                //salesman_id = a.salesman_id,
+                //salesman = a.member5.name,
+                salesman_id = a.customer.salesman_id,
+                salesman = a.customer.member1.name,
+
                 waiter_id = a.waiter_id,
                 waiter_name = a.member7.name,
                 manager_id = a.manager_id,
@@ -654,8 +657,11 @@ namespace WebCenter.Web.Controllers
                 invoice_bank = a.invoice_bank,
                 invoice_account = a.invoice_account,
 
-                salesman_id = a.salesman_id,
-                salesman = a.member5.name,
+                //salesman_id = a.salesman_id,
+                //salesman = a.member5.name,
+                salesman_id = a.customer.salesman_id,
+                salesman = a.customer.member1.name,
+
                 waiter_id = a.waiter_id,
                 waiter_name = a.member7.name,
                 manager_id = a.manager_id,

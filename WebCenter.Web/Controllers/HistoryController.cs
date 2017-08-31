@@ -445,8 +445,10 @@ namespace WebCenter.Web.Controllers
                     amount_income = 0,
                     amount_unreceive = 0,
                     progress = c.progress,
+
                     salesman_id = c.salesman_id,
                     salesman_name = c.member2.name,
+
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment
 
