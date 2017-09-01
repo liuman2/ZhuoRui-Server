@@ -151,7 +151,7 @@ namespace WebCenter.Web.Controllers
                     var sabroad = Uof.Ireg_abroadService.GetAll(a => a.id == printData.orderid).Select(a => new
                     {
                         creator = a.member.name,
-                        saleman = a.member4.name,
+                        saleman = a.customer.member1.name, //a.member4.name,
                         trader = a.customer1.name,
                         name_cn = a.name_cn,
                         name_en = a.name_en,
@@ -170,7 +170,7 @@ namespace WebCenter.Web.Controllers
                     var sinternal = Uof.Ireg_internalService.GetAll(a => a.id == printData.orderid).Select(a => new
                     {
                         creator = a.member1.name,
-                        saleman = a.member5.name,
+                        saleman = a.customer.member1.name, //a.member5.name,
                         trader = a.customer1.name,
                         name_cn = a.name_cn,
 
@@ -188,7 +188,7 @@ namespace WebCenter.Web.Controllers
                     var strademark = Uof.ItrademarkService.GetAll(a => a.id == printData.orderid).Select(a => new
                     {
                         creator = a.member1.name,
-                        saleman = a.member4.name,
+                        saleman = a.customer.member1.name, //a.member4.name,
                         trader = a.customer1.name,
                         name = a.name,
                     }).FirstOrDefault();
@@ -206,7 +206,7 @@ namespace WebCenter.Web.Controllers
                     var spatent = Uof.IpatentService.GetAll(a => a.id == printData.orderid).Select(a => new
                     {
                         creator = a.member1.name,
-                        saleman = a.member4.name,
+                        saleman = a.customer.member1.name, //a.member4.name,
                         trader = a.customer1.name,
                         name = a.name,
                     }).FirstOrDefault();
@@ -217,6 +217,23 @@ namespace WebCenter.Web.Controllers
                         printData.saleman = spatent.saleman;
                         printData.trader = spatent.trader;
                         printData.ordername = spatent.name;
+                    }
+                    break;
+                case "accounting":
+                    var saccounting = Uof.IaccountingService.GetAll(a=>a.id == printData.masterId).Select(a => new
+                    {
+                        //creator = a.member1.name,
+                        saleman = a.customer.member1.name,
+                        //trader = a.customer1.name,
+                        //name = a.name,
+                    }).FirstOrDefault();
+
+                    if (saccounting != null)
+                    {
+                        //printData.creator = saccounting.creator;
+                        printData.saleman = saccounting.saleman;
+                        //printData.trader = saccounting.trader;
+                        //printData.ordername = saccounting.name;
                     }
                     break;
                 default:
@@ -343,7 +360,7 @@ namespace WebCenter.Web.Controllers
                         attachments = 0,
                         auditor = a.member2.name,
                         balance = a.amount_transaction,
-                        code = a.code,
+                        code = a.order_code,
                         customer_name = a.customer.name,
                         company_cn = a.name_cn,
                         company_en = a.name_en,
@@ -397,7 +414,7 @@ namespace WebCenter.Web.Controllers
                         attachments = 0,
                         auditor = a.member2.name,
                         balance = a.amount_transaction,
-                        code = a.code,
+                        code = a.order_code,
                         customer_name = a.customer.name,
                         company_cn = a.name_cn,
                         company_en = a.name_en,
@@ -989,7 +1006,7 @@ namespace WebCenter.Web.Controllers
                         id = a.id,
                         masterId = a.master_id,
                         accounter = a.member.name,
-                        cashier = "", //a.member2.name, // 出纳
+                        cashier = a.member3.name, // 出纳
                         amount = a.amount_transaction,
                         attachments = 0,
                         auditor = "", //a.member2.name,
@@ -1020,6 +1037,11 @@ namespace WebCenter.Web.Controllers
                         trader = a.customer.name,                        
                     }).FirstOrDefault();
 
+                    //if (printData != null)
+                    //{
+                    //    ResetMan(printData);
+                    //}
+
                     //if (!string.IsNullOrEmpty(printData.region))
                     //{
                     //    printData.others = string.Format("{0}  注册地区:{1}", printData.others, printData.region);
@@ -1030,6 +1052,8 @@ namespace WebCenter.Web.Controllers
                     printData.customer_name = acc.customer.name;
                     printData.company_cn = acc.name;
                     printData.ordername = acc.name;
+
+                    printData.saleman = acc.customer.member1.name;
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}提交", printData.area);
@@ -1047,7 +1071,7 @@ namespace WebCenter.Web.Controllers
                         id = a.id,
                         masterId = a.master_id,
                         accounter = a.member.name,
-                        cashier = "", //a.member2.name, // 出纳
+                        cashier = a.member3.name, // 出纳
                         amount = a.amount_transaction,
                         attachments = 0,
                         auditor = "", //a.member2.name,
@@ -1077,11 +1101,18 @@ namespace WebCenter.Web.Controllers
                         region = "", //a.region
                     }).FirstOrDefault();
 
+                    //if (printData != null)
+                    //{
+                    //    ResetMan(printData);
+                    //}
+
                     var acct = Uof.IaccountingService.GetAll(a => a.id == printData.masterId).FirstOrDefault();
                     printData.code = acct.code;
                     printData.customer_name = acct.customer.name;
                     printData.company_cn = acct.name;
                     printData.ordername = acct.name;
+
+                    printData.saleman = acct.customer.member1.name;
 
                     printData.date = accountLine.date_pay != null ? accountLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}记账", printData.area);

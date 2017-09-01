@@ -1387,6 +1387,13 @@ namespace WebCenter.Web.Controllers
 
             total += audits;
 
+            var accs = Uof.IaccountingService
+                .GetAll(a => a.customer_id == customerId)
+                .OrderByDescending(a => a.code)
+                .Count();
+
+            total += accs;
+
             return total;
         }
     }
