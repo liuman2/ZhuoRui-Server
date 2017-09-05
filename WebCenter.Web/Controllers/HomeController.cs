@@ -177,10 +177,10 @@ namespace WebCenter.Web.Controllers
             Expression<Func<waitdeal, bool>> condition = c => c.read_status == 0 && c.user_id == userId;
                         
             var list = Uof.IwaitdealService.GetAll(condition)
-                .OrderByDescending(item => item.id).Select(c => new
+                .OrderByDescending(item => item.id).Select(c => new WaitNotify
                 {
                     id = c.id,
-                    cosourcede = c.source,
+                    source = c.source,
                     source_id = c.source_id,
                     user_id = c.user_id,
                     router = c.router,
@@ -190,6 +190,45 @@ namespace WebCenter.Web.Controllers
                 }).ToPagedList(index, size).ToList();
 
             var totalRecord = Uof.IwaitdealService.GetAll(condition).Count();
+
+            if (list != null && list.Count() > 0)
+            {
+                var accountitems = list.Where(l => l.source == "accounting_item").ToList();
+                if (accountitems!= null && accountitems.Count() > 0)
+                {
+                    foreach (var item in accountitems)
+                    {
+                        if (item.router == null || item.router == "")
+                        {
+                            item.router = "account_view";
+                        }
+
+                        var masterAcc = Uof.Iaccounting_itemService.GetAll(a => a.id == item.source_id).FirstOrDefault();
+                        if (masterAcc != null)
+                        {
+                            item.source_id = masterAcc.master_id;
+                        }
+                    }
+                }
+
+                var audititems = list.Where(l => l.source == "sub_audit").ToList();
+                if (audititems != null && audititems.Count() > 0)
+                {
+                    foreach (var item in audititems)
+                    {
+                        if (item.router == null || item.router == "")
+                        {
+                            item.router = "audit_view";
+                        }
+
+                        var masterAudit = Uof.Isub_auditService.GetAll(a => a.id == item.source_id).FirstOrDefault();
+                        if (masterAudit != null)
+                        {
+                            item.source_id = masterAudit.master_id;
+                        }
+                    }
+                }
+            }
 
             var totalPages = 0;
             if (totalRecord > 0)

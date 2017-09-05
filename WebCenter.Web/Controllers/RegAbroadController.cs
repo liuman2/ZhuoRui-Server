@@ -450,7 +450,7 @@ namespace WebCenter.Web.Controllers
             {
                 historyReocrd = new abroad_history();
                 historyReocrd.master_id = id;
-                var dbHistoryRecord = Uof.IhistoryService.GetAll(h => h.source_id == id && h.source == "reg_abroad").OrderByDescending(h => h.id).FirstOrDefault();
+                var dbHistoryRecord = Uof.IhistoryService.GetAll(h => h.source_id == id && h.source == "reg_abroad" && h.status >=3).OrderByDescending(h => h.id).FirstOrDefault();
                 if (dbHistoryRecord != null)
                 {
                     if (dbHistoryRecord.value != null && dbHistoryRecord.value != "{}" && dbHistoryRecord.value.Length > 0)

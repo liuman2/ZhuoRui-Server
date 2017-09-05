@@ -546,4 +546,16 @@ namespace WebCenter.Web
         public string finance_review_moment { get; set; }
         public string submit_review_moment { get; set; }
     }
+
+    public class WaitNotify
+    {
+        public int id { get; set; }
+        public string source { get; set; }
+        public int? source_id { get; set; }
+        public int? user_id { get; set; }
+        public string router { get; set; }
+        public string content { get; set; }
+        public DateTime? date_created { get; set; }
+        public sbyte? read_status { get; set; }
+    }
 }

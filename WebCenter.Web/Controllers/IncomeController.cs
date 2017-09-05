@@ -267,6 +267,12 @@ namespace WebCenter.Web.Controllers
                 case "annual":
                     router = "annual_view";
                     break;
+                case "accounting_item":
+                    router = "account_view";
+                    break;
+                case "sub_audit":
+                    router = "audit_view";
+                    break;
                 default:
                     break;
             }
