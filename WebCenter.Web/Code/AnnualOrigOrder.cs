@@ -27,5 +27,8 @@ namespace WebCenter.Web
 
         public int? waiter_id { get; set; }
         public string waiter_name { get; set; }
+
+        public string region { get; set; }
+        public float? reference_price { get; set; }
     }
 }

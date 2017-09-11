@@ -35,7 +35,10 @@ namespace WebCenter.Web
         public DateTime? date_wait { get; set; }
 
         public string setup_day { get; set; }
-        
+
+        public string region { get; set; }
+        public float? reference_price { get; set; }
+
     }
 
     public class FinanceCheck

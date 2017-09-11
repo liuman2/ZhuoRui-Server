@@ -168,6 +168,7 @@ namespace WebCenter.Web.Controllers
                     date_last = a.date_last,
                     title_last = a.title_last,
                     date_wait = a.date_wait,
+                    region = a.region,
                 }).ToList();
 
             if (abroads.Count() > 0)
@@ -282,6 +283,7 @@ namespace WebCenter.Web.Controllers
                         date_last = a.date_last,
                         title_last = a.title_last,
                         date_wait = a.date_wait,
+                        region = "",
                     }).ToList();
 
                 if (internas.Count() > 0)
@@ -351,6 +353,7 @@ namespace WebCenter.Web.Controllers
                     date_last = a.date_last,
                     title_last = a.title_last,
                     date_wait = a.date_wait,
+                    region = a.region,
                 }).ToList();
 
             if (trademarks.Count() > 0)
@@ -464,6 +467,7 @@ namespace WebCenter.Web.Controllers
                     date_last = a.date_last,
                     title_last = a.title_last,
                     date_wait = a.date_wait,
+                    region = "",
                 }).ToList();
 
             if (patents.Count() > 0)
@@ -513,7 +517,8 @@ namespace WebCenter.Web.Controllers
                         salesman_id = a.salesman_id,
                         salesman = a.member4.name,
                         assistant_id = a.assistant_id,
-                        assistant_name = a.member7.name
+                        assistant_name = a.member7.name,
+                        region = a.region,
                     }).FirstOrDefault();
                     break;
                 case "reg_internal":
@@ -551,6 +556,7 @@ namespace WebCenter.Web.Controllers
                         salesman = a.member4.name,
                         assistant_id = a.assistant_id,
                         assistant_name = a.member.name,
+                        region = a.region,
                     }).FirstOrDefault();
                     break;
                 case "patent":
