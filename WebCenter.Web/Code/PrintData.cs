@@ -140,6 +140,8 @@ namespace WebCenter.Web
         public int? logoff { get; set; }
 
         public string logoff_memo { get; set; }
+
+        public int? customer_id { get; set; }
     }
 
     public class ReceiptPrintData

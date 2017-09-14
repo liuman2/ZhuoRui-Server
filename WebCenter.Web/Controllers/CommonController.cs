@@ -810,7 +810,7 @@ namespace WebCenter.Web.Controllers
                         cashier = a.member1.name, // 出纳
                         source = a.source,
                         source_id = a.source_id,
-
+                        customer_id = a.customer_id,
                         amount = a.amount_transaction,
                         attachments = 0,
                         auditor = a.member1.name,
@@ -831,7 +831,7 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "注册变更",
                         received = 0,
-                        saleman = a.member2.name,
+                        //saleman = a.member2.name,
                         type = "",
                         currency = a.currency,
                         area = a.member3.area.name,
@@ -849,6 +849,15 @@ namespace WebCenter.Web.Controllers
                     {
                         var str = string.Format("注销, {0}", printData.logoff_memo);
                         printData.others = "{\"others\":\""+ str + "\"}";
+                    }
+
+                    if (printData.customer_id != null)
+                    {
+                        var dbCustomer =  Uof.IcustomerService.GetAll(c => c.id == printData.customer_id).FirstOrDefault();
+                        if (dbCustomer!= null)
+                        {
+                            printData.saleman = dbCustomer.member1.name;
+                        }
                     }
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -871,7 +880,7 @@ namespace WebCenter.Web.Controllers
                         cashier = a.member1.name, // 出纳
                         source = a.source,
                         source_id = a.source_id,
-
+                        customer_id = a.customer_id,
                         amount = a.amount_transaction,
                         attachments = 0,
                         auditor = a.member1.name,
@@ -892,14 +901,21 @@ namespace WebCenter.Web.Controllers
                         project = "",
                         reason = "注册变更",
                         received = 0,
-                        saleman = a.member2.name,
+                        //saleman = a.member2.name,
                         type = "",
                         currency = a.currency,
                         area = a.member3.area.name,
                         rate = a.rate ?? 1
                     }).FirstOrDefault();
 
-
+                    if (printData.customer_id != null)
+                    {
+                        var dbCustomer = Uof.IcustomerService.GetAll(c => c.id == printData.customer_id).FirstOrDefault();
+                        if (dbCustomer != null)
+                        {
+                            printData.saleman = dbCustomer.member1.name;
+                        }
+                    }
 
                     printData.date = historyLine.date_pay != null ? historyLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
                     printData.project = string.Format("{0}其他", printData.area);
