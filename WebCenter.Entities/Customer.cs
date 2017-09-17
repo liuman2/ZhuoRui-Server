@@ -35,6 +35,8 @@ namespace WebCenter.Entities
             this.accounting_item = new HashSet<accounting_item>();
             this.audits1 = new HashSet<audit>();
             this.sub_audit1 = new HashSet<sub_audit>();
+            this.histories = new HashSet<history>();
+            this.reg_abroad11 = new HashSet<reg_abroad>();
         }
     
     
@@ -192,5 +194,7 @@ namespace WebCenter.Entities
         public virtual ICollection<accounting_item> accounting_item { get; set; }
         public virtual ICollection<audit> audits1 { get; set; }
         public virtual ICollection<sub_audit> sub_audit1 { get; set; }
+        public virtual ICollection<history> histories { get; set; }
+        public virtual ICollection<reg_abroad> reg_abroad11 { get; set; }
     }
 }

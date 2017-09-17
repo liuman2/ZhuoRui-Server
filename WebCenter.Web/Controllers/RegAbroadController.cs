@@ -430,7 +430,10 @@ namespace WebCenter.Web.Controllers
                 need_annual = a.need_annual,
 
                 trader_id = a.trader_id,
-                trader_name = a.customer1.name
+                trader_name = a.customer1.name,
+
+                annual_owner = a.annual_owner,
+                annual_owner_name = a.member8.name,
 
             }).FirstOrDefault();
 
@@ -562,6 +565,9 @@ namespace WebCenter.Web.Controllers
 
                 trader_id = a.trader_id,
                 trader_name = a.customer1.name,
+
+                annual_owner = a.annual_owner,
+                annual_owner_name = a.member8.name,
 
             }).FirstOrDefault();
 
@@ -717,6 +723,8 @@ namespace WebCenter.Web.Controllers
             dbReg.trader_id = reg.trader_id;
 
             dbReg.need_annual = reg.need_annual ?? 1;
+
+            dbReg.annual_owner = reg.annual_owner;
 
             if (reg.is_open_bank == 0)
             {

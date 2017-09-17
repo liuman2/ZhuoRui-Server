@@ -170,6 +170,7 @@ namespace WebCenter.Web.Controllers
             dbHistory.logoff = _history.logoff;
             dbHistory.logoff_memo = _history.logoff_memo;
             dbHistory.date_updated = DateTime.Now;
+            dbHistory.change_owner = _history.change_owner;
 
             if (dbHistory.logoff == 1)
             {
@@ -524,6 +525,9 @@ namespace WebCenter.Web.Controllers
                 logoff = c.logoff,
                 logoff_memo = c.logoff_memo,
 
+                change_owner = c.change_owner,
+                change_owner_name = c.member4.name,
+
             }).FirstOrDefault();
 
             var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "history").Select(i => new {
@@ -596,6 +600,8 @@ namespace WebCenter.Web.Controllers
                 submit_review_moment = c.submit_review_moment,
                 logoff = c.logoff,
                 logoff_memo = c.logoff_memo,
+                change_owner = c.change_owner,
+                change_owner_name = c.member4.name,
 
             }).FirstOrDefault();
 

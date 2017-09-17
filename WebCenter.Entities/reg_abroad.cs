@@ -228,6 +228,14 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_wait { get; set; }
     
+    
+    
+        public Nullable<float> resell_price { get; set; }
+    
+    
+    
+        public Nullable<int> annual_owner { get; set; }
+    
         public virtual bank_account bank_account { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
@@ -239,5 +247,7 @@ namespace WebCenter.Entities
         public virtual member member7 { get; set; }
         public virtual customer customer { get; set; }
         public virtual customer customer1 { get; set; }
+        public virtual customer customer11 { get; set; }
+        public virtual member member8 { get; set; }
     }
 }

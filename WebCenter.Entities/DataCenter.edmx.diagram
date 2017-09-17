@@ -162,6 +162,10 @@
         <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_trader_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_audit_trader_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_sub_audit_trader_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_history_change_owner" />
+        <AssociationConnector Association="DataCenter.Entities.fk_reg_abroad_annual_owner" />
+        <AssociationConnector Association="DataCenter.Entities.fk_history_change_owner1" />
+        <AssociationConnector Association="DataCenter.Entities.fk_reg_abroad_annual_owner1" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

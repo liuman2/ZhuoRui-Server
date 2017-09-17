@@ -141,7 +141,34 @@ namespace WebCenter.Web
 
         public string logoff_memo { get; set; }
 
-        public int? customer_id { get; set; }
+        public int? customer_id { get; set; }        
+
+        /// <summary>
+        /// 注册提成所有人
+        /// </summary>
+        public int? manager_id { get; set; }
+        /// <summary>
+        /// 注册提成所有人
+        /// </summary>
+        public string manager_name { get; set; }
+
+        /// <summary>
+        /// 年检提成所有人
+        /// </summary>
+        public int? annual_owner { get; set; }
+        /// <summary>
+        /// 年检提成所有人
+        /// </summary>
+        public string annual_owner_name { get; set; }
+
+        /// <summary>
+        /// 变更提成所有人
+        /// </summary>
+        public int? change_owner { get; set; }
+        /// <summary>
+        /// 变更提成所有人
+        /// </summary>
+        public string change_owner_name { get; set; }
     }
 
     public class ReceiptPrintData

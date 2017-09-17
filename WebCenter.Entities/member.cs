@@ -94,6 +94,8 @@ namespace WebCenter.Entities
             this.customers = new HashSet<customer>();
             this.customers1 = new HashSet<customer>();
             this.customer_timeline = new HashSet<customer_timeline>();
+            this.histories4 = new HashSet<history>();
+            this.reg_abroad8 = new HashSet<reg_abroad>();
         }
     
     
@@ -239,5 +241,7 @@ namespace WebCenter.Entities
         public virtual ICollection<customer> customers { get; set; }
         public virtual ICollection<customer> customers1 { get; set; }
         public virtual ICollection<customer_timeline> customer_timeline { get; set; }
+        public virtual ICollection<history> histories4 { get; set; }
+        public virtual ICollection<reg_abroad> reg_abroad8 { get; set; }
     }
 }

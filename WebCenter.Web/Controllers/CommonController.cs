@@ -155,6 +155,11 @@ namespace WebCenter.Web.Controllers
                         trader = a.customer1.name,
                         name_cn = a.name_cn,
                         name_en = a.name_en,
+
+                        // 年检提成所有人
+                        annual_owner = a.annual_owner,
+                        annual_owner_name = a.member8.name,
+
                     }).FirstOrDefault();
 
                     if (sabroad != null)
@@ -164,6 +169,10 @@ namespace WebCenter.Web.Controllers
                         printData.trader = sabroad.trader;
                         printData.company_cn = sabroad.name_cn;
                         printData.company_en = sabroad.name_en;
+
+                        // 年检提成所有人
+                        printData.annual_owner = sabroad.annual_owner;
+                        printData.annual_owner_name = sabroad.annual_owner_name;
                     }
                     break;
                 case "reg_internal":
@@ -283,7 +292,10 @@ namespace WebCenter.Web.Controllers
                         area = a.member.area.name, // a.member4.area.name,
                         rate = a.rate ?? 1,
                         region = a.region,
-                        trader = a.customer1.name
+                        trader = a.customer1.name,
+                        //注册提成人
+                        manager_id = a.manager_id,
+                        manager_name = a.member2.name,
 
                     }).FirstOrDefault();
 
@@ -333,7 +345,11 @@ namespace WebCenter.Web.Controllers
                         currency = a.currency,
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
-                        region = a.region
+                        region = a.region,
+
+                        //注册提成人
+                        manager_id = a.manager_id,
+                        manager_name = a.member2.name,
                     }).FirstOrDefault();
 
 
@@ -386,7 +402,11 @@ namespace WebCenter.Web.Controllers
 
                         orderid = a.order_id,
                         ordersource = a.type,
-                        
+
+                        ////年检提成人
+                        //annual_owner = a.manager_id,
+                        //annual_owner_name = a.member2.name,
+
                     }).FirstOrDefault();
 
                     if (printData != null)
@@ -434,7 +454,10 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate ?? 1
+                        rate = a.rate ?? 1,
+
+                        orderid = a.order_id,
+                        ordersource = a.type,
                     }).FirstOrDefault();
                     if (printData != null)
                     {
@@ -838,6 +861,9 @@ namespace WebCenter.Web.Controllers
                         rate = a.rate ?? 1,
                         logoff = a.logoff,
                         logoff_memo = a.logoff_memo,
+                        //变更提成所有人
+                        change_owner = a.change_owner,
+                        change_owner_name = a.member4.name,
 
                     }).FirstOrDefault();
 
@@ -905,7 +931,11 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member3.area.name,
-                        rate = a.rate ?? 1
+                        rate = a.rate ?? 1,
+
+                        //变更提成所有人
+                        change_owner = a.change_owner,
+                        change_owner_name = a.member4.name,
                     }).FirstOrDefault();
 
                     if (printData.customer_id != null)

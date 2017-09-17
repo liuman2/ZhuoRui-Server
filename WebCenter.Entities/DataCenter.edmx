@@ -400,6 +400,10 @@
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="logoff" Type="int" />
           <Property Name="logoff_memo" Type="varchar" MaxLength="100" />
+          <Property Name="area_id" Type="int" />
+          <Property Name="resell_id" Type="int" />
+          <Property Name="resell_price" Type="float" />
+          <Property Name="change_owner" Type="int" />
         </EntityType>
         <EntityType Name="history_shareholder">
           <Key>
@@ -754,6 +758,8 @@
           <Property Name="trader_id" Type="int" />
           <Property Name="annual_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
+          <Property Name="resell_price" Type="float" />
+          <Property Name="annual_owner" Type="int" />
         </EntityType>
         <EntityType Name="reg_history">
           <Key>
@@ -1780,6 +1786,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_history_change_owner">
+          <End Role="member" Type="Self.member" Multiplicity="0..1" />
+          <End Role="history" Type="Self.history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="history">
+              <PropertyRef Name="change_owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_internal_assistant_id">
           <End Role="member" Type="Self.member" Multiplicity="0..1" />
           <End Role="reg_internal" Type="Self.reg_internal" Multiplicity="*" />
@@ -1849,6 +1867,18 @@
             </Principal>
             <Dependent Role="patent">
               <PropertyRef Name="trader_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_reg_abroad_annual_owner">
+          <End Role="member" Type="Self.member" Multiplicity="0..1" />
+          <End Role="reg_abroad" Type="Self.reg_abroad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="reg_abroad">
+              <PropertyRef Name="annual_owner" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2651,6 +2681,10 @@
             <End Role="member" EntitySet="member" />
             <End Role="customer_timeline" EntitySet="customer_timeline" />
           </AssociationSet>
+          <AssociationSet Name="fk_history_change_owner" Association="Self.fk_history_change_owner">
+            <End Role="member" EntitySet="member" />
+            <End Role="history" EntitySet="history" />
+          </AssociationSet>
           <AssociationSet Name="fk_internal_assistant_id" Association="Self.fk_internal_assistant_id">
             <End Role="member" EntitySet="member" />
             <End Role="reg_internal" EntitySet="reg_internal" />
@@ -2674,6 +2708,10 @@
           <AssociationSet Name="fk_patent_trader_id" Association="Self.fk_patent_trader_id">
             <End Role="customer" EntitySet="customer" />
             <End Role="patent" EntitySet="patent" />
+          </AssociationSet>
+          <AssociationSet Name="fk_reg_abroad_annual_owner" Association="Self.fk_reg_abroad_annual_owner">
+            <End Role="member" EntitySet="member" />
+            <End Role="reg_abroad" EntitySet="reg_abroad" />
           </AssociationSet>
           <AssociationSet Name="fk_reg_abroad_trader_id" Association="Self.fk_reg_abroad_trader_id">
             <End Role="customer" EntitySet="customer" />
@@ -3331,6 +3369,22 @@
             <End Role="customer" EntitySet="customers" />
             <End Role="sub_audit" EntitySet="sub_audit" />
           </AssociationSet>
+          <AssociationSet Name="fk_history_change_owner" Association="DataCenter.Entities.fk_history_change_owner">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="history" EntitySet="histories" />
+          </AssociationSet>
+          <AssociationSet Name="fk_reg_abroad_annual_owner" Association="DataCenter.Entities.fk_reg_abroad_annual_owner">
+            <End Role="customer" EntitySet="customers" />
+            <End Role="reg_abroad" EntitySet="reg_abroad" />
+          </AssociationSet>
+          <AssociationSet Name="fk_history_change_owner1" Association="DataCenter.Entities.fk_history_change_owner1">
+            <End Role="member" EntitySet="members" />
+            <End Role="history" EntitySet="histories" />
+          </AssociationSet>
+          <AssociationSet Name="fk_reg_abroad_annual_owner1" Association="DataCenter.Entities.fk_reg_abroad_annual_owner1">
+            <End Role="member" EntitySet="members" />
+            <End Role="reg_abroad" EntitySet="reg_abroad" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -3616,6 +3670,8 @@
           <NavigationProperty Name="customers" Relationship="DataCenter.Entities.member_ibfk_creator" FromRole="member" ToRole="customer" />
           <NavigationProperty Name="customers1" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="member" ToRole="customer" />
           <NavigationProperty Name="customer_timeline" Relationship="DataCenter.Entities.fk_customer_timeline_creator_id" FromRole="member" ToRole="customer_timeline" />
+          <NavigationProperty Name="histories4" Relationship="DataCenter.Entities.fk_history_change_owner1" FromRole="member" ToRole="history" />
+          <NavigationProperty Name="reg_abroad8" Relationship="DataCenter.Entities.fk_reg_abroad_annual_owner1" FromRole="member" ToRole="reg_abroad" />
           </EntityType>
         <Association Name="member_ibfk_3">
           <End Type="DataCenter.Entities.area" Role="area" Multiplicity="0..1" />
@@ -4425,6 +4481,12 @@
           <NavigationProperty Name="member1" Relationship="DataCenter.Entities.history_ibfk_finance_reviewer" FromRole="history" ToRole="member" />
           <NavigationProperty Name="member2" Relationship="DataCenter.Entities.history_ibfk_salesman" FromRole="history" ToRole="member" />
           <NavigationProperty Name="member3" Relationship="DataCenter.Entities.history_ibfk_submit_reviewer" FromRole="history" ToRole="member" />
+          <Property Name="change_owner" Type="Int32" />
+          <Property Name="area_id" Type="Int32" />
+          <Property Name="resell_id" Type="Int32" />
+          <Property Name="resell_price" Type="Single" />
+          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.fk_history_change_owner" FromRole="history" ToRole="customer" />
+          <NavigationProperty Name="member4" Relationship="DataCenter.Entities.fk_history_change_owner1" FromRole="history" ToRole="member" />
         </EntityType>
         <Association Name="history_ibfk_creator">
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
@@ -5343,6 +5405,10 @@
           <NavigationProperty Name="customer" Relationship="DataCenter.Entities.abroad_ibfk_customer" FromRole="reg_abroad" ToRole="customer" />
           <NavigationProperty Name="customer1" Relationship="DataCenter.Entities.fk_reg_abroad_trader_id" FromRole="reg_abroad" ToRole="customer" />
           <Property Name="date_wait" Type="DateTime" />
+          <Property Name="resell_price" Type="Single" />
+          <Property Name="annual_owner" Type="Int32" />
+          <NavigationProperty Name="customer11" Relationship="DataCenter.Entities.fk_reg_abroad_annual_owner" FromRole="reg_abroad" ToRole="customer" />
+          <NavigationProperty Name="member8" Relationship="DataCenter.Entities.fk_reg_abroad_annual_owner1" FromRole="reg_abroad" ToRole="member" />
         </EntityType>
         <Association Name="abroad_ibfk_bank">
           <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="0..1" />
@@ -5616,6 +5682,8 @@
           <NavigationProperty Name="accounting_item" Relationship="DataCenter.Entities.fk_accounting_item_trader_id" FromRole="customer" ToRole="accounting_item" />
           <NavigationProperty Name="audits1" Relationship="DataCenter.Entities.fk_audit_trader_id" FromRole="customer" ToRole="audit" />
           <NavigationProperty Name="sub_audit1" Relationship="DataCenter.Entities.fk_sub_audit_trader_id" FromRole="customer" ToRole="sub_audit" />
+          <NavigationProperty Name="histories" Relationship="DataCenter.Entities.fk_history_change_owner" FromRole="customer" ToRole="history" />
+          <NavigationProperty Name="reg_abroad11" Relationship="DataCenter.Entities.fk_reg_abroad_annual_owner" FromRole="customer" ToRole="reg_abroad" />
         </EntityType>
         <EntityType Name="schedule">
           <Key>
@@ -5906,6 +5974,54 @@
             </Principal>
             <Dependent Role="sub_audit">
               <PropertyRef Name="trader_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_history_change_owner">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="history">
+              <PropertyRef Name="change_owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_reg_abroad_annual_owner">
+          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.reg_abroad" Role="reg_abroad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="reg_abroad">
+              <PropertyRef Name="annual_owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_history_change_owner1">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="history">
+              <PropertyRef Name="change_owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_reg_abroad_annual_owner1">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.reg_abroad" Role="reg_abroad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="reg_abroad">
+              <PropertyRef Name="annual_owner" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6541,6 +6657,10 @@
           <EntitySetMapping Name="histories">
             <EntityTypeMapping TypeName="DataCenter.Entities.history">
               <MappingFragment StoreEntitySet="history">
+                <ScalarProperty Name="resell_price" ColumnName="resell_price" />
+                <ScalarProperty Name="resell_id" ColumnName="resell_id" />
+                <ScalarProperty Name="area_id" ColumnName="area_id" />
+                <ScalarProperty Name="change_owner" ColumnName="change_owner" />
                 <ScalarProperty Name="logoff_memo" ColumnName="logoff_memo" />
                 <ScalarProperty Name="logoff" ColumnName="logoff" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
@@ -6877,6 +6997,8 @@
           <EntitySetMapping Name="reg_abroad">
             <EntityTypeMapping TypeName="DataCenter.Entities.reg_abroad">
               <MappingFragment StoreEntitySet="reg_abroad">
+                <ScalarProperty Name="annual_owner" ColumnName="annual_owner" />
+                <ScalarProperty Name="resell_price" ColumnName="resell_price" />
                 <ScalarProperty Name="date_wait" ColumnName="date_wait" />
                 <ScalarProperty Name="annual_id" ColumnName="annual_id" />
                 <ScalarProperty Name="trader_id" ColumnName="trader_id" />
