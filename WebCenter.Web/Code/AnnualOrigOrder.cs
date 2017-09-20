@@ -30,5 +30,9 @@ namespace WebCenter.Web
 
         public string region { get; set; }
         public float? reference_price { get; set; }
-    }
+        /// <summary>
+        /// 订单归属
+        /// </summary>
+        public string order_owner { get; set; }
+}
 }

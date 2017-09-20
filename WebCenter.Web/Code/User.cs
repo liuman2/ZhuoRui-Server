@@ -381,6 +381,9 @@ namespace WebCenter.Web
         public string finance_review_moment { get; set; }
         public string submit_review_moment { get; set; }
         public string receipt_no { get; set; }
+
+        public int? order_id { get; set; }
+        public string region { get; set; }
     }
 
     public class LectureContact
@@ -545,6 +548,8 @@ namespace WebCenter.Web
         public int? review_status { get; set; }
         public string finance_review_moment { get; set; }
         public string submit_review_moment { get; set; }
+
+        public string order_owner { get; set; }
     }
 
     public class WaitNotify

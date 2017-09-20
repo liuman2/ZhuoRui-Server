@@ -514,11 +514,16 @@ namespace WebCenter.Web.Controllers
                         customer_code = a.customer.code,
                         customer_name = a.customer.name,
                         date_setup = a.date_setup,
-                        salesman_id = a.salesman_id,
-                        salesman = a.member4.name,
+                        salesman_id = a.customer.salesman_id,
+                        salesman = a.customer.member1.name,
                         assistant_id = a.assistant_id,
                         assistant_name = a.member7.name,
                         region = a.region,
+
+                        waiter_id = a.waiter_id,
+                        waiter_name = a.member6.name,
+                        order_owner = a.member.name,
+
                     }).FirstOrDefault();
                     break;
                 case "reg_internal":
@@ -533,10 +538,15 @@ namespace WebCenter.Web.Controllers
                         customer_code = a.customer.code,
                         customer_name = a.customer.name,
                         date_setup = a.date_setup,
-                        salesman_id = a.salesman_id,
-                        salesman = a.member5.name,
+                        salesman_id = a.customer.salesman_id,
+                        salesman = a.customer.member1.name,
                         assistant_id = a.assistant_id,
                         assistant_name = a.member.name,
+
+                        waiter_id = a.waiter_id,
+                        waiter_name = a.member7.name,
+
+                        order_owner = a.member1.name,
                     }).FirstOrDefault();
                     break;
                 case "trademark":
@@ -552,11 +562,17 @@ namespace WebCenter.Web.Controllers
                         customer_name = a.customer.name,
                         date_setup = a.date_regit,
 
-                        salesman_id = a.salesman_id,
-                        salesman = a.member4.name,
+                        salesman_id = a.customer.salesman_id,
+                        salesman = a.customer.member1.name,
+
                         assistant_id = a.assistant_id,
                         assistant_name = a.member.name,
                         region = a.region,
+
+                        waiter_id = a.waiter_id,
+                        waiter_name = a.member6.name,
+
+                        order_owner = a.member1.name,
                     }).FirstOrDefault();
                     break;
                 case "patent":
@@ -572,10 +588,16 @@ namespace WebCenter.Web.Controllers
                         customer_name = a.customer.name,
                         date_setup = a.date_regit,
 
-                        salesman_id = a.salesman_id,
-                        salesman = a.member4.name,
+                        salesman_id = a.customer.salesman_id,
+                        salesman = a.customer.member1.name,
+
                         assistant_id = a.assistant_id,
                         assistant_name = a.member.name,
+
+                        waiter_id = a.waiter_id,
+                        waiter_name = a.member6.name,
+
+                        order_owner = a.member1.name,
                     }).FirstOrDefault();
                     break;
                 default:
@@ -775,7 +797,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
-            var annua = Uof.Iannual_examService.GetAll(a => a.id == id).Select(a => new
+            var annua = Uof.Iannual_examService.GetAll(a => a.id == id).Select(a => new AnnualEntity
             {
                 id = a.id,
                 code = a.code,
@@ -807,6 +829,46 @@ namespace WebCenter.Web.Controllers
                 review_status = a.review_status
 
             }).FirstOrDefault();
+
+            switch (annua.type)
+            {
+                case "reg_abroad":
+                    var abroad = Uof.Ireg_abroadService.GetAll(a => a.code == annua.order_code).FirstOrDefault();
+                    if (abroad != null)
+                    {
+                        annua.order_owner = abroad.member.name;
+                        annua.salesman = abroad.customer.member1.name;
+                    }
+                    break;
+                case "reg_internal":
+                    var dbinternal = Uof.Ireg_internalService.GetAll(a => a.code == annua.order_code).FirstOrDefault();
+                    if (dbinternal != null)
+                    {
+                        annua.name_cn = dbinternal.name_cn;
+
+                        annua.order_owner = dbinternal.member.name;
+                        annua.salesman = dbinternal.customer.member1.name;
+                    }
+                    break;
+                case "trademark":
+                    var dbtrademark = Uof.ItrademarkService.GetAll(a => a.code == annua.order_code).FirstOrDefault();
+                    if (dbtrademark != null)
+                    {
+                        annua.order_owner = dbtrademark.member.name;
+                        annua.salesman = dbtrademark.customer.member1.name;
+                    }
+                    break;
+                case "patent":
+                    var dbpatent = Uof.IpatentService.GetAll(a => a.code == annua.order_code).FirstOrDefault();
+                    if (dbpatent != null)
+                    {
+                        annua.order_owner = dbpatent.member.name;
+                        annua.salesman = dbpatent.customer.member1.name;
+                    }
+                    break;
+                default:
+                    break;
+            }
 
             return Json(annua, JsonRequestBehavior.AllowGet);
         }
@@ -930,6 +992,7 @@ namespace WebCenter.Web.Controllers
                     id = c.id,
                     code = c.order_code,
                     customer_id = c.customer_id,
+                    order_id = c.order_id,
                     customer_code = c.customer.code,
                     type = c.type,
                     customer_name = c.customer.name,
@@ -982,9 +1045,25 @@ namespace WebCenter.Web.Controllers
                     if (dbReceipt != null)
                     {
                         item.receipt_no = dbReceipt.date_created.Value.ToString("yyyyMMdd") + dbReceipt.code;
-                    }                    
-                }
-                
+                    }
+
+                    if (item.type == "reg_abroad")
+                    {
+                        var dbAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == item.order_id).FirstOrDefault();
+                        if (dbAbroad != null)
+                        {
+                            item.region = dbAbroad.region;
+                        }
+                    }
+                    if (item.type == "trademark")
+                    {
+                        var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == item.order_id).FirstOrDefault();
+                        if (dbTrademark != null)
+                        {
+                            item.region = dbTrademark.region;
+                        }
+                    }
+                }                
             }
 
             var result = new
@@ -1015,8 +1094,10 @@ namespace WebCenter.Web.Controllers
                 rate = a.rate ?? 1,
                 description = a.description,
                 progress = a.progress,
-                salesman_id = a.salesman_id,
-                salesman = a.member4.name,
+
+                //salesman_id = a.salesman_id,
+                //salesman = a.member4.name,
+
                 waiter_id = a.waiter_id,
                 waiter_name = a.member6.name,
                 accountant_id = a.accountant_id,
@@ -1042,6 +1123,9 @@ namespace WebCenter.Web.Controllers
                     {
                         annua.name_cn = abroad.name_cn;
                         annua.name_en = abroad.name_en;
+
+                        annua.order_owner = abroad.member.name;
+                        annua.salesman = abroad.customer.member1.name;
                     }
                     break;
                 case "reg_internal":
@@ -1049,6 +1133,25 @@ namespace WebCenter.Web.Controllers
                     if (dbinternal != null)
                     {
                         annua.name_cn = dbinternal.name_cn;
+
+                        annua.order_owner = dbinternal.member.name;
+                        annua.salesman = dbinternal.customer.member1.name;
+                    }
+                    break;
+                case "trademark":
+                    var dbtrademark = Uof.ItrademarkService.GetAll(a => a.code == annua.order_code).FirstOrDefault();
+                    if (dbtrademark != null)
+                    {
+                        annua.order_owner = dbtrademark.member.name;
+                        annua.salesman = dbtrademark.customer.member1.name;
+                    }
+                    break;
+                case "patent":
+                    var dbpatent = Uof.IpatentService.GetAll(a => a.code == annua.order_code).FirstOrDefault();
+                    if (dbpatent != null)
+                    {
+                        annua.order_owner = dbpatent.member.name;
+                        annua.salesman = dbpatent.customer.member1.name;
                     }
                     break;
                 default:
@@ -1811,6 +1914,7 @@ namespace WebCenter.Web.Controllers
                         title_last = a.title_last,
                         annual_year = a.annual_year,
                         month = DateTime.Today.Month - a.date_setup.Value.Month,
+                        region = a.region,
                     }).ToList();
 
                 if (abroads.Count() > 0)
@@ -1930,6 +2034,7 @@ namespace WebCenter.Web.Controllers
                         annual_year = a.annual_year,
                         date_last = a.date_last,
                         title_last = a.title_last,
+                        region = a.region,
 
                     }).ToList();
 

@@ -154,6 +154,22 @@ ALTER TABLE sub_audit ADD CONSTRAINT fk_sub_audit_trader_id FOREIGN KEY (trader_
 INSERT INTO `menu` VALUES ('74', '4', 'receipt_list', 'fa fa-th', '收据列表', '41');
 
 
+call AddColumnUnlessExists(Database(), 'reg_abroad', 'resell_price', 'float(255,2) DEFAULT NULL COMMENT "转卖预售价"');
+
+call AddColumnUnlessExists(Database(), 'reg_abroad', 'annual_owner', 'int(11) DEFAULT NULL COMMENT "年检提成所有人"');
+ALTER TABLE reg_abroad ADD CONSTRAINT fk_reg_abroad_annual_owner FOREIGN KEY (annual_owner) REFERENCES member(id);
+
+call AddColumnUnlessExists(Database(), 'history', 'change_owner', 'int(11) DEFAULT NULL COMMENT "变更提成所有人"');
+ALTER TABLE history ADD CONSTRAINT fk_history_change_owner FOREIGN KEY (change_owner) REFERENCES member(id);
+
+call AddColumnUnlessExists(Database(), 'history', 'area_id', 'int(11) DEFAULT NULL COMMENT "转卖归属地"');
+
+call AddColumnUnlessExists(Database(), 'history', 'resell_id', 'int(11) DEFAULT NULL COMMENT "转卖订单id"');
+
+call AddColumnUnlessExists(Database(), 'history', 'resell_price', 'float(255,2) DEFAULT NULL COMMENT "转卖价格"');
+
+
+
 
 
 

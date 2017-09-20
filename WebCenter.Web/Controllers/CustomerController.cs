@@ -874,6 +874,13 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetBusinessByCustomerId(int customerId)
         {
+            List<FinanceCheck> orders = GetCustomerBusinessList(customerId);
+
+            return Json(orders, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<FinanceCheck> GetCustomerBusinessList(int customerId)
+        {
             var orders = new List<FinanceCheck>();
 
             var regAborads = Uof.Ireg_abroadService
@@ -930,7 +937,7 @@ namespace WebCenter.Web.Controllers
                 .OrderByDescending(a => a.code)
                 .Select(a => new FinanceCheck
                 {
-                    id = a.id,                    
+                    id = a.id,
                     order_code = a.code,
                     order_name = a.name,
                     order_type = "trademark",
@@ -1036,8 +1043,7 @@ namespace WebCenter.Web.Controllers
             //        order_name = "年检"
             //    });
             //}
-
-            return Json(orders, JsonRequestBehavior.AllowGet);
+            return orders;
         }
 
         public ActionResult GetShortInfo(int customer_id)
@@ -1105,7 +1111,10 @@ namespace WebCenter.Web.Controllers
                 memo = d.memo,
                 responsable = d.responsable,
             }).ToList();
-            return Json(new { customer = _c, contacts = contacts }, JsonRequestBehavior.AllowGet);
+
+            List<FinanceCheck> orders = GetCustomerBusinessList(customer_id);
+
+            return Json(new { customer = _c, contacts = contacts, orders = orders }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
