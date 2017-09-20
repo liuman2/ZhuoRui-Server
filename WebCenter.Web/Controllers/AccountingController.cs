@@ -342,7 +342,8 @@ namespace WebCenter.Web.Controllers
             if (oldRequest.is_old == 0)
             {
                 // 新单据
-                acc.code = GetNextOrderCode(acc.salesman_id.Value, "JZ");
+                //acc.code = GetNextOrderCode(acc.salesman_id.Value, "JZ");
+                acc.code = GetNextOrderCode(acc.creator_id.Value, "JZ");
             }
             else
             {

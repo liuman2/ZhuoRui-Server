@@ -300,7 +300,8 @@ namespace WebCenter.Web.Controllers
             if (oldRequest.is_old == 0)
             {
                 // 新单据
-                trade.code = GetNextOrderCode(trade.salesman_id.Value, "SB");
+                //trade.code = GetNextOrderCode(trade.salesman_id.Value, "SB");
+                trade.code = GetNextOrderCode(trade.creator_id.Value, "SB");
 
                 // 需要马上年检的 步骤审核流程
                 if (trade.is_annual == 1)

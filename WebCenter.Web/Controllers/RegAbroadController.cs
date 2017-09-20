@@ -261,7 +261,8 @@ namespace WebCenter.Web.Controllers
             if (oldRequest.is_old == 0)
             {
                 // 新单据
-                aboad.code = GetNextOrderCode(aboad.salesman_id.Value, "ZW");                
+                //aboad.code = GetNextOrderCode(aboad.salesman_id.Value, "ZW");    
+                aboad.code = GetNextOrderCode(aboad.creator_id.Value, "ZW");
             } else
             {
                 // 旧单据

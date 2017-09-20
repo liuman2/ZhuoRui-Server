@@ -302,7 +302,8 @@ namespace WebCenter.Web.Controllers
             if (oldRequest.is_old == 0)
             {
                 // 新单据
-                _patent.code = GetNextOrderCode(_patent.salesman_id.Value, "ZL");
+                //_patent.code = GetNextOrderCode(_patent.salesman_id.Value, "ZL");
+                _patent.code = GetNextOrderCode(_patent.creator_id.Value, "ZL");
 
                 // 需要马上年检的 步骤审核流程
                 if (_patent.is_annual == 1)

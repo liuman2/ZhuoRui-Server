@@ -284,7 +284,8 @@ namespace WebCenter.Web.Controllers
             var nowYear = DateTime.Now.Year;
             if (oldRequest.is_old == 0)
             {
-                _audit.code = GetNextOrderCode(_audit.salesman_id.Value, "SJ");
+                //_audit.code = GetNextOrderCode(_audit.salesman_id.Value, "SJ");
+                _audit.code = GetNextOrderCode(_audit.creator_id.Value, "SJ");
 
                 //if (_audit.is_annual == 1)
                 //{

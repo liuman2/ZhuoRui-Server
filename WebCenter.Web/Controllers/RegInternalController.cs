@@ -292,7 +292,8 @@ namespace WebCenter.Web.Controllers
             if (oldRequest.is_old == 0)
             {
                 // 新单据
-                reginternal.code = GetNextOrderCode(reginternal.salesman_id.Value, "ZN");
+                //reginternal.code = GetNextOrderCode(reginternal.salesman_id.Value, "ZN");
+                reginternal.code = GetNextOrderCode(reginternal.creator_id.Value, "ZN");
 
                 // 需要马上年检的 步骤审核流程
                 if (reginternal.is_annual == 1)
