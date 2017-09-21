@@ -232,6 +232,10 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_wait { get; set; }
     
+    
+    
+        public Nullable<float> resell_price { get; set; }
+    
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }

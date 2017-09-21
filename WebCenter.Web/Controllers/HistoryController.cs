@@ -88,7 +88,7 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (_history.logoff != 1)
+            if (_history.logoff != 1 && _history.logoff != 2)
             {
                 if (shareholderList != null && shareholderList.Count() > 0)
                 {
@@ -172,7 +172,7 @@ namespace WebCenter.Web.Controllers
             dbHistory.date_updated = DateTime.Now;
             dbHistory.change_owner = _history.change_owner;
 
-            if (dbHistory.logoff == 1)
+            if (dbHistory.logoff == 1 || dbHistory.logoff == 2)
             {
                 dbHistory.value = "{}";
             }
@@ -186,6 +186,12 @@ namespace WebCenter.Web.Controllers
             if (dbHistory.logoff == 1)
             {
                 // 注销
+                return Json(new { success = result, id = dbHistory.id }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (dbHistory.logoff == 2)
+            {
+                // 转卖
                 return Json(new { success = result, id = dbHistory.id }, JsonRequestBehavior.AllowGet);
             }
 
@@ -522,7 +528,7 @@ namespace WebCenter.Web.Controllers
                 salesman = c.member2.name,
                 finance_review_moment = c.finance_review_moment,
                 submit_review_moment = c.submit_review_moment,
-                logoff = c.logoff,
+                logoff = c.logoff ?? 0,
                 logoff_memo = c.logoff_memo,
 
                 change_owner = c.change_owner,
@@ -598,7 +604,7 @@ namespace WebCenter.Web.Controllers
                 salesman = c.member2.name,
                 finance_review_moment = c.finance_review_moment,
                 submit_review_moment = c.submit_review_moment,
-                logoff = c.logoff,
+                logoff = c.logoff ?? 0,
                 logoff_memo = c.logoff_memo,
                 change_owner = c.change_owner,
                 change_owner_name = c.member4.name,
@@ -609,6 +615,48 @@ namespace WebCenter.Web.Controllers
             var directoryList = Uof.Ihistory_shareholderService.GetAll(s => s.history_id == reg.id && s.type == "董事").ToList();
 
             return Json(new { order = reg, shareholderList  = shareholderList, directoryList = directoryList }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetSourceOrderInfo(int id, string module)
+        {
+            var order = new CommentOrderInfo();
+            switch (module)
+            {
+                case "abroad":
+                    order = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new CommentOrderInfo
+                    {
+                        id = a.id,
+                        order_status = a.order_status,
+                        resell_price = a.resell_price,
+                    }).FirstOrDefault();
+                    break;
+                case "internal":
+                    order = Uof.Ireg_internalService.GetAll(a => a.id == id).Select(a => new CommentOrderInfo
+                    {
+                        id = a.id,
+                        order_status = a.order_status,
+                        resell_price = a.resell_price,
+                    }).FirstOrDefault();
+                    break;
+                case "trademark":
+                    order = Uof.ItrademarkService.GetAll(a => a.id == id).Select(a => new CommentOrderInfo
+                    {
+                        id = a.id,
+                        order_status = a.order_status,
+                        resell_price = a.resell_price,
+                    }).FirstOrDefault();
+                    break;
+                case "patent":
+                    order = Uof.IpatentService.GetAll(a => a.id == id).Select(a => new CommentOrderInfo
+                    {
+                        id = a.id,
+                        order_status = a.order_status,
+                        resell_price = a.resell_price,
+                    }).FirstOrDefault();
+                    break;
+            }
+
+            return Json(order, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Submit(int id)
@@ -760,6 +808,7 @@ namespace WebCenter.Web.Controllers
 
                 if(dbAudit.status == 3)
                 {
+                    #region 普通变更
                     if (dbAudit.logoff == 0)
                     {
                         switch (dbAudit.source)
@@ -1005,7 +1054,9 @@ namespace WebCenter.Web.Controllers
                                 break;
                         }
                     }
+                    #endregion
 
+                    #region 注销
                     if (dbAudit.logoff == 1)
                     {
                         switch (dbAudit.source)
@@ -1075,7 +1126,335 @@ namespace WebCenter.Web.Controllers
                             default:
                                 break;
                         }
+                    }
+                    #endregion
+
+                    #region 转卖
+                    if (dbAudit.logoff == 2)
+                    {
+                        var timelineList = new List<timeline>();
+                        var resellWaits = new List<waitdeal>();
+                        switch (dbAudit.source)
+                        {
+                            case "reg_abroad":
+                                #region
+                                // 旧订单变为转卖
+                                var dbAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();
+                                dbAbroad.order_status = 4;
+                                dbAbroad.date_updated = DateTime.Now;
+                                Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
+                                
+                                // 生成新订单
+                                dbAbroad.id = 0;
+                                dbAbroad.description = string.Format("注：该订单是从{1}转卖而来", dbAbroad.code);
+                                dbAbroad.code = GetNextOrderCodeByAreaId(dbAudit.area_id.Value, "ZW");
+                                dbAbroad.order_status = 0;
+                                dbAbroad.resell_price = null;
+                                dbAbroad.salesman_id = dbAbroad.customer.member1.id;
+
+                                var newAbroad = Uof.Ireg_abroadService.AddEntity(dbAbroad);
+                                if (newAbroad != null)
+                                {
+                                    timelineList.Add(new timeline
+                                    {
+                                        source_id = dbAudit.source_id,
+                                        source_name = "reg_abroad",
+                                        title = "转卖变更",
+                                        is_system = 1,
+                                        content = string.Format("{0}审核通过了转卖变更，该订单被转卖了, 新订单为：{1}", arrs[3], newAbroad.code)
+                                    });
+
+                                    timelineList.Add(new timeline()
+                                    {
+                                        source_id = newAbroad.id,
+                                        source_name = "reg_abroad",
+                                        title = "转卖订单",
+                                        is_system = 1,
+                                        content = string.Format("{系统生成了转卖订单, 档案号{1}，来源档案号{2}", arrs[3], newAbroad.code, dbAudit.order_code)
+                                    });
+
+                                    timelineList.Add(new timeline()
+                                    {
+                                        source_id = dbAudit.id,
+                                        source_name = "history",
+                                        title = "转卖订单",
+                                        is_system = 1,
+                                        content = string.Format("生成了新的转卖订单，档案号{0}", newAbroad.code)
+                                    });                                    
+                                }
+
+                                // 变更单关联新订单
+                                dbAudit.resell_id = newAbroad.id;
+                                dbAudit.date_updated = DateTime.Now;
+                                Uof.IhistoryService.UpdateEntity(dbAudit);
+
+                                // 更新日志
+                                if (timelineList.Count > 0)
+                                {
+                                    Uof.ItimelineService.AddEntities(timelineList);
+                                }
+
+                                // 通知
+                                resellWaits.Add(new waitdeal
+                                {
+                                    source = "reg_abroad",
+                                    source_id = newAbroad.id,
+                                    user_id = newAbroad.creator_id,
+                                    router = "abroad_view",
+                                    content = string.Format("系统生成了一笔转卖新订单，档案号{0},来源{1}", newAbroad.code, dbAudit.order_code),
+                                    read_status = 0
+                                });
+                                resellWaits.Add(new waitdeal
+                                {
+                                    source = "reg_abroad",
+                                    source_id = newAbroad.id,
+                                    user_id = newAbroad.salesman_id,
+                                    router = "abroad_view",
+                                    content = string.Format("系统生成了一笔转卖新订单，档案号{0},来源{1}", newAbroad.code, dbAudit.order_code),
+                                    read_status = 0
+                                });
+                                Uof.IwaitdealService.AddEntities(resellWaits);
+                                #endregion
+                                break;
+                            case "reg_internal":
+                                // 旧订单变为转卖
+                                var dbInternal = Uof.Ireg_internalService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();
+                                dbInternal.order_status = 4;
+                                dbInternal.date_updated = DateTime.Now;
+                                Uof.Ireg_internalService.UpdateEntity(dbInternal);
+
+                                // 生成新订单
+                                dbInternal.id = 0;
+                                dbInternal.description = string.Format("注：该订单是从{1}转卖而来", dbInternal.code);
+                                dbInternal.code = GetNextOrderCodeByAreaId(dbAudit.area_id.Value, "ZN");
+                                dbInternal.order_status = 0;
+                                dbInternal.resell_price = null;
+                                dbInternal.salesman_id = dbInternal.customer.member1.id;
+                                var newInternal = Uof.Ireg_internalService.AddEntity(dbInternal);
+                                if (newInternal != null)
+                                {
+                                    timelineList.Add(new timeline
+                                    {
+                                        source_id = dbAudit.source_id,
+                                        source_name = "reg_internal",
+                                        title = "转卖变更",
+                                        is_system = 1,
+                                        content = string.Format("{0}审核通过了转卖变更，该订单被转卖了, 新订单为：{1}", arrs[3], newInternal.code)
+                                    });
+
+                                    timelineList.Add(new timeline()
+                                    {
+                                        source_id = newInternal.id,
+                                        source_name = "reg_internal",
+                                        title = "转卖订单",
+                                        is_system = 1,
+                                        content = string.Format("{系统生成了转卖订单, 档案号{1}，来源档案号{2}", arrs[3], newInternal.code, dbAudit.order_code)
+                                    });
+
+                                    timelineList.Add(new timeline()
+                                    {
+                                        source_id = dbAudit.id,
+                                        source_name = "history",
+                                        title = "转卖订单",
+                                        is_system = 1,
+                                        content = string.Format("生成了新的转卖订单，档案号{0}", newInternal.code)
+                                    });
+                                }
+
+                                // 变更单关联新订单
+                                dbAudit.resell_id = newInternal.id;
+                                dbAudit.date_updated = DateTime.Now;
+                                Uof.IhistoryService.UpdateEntity(dbAudit);
+
+                                // 更新日志
+                                if (timelineList.Count > 0)
+                                {
+                                    Uof.ItimelineService.AddEntities(timelineList);
+                                }
+
+                                // 通知
+                                resellWaits.Add(new waitdeal
+                                {
+                                    source = "reg_internal",
+                                    source_id = newInternal.id,
+                                    user_id = newInternal.creator_id,
+                                    router = "internal_view",
+                                    content = string.Format("系统生成了一笔转卖新订单，档案号{0},来源{1}", newInternal.code, dbAudit.order_code),
+                                    read_status = 0
+                                });
+                                resellWaits.Add(new waitdeal
+                                {
+                                    source = "reg_internal",
+                                    source_id = newInternal.id,
+                                    user_id = newInternal.salesman_id,
+                                    router = "internal_view",
+                                    content = string.Format("系统生成了一笔转卖新订单，档案号{0},来源{1}", newInternal.code, dbAudit.order_code),
+                                    read_status = 0
+                                });
+                                Uof.IwaitdealService.AddEntities(resellWaits);
+                                break;
+                            case "trademark":
+                                // 旧订单变为转卖
+                                var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();
+                                dbTrademark.order_status = 4;
+                                dbTrademark.date_updated = DateTime.Now;
+                                Uof.ItrademarkService.UpdateEntity(dbTrademark);
+
+                                // 生成新订单
+                                dbTrademark.id = 0;
+                                dbTrademark.description = string.Format("注：该订单是从{1}转卖而来", dbTrademark.code);
+                                dbTrademark.code = GetNextOrderCodeByAreaId(dbAudit.area_id.Value, "SB");
+                                dbTrademark.order_status = 0;
+                                dbTrademark.resell_price = null;
+                                dbTrademark.salesman_id = dbTrademark.customer.member1.id;
+                                var newTrademark = Uof.ItrademarkService.AddEntity(dbTrademark);
+
+                                if (newTrademark != null)
+                                {
+                                    timelineList.Add(new timeline
+                                    {
+                                        source_id = dbAudit.source_id,
+                                        source_name = "trademark",
+                                        title = "转卖变更",
+                                        is_system = 1,
+                                        content = string.Format("{0}审核通过了转卖变更，该订单被转卖了, 新订单为：{1}", arrs[3], newTrademark.code)
+                                    });
+
+                                    timelineList.Add(new timeline()
+                                    {
+                                        source_id = newTrademark.id,
+                                        source_name = "trademark",
+                                        title = "转卖订单",
+                                        is_system = 1,
+                                        content = string.Format("{系统生成了转卖订单, 档案号{1}，来源档案号{2}", arrs[3], newTrademark.code, dbAudit.order_code)
+                                    });
+
+                                    timelineList.Add(new timeline()
+                                    {
+                                        source_id = dbAudit.id,
+                                        source_name = "history",
+                                        title = "转卖订单",
+                                        is_system = 1,
+                                        content = string.Format("生成了新的转卖订单，档案号{0}", newTrademark.code)
+                                    });
+                                }
+
+                                // 变更单关联新订单
+                                dbAudit.resell_id = newTrademark.id;
+                                dbAudit.date_updated = DateTime.Now;
+                                Uof.IhistoryService.UpdateEntity(dbAudit);
+
+                                // 更新日志
+                                if (timelineList.Count > 0)
+                                {
+                                    Uof.ItimelineService.AddEntities(timelineList);
+                                }
+
+                                // 通知
+                                resellWaits.Add(new waitdeal
+                                {
+                                    source = "trademark",
+                                    source_id = newTrademark.id,
+                                    user_id = newTrademark.creator_id,
+                                    router = "trademark_view",
+                                    content = string.Format("系统生成了一笔转卖新订单，档案号{0},来源{1}", newTrademark.code, dbAudit.order_code),
+                                    read_status = 0
+                                });
+                                resellWaits.Add(new waitdeal
+                                {
+                                    source = "trademark",
+                                    source_id = newTrademark.id,
+                                    user_id = newTrademark.salesman_id,
+                                    router = "trademark_view",
+                                    content = string.Format("系统生成了一笔转卖新订单，档案号{0},来源{1}", newTrademark.code, dbAudit.order_code),
+                                    read_status = 0
+                                });
+                                Uof.IwaitdealService.AddEntities(resellWaits);
+
+                                break;
+                            case "patent":
+                                // 旧订单变为转卖
+                                var dbPatent = Uof.IpatentService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();
+                                dbPatent.order_status = 4;
+                                dbPatent.date_updated = DateTime.Now;
+                                Uof.IpatentService.UpdateEntity(dbPatent);
+
+                                // 生成新订单
+                                dbPatent.id = 0;
+                                dbPatent.description = string.Format("注：该订单是从{1}转卖而来", dbPatent.code);
+                                dbPatent.code = GetNextOrderCodeByAreaId(dbAudit.area_id.Value, "ZL");
+                                dbPatent.order_status = 0;
+                                dbPatent.resell_price = null;
+                                dbPatent.salesman_id = dbPatent.customer.member1.id;
+
+                                var newPatent = Uof.IpatentService.AddEntity(dbPatent);
+                                if (newPatent != null)
+                                {
+                                    timelineList.Add(new timeline
+                                    {
+                                        source_id = dbAudit.source_id,
+                                        source_name = "patent",
+                                        title = "转卖变更",
+                                        is_system = 1,
+                                        content = string.Format("{0}审核通过了转卖变更，该订单被转卖了, 新订单为：{1}", arrs[3], newPatent.code)
+                                    });
+
+                                    timelineList.Add(new timeline()
+                                    {
+                                        source_id = newPatent.id,
+                                        source_name = "patent",
+                                        title = "转卖订单",
+                                        is_system = 1,
+                                        content = string.Format("{系统生成了转卖订单, 档案号{1}，来源档案号{2}", arrs[3], newPatent.code, dbAudit.order_code)
+                                    });
+
+                                    timelineList.Add(new timeline()
+                                    {
+                                        source_id = dbAudit.id,
+                                        source_name = "history",
+                                        title = "转卖订单",
+                                        is_system = 1,
+                                        content = string.Format("生成了新的转卖订单，档案号{0}", newPatent.code)
+                                    });
+                                }
+
+                                // 变更单关联新订单
+                                dbAudit.resell_id = newPatent.id;
+                                dbAudit.date_updated = DateTime.Now;
+                                Uof.IhistoryService.UpdateEntity(dbAudit);
+
+                                // 更新日志
+                                if (timelineList.Count > 0)
+                                {
+                                    Uof.ItimelineService.AddEntities(timelineList);
+                                }
+
+                                // 通知
+                                resellWaits.Add(new waitdeal
+                                {
+                                    source = "patent",
+                                    source_id = newPatent.id,
+                                    user_id = newPatent.creator_id,
+                                    router = "patent_view",
+                                    content = string.Format("系统生成了一笔转卖新订单，档案号{0},来源{1}", newPatent.code, dbAudit.order_code),
+                                    read_status = 0
+                                });
+                                resellWaits.Add(new waitdeal
+                                {
+                                    source = "patent",
+                                    source_id = newPatent.id,
+                                    user_id = newPatent.salesman_id,
+                                    router = "patent_view",
+                                    content = string.Format("系统生成了一笔转卖新订单，档案号{0},来源{1}", newPatent.code, dbAudit.order_code),
+                                    read_status = 0
+                                });
+                                Uof.IwaitdealService.AddEntities(resellWaits);
+                                break;
+                            default:
+                                break;
+                        }
                     }                    
+                    #endregion
                 }                
             }
             return Json(new { success = r, message = r ? "" : "审核失败" }, JsonRequestBehavior.AllowGet);

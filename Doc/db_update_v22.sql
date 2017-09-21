@@ -168,14 +168,12 @@ call AddColumnUnlessExists(Database(), 'history', 'resell_id', 'int(11) DEFAULT 
 
 call AddColumnUnlessExists(Database(), 'history', 'resell_price', 'float(255,2) DEFAULT NULL COMMENT "转卖价格"');
 
+-- 2017-09-21
+call AddColumnUnlessExists(Database(), 'reg_internal', 'resell_price', 'float(255,2) DEFAULT NULL COMMENT "转卖预售价"');
+call AddColumnUnlessExists(Database(), 'trademark', 'resell_price', 'float(255,2) DEFAULT NULL COMMENT "转卖预售价"');
+call AddColumnUnlessExists(Database(), 'patent', 'resell_price', 'float(255,2) DEFAULT NULL COMMENT "转卖预售价"');
 
-
-
-
-
-
-
-
-
-
-
+call AddColumnUnlessExists(Database(), 'reg_abroad', 'order_status', 'int(11) DEFAULT NULL COMMENT "0 正常 1 转出 2 注销 3 待售 4 已售"');
+call AddColumnUnlessExists(Database(), 'reg_internal', 'order_status', 'int(11) DEFAULT NULL COMMENT "0 正常 1 转出 2 注销 3 待售 4 已售"');
+call AddColumnUnlessExists(Database(), 'trademark', 'order_status', 'int(11) DEFAULT NULL COMMENT "0 正常 1 转出 2 注销 3 待售 4 已售"');
+call AddColumnUnlessExists(Database(), 'patent', 'order_status', 'int(11) DEFAULT NULL COMMENT "0 正常 1 转出 2 注销 3 待售 4 已售"');

@@ -314,6 +314,67 @@ namespace WebCenter.Web.Controllers
             return string.Format("{0}{1}{2}", areaCodeStr, codeStr, (index + 1).ToString().PadLeft(suffix, '0'));
         }
 
+        public string GetNextOrderCodeByAreaId(int areaId, string moduleCode)
+        {
+            //var areaId = Uof.ImemberService.GetAll(m => m.id == userId).Select(m => m.area_id).FirstOrDefault();
+
+            var codeSetting = Uof.IsettingService.GetAll(s => s.name == "CODING").FirstOrDefault();
+            var codingObj = JsonConvert.DeserializeObject<Coding>(codeSetting.value);
+
+            var areaCodeStr = codingObj.customer.area_code.Where(a => a.id == areaId).Select(a => a.value).FirstOrDefault();
+
+            var suffix = codingObj.order.suffix;
+            var codeStr = codingObj.order.code.Where(a => a.module == moduleCode).Select(a => a.value).FirstOrDefault();
+
+            var dbCode = "";
+            var preCode = string.Format("{0}{1}", areaCodeStr, codeStr);
+            switch (moduleCode)
+            {
+                // 境外注册
+                case "ZW":
+                    dbCode = Uof.Ireg_abroadService.GetAll(r => r.code.Contains(preCode)).OrderByDescending(a => a.code).Select(a => a.code).FirstOrDefault();
+                    break;
+                // 境内注册
+                case "ZN":
+                    dbCode = Uof.Ireg_internalService.GetAll(r => r.code.Contains(preCode)).OrderByDescending(a => a.code).Select(a => a.code).FirstOrDefault();
+                    break;
+                // 审计
+                case "SJ":
+                    dbCode = Uof.IauditService.GetAll(r => r.code.Contains(preCode)).OrderByDescending(a => a.code).Select(a => a.code).FirstOrDefault();
+                    break;
+                // 商标
+                case "SB":
+                    dbCode = Uof.ItrademarkService.GetAll(r => r.code.Contains(preCode)).OrderByDescending(a => a.code).Select(a => a.code).FirstOrDefault();
+                    break;
+                // 专利
+                case "ZL":
+                    dbCode = Uof.IpatentService.GetAll(r => r.code.Contains(preCode)).OrderByDescending(a => a.code).Select(a => a.code).FirstOrDefault();
+                    break;
+                //年审
+                case "NS":
+                    break;
+                // 商标
+                case "JZ":
+                    dbCode = Uof.IaccountingService.GetAll(r => r.code.Contains(preCode)).OrderByDescending(a => a.code).Select(a => a.code).FirstOrDefault();
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (string.IsNullOrEmpty(dbCode))
+            {
+                return string.Format("{0}{1}{2}", areaCodeStr, codeStr, 1.ToString().PadLeft(suffix, '0'));
+            }
+
+            var indexStr = dbCode.Replace(preCode, "");
+
+            var index = 0;
+            int.TryParse(indexStr, out index);
+
+            return string.Format("{0}{1}{2}", areaCodeStr, codeStr, (index + 1).ToString().PadLeft(suffix, '0'));
+        }
+
         /// <summary>
         /// 获取财务审核人员
         /// </summary>

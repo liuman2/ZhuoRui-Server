@@ -563,4 +563,11 @@ namespace WebCenter.Web
         public DateTime? date_created { get; set; }
         public sbyte? read_status { get; set; }
     }
+
+    public class CommentOrderInfo
+    {
+        public int id { get; set; }
+        public int? order_status { get; set; }
+        public float? resell_price { get; set; }
+    }
 }
