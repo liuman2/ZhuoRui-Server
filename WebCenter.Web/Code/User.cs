@@ -570,4 +570,44 @@ namespace WebCenter.Web
         public int? order_status { get; set; }
         public float? resell_price { get; set; }
     }
+
+    public class HistoryEntity
+    {
+        public int id { get; set; }
+        public string source { get; set; }
+        public int? source_id { get; set; }
+        public int? customer_id { get; set; }
+        public string order_code { get; set; }
+        public float? amount_transaction { get; set; }
+        public DateTime? date_transaction { get; set; }
+        public string currency { get; set; }
+        public float? rate { get; set; }
+        public string value { get; set; }
+        public sbyte? status { get; set; }
+        public int? finance_reviewer_id { get; set; }
+        public DateTime? finance_review_date { get; set; }
+        public string finance_review_moment { get; set; }
+        public int? submit_reviewer_id { get; set; }
+        public DateTime? submit_review_date { get; set; }
+        public string submit_review_moment { get; set; }
+        public int? review_status { get; set; }
+        public DateTime? date_finish { get; set; }
+        public string progress { get; set; }
+        public int? creator_id { get; set; }
+        public int? salesman_id { get; set; }
+        public DateTime? date_created { get; set; }
+        public DateTime? date_updated { get; set; }
+        public int? logoff { get; set; }
+        public string logoff_memo { get; set; }
+        public int? change_owner { get; set; }
+        public int? area_id { get; set; }
+        public string area_name { get; set; }
+        public int? resell_id { get; set; }
+        public float? resell_price { get; set; }
+
+        public int? amount_income { get; set; }
+        public int? amount_unreceive { get; set; }
+        public string salesman { get; set; }
+        public string change_owner_name { get; set; }
+    }
 }

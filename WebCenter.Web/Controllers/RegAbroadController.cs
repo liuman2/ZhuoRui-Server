@@ -100,6 +100,14 @@ namespace WebCenter.Web.Controllers
                 {
                     statusQuery = c => (c.order_status == 3);
                 }
+                else if (request.status == 8)
+                {
+                    statusQuery = c => (c.order_status == 4);
+                }
+                else if (request.status == 9)
+                {
+                    statusQuery = c => (c.order_status == 5);
+                }
                 else
                 {
                     statusQuery = c => (c.status == request.status.Value);

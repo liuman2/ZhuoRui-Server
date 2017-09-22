@@ -679,6 +679,7 @@
           <Property Name="trader_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
           <Property Name="resell_price" Type="float" />
+          <Property Name="resell_code" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="position">
           <Key>
@@ -761,6 +762,7 @@
           <Property Name="date_wait" Type="datetime" Precision="0" />
           <Property Name="resell_price" Type="float" />
           <Property Name="annual_owner" Type="int" />
+          <Property Name="resell_code" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="reg_history">
           <Key>
@@ -847,6 +849,7 @@
           <Property Name="trader_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
           <Property Name="resell_price" Type="float" />
+          <Property Name="resell_code" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="reg_internal_history">
           <Key>
@@ -1078,6 +1081,7 @@
           <Property Name="trader_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
           <Property Name="resell_price" Type="float" />
+          <Property Name="resell_code" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="waitdeal">
           <Key>
@@ -4917,6 +4921,7 @@
           <Property Name="date_wait" Type="DateTime" />
           <NavigationProperty Name="customer1" Relationship="DataCenter.Entities.fk_patent_trader_id" FromRole="patent" ToRole="customer" />
           <Property Name="resell_price" Type="Single" />
+          <Property Name="resell_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="reg_internal">
           <Key>
@@ -4997,6 +5002,7 @@
           <Property Name="date_wait" Type="DateTime" />
           <NavigationProperty Name="customer1" Relationship="DataCenter.Entities.fk_reg_internal_trader_id" FromRole="reg_internal" ToRole="customer" />
           <Property Name="resell_price" Type="Single" />
+          <Property Name="resell_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="trademark">
           <Key>
@@ -5066,6 +5072,7 @@
           <Property Name="date_wait" Type="DateTime" />
           <NavigationProperty Name="customer1" Relationship="DataCenter.Entities.fk_trademark_trader_id" FromRole="trademark" ToRole="customer" />
           <Property Name="resell_price" Type="Single" />
+          <Property Name="resell_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="reg_internal_ibfk_bank">
           <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="0..1" />
@@ -5415,6 +5422,7 @@
           <Property Name="annual_owner" Type="Int32" />
           <NavigationProperty Name="customer11" Relationship="DataCenter.Entities.fk_reg_abroad_annual_owner" FromRole="reg_abroad" ToRole="customer" />
           <NavigationProperty Name="member8" Relationship="DataCenter.Entities.fk_reg_abroad_annual_owner1" FromRole="reg_abroad" ToRole="member" />
+          <Property Name="resell_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="abroad_ibfk_bank">
           <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="0..1" />
@@ -6821,6 +6829,7 @@
           <EntitySetMapping Name="patents">
             <EntityTypeMapping TypeName="DataCenter.Entities.patent">
               <MappingFragment StoreEntitySet="patent">
+                <ScalarProperty Name="resell_code" ColumnName="resell_code" />
                 <ScalarProperty Name="resell_price" ColumnName="resell_price" />
                 <ScalarProperty Name="date_wait" ColumnName="date_wait" />
                 <ScalarProperty Name="trader_id" ColumnName="trader_id" />
@@ -6875,6 +6884,7 @@
           <EntitySetMapping Name="reg_internal">
             <EntityTypeMapping TypeName="DataCenter.Entities.reg_internal">
               <MappingFragment StoreEntitySet="reg_internal">
+                <ScalarProperty Name="resell_code" ColumnName="resell_code" />
                 <ScalarProperty Name="resell_price" ColumnName="resell_price" />
                 <ScalarProperty Name="date_wait" ColumnName="date_wait" />
                 <ScalarProperty Name="trader_id" ColumnName="trader_id" />
@@ -6945,6 +6955,7 @@
           <EntitySetMapping Name="trademarks">
             <EntityTypeMapping TypeName="DataCenter.Entities.trademark">
               <MappingFragment StoreEntitySet="trademark">
+                <ScalarProperty Name="resell_code" ColumnName="resell_code" />
                 <ScalarProperty Name="resell_price" ColumnName="resell_price" />
                 <ScalarProperty Name="date_wait" ColumnName="date_wait" />
                 <ScalarProperty Name="trader_id" ColumnName="trader_id" />
@@ -7006,6 +7017,7 @@
           <EntitySetMapping Name="reg_abroad">
             <EntityTypeMapping TypeName="DataCenter.Entities.reg_abroad">
               <MappingFragment StoreEntitySet="reg_abroad">
+                <ScalarProperty Name="resell_code" ColumnName="resell_code" />
                 <ScalarProperty Name="annual_owner" ColumnName="annual_owner" />
                 <ScalarProperty Name="resell_price" ColumnName="resell_price" />
                 <ScalarProperty Name="date_wait" ColumnName="date_wait" />

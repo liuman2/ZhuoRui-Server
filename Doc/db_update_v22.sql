@@ -173,7 +173,10 @@ call AddColumnUnlessExists(Database(), 'reg_internal', 'resell_price', 'float(25
 call AddColumnUnlessExists(Database(), 'trademark', 'resell_price', 'float(255,2) DEFAULT NULL COMMENT "转卖预售价"');
 call AddColumnUnlessExists(Database(), 'patent', 'resell_price', 'float(255,2) DEFAULT NULL COMMENT "转卖预售价"');
 
-call AddColumnUnlessExists(Database(), 'reg_abroad', 'order_status', 'int(11) DEFAULT NULL COMMENT "0 正常 1 转出 2 注销 3 待售 4 已售"');
-call AddColumnUnlessExists(Database(), 'reg_internal', 'order_status', 'int(11) DEFAULT NULL COMMENT "0 正常 1 转出 2 注销 3 待售 4 已售"');
-call AddColumnUnlessExists(Database(), 'trademark', 'order_status', 'int(11) DEFAULT NULL COMMENT "0 正常 1 转出 2 注销 3 待售 4 已售"');
-call AddColumnUnlessExists(Database(), 'patent', 'order_status', 'int(11) DEFAULT NULL COMMENT "0 正常 1 转出 2 注销 3 待售 4 已售"');
+
+INSERT INTO `menu` VALUES ('75', '4', 'sale_order', 'fa fa-th', '转卖订单列表', '42');
+
+call AddColumnUnlessExists(Database(), 'reg_abroad', 'resell_code', 'varchar(20) DEFAULT NULL COMMENT "转卖后档案号"');
+call AddColumnUnlessExists(Database(), 'reg_internal', 'resell_code', 'varchar(20) DEFAULT NULL COMMENT "转卖后档案号"');
+call AddColumnUnlessExists(Database(), 'trademark', 'resell_code', 'varchar(20) DEFAULT NULL COMMENT "转卖后档案号"');
+call AddColumnUnlessExists(Database(), 'patent', 'resell_code', 'varchar(20) DEFAULT NULL COMMENT "转卖后档案号"');

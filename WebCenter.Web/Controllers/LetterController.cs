@@ -885,6 +885,7 @@ namespace WebCenter.Web.Controllers
                         order_name = a.name_en ?? a.name_cn,
                         order_source = "reg_abroad",
                         salesman_id = a.salesman_id,
+                        creator_id = a.creator_id,
                         assistant_id = a.assistant_id,
                         customer_id = a.customer_id,
                     }).ToPagedList(request.index, request.size).ToList();
@@ -916,6 +917,7 @@ namespace WebCenter.Web.Controllers
                         order_name = a.name_cn,
                         order_source = "reg_internal",
                         salesman_id = a.salesman_id,
+                        creator_id = a.creator_id,
                         assistant_id = a.assistant_id,
                         customer_id = a.customer_id,
                     }).ToPagedList(request.index, request.size).ToList();
@@ -946,6 +948,7 @@ namespace WebCenter.Web.Controllers
                         order_name = a.name_cn ?? a.name_en,
                         order_source = "audit",
                         salesman_id = a.salesman_id,
+                        creator_id = a.creator_id,
                         assistant_id = a.assistant_id,
                         customer_id = a.customer_id,
                     }).ToPagedList(request.index, request.size).ToList();
@@ -976,6 +979,7 @@ namespace WebCenter.Web.Controllers
                         order_name = a.name,
                         order_source = "patent",
                         salesman_id = a.salesman_id,
+                        creator_id = a.creator_id,
                         assistant_id = a.assistant_id,
                         customer_id = a.customer_id,
                     }).ToPagedList(request.index, request.size).ToList();
@@ -1006,6 +1010,7 @@ namespace WebCenter.Web.Controllers
                         order_name = a.name,
                         order_source = "trademark",
                         salesman_id = a.salesman_id,
+                        creator_id = a.creator_id,
                         assistant_id = a.assistant_id,
                         customer_id = a.customer_id,
                     }).ToPagedList(request.index, request.size).ToList();

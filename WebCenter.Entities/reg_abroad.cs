@@ -236,6 +236,10 @@ namespace WebCenter.Entities
     
         public Nullable<int> annual_owner { get; set; }
     
+    
+    
+        public string resell_code { get; set; }
+    
         public virtual bank_account bank_account { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }

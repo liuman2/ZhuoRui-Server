@@ -47,14 +47,14 @@ namespace WebCenter.Web.Controllers
             Expression<Func<customer, bool>> permQuery = c => true;
             if (ops.Count() == 0)
             {
-                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
+                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId + ",") || c.assistants.Contains("," + strUserId))));
             }
             else
             {
                 var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
                 if (hasCompany == null)
                 {
-                    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
+                    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId + ",") || c.assistants.Contains("," + strUserId))));
                 }
             }
 
@@ -136,14 +136,14 @@ namespace WebCenter.Web.Controllers
             Expression<Func<customer, bool>> permQuery = c => true;
             if (ops.Count() == 0)
             {
-                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
+                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId+",") || c.assistants.Contains("," + strUserId))));
             }
             else
             {
                 var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
                 if (hasCompany == null)
                 {
-                    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
+                    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId + ",") || c.assistants.Contains("," + strUserId))));
                 }
             }
 
@@ -281,7 +281,7 @@ namespace WebCenter.Web.Controllers
             var strUserId = userId.ToString();
             if (userId != 1)
             {
-                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants.Contains(strUserId));
+                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId + ",") || c.assistants.Contains("," + strUserId))));
             }            
 
             if (!string.IsNullOrEmpty(name))

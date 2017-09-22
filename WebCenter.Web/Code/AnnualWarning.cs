@@ -39,6 +39,8 @@ namespace WebCenter.Web
         public string region { get; set; }
         public float? reference_price { get; set; }
 
+        public string resell_code { get; set; }
+
     }
 
     public class FinanceCheck

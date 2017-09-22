@@ -172,6 +172,9 @@ namespace WebCenter.Web.Controllers
             dbHistory.date_updated = DateTime.Now;
             dbHistory.change_owner = _history.change_owner;
 
+            dbHistory.area_id = _history.area_id;
+            dbHistory.resell_price = _history.resell_price;
+
             if (dbHistory.logoff == 1 || dbHistory.logoff == 2)
             {
                 dbHistory.value = "{}";
@@ -507,7 +510,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult GetView(int id)
         {
-            var reg = Uof.IhistoryService.GetAll(c => c.id == id).Select(c => new
+            var reg = Uof.IhistoryService.GetAll(c => c.id == id).Select(c => new HistoryEntity
             {
                 id = c.id,
                 source = c.source,
@@ -534,7 +537,19 @@ namespace WebCenter.Web.Controllers
                 change_owner = c.change_owner,
                 change_owner_name = c.member4.name,
 
+                area_id = c.area_id,
+                resell_price = c.resell_price,
+
             }).FirstOrDefault();
+
+            if (reg.area_id != null)
+            {
+                var dbArea = Uof.IareaService.GetById(reg.area_id.Value);
+                if (dbArea != null)
+                {
+                    reg.area_name = dbArea.name;
+                }
+            }
 
             var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "history").Select(i => new {
                 id = i.id,
@@ -583,7 +598,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
-            var reg = Uof.IhistoryService.GetAll(c => c.id == id).Select(c => new
+            var reg = Uof.IhistoryService.GetAll(c => c.id == id).Select(c => new HistoryEntity
             {
                 id = c.id,
                 source = c.source,
@@ -609,7 +624,21 @@ namespace WebCenter.Web.Controllers
                 change_owner = c.change_owner,
                 change_owner_name = c.member4.name,
 
+                area_id = c.area_id,
+                resell_price = c.resell_price,
+
             }).FirstOrDefault();
+
+            if (reg.area_id!= null)
+            {
+                var dbArea = Uof.IareaService.GetById(reg.area_id.Value);
+                if (dbArea!= null)
+                {
+                    reg.area_name = dbArea.name;
+                }                
+            }
+            
+
 
             var shareholderList =  Uof.Ihistory_shareholderService.GetAll(s => s.history_id == reg.id && s.type == "股东").ToList();
             var directoryList = Uof.Ihistory_shareholderService.GetAll(s => s.history_id == reg.id && s.type == "董事").ToList();
@@ -1138,23 +1167,123 @@ namespace WebCenter.Web.Controllers
                         {
                             case "reg_abroad":
                                 #region
-                                // 旧订单变为转卖
                                 var dbAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();
-                                dbAbroad.order_status = 4;
-                                dbAbroad.date_updated = DateTime.Now;
-                                Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
-                                
-                                // 生成新订单
-                                dbAbroad.id = 0;
-                                dbAbroad.description = string.Format("注：该订单是从{1}转卖而来", dbAbroad.code);
-                                dbAbroad.code = GetNextOrderCodeByAreaId(dbAudit.area_id.Value, "ZW");
-                                dbAbroad.order_status = 0;
-                                dbAbroad.resell_price = null;
-                                dbAbroad.salesman_id = dbAbroad.customer.member1.id;
-
-                                var newAbroad = Uof.Ireg_abroadService.AddEntity(dbAbroad);
+                                // 生成新订单    
+                                #region                            
+                                var newRegAbroad = new reg_abroad()
+                                {
+                                    address = dbAbroad.address,
+                                    amount_transaction = dbAbroad.amount_transaction,
+                                    annual_date = dbAbroad.annual_date,
+                                    annual_id = dbAbroad.annual_id,
+                                    annual_owner = dbAbroad.annual_owner,
+                                    annual_year = dbAbroad.annual_year,
+                                    description = string.Format("注：该订单是从{0}转卖而来", dbAbroad.code),
+                                    assistant_id = dbAbroad.assistant_id,
+                                    bank_id = dbAbroad.bank_id,
+                                    code = GetNextOrderCodeByAreaId(dbAudit.area_id.Value, "ZW"),
+                                    creator_id = dbAbroad.creator_id,
+                                    currency = dbAbroad.currency,
+                                    customer_id = dbAbroad.customer_id,
+                                    date_created = DateTime.Now,
+                                    date_finish = dbAbroad.date_finish,
+                                    date_last = dbAbroad.date_last,
+                                    date_setup = dbAbroad.date_setup,
+                                    date_transaction = dbAbroad.date_transaction,
+                                    date_wait = dbAbroad.date_wait,
+                                    director = dbAbroad.director,
+                                    finance_reviewer_id = dbAbroad.finance_reviewer_id,
+                                    finance_review_date = dbAbroad.finance_review_date,
+                                    finance_review_moment = dbAbroad.finance_review_moment,
+                                    invoice_account = dbAbroad.invoice_account,
+                                    invoice_address = dbAbroad.invoice_address,
+                                    invoice_bank = dbAbroad.invoice_bank,
+                                    invoice_name = dbAbroad.invoice_name,
+                                    invoice_tax = dbAbroad.invoice_tax,
+                                    invoice_tel = dbAbroad.invoice_tel,
+                                    is_annual = dbAbroad.is_annual,
+                                    is_open_bank = dbAbroad.is_open_bank,
+                                    manager_id = dbAbroad.manager_id,
+                                    salesman_id = dbAbroad.customer.member1.id,
+                                    name_cn = dbAbroad.name_cn,
+                                    name_en = dbAbroad.name_en,
+                                    need_annual = dbAbroad.need_annual,
+                                    order_status = 0,
+                                    organization_id = dbAbroad.organization_id,
+                                    outworker_id = dbAbroad.outworker_id,
+                                    progress = dbAbroad.progress,
+                                    rate = dbAbroad.rate,
+                                    region = dbAbroad.region,
+                                    reg_no = dbAbroad.reg_no,
+                                    resell_price = null,
+                                    review_status = dbAbroad.review_status,
+                                    status = dbAbroad.status,
+                                    shareholder = null,
+                                    submit_reviewer_id = dbAbroad.submit_reviewer_id,
+                                    submit_review_date = dbAbroad.submit_review_date,
+                                    submit_review_moment = dbAbroad.submit_review_moment,
+                                    title_last = dbAbroad.title_last,
+                                    trader_id = dbAbroad.trader_id,
+                                    waiter_id = dbAbroad.waiter_id,                                    
+                                };
+                                #endregion
+                                var newAbroad = Uof.Ireg_abroadService.AddEntity(newRegAbroad);
                                 if (newAbroad != null)
                                 {
+                                    // 旧订单变为转卖                                    
+                                    dbAbroad.order_status = 5;
+                                    dbAbroad.date_updated = DateTime.Now;
+                                    dbAbroad.resell_code = newAbroad.code;
+                                    Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
+
+                                    // 股东董事
+                                    var shareholderList = Uof.Iabroad_shareholderService.GetAll(s => s.master_id == dbAbroad.id && s.source == "reg_abroad" && s.changed_type != "exit").ToList();
+                                    if (shareholderList.Count() > 0)
+                                    {
+                                        var abroadHolders = new List<abroad_shareholder>();
+                                        foreach (var item in shareholderList)
+                                        {
+                                            abroadHolders.Add(new abroad_shareholder
+                                            {
+                                                attachment = item.attachment,
+                                                cardNo = item.cardNo,
+                                                changed_type = item.changed_type,
+                                                date_changed = item.date_changed,
+                                                date_created = item.date_created,
+                                                date_updated = item.date_updated,
+                                                gender = item.gender,
+                                                master_id = newAbroad.id,
+                                                memo = item.memo,
+                                                name = item.name,
+                                                position = item.position,
+                                                source = item.source,
+                                                takes = item.takes,
+                                                type = item.type,
+                                            });
+                                        }
+                                        Uof.Iabroad_shareholderService.AddEntities(abroadHolders);
+                                    }
+                                    // 附件
+                                    var attachmentList = Uof.IattachmentService.GetAll(a => a.source_id == dbAbroad.id && a.source_name == "reg_abroad").ToList();
+                                    if (attachmentList.Count() > 0)
+                                    {
+                                        var attachments = new List<attachment>();
+                                        foreach (var item in attachmentList)
+                                        {
+                                            attachments.Add(new attachment
+                                            {
+                                                attachment_url = item.attachment_url,
+                                                date_created = item.date_created,
+                                                date_updated = item.date_updated,
+                                                description = item.description,
+                                                name = item.name,
+                                                source_id = newAbroad.id,
+                                                source_name = item.source_name,                                                
+                                            });
+                                        }
+                                        Uof.IattachmentService.AddEntities(attachments);
+                                    }
+
                                     timelineList.Add(new timeline
                                     {
                                         source_id = dbAudit.source_id,
@@ -1170,7 +1299,7 @@ namespace WebCenter.Web.Controllers
                                         source_name = "reg_abroad",
                                         title = "转卖订单",
                                         is_system = 1,
-                                        content = string.Format("{系统生成了转卖订单, 档案号{1}，来源档案号{2}", arrs[3], newAbroad.code, dbAudit.order_code)
+                                        content = string.Format("{0}系统生成了转卖订单, 档案号{1}，来源档案号{2}", arrs[2], newAbroad.code, dbAudit.order_code)
                                     });
 
                                     timelineList.Add(new timeline()
@@ -1217,22 +1346,156 @@ namespace WebCenter.Web.Controllers
                                 #endregion
                                 break;
                             case "reg_internal":
-                                // 旧订单变为转卖
-                                var dbInternal = Uof.Ireg_internalService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();
-                                dbInternal.order_status = 4;
-                                dbInternal.date_updated = DateTime.Now;
-                                Uof.Ireg_internalService.UpdateEntity(dbInternal);
-
+                                var dbInternal = Uof.Ireg_internalService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();                                
                                 // 生成新订单
-                                dbInternal.id = 0;
-                                dbInternal.description = string.Format("注：该订单是从{1}转卖而来", dbInternal.code);
-                                dbInternal.code = GetNextOrderCodeByAreaId(dbAudit.area_id.Value, "ZN");
-                                dbInternal.order_status = 0;
-                                dbInternal.resell_price = null;
-                                dbInternal.salesman_id = dbInternal.customer.member1.id;
-                                var newInternal = Uof.Ireg_internalService.AddEntity(dbInternal);
+                                 var newInternal = Uof.Ireg_internalService.AddEntity(new reg_internal
+                                {
+                                    address = dbInternal.address,
+                                    amount_bookkeeping = dbInternal.amount_bookkeeping,
+                                    amount_transaction = dbInternal.amount_transaction,
+                                    annual_date = dbInternal.annual_date,
+                                    annual_year = dbInternal.annual_year,
+                                    assistant_id = dbInternal.assistant_id,
+                                    bank_id = dbInternal.bank_id,
+                                    biz_address = dbInternal.biz_address,
+                                    capital = dbInternal.capital,
+                                    card_no = dbInternal.card_no,
+                                    code = GetNextOrderCodeByAreaId(dbAudit.area_id.Value, "ZN"),
+                                    creator_id = dbInternal.creator_id,
+                                    currency = dbInternal.currency,
+                                    customer_id = dbInternal.customer_id,
+                                    customs_address = dbInternal.customs_address,
+                                    customs_name = dbInternal.customs_name,
+                                    date_created =DateTime.Now,
+                                    date_finish = dbInternal.date_finish,
+                                    date_last = dbInternal.date_last,
+                                    date_setup = dbInternal.date_setup,
+                                    date_transaction = dbInternal.date_transaction,
+                                    date_wait = dbInternal.date_wait,
+                                    description = string.Format("注：该订单是从{0}转卖而来", dbInternal.code),
+                                    director = dbInternal.director,
+                                    director_card_no = dbInternal.director_card_no,
+                                    finance_reviewer_id = dbInternal.finance_reviewer_id,
+                                    finance_review_date = dbInternal.finance_review_date,
+                                    finance_review_moment = dbInternal.finance_review_moment,
+                                    invoice_account = dbInternal.invoice_account,
+                                    invoice_address = dbInternal.invoice_address,
+                                    invoice_bank = dbInternal.invoice_bank,
+                                    invoice_name = dbInternal.invoice_name,
+                                    invoice_tax = dbInternal.invoice_tax,
+                                    invoice_tel = dbInternal.invoice_tel,
+                                    is_annual = dbInternal.is_annual,
+                                    is_bookkeeping = dbInternal.is_bookkeeping,
+                                    is_customs = dbInternal.is_customs,
+                                    legal = dbInternal.legal,
+                                    manager_id = dbInternal.manager_id,
+                                    names = dbInternal.names,
+                                    name_cn = dbInternal.name_cn,
+                                    order_status = 0,
+                                    organization_id = dbInternal.organization_id,
+                                    outworker_id = dbInternal.outworker_id,
+                                    pay_mode = dbInternal.pay_mode,
+                                    progress = dbInternal.progress,
+                                    rate = dbInternal.rate,
+                                    reg_no = dbInternal.reg_no,
+                                    resell_price = null,
+                                    salesman_id = dbInternal.customer.member1.id,
+                                    review_status = dbInternal.review_status,
+                                    scope = dbInternal.scope,                                    
+                                    shareholders = null,
+                                    shareholder = null,
+                                    status = dbInternal.status,
+                                    submit_reviewer_id = dbInternal.submit_reviewer_id,
+                                    submit_review_date = dbInternal.submit_review_date,
+                                    submit_review_moment = dbInternal.submit_review_moment,
+                                    taxpayer = dbInternal.taxpayer,
+                                    title_last = dbInternal.title_last,
+                                    trader_id = dbInternal.trader_id,
+                                    waiter_id = dbInternal.waiter_id,                                  
+                                });
                                 if (newInternal != null)
                                 {
+                                    // 旧订单变为转卖
+                                    dbInternal.order_status = 5;
+                                    dbInternal.date_updated = DateTime.Now;
+                                    dbInternal.resell_code = newInternal.code;
+                                    Uof.Ireg_internalService.UpdateEntity(dbInternal);
+
+                                    var shareholderList = Uof.Iinternal_shareholderService.GetAll(s => s.master_id == id && s.source == "reg_internal" && s.changed_type != "exit").ToList();
+                                    if (shareholderList.Count() > 0)
+                                    {
+                                        var abroadHolders = new List<abroad_shareholder>();
+                                        foreach (var item in shareholderList)
+                                        {
+                                            abroadHolders.Add(new abroad_shareholder
+                                            {
+                                                attachment = item.attachment,
+                                                cardNo = item.cardNo,
+                                                changed_type = item.changed_type,
+                                                date_changed = item.date_changed,
+                                                date_created = item.date_created,
+                                                date_updated = item.date_updated,
+                                                gender = item.gender,
+                                                master_id = newInternal.id,
+                                                memo = item.memo,
+                                                name = item.name,
+                                                position = item.position,
+                                                source = item.source,
+                                                takes = item.takes,
+                                                type = item.type,
+                                            });
+                                        }
+                                        Uof.Iabroad_shareholderService.AddEntities(abroadHolders);
+                                    }
+                                    // 附件
+                                    var attachmentList = Uof.IattachmentService.GetAll(a => a.source_id == dbInternal.id && a.source_name == "reg_internal").ToList();
+                                    if (attachmentList.Count() > 0)
+                                    {
+                                        var attachments = new List<attachment>();
+                                        foreach (var item in attachmentList)
+                                        {
+                                            attachments.Add(new attachment
+                                            {
+                                                attachment_url = item.attachment_url,
+                                                date_created = item.date_created,
+                                                date_updated = item.date_updated,
+                                                description = item.description,
+                                                name = item.name,
+                                                source_id = newInternal.id,
+                                                source_name = item.source_name,
+                                            });
+                                        }
+                                        Uof.IattachmentService.AddEntities(attachments);
+                                    }
+
+                                    // 委托事项
+                                    var items = Uof.Ireg_internal_itemsService.GetAll(a => a.master_id == dbInternal.id).ToList();
+                                    if (items.Count > 0)
+                                    {
+                                        var newItems = new List<reg_internal_items>();
+                                        foreach (var item in items)
+                                        {
+                                            newItems.Add(new reg_internal_items
+                                            {
+                                                date_created = item.date_created,
+                                                date_finished = item.date_finished,
+                                                date_started = item.date_started,
+                                                date_updated = item.date_updated,
+                                                finisher = item.finisher,
+                                                master_id = newInternal.id,
+                                                material = item.material,
+                                                memo = item.memo,
+                                                name = item.name,
+                                                price = item.price,
+                                                spend = item.spend,
+                                                status = item.status,
+                                                sub_items = item.sub_items,
+                                            });
+                                        }
+                                        Uof.Ireg_internal_itemsService.AddEntities(newItems);
+                                    }
+
+
                                     timelineList.Add(new timeline
                                     {
                                         source_id = dbAudit.source_id,
@@ -1248,7 +1511,7 @@ namespace WebCenter.Web.Controllers
                                         source_name = "reg_internal",
                                         title = "转卖订单",
                                         is_system = 1,
-                                        content = string.Format("{系统生成了转卖订单, 档案号{1}，来源档案号{2}", arrs[3], newInternal.code, dbAudit.order_code)
+                                        content = string.Format("{0}系统生成了转卖订单, 档案号{1}，来源档案号{2}", arrs[3], newInternal.code, dbAudit.order_code)
                                     });
 
                                     timelineList.Add(new timeline()
@@ -1293,24 +1556,95 @@ namespace WebCenter.Web.Controllers
                                 });
                                 Uof.IwaitdealService.AddEntities(resellWaits);
                                 break;
-                            case "trademark":
-                                // 旧订单变为转卖
-                                var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();
-                                dbTrademark.order_status = 4;
-                                dbTrademark.date_updated = DateTime.Now;
-                                Uof.ItrademarkService.UpdateEntity(dbTrademark);
-
-                                // 生成新订单
-                                dbTrademark.id = 0;
-                                dbTrademark.description = string.Format("注：该订单是从{1}转卖而来", dbTrademark.code);
-                                dbTrademark.code = GetNextOrderCodeByAreaId(dbAudit.area_id.Value, "SB");
-                                dbTrademark.order_status = 0;
-                                dbTrademark.resell_price = null;
-                                dbTrademark.salesman_id = dbTrademark.customer.member1.id;
-                                var newTrademark = Uof.ItrademarkService.AddEntity(dbTrademark);
+                            case "trademark":                                
+                                var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();                                
+                                // 生成新订单  
+                                var newTrademark = Uof.ItrademarkService.AddEntity(new trademark
+                                {
+                                    accept_memo = dbTrademark.accept_memo,
+                                    address = dbTrademark.address,
+                                    allege_memo = dbTrademark.allege_memo,
+                                    amount_transaction = dbTrademark.amount_transaction,
+                                    annual_date = dbTrademark.annual_date,
+                                    annual_year = dbTrademark.annual_year,
+                                    applicant = dbTrademark.applicant,
+                                    assistant_id = dbTrademark.assistant_id,
+                                    code = GetNextOrderCodeByAreaId(dbAudit.area_id.Value, "SB"),
+                                    creator_id = dbTrademark.creator_id,
+                                    currency = dbTrademark.currency,
+                                    customer_id = dbTrademark.customer_id,
+                                    date_accept = dbTrademark.date_accept,
+                                    date_allege = dbTrademark.date_allege,
+                                    date_created = DateTime.Now,
+                                    date_exten = dbTrademark.date_exten,
+                                    date_finish = dbTrademark.date_finish,
+                                    date_last = dbTrademark.date_last,
+                                    date_receipt = dbTrademark.date_receipt,
+                                    date_regit = dbTrademark.date_regit,
+                                    date_transaction = dbTrademark.date_transaction,
+                                    date_trial = dbTrademark.date_trial,
+                                    date_updated = null,
+                                    date_wait = dbTrademark.date_wait,
+                                    description = string.Format("注：该订单是从{0}转卖而来", dbTrademark.code),
+                                    finance_reviewer_id = dbTrademark.finance_reviewer_id,
+                                    finance_review_date = dbTrademark.finance_review_date,
+                                    finance_review_moment = dbTrademark.finance_review_moment,
+                                    is_annual = dbTrademark.is_annual,
+                                    manager_id = dbTrademark.manager_id,
+                                    name = dbTrademark.name,
+                                    order_status = 0,
+                                    organization_id = dbTrademark.organization_id,
+                                    progress = dbTrademark.progress,
+                                    rate = dbTrademark.rate,
+                                    receipt_memo = dbTrademark.receipt_memo,
+                                    region = dbTrademark.region,
+                                    regit_no = dbTrademark.regit_no,
+                                    reg_mode = dbTrademark.reg_mode,
+                                    resell_price = null,
+                                    review_status = dbTrademark.review_status,
+                                    salesman_id = dbTrademark.customer.member1.id,
+                                    status = dbTrademark.status,
+                                    submit_reviewer_id = dbTrademark.submit_reviewer_id,
+                                    submit_review_date = dbTrademark.submit_review_date,
+                                    submit_review_moment = dbTrademark.submit_review_moment,
+                                    title_last = dbTrademark.title_last,
+                                    trademark_type = dbTrademark.trademark_type,
+                                    trader_id = dbTrademark.trader_id,
+                                    trial_memo = dbTrademark.trial_memo,
+                                    trial_type = dbTrademark.trial_type,
+                                    type = dbTrademark.type,
+                                    waiter_id = dbTrademark.waiter_id,
+                                });
 
                                 if (newTrademark != null)
                                 {
+                                    // 旧订单变为转卖
+                                    dbTrademark.order_status = 5;
+                                    dbTrademark.date_updated = DateTime.Now;
+                                    dbTrademark.resell_code = newTrademark.code;
+                                    Uof.ItrademarkService.UpdateEntity(dbTrademark);
+
+                                    // 附件
+                                    var attachmentList = Uof.IattachmentService.GetAll(a => a.source_id == dbTrademark.id && a.source_name == "trademark").ToList();
+                                    if (attachmentList.Count() > 0)
+                                    {
+                                        var attachments = new List<attachment>();
+                                        foreach (var item in attachmentList)
+                                        {
+                                            attachments.Add(new attachment
+                                            {
+                                                attachment_url = item.attachment_url,
+                                                date_created = item.date_created,
+                                                date_updated = item.date_updated,
+                                                description = item.description,
+                                                name = item.name,
+                                                source_id = newTrademark.id,
+                                                source_name = item.source_name,
+                                            });
+                                        }
+                                        Uof.IattachmentService.AddEntities(attachments);
+                                    }
+
                                     timelineList.Add(new timeline
                                     {
                                         source_id = dbAudit.source_id,
@@ -1326,7 +1660,7 @@ namespace WebCenter.Web.Controllers
                                         source_name = "trademark",
                                         title = "转卖订单",
                                         is_system = 1,
-                                        content = string.Format("{系统生成了转卖订单, 档案号{1}，来源档案号{2}", arrs[3], newTrademark.code, dbAudit.order_code)
+                                        content = string.Format("{0}系统生成了转卖订单, 档案号{1}，来源档案号{2}", arrs[3], newTrademark.code, dbAudit.order_code)
                                     });
 
                                     timelineList.Add(new timeline()
@@ -1373,23 +1707,95 @@ namespace WebCenter.Web.Controllers
 
                                 break;
                             case "patent":
-                                // 旧订单变为转卖
                                 var dbPatent = Uof.IpatentService.GetAll(a => a.id == dbAudit.source_id).FirstOrDefault();
-                                dbPatent.order_status = 4;
-                                dbPatent.date_updated = DateTime.Now;
-                                Uof.IpatentService.UpdateEntity(dbPatent);
 
                                 // 生成新订单
                                 dbPatent.id = 0;
-                                dbPatent.description = string.Format("注：该订单是从{1}转卖而来", dbPatent.code);
+                                dbPatent.description = string.Format("注：该订单是从{0}转卖而来", dbPatent.code);
                                 dbPatent.code = GetNextOrderCodeByAreaId(dbAudit.area_id.Value, "ZL");
                                 dbPatent.order_status = 0;
                                 dbPatent.resell_price = null;
                                 dbPatent.salesman_id = dbPatent.customer.member1.id;
 
-                                var newPatent = Uof.IpatentService.AddEntity(dbPatent);
+                                var newPatent = Uof.IpatentService.AddEntity(new patent
+                                {
+                                    address = dbPatent.address,
+                                    amount_transaction = dbPatent.amount_transaction,
+                                    annual_date = dbPatent.annual_date,
+                                    annual_year = dbPatent.annual_year,
+                                    applicant = dbPatent.applicant,
+                                    assistant_id = dbPatent.assistant_id,
+                                    card_no = dbPatent.card_no,
+                                    code = GetNextOrderCodeByAreaId(dbAudit.area_id.Value, "ZL"),
+                                    creator_id = dbPatent.creator_id,
+                                    currency = dbPatent.currency,
+                                    customer_id = dbPatent.customer_id,
+                                    date_accept = dbPatent.date_accept,
+                                    date_created = DateTime.Now,
+                                    date_empower = dbPatent.date_empower,
+                                    date_finish = dbPatent.date_finish,
+                                    date_inspection = dbPatent.date_inspection,
+                                    date_last = dbPatent.date_last,
+                                    date_regit = dbPatent.date_regit,
+                                    date_transaction = dbPatent.date_transaction,
+                                    date_updated = dbPatent.date_updated,
+                                    date_wait = dbPatent.date_wait,
+                                    description = string.Format("注：该订单是从{0}转卖而来", dbPatent.code),
+                                    designer = dbPatent.designer,
+                                    finance_reviewer_id = dbPatent.finance_reviewer_id,
+                                    finance_review_date = dbPatent.finance_review_date,
+                                    finance_review_moment = dbPatent.finance_review_moment,
+                                    is_annual = dbPatent.is_annual,
+                                    manager_id = dbPatent.manager_id,
+                                    name = dbPatent.name,
+                                    order_status = 0,
+                                    organization_id = dbPatent.organization_id,
+                                    patent_purpose = dbPatent.patent_purpose,
+                                    patent_type = dbPatent.patent_type,
+                                    progress = dbPatent.progress,
+                                    rate = dbPatent.rate,
+                                    reg_mode = dbPatent.reg_mode,
+                                    resell_price = null,
+                                    review_status = dbPatent.review_status,
+                                    salesman_id = dbPatent.customer.member1.id,
+                                    status = dbPatent.status,
+                                    submit_reviewer_id = dbPatent.submit_reviewer_id,
+                                    submit_review_date = dbPatent.submit_review_date,
+                                    submit_review_moment = dbPatent.submit_review_moment,
+                                    title_last = dbPatent.title_last,
+                                    trader_id = dbPatent.trader_id,
+                                    type = dbPatent.type,
+                                    waiter_id = dbPatent.waiter_id,
+                                });
                                 if (newPatent != null)
                                 {
+                                    // 旧订单变为转卖
+                                    dbPatent.order_status = 5;
+                                    dbPatent.date_updated = DateTime.Now;
+                                    dbPatent.resell_code = newPatent.code;
+                                    Uof.IpatentService.UpdateEntity(dbPatent);
+
+                                    // 附件
+                                    var attachmentList = Uof.IattachmentService.GetAll(a => a.source_id == dbPatent.id && a.source_name == "patent").ToList();
+                                    if (attachmentList.Count() > 0)
+                                    {
+                                        var attachments = new List<attachment>();
+                                        foreach (var item in attachmentList)
+                                        {
+                                            attachments.Add(new attachment
+                                            {
+                                                attachment_url = item.attachment_url,
+                                                date_created = item.date_created,
+                                                date_updated = item.date_updated,
+                                                description = item.description,
+                                                name = item.name,
+                                                source_id = newPatent.id,
+                                                source_name = item.source_name,
+                                            });
+                                        }
+                                        Uof.IattachmentService.AddEntities(attachments);
+                                    }
+
                                     timelineList.Add(new timeline
                                     {
                                         source_id = dbAudit.source_id,
@@ -1405,7 +1811,7 @@ namespace WebCenter.Web.Controllers
                                         source_name = "patent",
                                         title = "转卖订单",
                                         is_system = 1,
-                                        content = string.Format("{系统生成了转卖订单, 档案号{1}，来源档案号{2}", arrs[3], newPatent.code, dbAudit.order_code)
+                                        content = string.Format("{0}系统生成了转卖订单, 档案号{1}，来源档案号{2}", arrs[3], newPatent.code, dbAudit.order_code)
                                     });
 
                                     timelineList.Add(new timeline()

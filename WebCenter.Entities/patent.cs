@@ -208,6 +208,10 @@ namespace WebCenter.Entities
     
         public Nullable<float> resell_price { get; set; }
     
+    
+    
+        public string resell_code { get; set; }
+    
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }

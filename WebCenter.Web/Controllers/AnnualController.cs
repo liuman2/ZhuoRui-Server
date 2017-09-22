@@ -2206,5 +2206,290 @@ namespace WebCenter.Web.Controllers
 
             return SuccessResult;
         }
+        [HttpPost]
+        public ActionResult ForSale(int order_id, string order_type, float resell_price)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            switch (order_type)
+            {
+                case "reg_abroad":
+                    var dbAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == order_id).FirstOrDefault();
+                    dbAbroad.resell_price = resell_price;
+                    dbAbroad.order_status = 4;
+                    dbAbroad.date_updated = DateTime.Now;
+                    Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
+
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbAbroad.id,
+                        source_name = "reg_abroad",
+                        title = "转为待售",
+                        is_system = 1,
+                        content = string.Format("{0}设置为待售状态, 待售价格{1}", arrs[3], resell_price)
+                    });
+
+                    break;
+                case "reg_internal":
+                    var dbInternal = Uof.Ireg_internalService.GetAll(a => a.id == order_id).FirstOrDefault();
+                    dbInternal.resell_price = resell_price;
+                    dbInternal.order_status = 4;
+                    dbInternal.date_updated = DateTime.Now;
+                    Uof.Ireg_internalService.UpdateEntity(dbInternal);
+
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbInternal.id,
+                        source_name = "reg_internal",
+                        title = "转为待售",
+                        is_system = 1,
+                        content = string.Format("{0}设置为待售状态, 待售价格{1}", arrs[3], resell_price)
+                    });
+                    break;
+                case "trademark":
+                    var dbtrademark = Uof.ItrademarkService.GetAll(a => a.id == order_id).FirstOrDefault();
+                    dbtrademark.resell_price = resell_price;
+                    dbtrademark.order_status = 4;
+                    dbtrademark.date_updated = DateTime.Now;
+                    Uof.ItrademarkService.UpdateEntity(dbtrademark);
+
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbtrademark.id,
+                        source_name = "trademark",
+                        title = "转为待售",
+                        is_system = 1,
+                        content = string.Format("{0}设置为待售状态, 待售价格{1}", arrs[3], resell_price)
+                    });
+                    break;
+                case "patent":
+                    var dbpatent = Uof.IpatentService.GetAll(a => a.id == order_id).FirstOrDefault();
+                    dbpatent.resell_price = resell_price;
+                    dbpatent.order_status = 4;
+                    dbpatent.date_updated = DateTime.Now;
+                    Uof.IpatentService.UpdateEntity(dbpatent);
+
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = dbpatent.id,
+                        source_name = "patent",
+                        title = "转为待售",
+                        is_system = 1,
+                        content = string.Format("{0}设置为待售状态, 待售价格{1}", arrs[3], resell_price)
+                    });
+                    break;
+                default:
+                    break;
+            }
+
+            return SuccessResult;
+        }
+
+        public ActionResult GetSallOrders(string title)
+        {
+            var items = new List<AnnualWarning>();
+
+            #region 境外注册
+            Expression<Func<reg_abroad, bool>> nameQuery1 = c => true;
+            if (!string.IsNullOrEmpty(title))
+            {
+                nameQuery1 = c => (c.name_cn.Contains(title) || c.name_en.Contains(title) || c.code.Contains(title));
+            }
+
+            var abroads = Uof.Ireg_abroadService
+                .GetAll(c => c.order_status == 4 || c.order_status == 5)
+                .Where(nameQuery1)
+                .Select(a => new AnnualWarning
+                {
+                    id = a.id,
+                    customer_id = a.customer_id,
+                    customer_name = a.customer.name,
+                    customer_code = a.customer.code,
+                    order_code = a.code,
+                    order_name = a.name_cn ?? a.name_en,
+                    order_type = "reg_abroad",
+                    order_type_name = "境外注册",
+                    saleman = a.customer.member1.name ?? "",
+
+                    waiter = a.member6.name,
+                    assistant_name = a.member7.name,
+                    submit_review_date = a.submit_review_date,
+                    date_finish = a.date_finish,
+                    date_setup = a.date_setup,
+                    annual_date = a.annual_date,
+                    annual_year = a.annual_year,
+                    month = DateTime.Today.Month - a.date_setup.Value.Month,
+
+                    date_last = a.date_last,
+                    title_last = a.title_last,
+                    date_wait = a.date_wait,
+                    region = a.region,
+                    order_status = a.order_status,
+                    resell_code = a.resell_code ?? "",
+                }).ToList();
+
+            if (abroads.Count() > 0)
+            {
+                items.AddRange(abroads);
+            }
+            #endregion
+
+            #region 国内注册
+            Expression<Func<reg_internal, bool>> nameQuery2 = c => true;
+            if (!string.IsNullOrEmpty(title))
+            {
+                nameQuery2 = c => (c.name_cn.Contains(title) || c.code.Contains(title));
+            }
+
+            var internas = Uof.Ireg_internalService
+                .GetAll(c => c.order_status == 4 || c.order_status == 5)
+                .Where(nameQuery2)
+                .Select(a => new AnnualWarning
+                {
+                    id = a.id,
+                    customer_id = a.customer_id,
+                    customer_name = a.customer.name,
+                    customer_code = a.customer.code,
+                    order_code = a.code,
+                    order_name = a.name_cn,
+                    order_type = "reg_internal",
+                    order_type_name = "境内注册",
+                    //saleman = a.member5.name,                        
+                    saleman = a.customer.member1.name ?? "",
+                    waiter = a.member7.name,
+                    assistant_name = a.member.name,
+                    submit_review_date = a.submit_review_date,
+                    date_finish = a.date_finish,
+                    date_setup = a.date_setup,
+                    annual_year = a.annual_year,
+                    month = DateTime.Today.Month - a.date_setup.Value.Month,
+
+                    date_last = a.date_last,
+                    title_last = a.title_last,
+                    date_wait = a.date_wait,
+                    region = "",
+                    order_status = a.order_status,
+                    resell_code = a.resell_code ?? "",
+                }).ToList();
+
+            if (internas.Count() > 0)
+            {
+                items.AddRange(internas);
+            }
+            #endregion
+
+            #region 商标注册
+            Expression<Func<trademark, bool>> nameQuery3 = c => true;
+            if (!string.IsNullOrEmpty(title))
+            {
+                nameQuery3 = c => (c.name.Contains(title) || c.code.Contains(title));
+            }
+            var trademarks = Uof.ItrademarkService
+                .GetAll(c => c.order_status == 4 || c.order_status == 5)
+                .Where(nameQuery3)
+                .Select(a => new AnnualWarning
+                {
+                    id = a.id,
+                    customer_id = a.customer_id,
+                    customer_name = a.customer.name,
+                    customer_code = a.customer.code,
+                    order_code = a.code,
+                    order_name = a.name,
+                    order_type = "trademark",
+                    order_type_name = "商标注册",
+                    saleman = a.customer.member1.name ?? "",
+                    waiter = a.member6.name,
+                    assistant_name = a.member.name,
+                    submit_review_date = a.submit_review_date,
+                    date_finish = a.date_finish,
+                    date_setup = a.date_regit,
+                    annual_year = a.annual_year,
+                    exten_period = a.exten_period,
+                    date_last = a.date_last,
+                    title_last = a.title_last,
+                    date_wait = a.date_wait,
+                    region = a.region,
+                    order_status = a.order_status,
+                    resell_code = a.resell_code ?? "",
+                }).ToList();
+
+            if (trademarks.Count() > 0)
+            {
+                items.AddRange(trademarks);
+            }
+            #endregion
+
+            #region 专利注册
+            Expression<Func<patent, bool>> nameQuery4 = c => true;
+            if (!string.IsNullOrEmpty(title))
+            {
+                nameQuery4 = c => (c.name.Contains(title) || c.code.Contains(title));
+            }
+            var patents = Uof.IpatentService
+                .GetAll(c => c.order_status == 4 || c.order_status == 5)
+                .Where(nameQuery4)
+                .Select(a => new AnnualWarning
+                {
+                    id = a.id,
+                    customer_id = a.customer_id,
+                    customer_name = a.customer.name,
+                    customer_code = a.customer.code,
+                    order_code = a.code,
+                    order_name = a.name,
+                    order_type = "patent",
+                    order_type_name = "专利注册",
+                    //saleman = a.member4.name,
+                    saleman = a.customer.member1.name ?? "",
+
+                    waiter = a.member6.name,
+                    assistant_name = a.member.name,
+                    submit_review_date = a.submit_review_date,
+                    date_finish = a.date_finish,
+                    date_setup = a.date_regit,
+                    annual_year = a.annual_year,
+                    month = (a.date_regit != null) ? (DateTime.Today.Month - a.date_regit.Value.Month) : 0,
+
+                    date_last = a.date_last,
+                    title_last = a.title_last,
+                    date_wait = a.date_wait,
+                    order_status = a.order_status,
+                    region = "",
+                    resell_code = a.resell_code ?? "",
+                }).ToList();
+
+            if (patents.Count() > 0)
+            {
+                items.AddRange(patents);
+            }
+            #endregion
+            
+            if (items.Count > 0)
+            {
+                foreach (var item in items)
+                {
+                    item.setup_day = item.date_setup.Value.ToString("MM-dd");
+                }
+            }
+
+            items = items.OrderBy(i => i.setup_day).ToList();
+
+            var result = new
+            {
+                items = items
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }
