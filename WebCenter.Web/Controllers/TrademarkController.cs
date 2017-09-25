@@ -101,7 +101,13 @@ namespace WebCenter.Web.Controllers
                 }
                 else if (request.status == 9)
                 {
+                    // 卖出
                     statusQuery = c => (c.order_status == 5);
+                }
+                else if (request.status == 10)
+                {
+                    // 买入
+                    statusQuery = c => (c.status == 5);
                 }
                 else
                 {

@@ -108,6 +108,11 @@ namespace WebCenter.Web.Controllers
                 {
                     statusQuery = c => (c.order_status == 5);
                 }
+                else if (request.status == 10)
+                {
+                    // 买入
+                    statusQuery = c => (c.status == 5);
+                }
                 else
                 {
                     statusQuery = c => (c.status == request.status.Value);
