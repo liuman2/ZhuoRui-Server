@@ -80,6 +80,7 @@ namespace WebCenter.Web
         public List<Bank> banks { get; set; }
 
         public int business_count { get; set; }
+        public List<int> assistantIds { get; set; }
     }
 
     public class Assistant

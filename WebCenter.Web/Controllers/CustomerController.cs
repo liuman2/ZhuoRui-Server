@@ -44,19 +44,19 @@ namespace WebCenter.Web.Controllers
 
             var ops = arrs[4].Split(',');
             var strUserId = userId.ToString();
-            Expression<Func<customer, bool>> permQuery = c => true;
-            if (ops.Count() == 0)
-            {
-                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId + ",") || c.assistants.Contains("," + strUserId))));
-            }
-            else
-            {
-                var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
-                if (hasCompany == null)
-                {
-                    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId + ",") || c.assistants.Contains("," + strUserId))));
-                }
-            }
+            //Expression<Func<customer, bool>> permQuery = c => true;
+            //if (ops.Count() == 0)
+            //{
+            //    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants == strUserId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId + ",") || c.assistants.Contains("," + strUserId))));
+            //}
+            //else
+            //{
+            //    var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+            //    if (hasCompany == null)
+            //    {
+            //        permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants == strUserId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId + ",") || c.assistants.Contains("," + strUserId))));
+            //    }
+            //}
 
 
             Expression<Func<customer, bool>> condition = c => true;
@@ -66,14 +66,19 @@ namespace WebCenter.Web.Controllers
                 condition = tmp;
             }
 
-            var list = Uof.IcustomerService.GetAll(condition).Where(permQuery).Where(c=>c.is_delete != 1).OrderBy(item => item.id).Select(c => new
+            var list = Uof.IcustomerService.GetAll(condition)
+                //.Where(permQuery)
+                .Where(c=>c.is_delete != 1)
+                .OrderBy(item => item.id).Select(c => new
             {
                 id = c.id,
                 code = c.code,
                 name = c.name
             }).ToPagedList(index, size).ToList();
 
-            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(permQuery).Where(c => c.is_delete != 1).Count();
+            var totalRecord = Uof.IcustomerService.GetAll(condition)
+                //.Where(permQuery)
+                .Where(c => c.is_delete != 1).Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
@@ -133,23 +138,23 @@ namespace WebCenter.Web.Controllers
 
             var ops = arrs[4].Split(',');
             var strUserId = userId.ToString();
-            Expression<Func<customer, bool>> permQuery = c => true;
-            if (ops.Count() == 0)
-            {
-                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId+",") || c.assistants.Contains("," + strUserId))));
-            }
-            else
-            {
-                var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
-                if (hasCompany == null)
-                {
-                    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId + ",") || c.assistants.Contains("," + strUserId))));
-                }
-            }
+            //Expression<Func<customer, bool>> permQuery = c => true;
+            //if (ops.Count() == 0)
+            //{
+            //    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants == strUserId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId+",") || c.assistants.Contains("," + strUserId))));
+            //}
+            //else
+            //{
+            //    var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+            //    if (hasCompany == null)
+            //    {
+            //        permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants == strUserId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId + ",") || c.assistants.Contains("," + strUserId))));
+            //    }
+            //}
 
-            var list = Uof.IcustomerService.GetAll(condition)
+            var customerAllList = Uof.IcustomerService
+                .GetAll(condition)
                 .Where(nameQuery)
-                .Where(permQuery)
                 .Where(c => c.is_delete != 1)
                 .OrderByDescending(item => item.id).Select(c => new Customer()
                 {
@@ -173,13 +178,95 @@ namespace WebCenter.Web.Controllers
                     assistant_name = "",
                     assistants = c.assistants,
                     date_created = c.date_created,
-                }).ToPagedList(index, size).ToList();
+                }).ToList();
 
-            var totalRecord = Uof.IcustomerService.GetAll(condition)
-                .Where(nameQuery)
-                .Where(permQuery)
-                .Where(c => c.is_delete != 1)
-                .Count();
+            var fullCustomerList = new List<Customer>();
+
+            foreach (var item in customerAllList)
+            {
+                var assIds = new List<int>();
+                if (!string.IsNullOrEmpty(item.assistants))
+                {
+                    var assList = item.assistants.Split(',');
+                    foreach (var ass in assList)
+                    {
+                        int aid = 0;
+                        int.TryParse(ass, out aid);
+                        assIds.Add(aid);
+                    }
+                }
+                item.assistantIds = assIds;
+
+                if (ops.Count() == 0)
+                {
+                    if (item.salesman_id == userId || item.assistant_id == userId || item.assistantIds.Contains(userId))
+                    {
+                        fullCustomerList.Add(item);
+                    }
+                }
+                else
+                {
+                    var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+                    if (hasCompany == null)
+                    {
+                        if (item.salesman_id == userId || item.assistant_id == userId || item.assistantIds.Contains(userId))
+                        {
+                            fullCustomerList.Add(item);
+                        }
+                    }
+                }
+            }
+
+            //Expression<Func<Customer, bool>> permQuery = c => true;
+            //if (ops.Count() == 0)
+            //{
+            //    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistantIds.Contains(userId));
+            //}
+            //else
+            //{
+            //    var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+            //    if (hasCompany == null)
+            //    {
+            //        permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistantIds.Contains(userId));
+            //    }
+            //}
+
+            //var list = Uof.IcustomerService.GetAll(condition)
+            //    .Where(nameQuery)
+            //    .Where(permQuery)
+            //    .Where(c => c.is_delete != 1)
+            //    .OrderByDescending(item => item.id).Select(c => new Customer()
+            //    {
+            //        id = c.id,
+            //        code = c.code,
+            //        name = c.name,
+            //        contact = c.contact,
+            //        mobile = c.mobile,
+            //        tel = c.tel,
+            //        industry = c.industry,
+            //        province = c.province,
+            //        city = c.city,
+            //        county = c.county,
+            //        address = c.address,
+            //        salesman_id = c.salesman_id,
+            //        salesman = c.member1.name,
+            //        source = c.source,
+            //        source_id = c.source_id,
+            //        source_name = "",
+            //        assistant_id = c.assistant_id,
+            //        assistant_name = "",
+            //        assistants = c.assistants,
+            //        date_created = c.date_created,
+            //    }).ToPagedList(index, size).ToList();
+
+            //var totalRecord = Uof.IcustomerService.GetAll(condition)
+            //    .Where(nameQuery)
+            //    .Where(permQuery)
+            //    .Where(c => c.is_delete != 1)
+            //    .Count();
+
+            var list = fullCustomerList.OrderByDescending(item => item.id).Skip((index - 1) * size).Take(size).ToList();
+            var totalRecord = fullCustomerList.Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
@@ -277,23 +364,24 @@ namespace WebCenter.Web.Controllers
 
             Expression<Func<customer, bool>> condition = c => c.status == 1;
             Expression<Func<customer, bool>> nameQuery = c => true;
-            Expression<Func<customer, bool>> permQuery = c => true;
+            //Expression<Func<customer, bool>> permQuery = c => true;
             var strUserId = userId.ToString();
-            if (userId != 1)
-            {
-                permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId + ",") || c.assistants.Contains("," + strUserId))));
-            }            
+
+            //if (userId != 1)
+            //{
+            //    permQuery = c => (c.salesman_id == userId || c.assistant_id == userId || c.assistants == strUserId || (c.assistants.Contains(strUserId) && (c.assistants.Contains(strUserId + ",") || c.assistants.Contains("," + strUserId))));
+            //}            
 
             if (!string.IsNullOrEmpty(name))
             {
                 nameQuery = c => (c.name.IndexOf(name) > -1 || c.code.IndexOf(name) > -1);
             }
-            
-            var list = Uof.IcustomerService.GetAll(condition)
+
+            var customerAllList = Uof.IcustomerService
+                .GetAll(condition)
                 .Where(nameQuery)
-                .Where(permQuery)
                 .Where(c => c.is_delete != 1)
-                .OrderByDescending(item => item.id).Select(c => new
+                .OrderByDescending(item => item.id).Select(c => new Customer()
                 {
                     id = c.id,
                     code = c.code,
@@ -306,17 +394,78 @@ namespace WebCenter.Web.Controllers
                     city = c.city,
                     county = c.county,
                     address = c.address,
-
+                    salesman_id = c.salesman_id,
+                    salesman = c.member1.name,
+                    source = c.source,
+                    source_id = c.source_id,
+                    source_name = "",
+                    assistant_id = c.assistant_id,
+                    assistant_name = "",
+                    assistants = c.assistants,
+                    date_created = c.date_created,
                     mailling_address = c.mailling_address,
                     mailling_province = c.mailling_province,
                     mailling_city = c.mailling_city,
                     mailling_county = c.mailling_county,
+                }).ToList();
 
-                    salesman_id = c.salesman_id,
-                    salesman = c.member1.name,
-                }).ToPagedList(index, size).ToList();
+            var fullCustomerList = new List<Customer>();
 
-            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Where(c => c.is_delete != 1).Count();
+            foreach (var item in customerAllList)
+            {
+                var assIds = new List<int>();
+                if (!string.IsNullOrEmpty(item.assistants))
+                {
+                    var assList = item.assistants.Split(',');
+                    foreach (var ass in assList)
+                    {
+                        int aid = 0;
+                        int.TryParse(ass, out aid);
+                        assIds.Add(aid);
+                    }
+                }
+                item.assistantIds = assIds;
+
+                if (userId != 1)
+                {
+                    if (item.salesman_id == userId || item.assistant_id == userId || item.assistantIds.Contains(userId))
+                    {
+                        fullCustomerList.Add(item);
+                    }
+                }
+            }
+
+            var list = fullCustomerList.OrderByDescending(item => item.id).Skip((index - 1) * size).Take(size).ToList();
+            var totalRecord = fullCustomerList.Count();
+
+            //var list = Uof.IcustomerService.GetAll(condition)
+            //    .Where(nameQuery)
+            //    .Where(permQuery)
+            //    .Where(c => c.is_delete != 1)
+            //    .OrderByDescending(item => item.id).Select(c => new
+            //    {
+            //        id = c.id,
+            //        code = c.code,
+            //        name = c.name,
+            //        contact = c.contact,
+            //        mobile = c.mobile,
+            //        tel = c.tel,
+            //        industry = c.industry,
+            //        province = c.province,
+            //        city = c.city,
+            //        county = c.county,
+            //        address = c.address,
+
+            //        mailling_address = c.mailling_address,
+            //        mailling_province = c.mailling_province,
+            //        mailling_city = c.mailling_city,
+            //        mailling_county = c.mailling_county,
+
+            //        salesman_id = c.salesman_id,
+            //        salesman = c.member1.name,
+            //    }).ToPagedList(index, size).ToList();
+
+            //var totalRecord = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Where(c => c.is_delete != 1).Count();
 
             var totalPages = 0;
             if (totalRecord > 0)
