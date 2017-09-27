@@ -88,6 +88,10 @@ namespace WebCenter.Web.Controllers
                 {
                     statusQuery = c => (c.status == 2 || c.status == 3);
                 }
+                else if (request.status == 4)
+                {
+                    statusQuery = c => (c.status == 4 && c.order_status == 0);
+                }
                 else if (request.status == 5)
                 {
                     statusQuery = c => (c.order_status == 1);

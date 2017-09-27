@@ -87,6 +87,10 @@ namespace WebCenter.Web.Controllers
                 {
                     statusQuery = c => (c.status == 2 || c.status == 3);
                 }
+                else if (request.status == 4)
+                {
+                    statusQuery = c => (c.status == 4 && c.order_status == 0);
+                }
                 else if (request.status == 5)
                 {
                     statusQuery = c => (c.order_status == 1);
@@ -130,7 +134,8 @@ namespace WebCenter.Web.Controllers
             Expression<Func<trademark, bool>> nameQuery = c => true;
             if (!string.IsNullOrEmpty(request.name))
             {
-                nameQuery = c => (c.name.Contains(request.name));
+                //nameQuery = c => (c.name.Contains(request.name));
+                nameQuery = c => (c.name.ToLower().Contains(request.name.ToLower()) || c.code.ToLower().Contains(request.name.ToLower()));
             }
             Expression<Func<trademark, bool>> applicantQuery = c => true;
             if (!string.IsNullOrEmpty(request.applicant))
@@ -158,6 +163,12 @@ namespace WebCenter.Web.Controllers
                 codeQuery = c => c.code.ToLower().Contains(request.code.ToLower());
             }
 
+            Expression<Func<trademark, bool>> areaQuery = c => true;
+            if (!string.IsNullOrEmpty(request.area))
+            {
+                areaQuery = c => c.code.Contains(request.area);
+            }
+
             var list = Uof.ItrademarkService.GetAll(condition)
                 .Where(customerQuery)
                 .Where(statusQuery)
@@ -168,6 +179,7 @@ namespace WebCenter.Web.Controllers
                 .Where(date1Created)
                 .Where(date2Created)
                 .Where(codeQuery)
+                .Where(areaQuery)
                 .OrderByDescending(item => item.code).Select(c => new
                 {
                     id = c.id,
@@ -213,6 +225,7 @@ namespace WebCenter.Web.Controllers
                 .Where(applicantQuery)
                 .Where(date1Created)
                 .Where(date2Created)
+                .Where(areaQuery)
                 .Where(codeQuery).Count();
 
             var totalPages = 0;

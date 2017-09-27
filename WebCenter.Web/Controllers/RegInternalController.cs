@@ -89,6 +89,10 @@ namespace WebCenter.Web.Controllers
                 {
                     statusQuery = c => (c.status == 2 || c.status == 3);
                 }
+                else if (request.status == 4)
+                {
+                    statusQuery = c => (c.status == 4 && c.order_status == 0);
+                }
                 else if (request.status == 5)
                 {
                     statusQuery = c => (c.order_status == 1);
@@ -147,13 +151,19 @@ namespace WebCenter.Web.Controllers
             Expression<Func<reg_internal, bool>> nameQuery = c => true;
             if (!string.IsNullOrEmpty(request.name))
             {
-                nameQuery = c => (c.name_cn.ToLower().Contains(request.name.ToLower()));
+                nameQuery = c => (c.name_cn.ToLower().Contains(request.name.ToLower()) || c.code.ToLower().Contains(request.name.ToLower()));
             }
 
             Expression<Func<reg_internal, bool>> codeQuery = c => true;
             if (!string.IsNullOrEmpty(request.code))
             {
                 codeQuery = c => c.code.ToLower().Contains(request.code.ToLower());
+            }
+
+            Expression<Func<reg_internal, bool>> areaQuery = c => true;
+            if (!string.IsNullOrEmpty(request.area))
+            {
+                areaQuery = c => c.code.Contains(request.area);
             }
 
             var list = Uof.Ireg_internalService.GetAll(condition)
@@ -165,6 +175,7 @@ namespace WebCenter.Web.Controllers
                 .Where(date2Created)
                 .Where(nameQuery)
                 .Where(codeQuery)
+                .Where(areaQuery)
                 .OrderByDescending(item => item.code).Select(c => new
                 {
                     id = c.id,
@@ -205,6 +216,7 @@ namespace WebCenter.Web.Controllers
                 .Where(date2Created)
                 .Where(nameQuery)
                 .Where(codeQuery)
+                .Where(areaQuery)
                 .Count();
 
             var totalPages = 0;

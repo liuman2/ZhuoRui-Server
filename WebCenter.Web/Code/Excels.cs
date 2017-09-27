@@ -31,7 +31,10 @@ namespace WebCenter.Web
         public int? 订单归属人ID { get; set; }
         public string 订单归属人 { get; set; }
         public int? 客户归属ID { get; set; }
-        public string 客户归属 { get; set; }
+        public string 客户归属 { get; set; }        
+        public string 订单状态 { get; set; }
+        public int? order_status { get; set; }
+        public int? status { get; set; }
     }
 
     public class ExcelLectureContact

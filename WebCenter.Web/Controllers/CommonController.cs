@@ -1258,7 +1258,56 @@ namespace WebCenter.Web.Controllers
                         订单归属人 = a.member.name,
                         客户归属ID = a.customer.salesman_id,
                         客户归属 = a.customer.member1.name,
+                        order_status = a.order_status,
+                        status = a.status,
                     }).ToList();
+
+                    if (abroads.Count > 0)
+                    {
+                        foreach (var item in abroads)
+                        {
+                            if (item.order_status != 0)
+                            {
+                                if (item.order_status == 1)
+                                {
+                                    item.订单状态 = "转出";
+                                }
+                                if (item.order_status == 2)
+                                {
+                                    item.订单状态 = "注销";
+                                }
+                                if (item.order_status == 3)
+                                {
+                                    item.订单状态 = "暂不年检";
+                                }
+                                if (item.order_status == 4)
+                                {
+                                    item.订单状态 = "待售";
+                                }
+                                if (item.order_status == 5)
+                                {
+                                    item.订单状态 = "卖出";
+                                }
+                            } else
+                            {
+                                switch (item.status)
+                                {
+                                    case 0:
+                                    case 1:
+                                    case 2:
+                                    case 3:
+                                        item.订单状态 = "未完成";
+                                        break;
+                                    case 4:
+                                        item.订单状态 = "完成";
+                                        break;
+                                    case 5:
+                                        item.订单状态 = "买入";
+                                        break;
+                                }
+                            }
+                        }
+                    }
 
                     var sheet = ExportToExcel(abroads);
                     var fileName = "境外注册.xml";

@@ -195,7 +195,8 @@ namespace WebCenter.Web.Controllers
             Expression<Func<accounting, bool>> nameQuery = c => true;
             if (!string.IsNullOrEmpty(request.name))
             {
-                nameQuery = c => (c.name.ToLower().Contains(request.name.ToLower()));
+                //nameQuery = c => (c.name.ToLower().Contains(request.name.ToLower()) || c.code.ToLower().Contains(request.code.ToLower()));
+                nameQuery = c => (c.name.ToLower().Contains(request.name.ToLower()) || c.code.ToLower().Contains(request.name.ToLower()));
             }
 
             Expression<Func<accounting, bool>> codeQuery = c => true;
