@@ -182,40 +182,52 @@ namespace WebCenter.Web.Controllers
 
             var fullCustomerList = new List<Customer>();
 
-            foreach (var item in customerAllList)
+            if (userId == 1)
             {
-                var assIds = new List<int>();
-                if (!string.IsNullOrEmpty(item.assistants))
+                fullCustomerList = customerAllList;
+            }
+            else
+            {
+                foreach (var item in customerAllList)
                 {
-                    var assList = item.assistants.Split(',');
-                    foreach (var ass in assList)
+                    var assIds = new List<int>();
+                    if (!string.IsNullOrEmpty(item.assistants))
                     {
-                        int aid = 0;
-                        int.TryParse(ass, out aid);
-                        assIds.Add(aid);
+                        var assList = item.assistants.Split(',');
+                        foreach (var ass in assList)
+                        {
+                            int aid = 0;
+                            int.TryParse(ass, out aid);
+                            assIds.Add(aid);
+                        }
                     }
-                }
-                item.assistantIds = assIds;
+                    item.assistantIds = assIds;
 
-                if (ops.Count() == 0)
-                {
-                    if (item.salesman_id == userId || item.assistant_id == userId || item.assistantIds.Contains(userId))
-                    {
-                        fullCustomerList.Add(item);
-                    }
-                }
-                else
-                {
-                    var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
-                    if (hasCompany == null)
+                    if (ops.Count() == 0)
                     {
                         if (item.salesman_id == userId || item.assistant_id == userId || item.assistantIds.Contains(userId))
                         {
                             fullCustomerList.Add(item);
                         }
                     }
+                    else
+                    {
+                        var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+                        if (hasCompany == null)
+                        {
+                            if (item.salesman_id == userId || item.assistant_id == userId || item.assistantIds.Contains(userId))
+                            {
+                                fullCustomerList.Add(item);
+                            }
+                        }
+                        else
+                        {
+                            fullCustomerList = customerAllList;
+                        }
+                    }
                 }
             }
+            
 
             //Expression<Func<Customer, bool>> permQuery = c => true;
             //if (ops.Count() == 0)
@@ -411,29 +423,37 @@ namespace WebCenter.Web.Controllers
 
             var fullCustomerList = new List<Customer>();
 
-            foreach (var item in customerAllList)
+            if (userId == 1)
             {
-                var assIds = new List<int>();
-                if (!string.IsNullOrEmpty(item.assistants))
+                fullCustomerList = customerAllList;
+            }
+            else
+            {
+                foreach (var item in customerAllList)
                 {
-                    var assList = item.assistants.Split(',');
-                    foreach (var ass in assList)
+                    var assIds = new List<int>();
+                    if (!string.IsNullOrEmpty(item.assistants))
                     {
-                        int aid = 0;
-                        int.TryParse(ass, out aid);
-                        assIds.Add(aid);
+                        var assList = item.assistants.Split(',');
+                        foreach (var ass in assList)
+                        {
+                            int aid = 0;
+                            int.TryParse(ass, out aid);
+                            assIds.Add(aid);
+                        }
                     }
-                }
-                item.assistantIds = assIds;
+                    item.assistantIds = assIds;
 
-                if (userId != 1)
-                {
-                    if (item.salesman_id == userId || item.assistant_id == userId || item.assistantIds.Contains(userId))
+                    if (userId != 1)
                     {
-                        fullCustomerList.Add(item);
+                        if (item.salesman_id == userId || item.assistant_id == userId || item.assistantIds.Contains(userId))
+                        {
+                            fullCustomerList.Add(item);
+                        }
                     }
                 }
             }
+            
 
             var list = fullCustomerList.OrderByDescending(item => item.id).Skip((index - 1) * size).Take(size).ToList();
             var totalRecord = fullCustomerList.Count();
