@@ -2317,7 +2317,8 @@ namespace WebCenter.Web.Controllers
                     customer_name = a.customer.name,
                     customer_code = a.customer.code,
                     order_code = a.code,
-                    order_name = a.name_cn ?? a.name_en,
+                    order_name = a.name_cn,
+                    order_name_en = a.name_en,
                     order_type = "reg_abroad",
                     order_type_name = "境外注册",
                     saleman = a.customer.member1.name ?? "",
@@ -2337,6 +2338,8 @@ namespace WebCenter.Web.Controllers
                     region = a.region,
                     order_status = a.order_status,
                     resell_code = a.resell_code ?? "",
+                    resell_price = a.resell_price,
+                    is_annual = a.is_annual,
                 }).ToList();
 
             if (abroads.Count() > 0)
@@ -2381,6 +2384,8 @@ namespace WebCenter.Web.Controllers
                     region = "",
                     order_status = a.order_status,
                     resell_code = a.resell_code ?? "",
+                    resell_price = a.resell_price,
+                    is_annual = a.is_annual,
                 }).ToList();
 
             if (internas.Count() > 0)
@@ -2422,6 +2427,8 @@ namespace WebCenter.Web.Controllers
                     region = a.region,
                     order_status = a.order_status,
                     resell_code = a.resell_code ?? "",
+                    resell_price = a.resell_price,
+                    is_annual = a.is_annual,
                 }).ToList();
 
             if (trademarks.Count() > 0)
@@ -2466,6 +2473,8 @@ namespace WebCenter.Web.Controllers
                     order_status = a.order_status,
                     region = "",
                     resell_code = a.resell_code ?? "",
+                    resell_price = a.resell_price,
+                    is_annual = a.is_annual,
                 }).ToList();
 
             if (patents.Count() > 0)

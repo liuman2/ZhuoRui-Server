@@ -40,7 +40,8 @@ namespace WebCenter.Web
         public float? reference_price { get; set; }
 
         public string resell_code { get; set; }
-
+        public float? resell_price { get; set; }
+        public int?  is_annual { get; set; }
     }
 
     public class FinanceCheck
