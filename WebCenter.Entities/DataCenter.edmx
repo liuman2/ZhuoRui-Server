@@ -280,6 +280,23 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
+        <EntityType Name="business_bank">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="customer_id" Type="int" Nullable="false" />
+          <Property Name="source" Type="varchar" MaxLength="50" />
+          <Property Name="source_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="120" />
+          <Property Name="address" Type="varchar" MaxLength="300" />
+          <Property Name="manager" Type="varchar" MaxLength="30" />
+          <Property Name="tel" Type="varchar" MaxLength="50" />
+          <Property Name="date_setup" Type="datetime" Precision="0" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="memo" Type="varchar" MaxLength="300" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
         <EntityType Name="contact">
           <Key>
             <PropertyRef Name="id" />
@@ -2418,6 +2435,7 @@
           <EntitySet Name="audit_bank" EntityType="Self.audit_bank" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="bank_account" EntityType="Self.bank_account" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="banks" EntityType="Self.banks" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="business_bank" EntityType="Self.business_bank" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="contact" EntityType="Self.contact" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="customer" EntityType="Self.customer" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="customer_timeline" EntityType="Self.customer_timeline" Schema="zhuoruioa" store:Type="Tables" />
@@ -3392,6 +3410,7 @@
             <End Role="member" EntitySet="members" />
             <End Role="reg_abroad" EntitySet="reg_abroad" />
           </AssociationSet>
+          <EntitySet Name="business_bank" EntityType="DataCenter.Entities.business_bank" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -6039,6 +6058,23 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="business_bank">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="customer_id" Type="Int32" Nullable="false" />
+          <Property Name="source" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="source_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="manager" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="date_setup" Type="DateTime" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="memo" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -7183,6 +7219,24 @@
                 <ScalarProperty Name="end" ColumnName="end" />
                 <ScalarProperty Name="start" ColumnName="start" />
                 <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="business_bank">
+            <EntityTypeMapping TypeName="DataCenter.Entities.business_bank">
+              <MappingFragment StoreEntitySet="business_bank">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="date_setup" ColumnName="date_setup" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="manager" ColumnName="manager" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="source_id" ColumnName="source_id" />
+                <ScalarProperty Name="source" ColumnName="source" />
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

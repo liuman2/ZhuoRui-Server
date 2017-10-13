@@ -58,6 +58,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface Ibusiness_bankService:IBaseService<business_bank>
+    {   
+    }
+	
 	public partial interface IcontactService:IBaseService<contact>
     {   
     }

@@ -133,6 +133,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class business_bankService:BaseService<business_bank>,Ibusiness_bankService
+    {   
+        public business_bankService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.business_bankRepository;
+        }  
+    }
+	
 	public partial class contactService:BaseService<contact>,IcontactService
     {   
         public contactService()

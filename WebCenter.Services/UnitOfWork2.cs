@@ -93,6 +93,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  Ibusiness_bankService Ibusiness_bankService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  IcontactService IcontactService
     {
         get;

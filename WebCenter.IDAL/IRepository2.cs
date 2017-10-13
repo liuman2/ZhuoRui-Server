@@ -54,6 +54,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface Ibusiness_bankRepository :IBaseRepository<business_bank>
+    {         
+    }
+	
     public partial interface IcontactRepository :IBaseRepository<contact>
     {         
     }

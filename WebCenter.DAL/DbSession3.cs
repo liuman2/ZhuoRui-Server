@@ -31,6 +31,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.Ibank_accountRepository bank_accountRepository { get { return new bank_accountRepository(); } }
 	
+	public IDAL.Ibusiness_bankRepository business_bankRepository { get { return new business_bankRepository(); } }
+	
 	public IDAL.IcontactRepository contactRepository { get { return new contactRepository(); } }
 	
 	public IDAL.IcustomerRepository customerRepository { get { return new customerRepository(); } }

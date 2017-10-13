@@ -180,3 +180,23 @@ call AddColumnUnlessExists(Database(), 'reg_abroad', 'resell_code', 'varchar(20)
 call AddColumnUnlessExists(Database(), 'reg_internal', 'resell_code', 'varchar(20) DEFAULT NULL COMMENT "转卖后档案号"');
 call AddColumnUnlessExists(Database(), 'trademark', 'resell_code', 'varchar(20) DEFAULT NULL COMMENT "转卖后档案号"');
 call AddColumnUnlessExists(Database(), 'patent', 'resell_code', 'varchar(20) DEFAULT NULL COMMENT "转卖后档案号"');
+
+
+-- 2017-10-13
+DROP TABLE IF EXISTS `business_bank`;
+CREATE TABLE `business_bank` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `source` varchar(50) DEFAULT NULL COMMENT '来源',
+  `source_id` int(11) NOT NULL COMMENT '来源ID',
+  `name` varchar(120) DEFAULT NULL COMMENT '银行名称',
+  `address` varchar(300) DEFAULT NULL COMMENT '银行地址',
+  `manager` varchar(30) DEFAULT NULL COMMENT '客户经理',
+  `tel` varchar(50) DEFAULT NULL COMMENT '联系电话',
+  `date_setup` datetime DEFAULT NULL COMMENT '开户时间',
+  `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
+  `memo` varchar(300) DEFAULT NULL COMMENT '备注',
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `sequence` VALUES ('business_bank', '1');

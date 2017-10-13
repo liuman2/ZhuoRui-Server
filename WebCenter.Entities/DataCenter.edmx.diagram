@@ -166,6 +166,7 @@
         <AssociationConnector Association="DataCenter.Entities.fk_reg_abroad_annual_owner" />
         <AssociationConnector Association="DataCenter.Entities.fk_history_change_owner1" />
         <AssociationConnector Association="DataCenter.Entities.fk_reg_abroad_annual_owner1" />
+        <EntityTypeShape EntityType="DataCenter.Entities.business_bank" Width="1.5" PointX="8.375" PointY="6.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

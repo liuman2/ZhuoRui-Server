@@ -111,6 +111,9 @@
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
     <Compile Include="BaseModel.cs" />
+    <Compile Include="business_bank.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="contact.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
