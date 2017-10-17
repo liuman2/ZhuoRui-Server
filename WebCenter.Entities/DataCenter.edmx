@@ -287,14 +287,17 @@
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="customer_id" Type="int" Nullable="false" />
           <Property Name="source" Type="varchar" MaxLength="50" />
-          <Property Name="source_id" Type="int" Nullable="false" />
+          <Property Name="source_id" Type="int" />
           <Property Name="name" Type="varchar" MaxLength="120" />
+          <Property Name="account" Type="varchar" MaxLength="120" />
           <Property Name="address" Type="varchar" MaxLength="300" />
           <Property Name="manager" Type="varchar" MaxLength="30" />
           <Property Name="tel" Type="varchar" MaxLength="50" />
           <Property Name="date_setup" Type="datetime" Precision="0" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="memo" Type="varchar" MaxLength="300" />
+          <Property Name="is_audit" Type="int" />
+          <Property Name="audit_id" Type="int" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="contact">
@@ -6074,6 +6077,9 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="memo" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="date_updated" Type="DateTime" />
+          <Property Name="is_audit" Type="Int32" />
+          <Property Name="audit_id" Type="Int32" Nullable="false" />
+          <Property Name="account" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -7226,6 +7232,9 @@
           <EntitySetMapping Name="business_bank">
             <EntityTypeMapping TypeName="DataCenter.Entities.business_bank">
               <MappingFragment StoreEntitySet="business_bank">
+                <ScalarProperty Name="account" ColumnName="account" />
+                <ScalarProperty Name="audit_id" ColumnName="audit_id" />
+                <ScalarProperty Name="is_audit" ColumnName="is_audit" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="memo" ColumnName="memo" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />

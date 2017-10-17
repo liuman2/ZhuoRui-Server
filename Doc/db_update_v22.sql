@@ -188,14 +188,17 @@ CREATE TABLE `business_bank` (
   `id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `source` varchar(50) DEFAULT NULL COMMENT '来源',
-  `source_id` int(11) NOT NULL COMMENT '来源ID',
+  `source_id` int(11) DEFAULT NULL COMMENT '来源ID',
   `name` varchar(120) DEFAULT NULL COMMENT '银行名称',
+  `account` varchar(120) DEFAULT NULL COMMENT '银行帐号',
   `address` varchar(300) DEFAULT NULL COMMENT '银行地址',
   `manager` varchar(30) DEFAULT NULL COMMENT '客户经理',
   `tel` varchar(50) DEFAULT NULL COMMENT '联系电话',
   `date_setup` datetime DEFAULT NULL COMMENT '开户时间',
   `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
   `memo` varchar(300) DEFAULT NULL COMMENT '备注',
+  `is_audit` int(11) DEFAULT NULL COMMENT '是否来源审计',
+  `audit_id` int(11) DEFAULT NULL COMMENT '审计ID',
   `date_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

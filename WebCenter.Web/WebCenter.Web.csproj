@@ -229,6 +229,7 @@
     <Compile Include="Controllers\AuditSubController.cs" />
     <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BusinessBankController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\CustomerTimelineController.cs" />
@@ -346,6 +347,7 @@
     <Folder Include="Views\Attachment\" />
     <Folder Include="Views\Bank\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\BusinessBank\" />
     <Folder Include="Views\Company\" />
     <Folder Include="Views\CustomerTimeline\" />
     <Folder Include="Views\Dictionary\" />

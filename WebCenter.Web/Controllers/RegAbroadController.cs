@@ -514,7 +514,8 @@ namespace WebCenter.Web.Controllers
             }
 
             #endregion
-
+            
+            
             var reg = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new
             {
                 id = a.id,
@@ -589,6 +590,40 @@ namespace WebCenter.Web.Controllers
 
             }).FirstOrDefault();
 
+            #region  bank 旧数据处理
+            if (reg.bank_id != null)
+            {
+                try
+                {
+                    var oldBank = Uof.Ibank_accountService.GetAll(b => b.id == reg.bank_id).FirstOrDefault();
+                    if (oldBank != null)
+                    {
+                        var newBank = new business_bank()
+                        {
+                            name = oldBank.bank,
+                            account = oldBank.account,
+                            address = null,
+                            customer_id = oldBank.customer_id.Value,
+                            is_audit = 0,
+                            source = "reg_abroad",
+                            source_id = reg.id,
+                        };
+                        Uof.Ibusiness_bankService.AddEntity(newBank);
+
+                        var oldReg = Uof.Ireg_abroadService.GetAll(a => a.id == id).FirstOrDefault();
+                        oldReg.bank_id = null;
+                        Uof.Ireg_abroadService.UpdateEntity(oldReg);
+                    }
+                }
+                catch (Exception)
+                {
+                    
+                }
+                
+            }
+            #endregion
+
+
             var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "reg_abroad").Select(i => new
             {
                 id = i.id,
@@ -645,13 +680,17 @@ namespace WebCenter.Web.Controllers
                     reg_no = historyReocrd.reg_no
                 };
             }
+
+            var banks = Uof.Ibusiness_bankService.GetAll(b => b.source == "reg_abroad" && b.source_id == reg.id).ToList();
+
             return Json(new
             {
                 order = reg,
                 incomes = incomes,
                 shareholderList = shareholderList,
                 directorList = directorList,
-                historyReocrd = _historyReocrd
+                historyReocrd = _historyReocrd,
+                banks = banks,
             }, JsonRequestBehavior.AllowGet);
         }
 

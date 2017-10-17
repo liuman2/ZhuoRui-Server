@@ -63,5 +63,17 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
+    
+    
+    
+        public Nullable<int> is_audit { get; set; }
+    
+    
+    
+        public int audit_id { get; set; }
+    
+    
+    
+        public string account { get; set; }
     }
 }
