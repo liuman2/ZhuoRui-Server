@@ -203,3 +203,33 @@ CREATE TABLE `business_bank` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `sequence` VALUES ('business_bank', '1');
+
+
+-- 2017-10-23
+DROP TABLE IF EXISTS `open_bank`;
+CREATE TABLE `open_bank` (
+  `id` int(11) NOT NULL,
+  `name` varchar(120) DEFAULT NULL COMMENT '银行名称',
+  `area` varchar(20) DEFAULT NULL COMMENT '所属区域',
+  `address` varchar(300) DEFAULT NULL COMMENT '银行地址',
+  `date_created` datetime DEFAULT CURRENT_TIMESTAMP,
+  `memo` varchar(300) DEFAULT NULL COMMENT '备注',
+  `date_updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `sequence` VALUES ('open_bank', '1');
+
+DROP TABLE IF EXISTS `bank_contact`;
+CREATE TABLE `bank_contact` (
+  `id` int(11) NOT NULL,
+  `bank_id` int(11) NOT NULL,
+  `name` varchar(120) DEFAULT NULL COMMENT '客户经理',
+  `tel` varchar(20) DEFAULT NULL,
+  `email` varchar(120) DEFAULT NULL,
+  `memo` varchar(200) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `sequence` VALUES ('bank_contact', '1');
+
+call AddColumnUnlessExists(Database(), 'business_bank', 'bank_id', 'int(11) DEFAULT NULL COMMENT "开户行ID"');
+ALTER TABLE business_bank ADD CONSTRAINT fk_open_bank_bank_id FOREIGN KEY (bank_id) REFERENCES open_bank(id);

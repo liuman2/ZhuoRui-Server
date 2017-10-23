@@ -269,6 +269,17 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
+        <EntityType Name="bank_contact">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="bank_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="120" />
+          <Property Name="tel" Type="varchar" MaxLength="20" />
+          <Property Name="email" Type="varchar" MaxLength="120" />
+          <Property Name="memo" Type="varchar" MaxLength="200" />
+        </EntityType>
         <EntityType Name="banks">
           <Key>
             <PropertyRef Name="id" />
@@ -299,6 +310,7 @@
           <Property Name="is_audit" Type="int" />
           <Property Name="audit_id" Type="int" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="bank_id" Type="int" />
         </EntityType>
         <EntityType Name="contact">
           <Key>
@@ -627,6 +639,18 @@
           <Property Name="content" Type="text" />
           <Property Name="status" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
+        <EntityType Name="open_bank">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="120" />
+          <Property Name="area" Type="varchar" MaxLength="20" />
+          <Property Name="address" Type="varchar" MaxLength="300" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="memo" Type="varchar" MaxLength="300" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="operation">
@@ -1873,6 +1897,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_open_bank_bank_id">
+          <End Role="open_bank" Type="Self.open_bank" Multiplicity="0..1" />
+          <End Role="business_bank" Type="Self.business_bank" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="open_bank">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="business_bank">
+              <PropertyRef Name="bank_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_patent_assistant_id">
           <End Role="member" Type="Self.member" Multiplicity="0..1" />
           <End Role="patent" Type="Self.patent" Multiplicity="*" />
@@ -2437,6 +2473,7 @@
           <EntitySet Name="audit" EntityType="Self.audit" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="audit_bank" EntityType="Self.audit_bank" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="bank_account" EntityType="Self.bank_account" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="bank_contact" EntityType="Self.bank_contact" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="banks" EntityType="Self.banks" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="business_bank" EntityType="Self.business_bank" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="contact" EntityType="Self.contact" Schema="zhuoruioa" store:Type="Tables" />
@@ -2456,6 +2493,7 @@
           <EntitySet Name="member" EntityType="Self.member" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="menu" EntityType="Self.menu" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="notice" EntityType="Self.notice" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="open_bank" EntityType="Self.open_bank" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="operation" EntityType="Self.operation" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="organization" EntityType="Self.organization" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="patent" EntityType="Self.patent" Schema="zhuoruioa" store:Type="Tables" />
@@ -2728,6 +2766,10 @@
           <AssociationSet Name="fk_mail_creator_id" Association="Self.fk_mail_creator_id">
             <End Role="member" EntitySet="member" />
             <End Role="mail" EntitySet="mail" />
+          </AssociationSet>
+          <AssociationSet Name="fk_open_bank_bank_id" Association="Self.fk_open_bank_bank_id">
+            <End Role="open_bank" EntitySet="open_bank" />
+            <End Role="business_bank" EntitySet="business_bank" />
           </AssociationSet>
           <AssociationSet Name="fk_patent_assistant_id" Association="Self.fk_patent_assistant_id">
             <End Role="member" EntitySet="member" />
@@ -3414,6 +3456,12 @@
             <End Role="reg_abroad" EntitySet="reg_abroad" />
           </AssociationSet>
           <EntitySet Name="business_bank" EntityType="DataCenter.Entities.business_bank" />
+          <EntitySet Name="bank_contact" EntityType="DataCenter.Entities.bank_contact" />
+          <EntitySet Name="open_bank" EntityType="DataCenter.Entities.open_bank" />
+          <AssociationSet Name="fk_open_bank_bank_id" Association="DataCenter.Entities.fk_open_bank_bank_id">
+            <End Role="open_bank" EntitySet="open_bank" />
+            <End Role="business_bank" EntitySet="business_bank" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -6080,7 +6128,45 @@
           <Property Name="is_audit" Type="Int32" />
           <Property Name="audit_id" Type="Int32" Nullable="false" />
           <Property Name="account" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="bank_id" Type="Int32" />
+          <NavigationProperty Name="open_bank" Relationship="DataCenter.Entities.fk_open_bank_bank_id" FromRole="business_bank" ToRole="open_bank" />
         </EntityType>
+        <EntityType Name="bank_contact">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="bank_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="tel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="memo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="open_bank">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="area" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="memo" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="date_updated" Type="DateTime" />
+          <NavigationProperty Name="business_bank" Relationship="DataCenter.Entities.fk_open_bank_bank_id" FromRole="open_bank" ToRole="business_bank" />
+        </EntityType>
+        <Association Name="fk_open_bank_bank_id">
+          <End Type="DataCenter.Entities.open_bank" Role="open_bank" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.business_bank" Role="business_bank" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="open_bank">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="business_bank">
+              <PropertyRef Name="bank_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -7232,6 +7318,7 @@
           <EntitySetMapping Name="business_bank">
             <EntityTypeMapping TypeName="DataCenter.Entities.business_bank">
               <MappingFragment StoreEntitySet="business_bank">
+                <ScalarProperty Name="bank_id" ColumnName="bank_id" />
                 <ScalarProperty Name="account" ColumnName="account" />
                 <ScalarProperty Name="audit_id" ColumnName="audit_id" />
                 <ScalarProperty Name="is_audit" ColumnName="is_audit" />
@@ -7246,6 +7333,31 @@
                 <ScalarProperty Name="source_id" ColumnName="source_id" />
                 <ScalarProperty Name="source" ColumnName="source" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="bank_contact">
+            <EntityTypeMapping TypeName="DataCenter.Entities.bank_contact">
+              <MappingFragment StoreEntitySet="bank_contact">
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="tel" ColumnName="tel" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="bank_id" ColumnName="bank_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="open_bank">
+            <EntityTypeMapping TypeName="DataCenter.Entities.open_bank">
+              <MappingFragment StoreEntitySet="open_bank">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="area" ColumnName="area" />
+                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

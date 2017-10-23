@@ -2344,7 +2344,13 @@ namespace WebCenter.Web.Controllers
 
             if (abroads.Count() > 0)
             {
-                items.AddRange(abroads);
+                foreach (var item in abroads)
+                {
+                    var count = Uof.Ibusiness_bankService.GetAll(b => b.source_id == item.id && b.source == "reg_abroad").Count();
+                    item.bank_count = count;
+                }
+
+                items.AddRange(abroads);                
             }
             #endregion
 

@@ -54,6 +54,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface Ibank_contactRepository :IBaseRepository<bank_contact>
+    {         
+    }
+	
     public partial interface Ibusiness_bankRepository :IBaseRepository<business_bank>
     {         
     }
@@ -123,6 +127,10 @@ namespace WebCenter.IDAL
     }
 	
     public partial interface InoticeRepository :IBaseRepository<notice>
+    {         
+    }
+	
+    public partial interface Iopen_bankRepository :IBaseRepository<open_bank>
     {         
     }
 	

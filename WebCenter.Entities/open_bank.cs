@@ -12,25 +12,18 @@ namespace WebCenter.Entities
     using System;
     using System.Collections.Generic;
     
-    public partial class business_bank:BaseModel
+    public partial class open_bank:BaseModel
     {
+        public open_bank()
+        {
+            this.business_bank = new HashSet<business_bank>();
+        }
     
     
     
-    [EntityPrimKey("business_bank")]
+    
+    [EntityPrimKey("open_bank")]
         public int id { get; set; }
-    
-    
-    
-        public int customer_id { get; set; }
-    
-    
-    
-        public string source { get; set; }
-    
-    
-    
-        public int source_id { get; set; }
     
     
     
@@ -38,19 +31,11 @@ namespace WebCenter.Entities
     
     
     
+        public string area { get; set; }
+    
+    
+    
         public string address { get; set; }
-    
-    
-    
-        public string manager { get; set; }
-    
-    
-    
-        public string tel { get; set; }
-    
-    
-    
-        public Nullable<System.DateTime> date_setup { get; set; }
     
     
     
@@ -64,22 +49,6 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
-    
-    
-        public Nullable<int> is_audit { get; set; }
-    
-    
-    
-        public int audit_id { get; set; }
-    
-    
-    
-        public string account { get; set; }
-    
-    
-    
-        public Nullable<int> bank_id { get; set; }
-    
-        public virtual open_bank open_bank { get; set; }
+        public virtual ICollection<business_bank> business_bank { get; set; }
     }
 }

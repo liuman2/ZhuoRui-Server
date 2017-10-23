@@ -133,6 +133,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class bank_contactService:BaseService<bank_contact>,Ibank_contactService
+    {   
+        public bank_contactService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.bank_contactRepository;
+        }  
+    }
+	
 	public partial class business_bankService:BaseService<business_bank>,Ibusiness_bankService
     {   
         public business_bankService()
@@ -310,6 +320,16 @@ namespace WebCenter.Services
         public override void SetCurrentRepository()
         {
             CurrentRepository = _dbSession.noticeRepository;
+        }  
+    }
+	
+	public partial class open_bankService:BaseService<open_bank>,Iopen_bankService
+    {   
+        public open_bankService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.open_bankRepository;
         }  
     }
 	

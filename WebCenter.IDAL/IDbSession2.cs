@@ -49,6 +49,9 @@ namespace WebCenter.IDAL
 		IDAL.Ibank_accountRepository bank_accountRepository { get; }
 	  
 
+		IDAL.Ibank_contactRepository bank_contactRepository { get; }
+	  
+
 		IDAL.Ibusiness_bankRepository business_bankRepository { get; }
 	  
 
@@ -101,6 +104,9 @@ namespace WebCenter.IDAL
 	  
 
 		IDAL.InoticeRepository noticeRepository { get; }
+	  
+
+		IDAL.Iopen_bankRepository open_bankRepository { get; }
 	  
 
 		IDAL.IoperationRepository operationRepository { get; }

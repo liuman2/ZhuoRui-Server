@@ -67,6 +67,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class bank_contactRepository :BaseRepository<bank_contact>,Ibank_contactRepository
+    {
+         
+    }
+	
 	public partial class business_bankRepository :BaseRepository<business_bank>,Ibusiness_bankRepository
     {
          
@@ -153,6 +158,11 @@ namespace WebCenter.DAL
     }
 	
 	public partial class noticeRepository :BaseRepository<notice>,InoticeRepository
+    {
+         
+    }
+	
+	public partial class open_bankRepository :BaseRepository<open_bank>,Iopen_bankRepository
     {
          
     }

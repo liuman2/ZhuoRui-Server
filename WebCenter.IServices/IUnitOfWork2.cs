@@ -32,6 +32,8 @@ namespace WebCenter.IServices
 	
 	  Ibank_accountService Ibank_accountService{get;set;} 
 	
+	  Ibank_contactService Ibank_contactService{get;set;} 
+	
 	  Ibusiness_bankService Ibusiness_bankService{get;set;} 
 	
 	  IcontactService IcontactService{get;set;} 
@@ -67,6 +69,8 @@ namespace WebCenter.IServices
 	  ImenuService ImenuService{get;set;} 
 	
 	  InoticeService InoticeService{get;set;} 
+	
+	  Iopen_bankService Iopen_bankService{get;set;} 
 	
 	  IoperationService IoperationService{get;set;} 
 	

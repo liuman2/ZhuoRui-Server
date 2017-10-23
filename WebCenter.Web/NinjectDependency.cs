@@ -41,6 +41,8 @@ private void AutoAddBinds()
 	
 	   kernel.Bind<Ibank_accountService>().To<bank_accountService>().InRequestScope();
 	
+	   kernel.Bind<Ibank_contactService>().To<bank_contactService>().InRequestScope();
+	
 	   kernel.Bind<Ibusiness_bankService>().To<business_bankService>().InRequestScope();
 	
 	   kernel.Bind<IcontactService>().To<contactService>().InRequestScope();
@@ -76,6 +78,8 @@ private void AutoAddBinds()
 	   kernel.Bind<ImenuService>().To<menuService>().InRequestScope();
 	
 	   kernel.Bind<InoticeService>().To<noticeService>().InRequestScope();
+	
+	   kernel.Bind<Iopen_bankService>().To<open_bankService>().InRequestScope();
 	
 	   kernel.Bind<IoperationService>().To<operationService>().InRequestScope();
 	

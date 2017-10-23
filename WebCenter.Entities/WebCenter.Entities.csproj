@@ -110,6 +110,9 @@
     <Compile Include="bank_account.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="bank_contact.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="BaseModel.cs" />
     <Compile Include="business_bank.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
@@ -179,6 +182,9 @@
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
     <Compile Include="notice.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
+    <Compile Include="open_bank.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
     <Compile Include="operation.cs">
