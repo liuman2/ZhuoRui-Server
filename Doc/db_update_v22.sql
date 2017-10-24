@@ -233,3 +233,5 @@ INSERT INTO `sequence` VALUES ('bank_contact', '1');
 
 call AddColumnUnlessExists(Database(), 'business_bank', 'bank_id', 'int(11) DEFAULT NULL COMMENT "开户行ID"');
 ALTER TABLE business_bank ADD CONSTRAINT fk_open_bank_bank_id FOREIGN KEY (bank_id) REFERENCES open_bank(id);
+-- 2017-10-24
+INSERT INTO `menu` VALUES ('76', '1', 'open_bank', 'fa fa-money', '银行列表', '4');
