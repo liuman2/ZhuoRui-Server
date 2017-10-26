@@ -1,14 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using WebCenter.IServices;
-using Common;
-using System.Web.Security;
-using System.Collections.Generic;
 using WebCenter.Entities;
-using System.IO;
-using System.Drawing;
-using System.Web;
+using Common;
+using System.Linq.Expressions;
+using System;
+using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace WebCenter.Web.Controllers
 {
@@ -139,7 +137,41 @@ namespace WebCenter.Web.Controllers
             return SuccessResult;
         }
 
+        public ActionResult Search(int index = 1, int size = 10, string name = "")
+        {
 
+            size = 10;
+            var items = Uof.Iopen_bankService
+                .GetAll(b=>b.name.ToLower().Contains(name.ToLower()))
+                .OrderByDescending(item => item.id)
+                .ToPagedList(index, size).ToList();
+
+
+            var totalRecord = Uof.Iopen_bankService
+                .GetAll(b => b.name.ToLower().Contains(name.ToLower()))
+                .Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + size - 1) / size;
+            }
+            var page = new
+            {
+                current_index = index,
+                current_size = size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+                        
+            var result = new
+            {
+                page = page,
+                items = items
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
     }
 }
