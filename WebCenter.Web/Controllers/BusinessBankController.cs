@@ -173,5 +173,27 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Get(int id)
+        {
+            var dbBank = Uof.Iopen_bankService.GetAll(o => o.id == id).Select(o => new
+            {
+                id = o.id,
+                name = o.name,
+                area = o.area,
+                address = o.address,
+                memo = o.memo,
+            }).FirstOrDefault();
+
+            var contacts = Uof.Ibank_contactService.GetAll(b => b.bank_id == dbBank.id).Select(b => new
+            {
+                id = b.id,
+                name = b.name,
+                tel = b.tel,
+                email = b.email,
+                memo = b.memo,
+            }).ToList();
+
+            return Json(new { bank = dbBank, contacts = contacts }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
