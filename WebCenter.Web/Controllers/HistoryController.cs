@@ -542,6 +542,8 @@ namespace WebCenter.Web.Controllers
 
             }).FirstOrDefault();
 
+            reg.order_code = GetOrderCode(reg.source, reg.source_id.Value);
+
             if (reg.area_id != null)
             {
                 var dbArea = Uof.IareaService.GetById(reg.area_id.Value);
@@ -637,8 +639,8 @@ namespace WebCenter.Web.Controllers
                     reg.area_name = dbArea.name;
                 }                
             }
-            
 
+            reg.order_code = GetOrderCode(reg.source, reg.source_id.Value);
 
             var shareholderList =  Uof.Ihistory_shareholderService.GetAll(s => s.history_id == reg.id && s.type == "股东").ToList();
             var directoryList = Uof.Ihistory_shareholderService.GetAll(s => s.history_id == reg.id && s.type == "董事").ToList();

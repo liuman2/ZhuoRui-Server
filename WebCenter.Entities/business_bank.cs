@@ -80,6 +80,14 @@ namespace WebCenter.Entities
     
         public Nullable<int> bank_id { get; set; }
     
+    
+    
+        public string email { get; set; }
+    
+    
+    
+        public Nullable<int> manager_id { get; set; }
+    
         public virtual open_bank open_bank { get; set; }
     }
 }

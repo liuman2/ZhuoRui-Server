@@ -682,6 +682,25 @@ namespace WebCenter.Web.Controllers
             }
 
             var banks = Uof.Ibusiness_bankService.GetAll(b => b.source == "reg_abroad" && b.source_id == reg.id).ToList();
+            if (banks.Count > 0)
+            {
+                var openbanks = Uof.Iopen_bankService.GetAll().ToList();
+                var contacts = Uof.Ibank_contactService.GetAll().ToList();
+                foreach (var item in banks)
+                {
+                    var b = openbanks.Where(o => o.id == item.bank_id).FirstOrDefault();
+                    if (b!= null)
+                    {
+                        item.name = b.name;
+                    }
+
+                    var c = contacts.Where(o => o.id == item.manager_id).FirstOrDefault();
+                    if (c != null)
+                    {
+                        item.manager = c.name;
+                    }
+                }
+            }
 
             return Json(new
             {

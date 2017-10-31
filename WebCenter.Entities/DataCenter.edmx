@@ -311,6 +311,8 @@
           <Property Name="audit_id" Type="int" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="bank_id" Type="int" />
+          <Property Name="email" Type="varchar" MaxLength="120" />
+          <Property Name="manager_id" Type="int" />
         </EntityType>
         <EntityType Name="contact">
           <Key>
@@ -6130,6 +6132,8 @@
           <Property Name="account" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
           <Property Name="bank_id" Type="Int32" />
           <NavigationProperty Name="open_bank" Relationship="DataCenter.Entities.fk_open_bank_bank_id" FromRole="business_bank" ToRole="open_bank" />
+          <Property Name="email" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="manager_id" Type="Int32" />
         </EntityType>
         <EntityType Name="bank_contact">
           <Key>
@@ -7318,6 +7322,8 @@
           <EntitySetMapping Name="business_bank">
             <EntityTypeMapping TypeName="DataCenter.Entities.business_bank">
               <MappingFragment StoreEntitySet="business_bank">
+                <ScalarProperty Name="manager_id" ColumnName="manager_id" />
+                <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="bank_id" ColumnName="bank_id" />
                 <ScalarProperty Name="account" ColumnName="account" />
                 <ScalarProperty Name="audit_id" ColumnName="audit_id" />

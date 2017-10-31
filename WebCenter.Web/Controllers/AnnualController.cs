@@ -802,6 +802,7 @@ namespace WebCenter.Web.Controllers
                 id = a.id,
                 code = a.code,
                 customer_id = a.customer_id,
+                order_id = a.order_id,
                 customer_name = a.customer.name,
                 customer_code = a.customer.code,
                 type = a.type,
@@ -829,6 +830,8 @@ namespace WebCenter.Web.Controllers
                 review_status = a.review_status
 
             }).FirstOrDefault();
+
+            annua.order_code = GetOrderCode(annua.type, annua.order_id.Value);
 
             switch (annua.type)
             {
@@ -1082,6 +1085,7 @@ namespace WebCenter.Web.Controllers
                 id = a.id,
                 code = a.code,
                 customer_id = a.customer_id,
+                order_id = a.order_id,
                 customer_name = a.customer.name,
                 customer_code = a.customer.code,
                 type = a.type,
@@ -1114,6 +1118,8 @@ namespace WebCenter.Web.Controllers
                 submit_review_moment = a.submit_review_moment
 
             }).FirstOrDefault();
+
+            annua.order_code = GetOrderCode(annua.type, annua.order_id.Value);
 
             switch (annua.type)
             {

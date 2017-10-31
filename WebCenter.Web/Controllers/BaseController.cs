@@ -493,5 +493,29 @@ namespace WebCenter.Web.Controllers
                 }
             }
         } 
+
+        public string GetOrderCode(string source, int id)
+        {
+            var code = "";
+            switch (source)
+            {
+                case "reg_abroad":
+                    code = Uof.Ireg_abroadService.GetAll(o => o.id == id).Select(o => o.code).FirstOrDefault();
+                    break;
+                case "reg_internal":
+                    code = Uof.Ireg_internalService.GetAll(o => o.id == id).Select(o => o.code).FirstOrDefault();
+                    break;
+                case "trademark":
+                    code = Uof.ItrademarkService.GetAll(o => o.id == id).Select(o => o.code).FirstOrDefault();
+                    break;
+                case "patent":
+                    code = Uof.IpatentService.GetAll(o => o.id == id).Select(o => o.code).FirstOrDefault();
+                    break;
+                default:
+                    break;
+            }
+
+            return code;
+        }
     }
 }

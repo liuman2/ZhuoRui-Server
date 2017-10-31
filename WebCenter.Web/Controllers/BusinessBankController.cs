@@ -195,5 +195,24 @@ namespace WebCenter.Web.Controllers
 
             return Json(new { bank = dbBank, contacts = contacts }, JsonRequestBehavior.AllowGet);
         }
+
+
+        public ActionResult All()
+        {
+            var items = Uof.Iopen_bankService
+                .GetAll()
+                .OrderByDescending(item => item.id)
+                .ToList();         
+
+            return Json(items, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetContactByBankId(int bankId)
+        {
+            var items = Uof.Ibank_contactService.GetAll(b => b.bank_id == bankId).ToList();
+
+            return Json(items, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
