@@ -297,7 +297,7 @@ namespace WebCenter.Web.Controllers
             #region 操作
             var oldOpers = Uof.Irole_operationService.GetAll(o => o.role_id == roleId).ToList();
             var addOpers = new List<role_operation>();
-            if (addOpers.Count() == 0)
+            if (oldOpers.Count() == 0)
             {
                 foreach (var item in operIds)
                 {
