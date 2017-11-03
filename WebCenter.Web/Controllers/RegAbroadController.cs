@@ -117,6 +117,11 @@ namespace WebCenter.Web.Controllers
                     // 买入
                     statusQuery = c => (c.status == 5);
                 }
+                else if (request.status == 11)
+                {
+                    // 除名
+                    statusQuery = c => (c.order_status == 6);
+                }
                 else
                 {
                     statusQuery = c => (c.status == request.status.Value);

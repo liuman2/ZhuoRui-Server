@@ -238,3 +238,5 @@ INSERT INTO `menu` VALUES ('76', '1', 'open_bank', 'fa fa-money', '银行列表'
 
 call AddColumnUnlessExists(Database(), 'business_bank', 'email', 'varchar(120) DEFAULT NULL');
 call AddColumnUnlessExists(Database(), 'business_bank', 'manager_id', 'int(11) DEFAULT NULL');
+
+-- order_status 0-正常，1-转出，2-注销，3-暂不年检 4-待售 5-卖出  6-除名
