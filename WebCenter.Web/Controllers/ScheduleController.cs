@@ -370,6 +370,9 @@ namespace WebCenter.Web.Controllers
                 presenter_id = s.presenter_id,
                 presenter = "",
 
+                is_notify = s.is_notify,
+                dealt_date = s.dealt_date,
+
             }).ToList();
 
             if (list.Count == 0)
@@ -583,7 +586,58 @@ namespace WebCenter.Web.Controllers
             }
 
             return Json(dbSchedule, JsonRequestBehavior.AllowGet);
-        } 
+        }
+
+        public ActionResult SetDone(int id, bool isDone)
+        {
+            var dbSchedule = Uof.IscheduleService.GetAll(s => s.id == id).FirstOrDefault();
+            if (isDone)
+            {
+                dbSchedule.is_done = 1;
+            } else
+            {
+                dbSchedule.is_done = 0;
+            }
+
+            Uof.IscheduleService.UpdateEntity(dbSchedule);
+            return SuccessResult;
+        }
+
+        public ActionResult GetNotification()
+        {
+            var auth = HttpContext.User.Identity.IsAuthenticated;
+            if (!auth)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+            var strUserId = userId.ToString();
+
+            var items = Uof.IscheduleService
+                .GetAll(s => s.is_notify == 1 && s.is_done != 1 && s.start == DateTime.Today && s.created_id == userId)
+                .Select(s => new
+                {
+                    id = s.id,
+                    title = s.title,
+                    memo = s.memo,
+                    source = s.source,
+                    source_id = s.source_id,
+                    router = s.router,
+                    dealt_date = s.dealt_date,
+                    business_code = s.business_code
+                }).ToList();
+
+            return Json(items, JsonRequestBehavior.AllowGet);
+        }
 
         private bool CheckPeopleIn(string userId, ScheduleEntity entity)
         {

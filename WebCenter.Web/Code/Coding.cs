@@ -46,4 +46,21 @@ namespace WebCenter.Web
         public string order_code { get; set; }
         public int audit_id { get; set; }
     }
+
+    public class CustomerTimelineEntity
+    {
+        public int id { get; set; }
+        public Nullable<int> customer_id { get; set; }
+        public string title { get; set; }
+        public string content { get; set; }
+        public Nullable<sbyte> is_system { get; set; }
+        public Nullable<System.DateTime> date_business { get; set; }
+        public Nullable<System.DateTime> date_created { get; set; }
+        public Nullable<System.DateTime> date_updated { get; set; }
+        public Nullable<int> creator_id { get; set; }
+
+        public bool is_notify { get; set; }
+        public Nullable<System.DateTime> date_notify { get; set; }
+        public Nullable<System.DateTime> dealt_date { get; set; }        
+    }
 }

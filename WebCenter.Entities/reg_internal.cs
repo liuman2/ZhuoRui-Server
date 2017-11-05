@@ -270,13 +270,15 @@ namespace WebCenter.Entities
     
     
     
-        public Nullable<float> resell_price { get; set; }
-    
-    
-    
         public string resell_code { get; set; }
     
+    
+    
+        public Nullable<float> resell_price { get; set; }
+    
         public virtual bank_account bank_account { get; set; }
+        public virtual customer customer { get; set; }
+        public virtual customer customer1 { get; set; }
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }
@@ -285,7 +287,5 @@ namespace WebCenter.Entities
         public virtual member member5 { get; set; }
         public virtual member member6 { get; set; }
         public virtual member member7 { get; set; }
-        public virtual customer customer { get; set; }
-        public virtual customer customer1 { get; set; }
     }
 }

@@ -51,7 +51,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(customer_timeline t)
+        public ActionResult Add(CustomerTimelineEntity t)
         {
             var auth = HttpContext.User.Identity.IsAuthenticated;
             if (!auth)
@@ -76,7 +76,40 @@ namespace WebCenter.Web.Controllers
                 t.date_business = DateTime.Now;
             }
 
-            var r = Uof.Icustomer_timelineService.AddEntity(t);
+            var r = Uof.Icustomer_timelineService.AddEntity(new customer_timeline
+            {
+                customer_id = t.customer_id,
+                title = t.title,
+                content = t.content,
+                is_system = t.is_system,
+                creator_id = t.creator_id,
+                date_business = t.date_business,                
+            });
+
+            if (t.is_notify)
+            {
+                Uof.IscheduleService.AddEntity(new schedule
+                {
+                    all_day = 1,
+                    color = "#51b749",
+                    title = t.title,
+                    memo = t.content,
+                    start = t.date_notify,
+                    type = 0,
+                    created_id = userId,
+                    date_created = DateTime.Now,
+                    is_repeat = 0,
+                    is_done = 0,
+                    property = 2,
+                    is_notify = 1,
+                    source = "customer",
+                    source_id = t.customer_id,
+                    router = "customer",
+                    dealt_date = t.dealt_date,
+                    timeline_id = r.id,
+                });
+            }
+
             return SuccessResult;
         }
 

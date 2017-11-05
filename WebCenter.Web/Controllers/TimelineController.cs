@@ -98,7 +98,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Add(timeline timeLine)
+        public ActionResult Add(TimelineEntity timeLine)
         {
             var auth = HttpContext.User.Identity.IsAuthenticated;
             if (!auth)
@@ -115,7 +115,7 @@ namespace WebCenter.Web.Controllers
 
             var userId = 0;
             int.TryParse(arrs[0], out userId);
-
+            var businessCode = "";
             if (timeLine.source_name == "annual")
             {
                 var annualExam = Uof.Iannual_examService.GetAll(a => a.id == timeLine.source_id).Select(a => new
@@ -125,7 +125,7 @@ namespace WebCenter.Web.Controllers
                     order_id = a.order_id,
                     order_code = a.order_code
                 }).FirstOrDefault();
-
+                businessCode = annualExam.order_code;
                 if (annualExam != null)
                 {
                     timeLine.title = timeLine.title;
@@ -141,7 +141,17 @@ namespace WebCenter.Web.Controllers
                 timeLine.date_business = DateTime.Now;
             }
 
-            var r = Uof.ItimelineService.AddEntity(timeLine);
+            var r = Uof.ItimelineService.AddEntity(new timeline
+            {
+                source_id = timeLine.source_id,
+                content = timeLine.content,
+                creator_id = timeLine.creator_id,
+                date_business = timeLine.date_business,
+                is_system = timeLine.is_system,
+                log_type = timeLine.log_type,
+                source_name = timeLine.source_name,
+                title = timeLine.title,
+            });
 
             if (r != null && r.log_type == 1)
             {
@@ -154,6 +164,7 @@ namespace WebCenter.Web.Controllers
                         dbAbroad.date_wait = r.date_business;
 
                         Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
+                        businessCode = dbAbroad.code;
                         break;
                     case "reg_internal":
                         var dbInternal = Uof.Ireg_internalService.GetAll(a => a.id == r.source_id).FirstOrDefault();
@@ -161,6 +172,7 @@ namespace WebCenter.Web.Controllers
                         dbInternal.title_last = r.content;
                         dbInternal.date_wait = r.date_business;
                         Uof.Ireg_internalService.UpdateEntity(dbInternal);
+                        businessCode = dbInternal.code;
                         break;
                     case "trademark":
                         var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == r.source_id).FirstOrDefault();
@@ -168,6 +180,7 @@ namespace WebCenter.Web.Controllers
                         dbTrademark.title_last = r.content;
                         dbTrademark.date_wait = r.date_business;
                         Uof.ItrademarkService.UpdateEntity(dbTrademark);
+                        businessCode = dbTrademark.code;
                         break;
                     case "patent":
                         var dbPatent = Uof.IpatentService.GetAll(a => a.id == r.source_id).FirstOrDefault();
@@ -175,10 +188,36 @@ namespace WebCenter.Web.Controllers
                         dbPatent.title_last = r.content;
                         dbPatent.date_wait = r.date_business;
                         Uof.IpatentService.UpdateEntity(dbPatent);
+                        businessCode = dbPatent.code;
                         break;
                     default:
                         break;
                 }
+            }
+
+            if(r!= null && timeLine.is_notify)
+            {
+                Uof.IscheduleService.AddEntity(new schedule
+                {
+                    all_day = 1,
+                    color = "#51b749",
+                    title = timeLine.title,
+                    memo = timeLine.content,
+                    start = timeLine.date_notify,
+                    type = 0,
+                    created_id = userId,
+                    date_created = DateTime.Now,
+                    is_repeat = 0,
+                    is_done = 0,
+                    property = 2,
+                    is_notify = 1,
+                    source = timeLine.source_name,
+                    source_id = timeLine.source_id,
+                    router = r.log_type == 1 ? "annual_warning" : timeLine.source_name,
+                    dealt_date = timeLine.date_business,
+                    timeline_id = r.id,
+                    business_code = businessCode
+                });
             }
 
             return SuccessResult;

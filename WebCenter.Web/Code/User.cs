@@ -501,6 +501,27 @@ namespace WebCenter.Web
         public DateTime? repeat_end { get; set; }
         public List<int> dow { get; set; }
 
+        public int? is_notify { get; set; }
+        public Nullable<System.DateTime> dealt_date { get; set; }
+    }
+
+    public class TimelineEntity
+    {
+        public int id { get; set; }
+        public Nullable<int> source_id { get; set; }
+        public string source_name { get; set; }
+        public string title { get; set; }
+        public string content { get; set; }
+        public Nullable<System.DateTime> date_created { get; set; }
+        public Nullable<System.DateTime> date_updated { get; set; }
+        public Nullable<System.DateTime> date_business { get; set; }
+        public Nullable<sbyte> is_system { get; set; }
+        public Nullable<sbyte> log_type { get; set; }
+        public Nullable<int> creator_id { get; set; }
+
+        public bool is_notify { get; set; }
+        public Nullable<System.DateTime> date_notify { get; set; }
+        public Nullable<System.DateTime> dealt_date { get; set; }
     }
 
     public class ReceiptEntity

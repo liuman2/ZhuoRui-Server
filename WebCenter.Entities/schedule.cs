@@ -107,5 +107,33 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> repeat_end { get; set; }
+    
+    
+    
+        public Nullable<int> is_notify { get; set; }
+    
+    
+    
+        public string source { get; set; }
+    
+    
+    
+        public Nullable<int> source_id { get; set; }
+    
+    
+    
+        public string router { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> dealt_date { get; set; }
+    
+    
+    
+        public Nullable<int> timeline_id { get; set; }
+    
+    
+    
+        public string business_code { get; set; }
     }
 }
