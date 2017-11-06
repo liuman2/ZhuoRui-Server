@@ -1194,8 +1194,8 @@ namespace WebCenter.Web.Controllers
             var incomes = new
             {
                 items = list,
-                total = total,
-                balance = balance,
+                total = Math.Round(total, 2), //total,
+                balance = balance == null ? 0 : Math.Round(balance.Value, 2), //balance,
                 rate = annua.rate,
                 amount = (float)Math.Round((double)(annua.amount_transaction * annua.rate ?? 0), 2),
 

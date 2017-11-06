@@ -434,10 +434,10 @@
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="logoff" Type="int" />
           <Property Name="logoff_memo" Type="varchar" MaxLength="100" />
+          <Property Name="change_owner" Type="int" />
           <Property Name="area_id" Type="int" />
           <Property Name="resell_id" Type="int" />
           <Property Name="resell_price" Type="float" />
-          <Property Name="change_owner" Type="int" />
         </EntityType>
         <EntityType Name="history_shareholder">
           <Key>
@@ -724,8 +724,8 @@
           <Property Name="title_last" Type="varchar" MaxLength="100" />
           <Property Name="trader_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
-          <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="resell_price" Type="float" />
+          <Property Name="resell_code" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="position">
           <Key>
@@ -894,8 +894,8 @@
           <Property Name="title_last" Type="varchar" MaxLength="100" />
           <Property Name="trader_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
-          <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="resell_price" Type="float" />
+          <Property Name="resell_code" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="reg_internal_history">
           <Key>
@@ -988,12 +988,12 @@
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="all_day" Type="tinyint" />
           <Property Name="is_repeat" Type="tinyint" />
+          <Property Name="repeat_type" Type="tinyint" />
+          <Property Name="repeat_dow" Type="varchar" MaxLength="20" />
           <Property Name="is_done" Type="tinyint" />
           <Property Name="property" Type="tinyint" />
           <Property Name="meeting_type" Type="varchar" MaxLength="20" />
           <Property Name="presenter_id" Type="int" />
-          <Property Name="repeat_type" Type="tinyint" />
-          <Property Name="repeat_dow" Type="varchar" MaxLength="20" />
           <Property Name="repeat_end" Type="datetime" Precision="0" />
           <Property Name="is_notify" Type="int" />
           <Property Name="source" Type="varchar" MaxLength="50" />
@@ -1133,8 +1133,8 @@
           <Property Name="title_last" Type="varchar" MaxLength="100" />
           <Property Name="trader_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
-          <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="resell_price" Type="float" />
+          <Property Name="resell_code" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="waitdeal">
           <Key>

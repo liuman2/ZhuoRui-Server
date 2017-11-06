@@ -542,8 +542,8 @@ namespace WebCenter.Web.Controllers
             var incomes = new
             {
                 items = list,
-                total = total,
-                balance = balance,
+                total = Math.Round(total, 2), //total,
+                balance = balance == null ? 0 : Math.Round(balance.Value, 2), //balance,
                 rate = dbTrademar.rate,
                 amount = (float)Math.Round((double)(dbTrademar.amount_transaction * dbTrademar.rate ?? 0), 2),
 
