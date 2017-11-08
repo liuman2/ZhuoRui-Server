@@ -59,7 +59,7 @@ namespace WebCenter.Web.Controllers
             return SuccessResult;
         }
 
-        public ActionResult Warning(int? customer_id, int? waiter_id, int? salesman_id, string name, string area)
+        public ActionResult Warning(int? customer_id, int? waiter_id, int? salesman_id, string name, string area, int index = 1)
         {
             waiter_id = null;
             salesman_id = null;
@@ -489,11 +489,28 @@ namespace WebCenter.Web.Controllers
                 }
             }
 
-            items = items.OrderBy(i => i.setup_day).ToList();
+            var size = 50;
+            //items = items.OrderBy(i => i.setup_day).ToList();
+            var list = items.OrderBy(item => item.setup_day).Skip((index - 1) * size).Take(size).ToList();
+
+            var totalRecord = items.Count();
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + size - 1) / size;
+            }
+            var page = new
+            {
+                current_index = index,
+                current_size = size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
 
             var result = new
             {
-                items = items
+                page = page,
+                items = list
             };
 
             return Json(result, JsonRequestBehavior.AllowGet);

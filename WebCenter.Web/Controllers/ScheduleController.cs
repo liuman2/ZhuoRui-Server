@@ -623,7 +623,7 @@ namespace WebCenter.Web.Controllers
             var strUserId = userId.ToString();
 
             var items = Uof.IscheduleService
-                .GetAll(s => s.is_notify == 1 && s.is_done != 1 && s.start == DateTime.Today && s.created_id == userId)
+                .GetAll(s => s.is_notify == 1 && s.is_done != 1 && s.start <= DateTime.Today && s.created_id == userId)
                 .Select(s => new
                 {
                     id = s.id,
