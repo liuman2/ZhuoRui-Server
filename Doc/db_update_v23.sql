@@ -7,3 +7,6 @@ call AddColumnUnlessExists(Database(), 'schedule', 'dealt_date', 'datetime DEFAU
 call AddColumnUnlessExists(Database(), 'schedule', 'timeline_id', 'int(11) DEFAULT NULL');
 
 call AddColumnUnlessExists(Database(), 'schedule', 'business_code', 'varchar(20) DEFAULT NULL COMMENT "档案号"');
+
+
+call AddColumnUnlessExists(Database(), 'annual_exam', 'start_annual', 'int(11) DEFAULT NULL COMMENT "年检年份"');

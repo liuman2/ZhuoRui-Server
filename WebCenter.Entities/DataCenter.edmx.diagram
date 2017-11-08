@@ -125,30 +125,17 @@
         <EntityTypeShape EntityType="DataCenter.Entities.open_bank" Width="1.5" PointX="6.125" PointY="23.625" />
         <AssociationConnector Association="DataCenter.Entities.fk_open_bank_bank_id" />
         <EntityTypeShape EntityType="DataCenter.Entities.patent" Width="1.5" PointX="15.875" PointY="32.75" />
-        <EntityTypeShape EntityType="DataCenter.Entities.reg_abroad" Width="1.5" PointX="26.125" PointY="25.875" />
         <EntityTypeShape EntityType="DataCenter.Entities.reg_internal" Width="1.5" PointX="21.125" PointY="30.125" />
         <EntityTypeShape EntityType="DataCenter.Entities.trademark" Width="1.5" PointX="23.875" PointY="37.125" />
-        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_bank" />
         <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_bank" />
-        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.fk_patent_trader_id" />
-        <AssociationConnector Association="DataCenter.Entities.fk_reg_abroad_trader_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_reg_internal_trader_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_trademark_trader_id" />
         <AssociationConnector Association="DataCenter.Entities.patent_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.reg_internal_ibfk_customer" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_customer" />
-        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_creator" />
-        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_finance_reviewer" />
-        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_manager" />
-        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_outworker" />
-        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_salesman" />
-        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_submit_reviewer" />
-        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_waiter" />
-        <AssociationConnector Association="DataCenter.Entities.fk_abroad_assistant_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_internal_assistant_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_patent_assistant_id" />
-        <AssociationConnector Association="DataCenter.Entities.fk_reg_abroad_annual_owner" />
         <AssociationConnector Association="DataCenter.Entities.fk_trademark_assistant_id" />
         <AssociationConnector Association="DataCenter.Entities.patent_ibfk_creator" />
         <AssociationConnector Association="DataCenter.Entities.patent_ibfk_finance_reviewer" />
@@ -169,6 +156,19 @@
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_salesman" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_submit_reviewer" />
         <AssociationConnector Association="DataCenter.Entities.trademark_ibfk_waiter" />
+        <EntityTypeShape EntityType="DataCenter.Entities.reg_abroad" Width="1.5" PointX="26.125" PointY="25.875" />
+        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_bank" />
+        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_customer" />
+        <AssociationConnector Association="DataCenter.Entities.fk_reg_abroad_trader_id" />
+        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_creator" />
+        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_finance_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_manager" />
+        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_outworker" />
+        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_salesman" />
+        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_submit_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_waiter" />
+        <AssociationConnector Association="DataCenter.Entities.fk_abroad_assistant_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_reg_abroad_annual_owner" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

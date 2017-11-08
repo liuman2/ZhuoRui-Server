@@ -573,6 +573,7 @@ namespace WebCenter.Web
         public string submit_review_moment { get; set; }
 
         public string order_owner { get; set; }
+        public int? start_annual { get; set; }
     }
 
     public class WaitNotify

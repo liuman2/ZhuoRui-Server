@@ -807,6 +807,7 @@ namespace WebCenter.Web.Controllers
 
             dbReg.annual_owner = reg.annual_owner;
 
+
             if (reg.is_open_bank == 0)
             {
                 dbReg.bank_id = null;

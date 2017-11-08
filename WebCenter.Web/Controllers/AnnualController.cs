@@ -177,6 +177,9 @@ namespace WebCenter.Web.Controllers
                  //(a.annual_date == null && (a.date_setup.Value.AddMonths(12 - abroadMonth) <= DateTime.Today || (new DateTime(DateTime.Now.Year, a.date_setup.Value.Month, 1)).AddMonths(-abroadMonth) <= DateTime.Today)) ||
                 (a.annual_date == null && (a.date_setup.Value.AddMonths(12 - abroadMonth) <= DateTime.Today)) ||
                 (a.annual_date != null && a.annual_date.Value.AddMonths(12 - abroadMonth) <= DateTime.Today)).ToList();
+
+                //var _newList = newList.Where(a => (a.start_annual != null && a.start_annual <= nowYear) || a.start_annual == null).ToList();
+
                 items.AddRange(newList);
             }
             #endregion
@@ -644,10 +647,10 @@ namespace WebCenter.Web.Controllers
                 case "reg_abroad":
                     var dbRegAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
 
-                    dbRegAbroad.annual_year = DateTime.Now.Year;
+                    dbRegAbroad.annual_year = exam.start_annual ?? DateTime.Now.Year;
                     if (dbRegAbroad.date_setup != null)
                     {
-                        dbRegAbroad.annual_date = new DateTime(DateTime.Today.Year, dbRegAbroad.date_setup.Value.Month, dbRegAbroad.date_setup.Value.Day);
+                        dbRegAbroad.annual_date = new DateTime(exam.start_annual ?? DateTime.Today.Year, dbRegAbroad.date_setup.Value.Month, dbRegAbroad.date_setup.Value.Day);
                     } else
                     {
                         dbRegAbroad.annual_date = DateTime.Today;
@@ -662,11 +665,11 @@ namespace WebCenter.Web.Controllers
                     break;
                 case "reg_internal":
                     var dbRegInternal = Uof.Ireg_internalService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
-                    dbRegInternal.annual_year = DateTime.Now.Year;
+                    dbRegInternal.annual_year = exam.start_annual ?? DateTime.Now.Year;
 
                     if (dbRegInternal.date_setup != null)
                     {
-                        dbRegInternal.annual_date = new DateTime(DateTime.Today.Year, dbRegInternal.date_setup.Value.Month, dbRegInternal.date_setup.Value.Day);
+                        dbRegInternal.annual_date = new DateTime(exam.start_annual ?? DateTime.Today.Year, dbRegInternal.date_setup.Value.Month, dbRegInternal.date_setup.Value.Day);
                     }
                     else
                     {
@@ -677,16 +680,16 @@ namespace WebCenter.Web.Controllers
                     break;
                 case "audit":
                     var dbAudit = Uof.IauditService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
-                    dbAudit.annual_year = DateTime.Now.Year;
+                    dbAudit.annual_year = exam.start_annual ?? DateTime.Now.Year;
                     Uof.IauditService.UpdateEntity(dbAudit);
                     break;
                 case "patent":
                     var dbPatent = Uof.IpatentService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
-                    dbPatent.annual_year = DateTime.Now.Year;
+                    dbPatent.annual_year = exam.start_annual ?? DateTime.Now.Year;
                     dbPatent.annual_date = DateTime.Today;
                     if (dbPatent.date_regit != null)
                     {
-                        dbPatent.annual_date = new DateTime(DateTime.Today.Year, dbPatent.date_regit.Value.Month, dbPatent.date_regit.Value.Day);
+                        dbPatent.annual_date = new DateTime(exam.start_annual ?? DateTime.Now.Year, dbPatent.date_regit.Value.Month, dbPatent.date_regit.Value.Day);
                     }
                     else
                     {
@@ -697,12 +700,12 @@ namespace WebCenter.Web.Controllers
                     break;
                 case "trademark":
                     var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
-                    dbTrademark.annual_year = DateTime.Now.Year;
+                    dbTrademark.annual_year = exam.start_annual ?? DateTime.Now.Year;
                     //dbTrademark.annual_date = DateTime.Today;
 
                     if (dbTrademark.date_regit != null)
                     {
-                        dbTrademark.annual_date = new DateTime(DateTime.Today.Year, dbTrademark.date_regit.Value.Month, dbTrademark.date_regit.Value.Day);
+                        dbTrademark.annual_date = new DateTime(exam.start_annual ?? DateTime.Now.Year, dbTrademark.date_regit.Value.Month, dbTrademark.date_regit.Value.Day);
                     }
                     else
                     {
@@ -721,7 +724,7 @@ namespace WebCenter.Web.Controllers
                 source_name = exam.type,
                 title = "新建年检",
                 is_system = 1,
-                content = string.Format("{0}新建了{1}年度年检订单, 年检单号{2}", arrs[3], DateTime.Now.Year, newExam.code)
+                content = string.Format("{0}新建了{1}年度年检订单, 年检单号{2}", arrs[3], exam.start_annual ?? DateTime.Now.Year, newExam.code)
             });
 
             return Json(new { id = newExam.id }, JsonRequestBehavior.AllowGet);
@@ -1115,7 +1118,8 @@ namespace WebCenter.Web.Controllers
                 status = a.status,
                 review_status = a.review_status,
                 finance_review_moment = a.finance_review_moment,
-                submit_review_moment = a.submit_review_moment
+                submit_review_moment = a.submit_review_moment,
+                start_annual = a.start_annual,
 
             }).FirstOrDefault();
 
