@@ -634,4 +634,16 @@ namespace WebCenter.Web
         public string salesman { get; set; }
         public string change_owner_name { get; set; }
     }
+
+    public class Notification
+    {
+        public int id { get; set; }
+        public string title { get; set; }
+        public string memo { get; set; }
+        public string source { get; set; }
+        public int? source_id { get; set; }
+        public string router { get; set; }
+        public DateTime? dealt_date { get; set; }
+        public string business_code { get; set; }
+    }
 }

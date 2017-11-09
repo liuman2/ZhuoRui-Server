@@ -397,17 +397,21 @@ namespace WebCenter.Web.Controllers
 
                 if (item.repeat_type == 1)
                 {
-                    var dows = item.repeat_dow.Split(',');
-                    if (dows.Count() > 0)
+                    if (item.repeat_dow != null)
                     {
-                        item.dow = new List<int>();
-                        foreach (var dow in dows)
+                        var dows = item.repeat_dow.Split(',');
+                        if (dows.Count() > 0)
                         {
-                            int iDow = 0;
-                            int.TryParse(dow, out iDow);
-                            item.dow.Add(iDow);
+                            item.dow = new List<int>();
+                            foreach (var dow in dows)
+                            {
+                                int iDow = 0;
+                                int.TryParse(dow, out iDow);
+                                item.dow.Add(iDow);
+                            }
                         }
                     }
+                    
                 }
 
                 var creator = memberList.Where(m => m.id == item.created_id).FirstOrDefault();
@@ -624,7 +628,7 @@ namespace WebCenter.Web.Controllers
 
             var items = Uof.IscheduleService
                 .GetAll(s => s.is_notify == 1 && s.is_done != 1 && s.start <= DateTime.Today && s.created_id == userId)
-                .Select(s => new
+                .Select(s => new Notification
                 {
                     id = s.id,
                     title = s.title,
@@ -635,6 +639,112 @@ namespace WebCenter.Web.Controllers
                     dealt_date = s.dealt_date,
                     business_code = s.business_code
                 }).ToList();
+
+            if (items.Count() > 0)
+            {
+                var abroadItems = items.Where(a => a.source == "reg_abroad").ToList();
+                if (abroadItems != null && abroadItems.Count > 0)
+                {
+                    var ids = abroadItems.Select(a => a.source_id).ToList();
+                    var abroads = Uof.Ireg_abroadService.GetAll(a => ids.Contains(a.id)).ToList();
+                    if (abroads != null && abroads.Count > 0)
+                    {
+                        foreach (var item in abroadItems)
+                        {
+                            var code = abroads.Where(a => a.id == item.source_id).Select(a => a.code).FirstOrDefault();
+                            item.business_code = code;
+                        }
+                    }
+                }
+
+                var auditItems = items.Where(a => a.source == "audit").ToList();
+                if (auditItems != null && auditItems.Count > 0)
+                {
+                    var ids = auditItems.Select(a => a.source_id).ToList();
+                    var audits = Uof.IauditService.GetAll(a => ids.Contains(a.id)).ToList();
+                    if (audits != null && audits.Count > 0)
+                    {
+                        foreach (var item in auditItems)
+                        {
+                            var code = audits.Where(a => a.id == item.source_id).Select(a => a.code).FirstOrDefault();
+                            item.business_code = code;
+                        }
+                    }
+                }
+
+                var sub_auditItems = items.Where(a => a.source == "sub_audit").ToList();
+                if (sub_auditItems != null && sub_auditItems.Count > 0)
+                {
+                    //var ids = sub_auditItems.Select(a => a.source_id).ToList();                    
+                    foreach (var item in sub_auditItems)
+                    {
+                        var masterId = Uof.Isub_auditService.GetAll(a => a.id == item.source_id).Select(a => a.master_id).FirstOrDefault();
+                        var auditCode = Uof.IauditService.GetAll(a => a.id == masterId).Select(a=>a.code).FirstOrDefault();
+                        item.business_code = auditCode ?? "";
+                    }
+                }
+
+                var customerItems = items.Where(a => a.source == "customer").ToList();
+                if (customerItems != null && customerItems.Count > 0)
+                {
+                    var ids = customerItems.Select(a => a.source_id).ToList();
+                    var customers = Uof.IcustomerService.GetAll(a => ids.Contains(a.id)).ToList();
+                    if (customers != null && customers.Count > 0)
+                    {
+                        foreach (var item in abroadItems)
+                        {
+                            var code = customers.Where(a => a.id == item.source_id).Select(a => a.name).FirstOrDefault();
+                            item.business_code = code;
+                        }
+                    }
+                }
+
+                var reg_internalItems = items.Where(a => a.source == "reg_internal").ToList();
+                if (reg_internalItems != null && reg_internalItems.Count > 0)
+                {
+                    var ids = reg_internalItems.Select(a => a.source_id).ToList();
+                    var internals = Uof.Ireg_internalService.GetAll(a => ids.Contains(a.id)).ToList();
+                    if (internals != null && internals.Count > 0)
+                    {
+                        foreach (var item in reg_internalItems)
+                        {
+                            var code = internals.Where(a => a.id == item.source_id).Select(a => a.code).FirstOrDefault();
+                            item.business_code = code;
+                        }
+                    }
+                }
+
+                var trademarkItems = items.Where(a => a.source == "trademark").ToList();
+                if (trademarkItems != null && trademarkItems.Count > 0)
+                {
+                    var ids = trademarkItems.Select(a => a.source_id).ToList();
+                    var trademarks = Uof.ItrademarkService.GetAll(a => ids.Contains(a.id)).ToList();
+                    if (trademarks != null && trademarks.Count > 0)
+                    {
+                        foreach (var item in trademarkItems)
+                        {
+                            var code = trademarks.Where(a => a.id == item.source_id).Select(a => a.code).FirstOrDefault();
+                            item.business_code = code;
+                        }
+                    }
+                }
+
+                var patentItems = items.Where(a => a.source == "patent").ToList();
+                if (patentItems != null && patentItems.Count > 0)
+                {
+                    var ids = patentItems.Select(a => a.source_id).ToList();
+                    var patents = Uof.IpatentService.GetAll(a => ids.Contains(a.id)).ToList();
+                    if (patents != null && patents.Count > 0)
+                    {
+                        foreach (var item in patentItems)
+                        {
+                            var code = patents.Where(a => a.id == item.source_id).Select(a => a.code).FirstOrDefault();
+                            item.business_code = code;
+                        }
+                    }
+                }
+            }
+            
 
             return Json(items, JsonRequestBehavior.AllowGet);
         }
