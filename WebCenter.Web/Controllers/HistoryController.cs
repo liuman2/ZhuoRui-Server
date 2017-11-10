@@ -535,7 +535,7 @@ namespace WebCenter.Web.Controllers
                 logoff_memo = c.logoff_memo,
 
                 change_owner = c.change_owner,
-                change_owner_name = c.member4.name,
+                change_owner_name = c.member.name,
 
                 area_id = c.area_id,
                 resell_price = c.resell_price,
@@ -618,13 +618,13 @@ namespace WebCenter.Web.Controllers
                 amount_unreceive = 0,
                 progress = c.progress,
                 salesman_id = c.salesman_id,
-                salesman = c.member2.name,
+                salesman = c.member3.name,
                 finance_review_moment = c.finance_review_moment,
                 submit_review_moment = c.submit_review_moment,
                 logoff = c.logoff ?? 0,
                 logoff_memo = c.logoff_memo,
                 change_owner = c.change_owner,
-                change_owner_name = c.member4.name,
+                change_owner_name = c.member.name,
 
                 area_id = c.area_id,
                 resell_price = c.resell_price,

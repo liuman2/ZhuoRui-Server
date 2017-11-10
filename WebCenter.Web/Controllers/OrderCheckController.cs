@@ -937,7 +937,7 @@ namespace WebCenter.Web.Controllers
                         review_status = a.review_status,
                         status = a.status,
                         source = a.source,
-                        salesman = a.member2.name,
+                        salesman = a.member3.name,
                         amount_transaction = a.amount_transaction
 
                     }).ToList();

@@ -40,10 +40,6 @@ namespace WebCenter.Entities
             this.audits4 = new HashSet<audit>();
             this.audits5 = new HashSet<audit>();
             this.audits6 = new HashSet<audit>();
-            this.histories = new HashSet<history>();
-            this.histories1 = new HashSet<history>();
-            this.histories2 = new HashSet<history>();
-            this.histories3 = new HashSet<history>();
             this.accountings = new HashSet<accounting>();
             this.accountings1 = new HashSet<accounting>();
             this.accountings2 = new HashSet<accounting>();
@@ -64,7 +60,6 @@ namespace WebCenter.Entities
             this.customers = new HashSet<customer>();
             this.customers1 = new HashSet<customer>();
             this.customer_timeline = new HashSet<customer_timeline>();
-            this.histories4 = new HashSet<history>();
             this.reg_internal = new HashSet<reg_internal>();
             this.patents = new HashSet<patent>();
             this.trademarks = new HashSet<trademark>();
@@ -96,6 +91,11 @@ namespace WebCenter.Entities
             this.reg_abroad6 = new HashSet<reg_abroad>();
             this.reg_abroad7 = new HashSet<reg_abroad>();
             this.reg_abroad8 = new HashSet<reg_abroad>();
+            this.histories = new HashSet<history>();
+            this.histories1 = new HashSet<history>();
+            this.histories2 = new HashSet<history>();
+            this.histories3 = new HashSet<history>();
+            this.histories4 = new HashSet<history>();
         }
     
     
@@ -187,10 +187,6 @@ namespace WebCenter.Entities
         public virtual ICollection<audit> audits4 { get; set; }
         public virtual ICollection<audit> audits5 { get; set; }
         public virtual ICollection<audit> audits6 { get; set; }
-        public virtual ICollection<history> histories { get; set; }
-        public virtual ICollection<history> histories1 { get; set; }
-        public virtual ICollection<history> histories2 { get; set; }
-        public virtual ICollection<history> histories3 { get; set; }
         public virtual ICollection<accounting> accountings { get; set; }
         public virtual ICollection<accounting> accountings1 { get; set; }
         public virtual ICollection<accounting> accountings2 { get; set; }
@@ -211,7 +207,6 @@ namespace WebCenter.Entities
         public virtual ICollection<customer> customers { get; set; }
         public virtual ICollection<customer> customers1 { get; set; }
         public virtual ICollection<customer_timeline> customer_timeline { get; set; }
-        public virtual ICollection<history> histories4 { get; set; }
         public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual ICollection<patent> patents { get; set; }
         public virtual ICollection<trademark> trademarks { get; set; }
@@ -243,5 +238,10 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_abroad> reg_abroad6 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad7 { get; set; }
         public virtual ICollection<reg_abroad> reg_abroad8 { get; set; }
+        public virtual ICollection<history> histories { get; set; }
+        public virtual ICollection<history> histories1 { get; set; }
+        public virtual ICollection<history> histories2 { get; set; }
+        public virtual ICollection<history> histories3 { get; set; }
+        public virtual ICollection<history> histories4 { get; set; }
     }
 }

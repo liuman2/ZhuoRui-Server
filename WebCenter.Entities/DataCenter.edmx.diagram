@@ -71,11 +71,6 @@
         <EntityTypeShape EntityType="DataCenter.Entities.abroad_shareholder" Width="1.5" PointX="0.75" PointY="20.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.internal_shareholder" Width="1.5" PointX="9.75" PointY="22.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.internal_history" Width="1.5" PointX="19.375" PointY="0.75" />
-        <EntityTypeShape EntityType="DataCenter.Entities.history" Width="1.5" PointX="13.625" PointY="36" />
-        <AssociationConnector Association="DataCenter.Entities.history_ibfk_creator" />
-        <AssociationConnector Association="DataCenter.Entities.history_ibfk_finance_reviewer" />
-        <AssociationConnector Association="DataCenter.Entities.history_ibfk_salesman" />
-        <AssociationConnector Association="DataCenter.Entities.history_ibfk_submit_reviewer" />
         <EntityTypeShape EntityType="DataCenter.Entities.accounting" Width="1.5" PointX="18.125" PointY="29" />
         <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_accountant" />
         <AssociationConnector Association="DataCenter.Entities.accounting_ibfk_bank" />
@@ -118,8 +113,6 @@
         <AssociationConnector Association="DataCenter.Entities.fk_accounting_item_trader_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_audit_trader_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_sub_audit_trader_id" />
-        <AssociationConnector Association="DataCenter.Entities.fk_history_change_owner" />
-        <AssociationConnector Association="DataCenter.Entities.fk_history_change_owner1" />
         <EntityTypeShape EntityType="DataCenter.Entities.business_bank" Width="1.5" PointX="8.375" PointY="6.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.bank_contact" Width="1.5" PointX="13.375" PointY="8.75" />
         <EntityTypeShape EntityType="DataCenter.Entities.open_bank" Width="1.5" PointX="6.125" PointY="23.625" />
@@ -169,6 +162,12 @@
         <AssociationConnector Association="DataCenter.Entities.abroad_ibfk_waiter" />
         <AssociationConnector Association="DataCenter.Entities.fk_abroad_assistant_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_reg_abroad_annual_owner" />
+        <EntityTypeShape EntityType="DataCenter.Entities.history" Width="1.5" PointX="13.625" PointY="66" />
+        <AssociationConnector Association="DataCenter.Entities.fk_history_change_owner" />
+        <AssociationConnector Association="DataCenter.Entities.history_ibfk_creator" />
+        <AssociationConnector Association="DataCenter.Entities.history_ibfk_finance_reviewer" />
+        <AssociationConnector Association="DataCenter.Entities.history_ibfk_salesman" />
+        <AssociationConnector Association="DataCenter.Entities.history_ibfk_submit_reviewer" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -3124,23 +3124,6 @@
           <EntitySet Name="abroad_shareholder" EntityType="DataCenter.Entities.abroad_shareholder" />
           <EntitySet Name="internal_shareholder" EntityType="DataCenter.Entities.internal_shareholder" />
           <EntitySet Name="internal_history" EntityType="DataCenter.Entities.internal_history" />
-          <EntitySet Name="histories" EntityType="DataCenter.Entities.history" />
-          <AssociationSet Name="history_ibfk_creator" Association="DataCenter.Entities.history_ibfk_creator">
-            <End Role="member" EntitySet="members" />
-            <End Role="history" EntitySet="histories" />
-          </AssociationSet>
-          <AssociationSet Name="history_ibfk_finance_reviewer" Association="DataCenter.Entities.history_ibfk_finance_reviewer">
-            <End Role="member" EntitySet="members" />
-            <End Role="history" EntitySet="histories" />
-          </AssociationSet>
-          <AssociationSet Name="history_ibfk_salesman" Association="DataCenter.Entities.history_ibfk_salesman">
-            <End Role="member" EntitySet="members" />
-            <End Role="history" EntitySet="histories" />
-          </AssociationSet>
-          <AssociationSet Name="history_ibfk_submit_reviewer" Association="DataCenter.Entities.history_ibfk_submit_reviewer">
-            <End Role="member" EntitySet="members" />
-            <End Role="history" EntitySet="histories" />
-          </AssociationSet>
           <EntitySet Name="accountings" EntityType="DataCenter.Entities.accounting" />
           <AssociationSet Name="accounting_ibfk_accountant" Association="DataCenter.Entities.accounting_ibfk_accountant">
             <End Role="member" EntitySet="members" />
@@ -3284,14 +3267,6 @@
           <AssociationSet Name="fk_sub_audit_trader_id" Association="DataCenter.Entities.fk_sub_audit_trader_id">
             <End Role="customer" EntitySet="customers" />
             <End Role="sub_audit" EntitySet="sub_audit" />
-          </AssociationSet>
-          <AssociationSet Name="fk_history_change_owner" Association="DataCenter.Entities.fk_history_change_owner">
-            <End Role="customer" EntitySet="customers" />
-            <End Role="history" EntitySet="histories" />
-          </AssociationSet>
-          <AssociationSet Name="fk_history_change_owner1" Association="DataCenter.Entities.fk_history_change_owner1">
-            <End Role="member" EntitySet="members" />
-            <End Role="history" EntitySet="histories" />
           </AssociationSet>
           <EntitySet Name="business_bank" EntityType="DataCenter.Entities.business_bank" />
           <EntitySet Name="bank_contact" EntityType="DataCenter.Entities.bank_contact" />
@@ -3467,6 +3442,27 @@
           <AssociationSet Name="fk_reg_abroad_annual_owner" Association="DataCenter.Entities.fk_reg_abroad_annual_owner">
             <End Role="member" EntitySet="members" />
             <End Role="reg_abroad" EntitySet="reg_abroad" />
+          </AssociationSet>
+          <EntitySet Name="histories" EntityType="DataCenter.Entities.history" />
+          <AssociationSet Name="fk_history_change_owner" Association="DataCenter.Entities.fk_history_change_owner">
+            <End Role="member" EntitySet="members" />
+            <End Role="history" EntitySet="histories" />
+          </AssociationSet>
+          <AssociationSet Name="history_ibfk_creator" Association="DataCenter.Entities.history_ibfk_creator">
+            <End Role="member" EntitySet="members" />
+            <End Role="history" EntitySet="histories" />
+          </AssociationSet>
+          <AssociationSet Name="history_ibfk_finance_reviewer" Association="DataCenter.Entities.history_ibfk_finance_reviewer">
+            <End Role="member" EntitySet="members" />
+            <End Role="history" EntitySet="histories" />
+          </AssociationSet>
+          <AssociationSet Name="history_ibfk_salesman" Association="DataCenter.Entities.history_ibfk_salesman">
+            <End Role="member" EntitySet="members" />
+            <End Role="history" EntitySet="histories" />
+          </AssociationSet>
+          <AssociationSet Name="history_ibfk_submit_reviewer" Association="DataCenter.Entities.history_ibfk_submit_reviewer">
+            <End Role="member" EntitySet="members" />
+            <End Role="history" EntitySet="histories" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
@@ -3699,10 +3695,6 @@
           <NavigationProperty Name="audits4" Relationship="DataCenter.Entities.audit_ibfk_salesman" FromRole="member" ToRole="audit" />
           <NavigationProperty Name="audits5" Relationship="DataCenter.Entities.audit_ibfk_submit_reviewer" FromRole="member" ToRole="audit" />
           <NavigationProperty Name="audits6" Relationship="DataCenter.Entities.fk_audit_assistant_id" FromRole="member" ToRole="audit" />
-          <NavigationProperty Name="histories" Relationship="DataCenter.Entities.history_ibfk_creator" FromRole="member" ToRole="history" />
-          <NavigationProperty Name="histories1" Relationship="DataCenter.Entities.history_ibfk_finance_reviewer" FromRole="member" ToRole="history" />
-          <NavigationProperty Name="histories2" Relationship="DataCenter.Entities.history_ibfk_salesman" FromRole="member" ToRole="history" />
-          <NavigationProperty Name="histories3" Relationship="DataCenter.Entities.history_ibfk_submit_reviewer" FromRole="member" ToRole="history" />
           <NavigationProperty Name="accountings" Relationship="DataCenter.Entities.accounting_ibfk_accountant" FromRole="member" ToRole="accounting" />
           <NavigationProperty Name="accountings1" Relationship="DataCenter.Entities.accounting_ibfk_creator" FromRole="member" ToRole="accounting" />
           <NavigationProperty Name="accountings2" Relationship="DataCenter.Entities.accounting_ibfk_finance_reviewer" FromRole="member" ToRole="accounting" />
@@ -3723,7 +3715,6 @@
           <NavigationProperty Name="customers" Relationship="DataCenter.Entities.member_ibfk_creator" FromRole="member" ToRole="customer" />
           <NavigationProperty Name="customers1" Relationship="DataCenter.Entities.member_ibfk_salesman" FromRole="member" ToRole="customer" />
           <NavigationProperty Name="customer_timeline" Relationship="DataCenter.Entities.fk_customer_timeline_creator_id" FromRole="member" ToRole="customer_timeline" />
-          <NavigationProperty Name="histories4" Relationship="DataCenter.Entities.fk_history_change_owner1" FromRole="member" ToRole="history" />
           <NavigationProperty Name="reg_internal" Relationship="DataCenter.Entities.fk_internal_assistant_id" FromRole="member" ToRole="reg_internal" />
           <NavigationProperty Name="patents" Relationship="DataCenter.Entities.fk_patent_assistant_id" FromRole="member" ToRole="patent" />
           <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.fk_trademark_assistant_id" FromRole="member" ToRole="trademark" />
@@ -3755,6 +3746,11 @@
           <NavigationProperty Name="reg_abroad6" Relationship="DataCenter.Entities.abroad_ibfk_waiter" FromRole="member" ToRole="reg_abroad" />
           <NavigationProperty Name="reg_abroad7" Relationship="DataCenter.Entities.fk_abroad_assistant_id" FromRole="member" ToRole="reg_abroad" />
           <NavigationProperty Name="reg_abroad8" Relationship="DataCenter.Entities.fk_reg_abroad_annual_owner" FromRole="member" ToRole="reg_abroad" />
+          <NavigationProperty Name="histories" Relationship="DataCenter.Entities.fk_history_change_owner" FromRole="member" ToRole="history" />
+          <NavigationProperty Name="histories1" Relationship="DataCenter.Entities.history_ibfk_creator" FromRole="member" ToRole="history" />
+          <NavigationProperty Name="histories2" Relationship="DataCenter.Entities.history_ibfk_finance_reviewer" FromRole="member" ToRole="history" />
+          <NavigationProperty Name="histories3" Relationship="DataCenter.Entities.history_ibfk_salesman" FromRole="member" ToRole="history" />
+          <NavigationProperty Name="histories4" Relationship="DataCenter.Entities.history_ibfk_submit_reviewer" FromRole="member" ToRole="history" />
           </EntityType>
         <Association Name="member_ibfk_3">
           <End Type="DataCenter.Entities.area" Role="area" Multiplicity="0..1" />
@@ -4531,95 +4527,6 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
         </EntityType>
-        <EntityType Name="history">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="source" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="source_id" Type="Int32" />
-          <Property Name="customer_id" Type="Int32" />
-          <Property Name="order_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="amount_transaction" Type="Single" />
-          <Property Name="date_transaction" Type="DateTime" />
-          <Property Name="currency" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="rate" Type="Single" />
-          <Property Name="value" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="status" Type="SByte" />
-          <Property Name="finance_reviewer_id" Type="Int32" />
-          <Property Name="finance_review_date" Type="DateTime" />
-          <Property Name="finance_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="submit_reviewer_id" Type="Int32" />
-          <Property Name="submit_review_date" Type="DateTime" />
-          <Property Name="submit_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="review_status" Type="Int32" />
-          <Property Name="date_finish" Type="DateTime" />
-          <Property Name="progress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="creator_id" Type="Int32" />
-          <Property Name="salesman_id" Type="Int32" />
-          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="date_updated" Type="DateTime" />
-          <Property Name="logoff" Type="Int32" />
-          <Property Name="logoff_memo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="member" Relationship="DataCenter.Entities.history_ibfk_creator" FromRole="history" ToRole="member" />
-          <NavigationProperty Name="member1" Relationship="DataCenter.Entities.history_ibfk_finance_reviewer" FromRole="history" ToRole="member" />
-          <NavigationProperty Name="member2" Relationship="DataCenter.Entities.history_ibfk_salesman" FromRole="history" ToRole="member" />
-          <NavigationProperty Name="member3" Relationship="DataCenter.Entities.history_ibfk_submit_reviewer" FromRole="history" ToRole="member" />
-          <Property Name="change_owner" Type="Int32" />
-          <Property Name="area_id" Type="Int32" />
-          <Property Name="resell_id" Type="Int32" />
-          <Property Name="resell_price" Type="Single" />
-          <NavigationProperty Name="customer" Relationship="DataCenter.Entities.fk_history_change_owner" FromRole="history" ToRole="customer" />
-          <NavigationProperty Name="member4" Relationship="DataCenter.Entities.fk_history_change_owner1" FromRole="history" ToRole="member" />
-        </EntityType>
-        <Association Name="history_ibfk_creator">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="history">
-              <PropertyRef Name="creator_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="history_ibfk_finance_reviewer">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="history">
-              <PropertyRef Name="finance_reviewer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="history_ibfk_salesman">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="history">
-              <PropertyRef Name="salesman_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="history_ibfk_submit_reviewer">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="history">
-              <PropertyRef Name="submit_reviewer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="accounting">
           <Key>
             <PropertyRef Name="id" />
@@ -5093,7 +5000,6 @@
           <NavigationProperty Name="accounting_item" Relationship="DataCenter.Entities.fk_accounting_item_trader_id" FromRole="customer" ToRole="accounting_item" />
           <NavigationProperty Name="audits1" Relationship="DataCenter.Entities.fk_audit_trader_id" FromRole="customer" ToRole="audit" />
           <NavigationProperty Name="sub_audit1" Relationship="DataCenter.Entities.fk_sub_audit_trader_id" FromRole="customer" ToRole="sub_audit" />
-          <NavigationProperty Name="histories" Relationship="DataCenter.Entities.fk_history_change_owner" FromRole="customer" ToRole="history" />
           <NavigationProperty Name="patents" Relationship="DataCenter.Entities.fk_patent_trader_id" FromRole="customer" ToRole="patent" />
           <NavigationProperty Name="reg_internal" Relationship="DataCenter.Entities.fk_reg_internal_trader_id" FromRole="customer" ToRole="reg_internal" />
           <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.fk_trademark_trader_id" FromRole="customer" ToRole="trademark" />
@@ -5303,30 +5209,6 @@
             </Principal>
             <Dependent Role="sub_audit">
               <PropertyRef Name="trader_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_history_change_owner">
-          <End Type="DataCenter.Entities.customer" Role="customer" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="customer">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="history">
-              <PropertyRef Name="change_owner" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_history_change_owner1">
-          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
-          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="member">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="history">
-              <PropertyRef Name="change_owner" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6169,6 +6051,106 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="history">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="source" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="source_id" Type="Int32" />
+          <Property Name="customer_id" Type="Int32" />
+          <Property Name="order_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="amount_transaction" Type="Single" />
+          <Property Name="date_transaction" Type="DateTime" />
+          <Property Name="currency" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="rate" Type="Single" />
+          <Property Name="value" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="SByte" />
+          <Property Name="finance_reviewer_id" Type="Int32" />
+          <Property Name="finance_review_date" Type="DateTime" />
+          <Property Name="finance_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="submit_reviewer_id" Type="Int32" />
+          <Property Name="submit_review_date" Type="DateTime" />
+          <Property Name="submit_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="review_status" Type="Int32" />
+          <Property Name="date_finish" Type="DateTime" />
+          <Property Name="progress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="creator_id" Type="Int32" />
+          <Property Name="salesman_id" Type="Int32" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+          <Property Name="logoff" Type="Int32" />
+          <Property Name="logoff_memo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="change_owner" Type="Int32" />
+          <Property Name="area_id" Type="Int32" />
+          <Property Name="resell_id" Type="Int32" />
+          <Property Name="resell_price" Type="Single" />
+          <NavigationProperty Name="member" Relationship="DataCenter.Entities.fk_history_change_owner" FromRole="history" ToRole="member" />
+          <NavigationProperty Name="member1" Relationship="DataCenter.Entities.history_ibfk_creator" FromRole="history" ToRole="member" />
+          <NavigationProperty Name="member2" Relationship="DataCenter.Entities.history_ibfk_finance_reviewer" FromRole="history" ToRole="member" />
+          <NavigationProperty Name="member3" Relationship="DataCenter.Entities.history_ibfk_salesman" FromRole="history" ToRole="member" />
+          <NavigationProperty Name="member4" Relationship="DataCenter.Entities.history_ibfk_submit_reviewer" FromRole="history" ToRole="member" />
+        </EntityType>
+        <Association Name="fk_history_change_owner">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="history">
+              <PropertyRef Name="change_owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="history_ibfk_creator">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="history">
+              <PropertyRef Name="creator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="history_ibfk_finance_reviewer">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="history">
+              <PropertyRef Name="finance_reviewer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="history_ibfk_salesman">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="history">
+              <PropertyRef Name="salesman_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="history_ibfk_submit_reviewer">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="history">
+              <PropertyRef Name="submit_reviewer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -6799,42 +6781,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="histories">
-            <EntityTypeMapping TypeName="DataCenter.Entities.history">
-              <MappingFragment StoreEntitySet="history">
-                <ScalarProperty Name="resell_price" ColumnName="resell_price" />
-                <ScalarProperty Name="resell_id" ColumnName="resell_id" />
-                <ScalarProperty Name="area_id" ColumnName="area_id" />
-                <ScalarProperty Name="change_owner" ColumnName="change_owner" />
-                <ScalarProperty Name="logoff_memo" ColumnName="logoff_memo" />
-                <ScalarProperty Name="logoff" ColumnName="logoff" />
-                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
-                <ScalarProperty Name="date_created" ColumnName="date_created" />
-                <ScalarProperty Name="salesman_id" ColumnName="salesman_id" />
-                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
-                <ScalarProperty Name="progress" ColumnName="progress" />
-                <ScalarProperty Name="date_finish" ColumnName="date_finish" />
-                <ScalarProperty Name="review_status" ColumnName="review_status" />
-                <ScalarProperty Name="submit_review_moment" ColumnName="submit_review_moment" />
-                <ScalarProperty Name="submit_review_date" ColumnName="submit_review_date" />
-                <ScalarProperty Name="submit_reviewer_id" ColumnName="submit_reviewer_id" />
-                <ScalarProperty Name="finance_review_moment" ColumnName="finance_review_moment" />
-                <ScalarProperty Name="finance_review_date" ColumnName="finance_review_date" />
-                <ScalarProperty Name="finance_reviewer_id" ColumnName="finance_reviewer_id" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="value" ColumnName="value" />
-                <ScalarProperty Name="rate" ColumnName="rate" />
-                <ScalarProperty Name="currency" ColumnName="currency" />
-                <ScalarProperty Name="date_transaction" ColumnName="date_transaction" />
-                <ScalarProperty Name="amount_transaction" ColumnName="amount_transaction" />
-                <ScalarProperty Name="order_code" ColumnName="order_code" />
-                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
-                <ScalarProperty Name="source_id" ColumnName="source_id" />
-                <ScalarProperty Name="source" ColumnName="source" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="accountings">
             <EntityTypeMapping TypeName="DataCenter.Entities.accounting">
               <MappingFragment StoreEntitySet="accounting">
@@ -7370,6 +7316,42 @@
                 <ScalarProperty Name="name_cn" ColumnName="name_cn" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="histories">
+            <EntityTypeMapping TypeName="DataCenter.Entities.history">
+              <MappingFragment StoreEntitySet="history">
+                <ScalarProperty Name="resell_price" ColumnName="resell_price" />
+                <ScalarProperty Name="resell_id" ColumnName="resell_id" />
+                <ScalarProperty Name="area_id" ColumnName="area_id" />
+                <ScalarProperty Name="change_owner" ColumnName="change_owner" />
+                <ScalarProperty Name="logoff_memo" ColumnName="logoff_memo" />
+                <ScalarProperty Name="logoff" ColumnName="logoff" />
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="salesman_id" ColumnName="salesman_id" />
+                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
+                <ScalarProperty Name="progress" ColumnName="progress" />
+                <ScalarProperty Name="date_finish" ColumnName="date_finish" />
+                <ScalarProperty Name="review_status" ColumnName="review_status" />
+                <ScalarProperty Name="submit_review_moment" ColumnName="submit_review_moment" />
+                <ScalarProperty Name="submit_review_date" ColumnName="submit_review_date" />
+                <ScalarProperty Name="submit_reviewer_id" ColumnName="submit_reviewer_id" />
+                <ScalarProperty Name="finance_review_moment" ColumnName="finance_review_moment" />
+                <ScalarProperty Name="finance_review_date" ColumnName="finance_review_date" />
+                <ScalarProperty Name="finance_reviewer_id" ColumnName="finance_reviewer_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="rate" ColumnName="rate" />
+                <ScalarProperty Name="currency" ColumnName="currency" />
+                <ScalarProperty Name="date_transaction" ColumnName="date_transaction" />
+                <ScalarProperty Name="amount_transaction" ColumnName="amount_transaction" />
+                <ScalarProperty Name="order_code" ColumnName="order_code" />
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="source_id" ColumnName="source_id" />
+                <ScalarProperty Name="source" ColumnName="source" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

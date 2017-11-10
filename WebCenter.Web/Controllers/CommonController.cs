@@ -324,7 +324,7 @@ namespace WebCenter.Web.Controllers
                         attachments = 0,
                         auditor = a.member1.name,
                         code = a.code,
-                        customer_name = a.customer.name,
+                        customer_name = a.customer1.name,
                         company_cn = a.name_cn,
                         company_en = a.name_en,
                         creator = a.member.name,
@@ -340,7 +340,7 @@ namespace WebCenter.Web.Controllers
                         reason = "境外注册",
                         received = 0,
                         //saleman = a.member4.name,
-                        saleman = a.customer.member1.name,
+                        saleman = a.customer1.member1.name,
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
@@ -567,7 +567,7 @@ namespace WebCenter.Web.Controllers
                         auditor = a.member2.name,
                         balance = a.amount_transaction,
                         code = a.code,
-                        customer_name = a.customer.name,
+                        customer_name = a.customer1.name,
                         company_cn = a.name_cn,
                         company_en = "",
                         creator = a.member1.name,
@@ -583,12 +583,12 @@ namespace WebCenter.Web.Controllers
                         reason = "国内注册",
                         received = 0,
                         //saleman = a.member5.name,
-                        saleman = a.customer.member1.name,
+                        saleman = a.customer1.member1.name,
                         type = "",
                         currency = a.currency,
                         area = a.member5.area.name,
                         rate = a.rate ?? 1,
-                        trader = a.customer1.name,
+                        trader = a.customer.name,
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction!=null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -611,7 +611,7 @@ namespace WebCenter.Web.Controllers
                         auditor = a.member2.name,
                         balance = a.amount_transaction,
                         code = a.code,
-                        customer_name = a.customer.name,
+                        customer_name = a.customer1.name,
                         company_cn = a.name_cn,
                         company_en = "",
                         creator = a.member1.name,
@@ -627,7 +627,7 @@ namespace WebCenter.Web.Controllers
                         reason = "国内注册",
                         received = 0,
                         //saleman = a.member5.name,
-                        saleman = a.customer.member1.name,
+                        saleman = a.customer1.member1.name,
                         type = "",
                         currency = a.currency,
                         area = a.member5.area.name,
@@ -653,7 +653,7 @@ namespace WebCenter.Web.Controllers
                         auditor = a.member2.name,
                         balance = a.amount_transaction,
                         code = a.code,
-                        customer_name = a.customer.name,
+                        customer_name = a.customer1.name,
                         company_cn = a.applicant,
                         company_en = "",
                         creator = a.member1.name,
@@ -669,12 +669,12 @@ namespace WebCenter.Web.Controllers
                         reason = "专利注册",
                         received = 0,
                         //saleman = a.member4.name,
-                        saleman = a.customer.member1.name,
+                        saleman = a.customer1.member1.name,
                         type = a.patent_type,
                         currency = a.currency,
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
-                        trader = a.customer1.name,
+                        trader = a.customer.name,
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -697,7 +697,7 @@ namespace WebCenter.Web.Controllers
                         auditor = a.member2.name,
                         balance = a.amount_transaction,
                         code = a.code,
-                        customer_name = a.customer.name,
+                        customer_name = a.customer1.name,
                         company_cn = a.applicant,
                         company_en = "",
                         creator = a.member1.name,
@@ -713,7 +713,7 @@ namespace WebCenter.Web.Controllers
                         reason = "专利注册",
                         received = 0,
                         //saleman = a.member4.name,
-                        saleman = a.customer.member1.name,
+                        saleman = a.customer1.member1.name,
                         type = a.patent_type,
                         currency = a.currency,
                         area = a.member4.area.name,
@@ -739,7 +739,7 @@ namespace WebCenter.Web.Controllers
                         auditor = a.member2.name,
                         balance = a.amount_transaction,
                         code = a.code,
-                        customer_name = a.customer.name,
+                        customer_name = a.customer1.name,
                         company_cn = a.applicant,
                         company_en = "",
                         creator = a.member1.name,
@@ -755,13 +755,13 @@ namespace WebCenter.Web.Controllers
                         reason = "商标注册",
                         received = 0,
                         //saleman = a.member4.name,
-                        saleman = a.customer.member1.name,
+                        saleman = a.customer1.member1.name,
                         type = a.trademark_type,
                         currency = a.currency,
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
                         region = a.region,
-                        trader = a.customer1.name,
+                        trader = a.customer.name,
                     }).FirstOrDefault();
 
                     if (!string.IsNullOrEmpty(printData.region))
@@ -789,7 +789,7 @@ namespace WebCenter.Web.Controllers
                         auditor = a.member2.name,
                         balance = a.amount_transaction,
                         code = a.code,
-                        customer_name = a.customer.name,
+                        customer_name = a.customer1.name,
                         company_cn = a.applicant,
                         company_en = "",
                         creator = a.member1.name,
@@ -805,7 +805,7 @@ namespace WebCenter.Web.Controllers
                         reason = "商标注册",
                         received = 0,
                         //saleman = a.member4.name,
-                        saleman = a.customer.member1.name,
+                        saleman = a.customer1.member1.name,
                         type = a.trademark_type,
                         currency = a.currency,
                         area = a.member4.area.name,
@@ -863,7 +863,7 @@ namespace WebCenter.Web.Controllers
                         logoff_memo = a.logoff_memo,
                         //变更提成所有人
                         change_owner = a.change_owner,
-                        change_owner_name = a.member4.name,
+                        change_owner_name = a.member.name,
 
                     }).FirstOrDefault();
 
@@ -935,7 +935,7 @@ namespace WebCenter.Web.Controllers
 
                         //变更提成所有人
                         change_owner = a.change_owner,
-                        change_owner_name = a.member4.name,
+                        change_owner_name = a.member.name,
                     }).FirstOrDefault();
 
                     if (printData.customer_id != null)

@@ -48,8 +48,13 @@ namespace WebCenter.Web.Controllers
             return SuccessResult;
         }
 
-        public ActionResult GetTimelines(int source_id, string source_name, string name)
+        public ActionResult GetTimelines(int source_id, string source_name, string name, int? show_type)
         {
+            if(show_type == null)
+            {
+                show_type = 9;
+            }
+
             if (source_name == "annual")
             {
                 var annualExam = Uof.Iannual_examService.GetAll(a => a.id == source_id).Select(a => new
@@ -69,12 +74,28 @@ namespace WebCenter.Web.Controllers
 
             Expression<Func<timeline, bool>> nameQuery = c => true;
 
+            Expression<Func<timeline, bool>> logType = c => true;
+
             if (!string.IsNullOrEmpty(name))
             {
                 nameQuery = c => (c.title.IndexOf(name) > -1 || c.content.IndexOf(name) > -1);
             }
 
-            var list = Uof.ItimelineService.GetAll(t => t.source_id == source_id && t.source_name == source_name).Where(nameQuery).OrderByDescending(c => c.date_created).Select(t => new TimeLine
+            if(show_type == 9)
+            {
+                logType = c => (c.log_type != 1);
+            }
+            if (show_type == 1)
+            {
+                logType = c => (c.log_type == 1);
+            }
+
+            var list = Uof.ItimelineService
+                .GetAll(t => t.source_id == source_id && t.source_name == source_name)
+                .Where(nameQuery)
+                .Where(logType)
+                .OrderByDescending(c => c.date_created)
+                .Select(t => new TimeLine
             {
                 id = t.id,
                 content = t.content,

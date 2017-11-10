@@ -1,0 +1,123 @@
+patent:
+ trader_id -> customer
+ customer_id -> customer1
+ assistant_id -> member
+ creator_id -> member1
+ finance -> member2
+ manager_id -> member3
+ salesman_id ->member4
+ submit -> member5
+ waiter -> member6
+
+history 
+  change_owner -> member
+  creator-> member1
+  finance -> member2
+  salesman_id -> member3
+  submit -> member3
+  submit-> member4
+
+trademark
+  trader -> customer
+  customer_id -> customer1
+  assistant_id -> member
+  creator-> member1
+  finance -> member2
+  manager_id -> member3
+  salesman_id -> member4
+  submit -> member5
+  waiter -> member6
+
+reg_internal
+  trader_id  -> customer
+  customer_id  -> customer1
+  assistant_id -> member
+  creator_id -> member1
+  finance -> member2
+  manager_id -> member3
+  outworker_id -> member4
+  salesman_id -> member5
+  submit -> member6
+  waiter -> member7
+
+reg_abroad
+  customer_id -> customer
+  trader_id  -> customer1
+  creator_id -> member
+  finance  -> member1
+  manager_id  -> member2
+  outworker_id  -> member3
+  salesman_id  -> member4
+  submit  -> member5
+  waiter  -> member6
+  assistant -> member7
+  annual_owner -> member8
+
+audit
+  accountant_id -> member
+  creator_id  -> member1
+  finance  -> member2
+  manager_id   -> member3
+  salesman_id   -> member4
+  submit   -> member5
+  assistant  -> member6
+  customer_id -> customer
+  trader_id  -> customer1
+
+sub_audit
+  accountant_id  -> member
+  creator_id  -> member1
+  finance  -> member2
+  manager_id   -> member3
+  salesman_id   -> member4
+  submit   -> member5
+  customer_id -> customer
+  trader_id  -> customer1
+
+annual_exam
+  accountant_id  -> member
+  creator_id  -> member1
+  finance  -> member2
+  manager_id   -> member3
+  salesman_id   -> member4
+  submit   -> member5
+  waiter_id -> member6
+  assistant  -> member7
+
+accounting
+  accountant_id  -> member
+  creator_id  -> member1
+  finance  -> member2
+  manager_id   -> member3
+  ssistant  -> member4
+  salesman_id   -> member5
+  submit   -> member6
+
+accounting_item
+  accountant_id  -> member
+  assistant  -> member1
+  creator_id  -> member2
+  finance  -> member3
+  manager_id   -> member4
+  salesman_id   -> member5
+  submit   -> member6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

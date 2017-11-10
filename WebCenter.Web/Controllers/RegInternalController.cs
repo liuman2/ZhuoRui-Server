@@ -419,15 +419,15 @@ namespace WebCenter.Web.Controllers
             {
                 id = a.id,
                 customer_id = a.customer_id,
-                customer_name = a.customer.name,
-                industry = a.customer.industry,
-                province = a.customer.province,
-                city = a.customer.city,
-                county = a.customer.county,
-                customer_address = a.customer.address,
-                contact = a.customer.contact,
-                mobile = a.customer.mobile,
-                tel = a.customer.tel,
+                customer_name = a.customer1.name,
+                industry = a.customer1.industry,
+                province = a.customer1.province,
+                city = a.customer1.city,
+                county = a.customer1.county,
+                customer_address = a.customer1.address,
+                contact = a.customer1.contact,
+                mobile = a.customer1.mobile,
+                tel = a.customer1.tel,
 
                 code = a.code,
                 name_cn = a.name_cn,
@@ -462,8 +462,8 @@ namespace WebCenter.Web.Controllers
 
                 //salesman_id = a.salesman_id,
                 //salesman = a.member5.name,
-                salesman_id = a.customer.salesman_id,
-                salesman = a.customer.member1.name,
+                salesman_id = a.customer1.salesman_id,
+                salesman = a.customer1.member1.name,
 
                 waiter_id = a.waiter_id,
                 waiter_name = a.member7.name,
@@ -493,7 +493,7 @@ namespace WebCenter.Web.Controllers
                 date_created = a.date_created,
 
                 trader_id = a.trader_id,
-                trader_name = a.customer1.name,
+                trader_name = a.customer.name,
 
             }).FirstOrDefault();
             #endregion
@@ -643,15 +643,15 @@ namespace WebCenter.Web.Controllers
             {
                 id = a.id,
                 customer_id = a.customer_id,
-                customer_name = a.customer.name,
-                industry = a.customer.industry,
-                province = a.customer.province,
-                city = a.customer.city,
-                county = a.customer.county,
-                customer_address = a.customer.address,
-                contact = a.customer.contact,
-                mobile = a.customer.mobile,
-                tel = a.customer.tel,
+                customer_name = a.customer1.name,
+                industry = a.customer1.industry,
+                province = a.customer1.province,
+                city = a.customer1.city,
+                county = a.customer1.county,
+                customer_address = a.customer1.address,
+                contact = a.customer1.contact,
+                mobile = a.customer1.mobile,
+                tel = a.customer1.tel,
 
                 code = a.code,
                 name_cn = a.name_cn,
@@ -686,8 +686,8 @@ namespace WebCenter.Web.Controllers
 
                 //salesman_id = a.salesman_id,
                 //salesman = a.member5.name,
-                salesman_id = a.customer.salesman_id,
-                salesman = a.customer.member1.name,
+                salesman_id = a.customer1.salesman_id,
+                salesman = a.customer1.member1.name,
 
                 waiter_id = a.waiter_id,
                 waiter_name = a.member7.name,
@@ -721,7 +721,7 @@ namespace WebCenter.Web.Controllers
                 date_created = a.date_created,
 
                 trader_id = a.trader_id,
-                trader_name = a.customer1.name,
+                trader_name = a.customer.name,
 
             }).FirstOrDefault();
 
