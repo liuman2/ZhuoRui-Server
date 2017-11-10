@@ -1,3 +1,5 @@
+patent  trademark  reg_internal
+
 patent:
  trader_id -> customer
  customer_id -> customer1
@@ -14,7 +16,6 @@ history
   creator-> member1
   finance -> member2
   salesman_id -> member3
-  submit -> member3
   submit-> member4
 
 trademark

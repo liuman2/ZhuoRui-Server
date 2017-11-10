@@ -179,8 +179,8 @@ namespace WebCenter.Web.Controllers
                     var sinternal = Uof.Ireg_internalService.GetAll(a => a.id == printData.orderid).Select(a => new
                     {
                         creator = a.member1.name,
-                        saleman = a.customer.member1.name, //a.member5.name,
-                        trader = a.customer1.name,
+                        saleman = a.customer1.member1.name, //a.member5.name,
+                        trader = a.customer.name,
                         name_cn = a.name_cn,
 
                     }).FirstOrDefault();
@@ -215,8 +215,8 @@ namespace WebCenter.Web.Controllers
                     var spatent = Uof.IpatentService.GetAll(a => a.id == printData.orderid).Select(a => new
                     {
                         creator = a.member1.name,
-                        saleman = a.customer.member1.name, //a.member4.name,
-                        trader = a.customer1.name,
+                        saleman = a.customer1.member1.name, //a.member4.name,
+                        trader = a.customer.name,
                         name = a.name,
                     }).FirstOrDefault();
 
@@ -829,8 +829,8 @@ namespace WebCenter.Web.Controllers
                     {
                         print_type = "history",
                         id = a.id,
-                        accounter = a.member3.name,
-                        cashier = a.member1.name, // 出纳
+                        accounter = a.member4.name, // 提交审核人
+                        cashier = a.member2.name,   // 出纳
                         source = a.source,
                         source_id = a.source_id,
                         customer_id = a.customer_id,
@@ -902,8 +902,8 @@ namespace WebCenter.Web.Controllers
                     {
                         print_type = "history",
                         id = a.id,
-                        accounter = a.member3.name,
-                        cashier = a.member1.name, // 出纳
+                        accounter = a.member4.name,
+                        cashier = a.member2.name, // 出纳
                         source = a.source,
                         source_id = a.source_id,
                         customer_id = a.customer_id,
