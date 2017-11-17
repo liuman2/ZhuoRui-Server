@@ -664,10 +664,10 @@ namespace WebCenter.Web.Controllers
                 case "reg_abroad":
                     var dbRegAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
 
-                    dbRegAbroad.annual_year = exam.start_annual ?? DateTime.Now.Year;
+                    dbRegAbroad.annual_year = exam.start_annual;
                     if (dbRegAbroad.date_setup != null)
                     {
-                        dbRegAbroad.annual_date = new DateTime(exam.start_annual ?? DateTime.Today.Year, dbRegAbroad.date_setup.Value.Month, dbRegAbroad.date_setup.Value.Day);
+                        dbRegAbroad.annual_date = new DateTime(exam.start_annual.Value, dbRegAbroad.date_setup.Value.Month, dbRegAbroad.date_setup.Value.Day);
                     } else
                     {
                         dbRegAbroad.annual_date = DateTime.Today;
@@ -682,11 +682,11 @@ namespace WebCenter.Web.Controllers
                     break;
                 case "reg_internal":
                     var dbRegInternal = Uof.Ireg_internalService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
-                    dbRegInternal.annual_year = exam.start_annual ?? DateTime.Now.Year;
+                    dbRegInternal.annual_year = exam.start_annual;
 
                     if (dbRegInternal.date_setup != null)
                     {
-                        dbRegInternal.annual_date = new DateTime(exam.start_annual ?? DateTime.Today.Year, dbRegInternal.date_setup.Value.Month, dbRegInternal.date_setup.Value.Day);
+                        dbRegInternal.annual_date = new DateTime(exam.start_annual.Value, dbRegInternal.date_setup.Value.Month, dbRegInternal.date_setup.Value.Day);
                     }
                     else
                     {
@@ -697,16 +697,16 @@ namespace WebCenter.Web.Controllers
                     break;
                 case "audit":
                     var dbAudit = Uof.IauditService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
-                    dbAudit.annual_year = exam.start_annual ?? DateTime.Now.Year;
+                    dbAudit.annual_year = exam.start_annual;
                     Uof.IauditService.UpdateEntity(dbAudit);
                     break;
                 case "patent":
                     var dbPatent = Uof.IpatentService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
-                    dbPatent.annual_year = exam.start_annual ?? DateTime.Now.Year;
+                    dbPatent.annual_year = exam.start_annual;
                     dbPatent.annual_date = DateTime.Today;
                     if (dbPatent.date_regit != null)
                     {
-                        dbPatent.annual_date = new DateTime(exam.start_annual ?? DateTime.Now.Year, dbPatent.date_regit.Value.Month, dbPatent.date_regit.Value.Day);
+                        dbPatent.annual_date = new DateTime(exam.start_annual.Value, dbPatent.date_regit.Value.Month, dbPatent.date_regit.Value.Day);
                     }
                     else
                     {
@@ -717,12 +717,12 @@ namespace WebCenter.Web.Controllers
                     break;
                 case "trademark":
                     var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == exam.order_id.Value).FirstOrDefault();
-                    dbTrademark.annual_year = exam.start_annual ?? DateTime.Now.Year;
+                    dbTrademark.annual_year = exam.start_annual;
                     //dbTrademark.annual_date = DateTime.Today;
 
                     if (dbTrademark.date_regit != null)
                     {
-                        dbTrademark.annual_date = new DateTime(exam.start_annual ?? DateTime.Now.Year, dbTrademark.date_regit.Value.Month, dbTrademark.date_regit.Value.Day);
+                        dbTrademark.annual_date = new DateTime(exam.start_annual.Value, dbTrademark.date_regit.Value.Month, dbTrademark.date_regit.Value.Day);
                     }
                     else
                     {
@@ -741,7 +741,7 @@ namespace WebCenter.Web.Controllers
                 source_name = exam.type,
                 title = "新建年检",
                 is_system = 1,
-                content = string.Format("{0}新建了{1}年度年检订单, 年检单号{2}", arrs[3], exam.start_annual ?? DateTime.Now.Year, newExam.code)
+                content = string.Format("{0}新建了{1}年度年检订单, 年检单号{2}", arrs[3], exam.start_annual, newExam.code)
             });
 
             return Json(new { id = newExam.id }, JsonRequestBehavior.AllowGet);
@@ -751,18 +751,18 @@ namespace WebCenter.Web.Controllers
         {
             var dbExam = Uof.Iannual_examService.GetById(exam.id);
 
-            if (exam.description == dbExam.description &&
-                exam.date_transaction == dbExam.date_transaction &&
-                exam.amount_transaction == dbExam.amount_transaction &&
-                exam.rate == dbExam.rate &&
-                exam.currency == dbExam.currency &&
-                exam.salesman_id == dbExam.salesman_id &&
-                exam.accountant_id == dbExam.accountant_id &&
-                exam.assistant_id == dbExam.assistant_id
-                )
-            {
-                return Json(new { success = true, id = dbExam.id }, JsonRequestBehavior.AllowGet);
-            }
+            //if (exam.description == dbExam.description &&
+            //    exam.date_transaction == dbExam.date_transaction &&
+            //    exam.amount_transaction == dbExam.amount_transaction &&
+            //    exam.rate == dbExam.rate &&
+            //    exam.currency == dbExam.currency &&
+            //    exam.salesman_id == dbExam.salesman_id &&
+            //    exam.accountant_id == dbExam.accountant_id &&
+            //    exam.assistant_id == dbExam.assistant_id
+            //    )
+            //{
+            //    return Json(new { success = true, id = dbExam.id }, JsonRequestBehavior.AllowGet);
+            //}
 
             var identityName = HttpContext.User.Identity.Name;
             var arrs = identityName.Split('|');
@@ -783,10 +783,84 @@ namespace WebCenter.Web.Controllers
             dbExam.accountant_id = exam.accountant_id;
             dbExam.assistant_id = exam.assistant_id;
 
+            dbExam.start_annual = exam.start_annual;
+
             var r = Uof.Iannual_examService.UpdateEntity(dbExam);
 
             if (r)
             {
+                switch (dbExam.type)
+                {
+                    case "reg_abroad":
+                        var dbRegAbroad = Uof.Ireg_abroadService.GetAll(a => a.id == dbExam.order_id.Value).FirstOrDefault();
+
+                        dbRegAbroad.annual_year = dbExam.start_annual;
+                        if (dbRegAbroad.date_setup != null)
+                        {
+                            dbRegAbroad.annual_date = new DateTime(dbExam.start_annual.Value, dbRegAbroad.date_setup.Value.Month, dbRegAbroad.date_setup.Value.Day);
+                        }
+                        else
+                        {
+                            dbRegAbroad.annual_date = DateTime.Today;
+                        }
+
+                        Uof.Ireg_abroadService.UpdateEntity(dbRegAbroad);
+                        break;
+                    case "reg_internal":
+                        var dbRegInternal = Uof.Ireg_internalService.GetAll(a => a.id == dbExam.order_id.Value).FirstOrDefault();
+                        dbRegInternal.annual_year = exam.start_annual;
+
+                        if (dbRegInternal.date_setup != null)
+                        {
+                            dbRegInternal.annual_date = new DateTime(exam.start_annual.Value, dbRegInternal.date_setup.Value.Month, dbRegInternal.date_setup.Value.Day);
+                        }
+                        else
+                        {
+                            dbRegInternal.annual_date = DateTime.Today;
+                        }
+
+                        Uof.Ireg_internalService.UpdateEntity(dbRegInternal);
+                        break;
+                    case "audit":
+                        var dbAudit = Uof.IauditService.GetAll(a => a.id == dbExam.order_id.Value).FirstOrDefault();
+                        dbAudit.annual_year = exam.start_annual;
+                        Uof.IauditService.UpdateEntity(dbAudit);
+                        break;
+                    case "patent":
+                        var dbPatent = Uof.IpatentService.GetAll(a => a.id == dbExam.order_id.Value).FirstOrDefault();
+                        dbPatent.annual_year = exam.start_annual;
+                        dbPatent.annual_date = DateTime.Today;
+                        if (dbPatent.date_regit != null)
+                        {
+                            dbPatent.annual_date = new DateTime(exam.start_annual.Value, dbPatent.date_regit.Value.Month, dbPatent.date_regit.Value.Day);
+                        }
+                        else
+                        {
+                            dbPatent.annual_date = DateTime.Today;
+                        }
+
+                        Uof.IpatentService.UpdateEntity(dbPatent);
+                        break;
+                    case "trademark":
+                        var dbTrademark = Uof.ItrademarkService.GetAll(a => a.id == dbExam.order_id.Value).FirstOrDefault();
+                        dbTrademark.annual_year = exam.start_annual;
+                        //dbTrademark.annual_date = DateTime.Today;
+
+                        if (dbTrademark.date_regit != null)
+                        {
+                            dbTrademark.annual_date = new DateTime(exam.start_annual.Value, dbTrademark.date_regit.Value.Month, dbTrademark.date_regit.Value.Day);
+                        }
+                        else
+                        {
+                            dbTrademark.annual_date = DateTime.Today;
+                        }
+
+                        Uof.ItrademarkService.UpdateEntity(dbTrademark);
+                        break;
+                    default:
+                        break;
+                }
+
                 //if (isChangeCurrency)
                 //{
                 //    var list = Uof.IincomeService.GetAll(i => i.source_id == exam.id && i.source_name == "annual").ToList();
@@ -847,7 +921,8 @@ namespace WebCenter.Web.Controllers
                 assistant_name = a.member7.name,
 
                 status = a.status,
-                review_status = a.review_status
+                review_status = a.review_status,
+                start_annual = a.start_annual,
 
             }).FirstOrDefault();
 

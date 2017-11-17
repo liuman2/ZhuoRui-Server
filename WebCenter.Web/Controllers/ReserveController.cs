@@ -100,7 +100,8 @@ namespace WebCenter.Web.Controllers
                 source_name = "",
                 assistant_id = c.assistant_id,
                 assistant_name = "",
-                tel = c.tel
+                tel = c.tel,
+                date_created = c.date_created,
             }).ToPagedList(index, size).ToList();
 
             var totalRecord = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Where(permQuery).Where(c => c.is_delete != 1).Count();
