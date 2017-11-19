@@ -296,6 +296,7 @@ namespace WebCenter.Web.Controllers
                         //注册提成人
                         manager_id = a.manager_id,
                         manager_name = a.member2.name,
+                        submit_review_date = a.submit_review_date,
 
                     }).FirstOrDefault();
 
@@ -350,6 +351,7 @@ namespace WebCenter.Web.Controllers
                         //注册提成人
                         manager_id = a.manager_id,
                         manager_name = a.member2.name,
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
 
@@ -406,6 +408,7 @@ namespace WebCenter.Web.Controllers
                         ////年检提成人
                         //annual_owner = a.manager_id,
                         //annual_owner_name = a.member2.name,
+                        submit_review_date = a.submit_review_date,
 
                     }).FirstOrDefault();
 
@@ -458,6 +461,8 @@ namespace WebCenter.Web.Controllers
 
                         orderid = a.order_id,
                         ordersource = a.type,
+
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
                     if (printData != null)
                     {
@@ -503,6 +508,8 @@ namespace WebCenter.Web.Controllers
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
                         trader = a.customer1.name,
+
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -545,7 +552,8 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate ?? 1
+                        rate = a.rate ?? 1,
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     printData.date = auditLine.date_pay != null ? auditLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -589,6 +597,7 @@ namespace WebCenter.Web.Controllers
                         area = a.member5.area.name,
                         rate = a.rate ?? 1,
                         trader = a.customer.name,
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction!=null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -631,7 +640,8 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member5.area.name,
-                        rate = a.rate ?? 1
+                        rate = a.rate ?? 1,
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     printData.date = internalLine.date_pay != null ? internalLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -675,6 +685,7 @@ namespace WebCenter.Web.Controllers
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
                         trader = a.customer.name,
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -717,7 +728,8 @@ namespace WebCenter.Web.Controllers
                         type = a.patent_type,
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate ?? 1
+                        rate = a.rate ?? 1,
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     printData.date = patentLine.date_pay != null ? patentLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -762,6 +774,7 @@ namespace WebCenter.Web.Controllers
                         rate = a.rate ?? 1,
                         region = a.region,
                         trader = a.customer.name,
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     if (!string.IsNullOrEmpty(printData.region))
@@ -810,7 +823,8 @@ namespace WebCenter.Web.Controllers
                         currency = a.currency,
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
-                        region = a.region
+                        region = a.region,
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     if (!string.IsNullOrEmpty(printData.region))
@@ -864,6 +878,7 @@ namespace WebCenter.Web.Controllers
                         //变更提成所有人
                         change_owner = a.change_owner,
                         change_owner_name = a.member.name,
+                        submit_review_date = a.submit_review_date,
 
                     }).FirstOrDefault();
 
@@ -936,6 +951,7 @@ namespace WebCenter.Web.Controllers
                         //变更提成所有人
                         change_owner = a.change_owner,
                         change_owner_name = a.member.name,
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     if (printData.customer_id != null)
@@ -991,6 +1007,7 @@ namespace WebCenter.Web.Controllers
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
                         trader = a.customer1.name,
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -1033,7 +1050,8 @@ namespace WebCenter.Web.Controllers
                         type = "",
                         currency = a.currency,
                         area = a.member4.area.name,
-                        rate = a.rate ?? 1
+                        rate = a.rate ?? 1,
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     printData.date = subAuditLineLine.date_pay != null ? subAuditLineLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -1080,7 +1098,8 @@ namespace WebCenter.Web.Controllers
                         area = a.member5.area.name,
                         rate = 1,
                         region = "", //a.region
-                        trader = a.customer.name,                        
+                        trader = a.customer.name,
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     //if (printData != null)
@@ -1145,6 +1164,7 @@ namespace WebCenter.Web.Controllers
                         area = a.member5.area.name,
                         rate = 1,
                         region = "", //a.region
+                        submit_review_date = a.submit_review_date,
                     }).FirstOrDefault();
 
                     //if (printData != null)
@@ -1169,6 +1189,11 @@ namespace WebCenter.Web.Controllers
                     break;
                 default:
                     break;
+            }
+
+            if (printData.submit_review_date != null)
+            {
+                printData.header_date = printData.submit_review_date.Value.ToString("yyyy年MM月dd日");
             }
 
             printData.amount = (float)Math.Round((double)(printData.amount * (printData.rate ?? 1)), 2);
@@ -1407,6 +1432,7 @@ namespace WebCenter.Web.Controllers
                 bank = i.bank,
                 currency = i.currency,
                 rate = i.rate ?? 1,
+                income_date = i.date_created
             }).OrderByDescending(i => i.id).ToList();
 
             var total = 0f;
@@ -1440,6 +1466,11 @@ namespace WebCenter.Web.Controllers
                 pd.pay_way = list[0].pay_way;
 
                 pd.attachments = list.Where(l => !string.IsNullOrEmpty(l.attachment_url)).Count();
+                var maxIndex = list.Count() - 1;
+                if (list[maxIndex].income_date != null)
+                {
+                    pd.income_date = list[maxIndex].income_date.Value.ToString("yyyy年MM月dd日");
+                }
 
             } else
             {
@@ -1462,6 +1493,7 @@ namespace WebCenter.Web.Controllers
                 bank = i.bank,
                 currency = i.currency,
                 rate = i.rate ?? 1,
+                income_date = i.date_created,
             }).OrderByDescending(i => i.id).ToList();
 
             var total = 0f;
@@ -1499,8 +1531,15 @@ namespace WebCenter.Web.Controllers
                 }
                 pd.pay_info = string.Format("{0} {1}", list[0].bank, acc);
                 pd.pay_way = list[0].pay_way;
+                
 
                 pd.attachments = list.Where(l => !string.IsNullOrEmpty(l.attachment_url)).Count();
+
+                var maxIndex = list.Count() - 1;
+                if (list[maxIndex].income_date != null)
+                {
+                    pd.income_date = list[maxIndex].income_date.Value.ToString("yyyy年MM月dd日");
+                }
 
             }
             else

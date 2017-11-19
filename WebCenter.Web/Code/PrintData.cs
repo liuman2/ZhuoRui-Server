@@ -36,6 +36,11 @@ namespace WebCenter.Web
 
         public DateTime? date_transaction { get; set; }
 
+        public DateTime? submit_review_date { get; set; }
+
+
+        public string header_date { get; set; }
+
         /// <summary>
         /// 付款人
         /// </summary>
@@ -169,6 +174,8 @@ namespace WebCenter.Web
         /// 变更提成所有人
         /// </summary>
         public string change_owner_name { get; set; }
+
+        public string income_date { get; set; }
     }
 
     public class ReceiptPrintData
