@@ -1194,6 +1194,9 @@ namespace WebCenter.Web.Controllers
             if (printData.submit_review_date != null)
             {
                 printData.header_date = printData.submit_review_date.Value.ToString("yyyy年MM月dd日");
+            } else
+            {
+                printData.header_date = DateTime.Today.ToString("yyyy年MM月dd日");
             }
 
             printData.amount = (float)Math.Round((double)(printData.amount * (printData.rate ?? 1)), 2);
@@ -1432,7 +1435,7 @@ namespace WebCenter.Web.Controllers
                 bank = i.bank,
                 currency = i.currency,
                 rate = i.rate ?? 1,
-                income_date = i.date_created
+                income_date = i.date_pay
             }).OrderByDescending(i => i.id).ToList();
 
             var total = 0f;
@@ -1493,7 +1496,7 @@ namespace WebCenter.Web.Controllers
                 bank = i.bank,
                 currency = i.currency,
                 rate = i.rate ?? 1,
-                income_date = i.date_created,
+                income_date = i.date_pay,
             }).OrderByDescending(i => i.id).ToList();
 
             var total = 0f;
