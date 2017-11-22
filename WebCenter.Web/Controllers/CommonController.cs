@@ -856,7 +856,7 @@ namespace WebCenter.Web.Controllers
                         customer_name = "",
                         company_cn = "",
                         company_en = "",
-                        creator = a.member.name,
+                        creator = a.member1.name,
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "",
@@ -930,7 +930,7 @@ namespace WebCenter.Web.Controllers
                         customer_name = "",
                         company_cn = "",
                         company_en = "",
-                        creator = a.member.name,
+                        creator = a.member1.name,
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "",
@@ -1200,7 +1200,7 @@ namespace WebCenter.Web.Controllers
             }
 
             printData.amount = (float)Math.Round((double)(printData.amount * (printData.rate ?? 1)), 2);
-            printData.balance = (float)Math.Round((double)(printData.balance * (printData.rate ?? 1)), 2);
+            //printData.balance = (float)Math.Round((double)(printData.balance * (printData.rate ?? 1)), 2);
             return Json(printData, JsonRequestBehavior.AllowGet);
         }
 
@@ -1366,12 +1366,14 @@ namespace WebCenter.Web.Controllers
                         id = a.id,
                         name_cn = a.name_cn,
                         name_en = a.name_en,
+                        creator = a.member.name,
 
                     }).FirstOrDefault();
                     if (abroad != null)
                     {
                         printData.company_cn = abroad.name_cn;
                         printData.company_en = abroad.name_en;
+                        printData.creator = abroad.creator;
                     }
                     break;
                 case "reg_internal":
@@ -1380,12 +1382,14 @@ namespace WebCenter.Web.Controllers
                         id = a.id,
                         name_cn = a.name_cn,
                         name_en = "",
+                        creator = a.member1.name,
 
                     }).FirstOrDefault();
                     if (inter != null)
                     {
                         printData.company_cn = inter.name_cn;
                         printData.company_en = inter.name_en;
+                        printData.creator = inter.creator;
                     }
                     break;
                 case "patent":
@@ -1394,12 +1398,14 @@ namespace WebCenter.Web.Controllers
                         id = a.id,
                         name_cn = a.applicant,
                         name_en = "",
+                        creator = a.member1.name,
 
                     }).FirstOrDefault();
                     if (paten != null)
                     {
                         printData.company_cn = paten.name_cn;
                         printData.company_en = paten.name_en;
+                        printData.creator = paten.creator;
                     }
                     break;
                 case "trademark":
@@ -1408,12 +1414,14 @@ namespace WebCenter.Web.Controllers
                         id = a.id,
                         name_cn = a.applicant,
                         name_en = "",
+                        creator = a.member1.name,
 
                     }).FirstOrDefault();
                     if (trademar != null)
                     {
                         printData.company_cn = trademar.name_cn;
                         printData.company_en = trademar.name_en;
+                        printData.creator = trademar.creator;
                     }
                     break;
                 default:
@@ -1541,8 +1549,11 @@ namespace WebCenter.Web.Controllers
                 var maxIndex = list.Count() - 1;
                 if (list[maxIndex].income_date != null)
                 {
-                    pd.income_date = list[maxIndex].income_date.Value.ToString("yyyy年MM月dd日");
+                    //pd.income_date = list[maxIndex].income_date.Value.ToString("yyyy年MM月dd日");
+                    
                 }
+
+                pd.income_date = lineIncome.date_pay.Value.ToString("yyyy年MM月dd日");
 
             }
             else
