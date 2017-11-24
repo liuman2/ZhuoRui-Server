@@ -38,7 +38,7 @@ namespace WebCenter.Web.Controllers
                 Uof.Ibank_contactService.AddEntities(contacts);
             }
 
-            return SuccessResult;
+            return Json(new { id = dbBank.id }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -134,7 +134,7 @@ namespace WebCenter.Web.Controllers
 
             #endregion
 
-            return SuccessResult;
+            return Json(new { id = dbBank.id }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Search(int index = 1, int size = 10, string name = "")

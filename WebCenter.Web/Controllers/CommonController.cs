@@ -1487,6 +1487,7 @@ namespace WebCenter.Web.Controllers
             {
                 pd.pay_way = "先提交,未付款";
                 pd.received = 0;
+                pd.balance = (float)Math.Round((double)(pd.amount * pd.rate ), 2);
             }
         }
 
