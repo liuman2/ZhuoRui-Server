@@ -107,6 +107,8 @@ namespace WebCenter.DAL
 	
 	public IDAL.Isub_auditRepository sub_auditRepository { get { return new sub_auditRepository(); } }
 	
+	public IDAL.IsupplierRepository supplierRepository { get { return new supplierRepository(); } }
+	
 	public IDAL.ItimelineRepository timelineRepository { get { return new timelineRepository(); } }
 	
 	public IDAL.ItrademarkRepository trademarkRepository { get { return new trademarkRepository(); } }

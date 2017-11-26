@@ -257,6 +257,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class supplierRepository :BaseRepository<supplier>,IsupplierRepository
+    {
+         
+    }
+	
 	public partial class timelineRepository :BaseRepository<timeline>,ItimelineRepository
     {
          

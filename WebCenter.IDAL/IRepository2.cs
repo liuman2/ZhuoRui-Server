@@ -206,6 +206,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface IsupplierRepository :IBaseRepository<supplier>
+    {         
+    }
+	
     public partial interface ItimelineRepository :IBaseRepository<timeline>
     {         
     }

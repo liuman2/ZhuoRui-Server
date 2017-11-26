@@ -156,6 +156,10 @@ namespace WebCenter.Entities
     
         public Nullable<int> trader_id { get; set; }
     
+    
+    
+        public Nullable<int> supplier_id { get; set; }
+    
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }
@@ -165,5 +169,6 @@ namespace WebCenter.Entities
         public virtual audit audit { get; set; }
         public virtual customer customer { get; set; }
         public virtual customer customer1 { get; set; }
+        public virtual supplier supplier { get; set; }
     }
 }

@@ -163,6 +163,9 @@ namespace WebCenter.IDAL
 		IDAL.Isub_auditRepository sub_auditRepository { get; }
 	  
 
+		IDAL.IsupplierRepository supplierRepository { get; }
+	  
+
 		IDAL.ItimelineRepository timelineRepository { get; }
 	  
 

@@ -513,6 +513,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class supplierService:BaseService<supplier>,IsupplierService
+    {   
+        public supplierService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.supplierRepository;
+        }  
+    }
+	
 	public partial class timelineService:BaseService<timeline>,ItimelineService
     {   
         public timelineService()

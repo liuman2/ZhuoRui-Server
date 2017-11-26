@@ -242,6 +242,9 @@
     <Compile Include="sub_audit.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="supplier.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="timeline.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

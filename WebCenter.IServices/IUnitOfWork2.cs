@@ -108,6 +108,8 @@ namespace WebCenter.IServices
 	
 	  Isub_auditService Isub_auditService{get;set;} 
 	
+	  IsupplierService IsupplierService{get;set;} 
+	
 	  ItimelineService ItimelineService{get;set;} 
 	
 	  ItrademarkService ItrademarkService{get;set;} 
