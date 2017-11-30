@@ -7,6 +7,7 @@ using System.Web.Security;
 using System.Linq.Expressions;
 using WebCenter.Entities;
 using System.Collections.Generic;
+using System.IO;
 
 namespace WebCenter.Web.Controllers
 {
@@ -1171,6 +1172,44 @@ namespace WebCenter.Web.Controllers
             };
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public FileStreamResult Export()
+        {
+           var annualList = Uof.Iannual_examService.GetAll().OrderByDescending(item => item.order_code).ToList();
+
+            if (annualList != null && annualList.Count() > 0)
+            {
+                var exportList = annualList.Select(c => new ExcelAnnualContact
+                {
+                    ID = c.id,
+                    orderID = c.order_id,
+                    //客户名称 = c.name,
+                    档案号 = c.order_code,
+                    订单中文名 = c.name_cn,
+                    订单英文名 = c.name_en,
+                    成交日期 = c.date_transaction.Value.ToString("yyyy-MM-dd"),
+                    年检年份 = c.start_annual != null ? c.start_annual.Value.ToString() : "",
+                    备注 = c.description,
+                }).ToList();
+
+                var sheet = ExportToExcel(exportList);
+                var fileName = "客户列表.xml";
+                var bytes = GenerateStreamFromString(sheet);
+                return File(bytes, "application/xml", fileName);
+            }
+
+            throw new Exception("无数据");
+        }
+
+        public static Stream GenerateStreamFromString(string s)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
 
         public ActionResult GetView(int id)

@@ -68,4 +68,17 @@ namespace WebCenter.Web
         public string 业务员 { get; set; }
         public string 创建日期 { get; set; }
     }
+
+    public class ExcelAnnualContact
+    {
+        public int ID { get; set; }
+        public int? orderID { get; set; }
+        //public string 客户名称 { get; set; }
+        public string 档案号 { get; set; }
+        public string 订单中文名 { get; set; }
+        public string 订单英文名 { get; set; }
+        public string 成交日期 { get; set; }
+        public string 年检年份 { get; set; }
+        public string 备注 { get; set; }
+    }
 }

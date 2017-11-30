@@ -212,6 +212,7 @@ namespace WebCenter.Web.Controllers
 
                     annual_date = c.annual_date,
                     annual_id = c.annual_id,
+                    annual_year = c.annual_year,
 
                 }).ToPagedList(request.index, request.size).ToList();
 
