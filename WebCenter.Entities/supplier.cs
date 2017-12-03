@@ -23,6 +23,7 @@ namespace WebCenter.Entities
             this.reg_internal = new HashSet<reg_internal>();
             this.sub_audit = new HashSet<sub_audit>();
             this.trademarks = new HashSet<trademark>();
+            this.accountings = new HashSet<accounting>();
         }
     
     
@@ -50,5 +51,6 @@ namespace WebCenter.Entities
         public virtual ICollection<reg_internal> reg_internal { get; set; }
         public virtual ICollection<sub_audit> sub_audit { get; set; }
         public virtual ICollection<trademark> trademarks { get; set; }
+        public virtual ICollection<accounting> accountings { get; set; }
     }
 }

@@ -43,6 +43,14 @@ ALTER TABLE sub_audit ADD CONSTRAINT fk_sub_audit_supplier_id FOREIGN KEY (suppl
 call AddColumnUnlessExists(Database(), 'accounting_item', 'supplier_id', 'int(11) DEFAULT NULL COMMENT "供应商id"');
 ALTER TABLE accounting_item ADD CONSTRAINT fk_accounting_item_supplier_id FOREIGN KEY (supplier_id) REFERENCES supplier(id);
 
+-- 2017-12-03
+INSERT INTO `menu` VALUES ('77', '1', 'supplier', 'fa fa-money', '供应商列表', '5');
+
+call AddColumnUnlessExists(Database(), 'accounting', 'supplier_id', 'int(11) DEFAULT NULL COMMENT "供应商id"');
+ALTER TABLE accounting ADD CONSTRAINT fk_accounting_supplier_id FOREIGN KEY (supplier_id) REFERENCES supplier(id);
+
+
+
 
 
 

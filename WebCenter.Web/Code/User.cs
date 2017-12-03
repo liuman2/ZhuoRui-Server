@@ -174,6 +174,8 @@ namespace WebCenter.Web
         public int? trader_id { get; set; }
         public string trader_name { get; set; }
         public string creator { get; set; }
+
+        public string supplier_name { get; set; }
     }
 
     public class SubAudit
@@ -220,6 +222,8 @@ namespace WebCenter.Web
         public int? trader_id { get; set; }
         public string trader_name { get; set; }
         public string creator { get; set; }
+
+        public string supplier_name { get; set; }
     }
 
     public class LectureCustomer

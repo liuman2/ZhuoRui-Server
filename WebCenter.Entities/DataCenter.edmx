@@ -83,6 +83,7 @@
           <Property Name="invoice_account" Type="varchar" MaxLength="100" />
           <Property Name="pay_mode" Type="tinyint" />
           <Property Name="pay_notify" Type="datetime" Precision="0" />
+          <Property Name="supplier_id" Type="int" />
         </EntityType>
         <EntityType Name="accounting_item">
           <Key>
@@ -1815,6 +1816,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_accounting_supplier_id">
+          <End Role="supplier" Type="Self.supplier" Multiplicity="0..1" />
+          <End Role="accounting" Type="Self.accounting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accounting">
+              <PropertyRef Name="supplier_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_annual_exam_assistant_id">
           <End Role="member" Type="Self.member" Multiplicity="0..1" />
           <End Role="annual_exam" Type="Self.annual_exam" Multiplicity="*" />
@@ -2842,6 +2855,10 @@
             <End Role="customer" EntitySet="customer" />
             <End Role="accounting_item" EntitySet="accounting_item" />
           </AssociationSet>
+          <AssociationSet Name="fk_accounting_supplier_id" Association="Self.fk_accounting_supplier_id">
+            <End Role="supplier" EntitySet="supplier" />
+            <End Role="accounting" EntitySet="accounting" />
+          </AssociationSet>
           <AssociationSet Name="fk_annual_exam_assistant_id" Association="Self.fk_annual_exam_assistant_id">
             <End Role="member" EntitySet="member" />
             <End Role="annual_exam" EntitySet="annual_exam" />
@@ -3621,6 +3638,10 @@
           <AssociationSet Name="fk_trademark_supplier_id" Association="DataCenter.Entities.fk_trademark_supplier_id">
             <End Role="supplier" EntitySet="suppliers" />
             <End Role="trademark" EntitySet="trademarks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_accounting_supplier_id" Association="DataCenter.Entities.fk_accounting_supplier_id">
+            <End Role="supplier" EntitySet="suppliers" />
+            <End Role="accounting" EntitySet="accountings" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
@@ -4741,6 +4762,8 @@
           <NavigationProperty Name="member5" Relationship="DataCenter.Entities.accounting_ibfk_salesman" FromRole="accounting" ToRole="member" />
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.accounting_ibfk_submit_reviewer" FromRole="accounting" ToRole="member" />
           <NavigationProperty Name="customer" Relationship="DataCenter.Entities.accounting_ibfk_customer" FromRole="accounting" ToRole="customer" />
+          <Property Name="supplier_id" Type="Int32" />
+          <NavigationProperty Name="supplier" Relationship="DataCenter.Entities.fk_accounting_supplier_id" FromRole="accounting" ToRole="supplier" />
         </EntityType>
         <Association Name="accounting_ibfk_accountant">
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
@@ -6338,6 +6361,7 @@
           <NavigationProperty Name="reg_internal" Relationship="DataCenter.Entities.fk_reg_internal_supplier_id" FromRole="supplier" ToRole="reg_internal" />
           <NavigationProperty Name="sub_audit" Relationship="DataCenter.Entities.fk_sub_audit_supplier_id" FromRole="supplier" ToRole="sub_audit" />
           <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.fk_trademark_supplier_id" FromRole="supplier" ToRole="trademark" />
+          <NavigationProperty Name="accountings" Relationship="DataCenter.Entities.fk_accounting_supplier_id" FromRole="supplier" ToRole="accounting" />
         </EntityType>
         <Association Name="fk_accounting_item_supplier_id">
           <End Type="DataCenter.Entities.supplier" Role="supplier" Multiplicity="0..1" />
@@ -6419,6 +6443,18 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="trademark">
+              <PropertyRef Name="supplier_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_accounting_supplier_id">
+          <End Type="DataCenter.Entities.supplier" Role="supplier" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.accounting" Role="accounting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accounting">
               <PropertyRef Name="supplier_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -7058,6 +7094,7 @@
           <EntitySetMapping Name="accountings">
             <EntityTypeMapping TypeName="DataCenter.Entities.accounting">
               <MappingFragment StoreEntitySet="accounting">
+                <ScalarProperty Name="supplier_id" ColumnName="supplier_id" />
                 <ScalarProperty Name="pay_notify" ColumnName="pay_notify" />
                 <ScalarProperty Name="pay_mode" ColumnName="pay_mode" />
                 <ScalarProperty Name="invoice_account" ColumnName="invoice_account" />

@@ -476,6 +476,9 @@ namespace WebCenter.Web.Controllers
                 trader_id = a.trader_id,
                 trader_name = a.customer1.name,
                 creator = a.member1.name,
+
+                supplier_name = a.supplier.name,
+
             }).FirstOrDefault();
 
             var list = Uof.IincomeService.GetAll(i => i.source_id == reg.id && i.source_name == "audit").Select(i => new {
@@ -569,7 +572,7 @@ namespace WebCenter.Web.Controllers
                 trader_id = a.trader_id,
                 trader_name = a.customer1.name,
                 creator = a.member1.name,
-
+                supplier_name = a.supplier.name,
             });
 
             return Json(new { order = reg, incomes = incomes, subs = subs, banks = banks }, JsonRequestBehavior.AllowGet);
@@ -731,7 +734,7 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PassAudit(int id)
+        public ActionResult PassAudit(int id, int supplier_id)
         {
             var u = HttpContext.User.Identity.IsAuthenticated;
             if (!u)
@@ -827,7 +830,7 @@ namespace WebCenter.Web.Controllers
                 dbAudit.submit_reviewer_id = userId;
                 dbAudit.submit_review_date = DateTime.Now;
                 dbAudit.submit_review_moment = "";
-
+                dbAudit.supplier_id = supplier_id;
                 t = "提交的审核";
                 waitdeals.Add(new waitdeal
                 {

@@ -593,6 +593,8 @@ namespace WebCenter.Web.Controllers
                 //invoice_tel = a.invoice_tel,
                 //invoice_bank = a.invoice_bank,
                 //invoice_account = a.invoice_account,
+
+                supplier_name = a.supplier.name ?? ""
             }).FirstOrDefault();
 
 
@@ -647,6 +649,8 @@ namespace WebCenter.Web.Controllers
 
                     trader_id = a.trader_id,
                     trader_name = a.customer.name,
+
+                    supplier_name = a.supplier.name,
 
                 })
                 .ToList();
@@ -918,7 +922,7 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PassAudit(int masterId, int subId, int waiter_id, int period, string code)
+        public ActionResult PassAudit(int masterId, int subId, int waiter_id, int period, string code, int supplier_id)
         {
             var u = HttpContext.User.Identity.IsAuthenticated;
             if (!u)
@@ -993,6 +997,7 @@ namespace WebCenter.Web.Controllers
                 dbAcc.submit_reviewer_id = userId;
                 dbAcc.submit_review_date = DateTime.Now;
                 dbAcc.submit_review_moment = "";
+                dbAcc.supplier_id = supplier_id;
 
                 master.accountant_id = waiter_id;
                 master.status = 3;
@@ -1000,6 +1005,7 @@ namespace WebCenter.Web.Controllers
                 master.submit_reviewer_id = userId;
                 master.submit_review_date = DateTime.Now;
                 master.submit_review_moment = "";
+                //master.supplier_id = supplier_id;
 
                 t = "提交的审核";
                 waitdeals.Add(new waitdeal

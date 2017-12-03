@@ -515,7 +515,9 @@ namespace WebCenter.Web.Controllers
                 creator = a.member1.name,
 
                 trader_id = a.trader_id,
-                trader_name = a.customer.name
+                trader_name = a.customer.name,
+
+                supplier_name = a.supplier.name,
 
             }).FirstOrDefault();
 
@@ -711,7 +713,7 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PassAudit(int id)
+        public ActionResult PassAudit(int id, int supplier_id)
         {
             var u = HttpContext.User.Identity.IsAuthenticated;
             if (!u)
@@ -806,6 +808,7 @@ namespace WebCenter.Web.Controllers
                 dbTrade.submit_reviewer_id = userId;
                 dbTrade.submit_review_date = DateTime.Now;
                 dbTrade.submit_review_moment = "";
+                dbTrade.supplier_id = supplier_id;
 
                 t = "提交的审核";
                 waitdeals.Add(new waitdeal

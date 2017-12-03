@@ -593,6 +593,7 @@ namespace WebCenter.Web.Controllers
 
                 annual_owner = a.annual_owner,
                 annual_owner_name = a.member8.name,
+                supplier_name = a.supplier.name,
 
             }).FirstOrDefault();
 
@@ -997,7 +998,7 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PassAudit(int id)
+        public ActionResult PassAudit(int id, int supplier_id)
         {
             var u = HttpContext.User.Identity.IsAuthenticated;
             if (!u)
@@ -1076,6 +1077,7 @@ namespace WebCenter.Web.Controllers
                 dbReg.submit_reviewer_id = userId;
                 dbReg.submit_review_date = DateTime.Now;
                 dbReg.submit_review_moment = "";
+                dbReg.supplier_id = supplier_id;
 
                 t = "提交的审核";
                 waitdeals.Add(new waitdeal

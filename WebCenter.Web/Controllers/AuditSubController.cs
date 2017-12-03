@@ -272,7 +272,7 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PassAudit(int id)
+        public ActionResult PassAudit(int id, int supplier_id)
         {
             var u = HttpContext.User.Identity.IsAuthenticated;
             if (!u)
@@ -352,6 +352,7 @@ namespace WebCenter.Web.Controllers
                 dbAudit.submit_reviewer_id = userId;
                 dbAudit.submit_review_date = DateTime.Now;
                 dbAudit.submit_review_moment = "";
+                dbAudit.supplier_id = supplier_id;
 
                 t = "提交的审核";
                 waitdeals.Add(new waitdeal
