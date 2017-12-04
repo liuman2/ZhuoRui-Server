@@ -177,6 +177,8 @@
         <AssociationConnector Association="DataCenter.Entities.fk_sub_audit_supplier_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_trademark_supplier_id" />
         <AssociationConnector Association="DataCenter.Entities.fk_accounting_supplier_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_annual_exam_supplier_id" />
+        <AssociationConnector Association="DataCenter.Entities.fk_history_supplier_id" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -136,10 +136,15 @@ namespace WebCenter.Entities
     
         public Nullable<float> resell_price { get; set; }
     
+    
+    
+        public Nullable<int> supplier_id { get; set; }
+    
         public virtual member member { get; set; }
         public virtual member member1 { get; set; }
         public virtual member member2 { get; set; }
         public virtual member member3 { get; set; }
         public virtual member member4 { get; set; }
+        public virtual supplier supplier { get; set; }
     }
 }

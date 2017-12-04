@@ -24,6 +24,8 @@ namespace WebCenter.Entities
             this.sub_audit = new HashSet<sub_audit>();
             this.trademarks = new HashSet<trademark>();
             this.accountings = new HashSet<accounting>();
+            this.annual_exam = new HashSet<annual_exam>();
+            this.histories = new HashSet<history>();
         }
     
     
@@ -52,5 +54,7 @@ namespace WebCenter.Entities
         public virtual ICollection<sub_audit> sub_audit { get; set; }
         public virtual ICollection<trademark> trademarks { get; set; }
         public virtual ICollection<accounting> accountings { get; set; }
+        public virtual ICollection<annual_exam> annual_exam { get; set; }
+        public virtual ICollection<history> histories { get; set; }
     }
 }

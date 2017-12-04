@@ -578,6 +578,8 @@ namespace WebCenter.Web
 
         public string order_owner { get; set; }
         public int? start_annual { get; set; }
+
+        public string supplier_name { get; set; }
     }
 
     public class WaitNotify
@@ -637,6 +639,7 @@ namespace WebCenter.Web
         public int? amount_unreceive { get; set; }
         public string salesman { get; set; }
         public string change_owner_name { get; set; }
+        public string supplier_name { get; set; }
     }
 
     public class Notification

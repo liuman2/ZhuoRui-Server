@@ -1251,6 +1251,7 @@ namespace WebCenter.Web.Controllers
                 finance_review_moment = a.finance_review_moment,
                 submit_review_moment = a.submit_review_moment,
                 start_annual = a.start_annual,
+                supplier_name = a.supplier.name,
 
             }).FirstOrDefault();
 
@@ -1386,7 +1387,7 @@ namespace WebCenter.Web.Controllers
             return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PassAudit(int id)
+        public ActionResult PassAudit(int id, int supplier_id)
         {
             var u = HttpContext.User.Identity.IsAuthenticated;
             if (!u)
@@ -1467,7 +1468,7 @@ namespace WebCenter.Web.Controllers
                 dbAnnual.submit_reviewer_id = userId;
                 dbAnnual.submit_review_date = DateTime.Now;
                 dbAnnual.submit_review_moment = "";
-                //dbAnnual.supplier_id = supplier_id;
+                dbAnnual.supplier_id = supplier_id;
 
                 t = "提交的审核";
                 waitdeals.Add(new waitdeal

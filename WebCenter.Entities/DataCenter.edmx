@@ -175,6 +175,7 @@
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="assistant_id" Type="int" />
           <Property Name="start_annual" Type="int" />
+          <Property Name="supplier_id" Type="int" />
         </EntityType>
         <EntityType Name="area">
           <Key>
@@ -438,10 +439,11 @@
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="logoff" Type="int" />
           <Property Name="logoff_memo" Type="varchar" MaxLength="100" />
+          <Property Name="change_owner" Type="int" />
           <Property Name="area_id" Type="int" />
           <Property Name="resell_id" Type="int" />
           <Property Name="resell_price" Type="float" />
-          <Property Name="change_owner" Type="int" />
+          <Property Name="supplier_id" Type="int" />
         </EntityType>
         <EntityType Name="history_shareholder">
           <Key>
@@ -728,8 +730,8 @@
           <Property Name="title_last" Type="varchar" MaxLength="100" />
           <Property Name="trader_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
-          <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="resell_price" Type="float" />
+          <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="supplier_id" Type="int" />
         </EntityType>
         <EntityType Name="position">
@@ -900,8 +902,8 @@
           <Property Name="title_last" Type="varchar" MaxLength="100" />
           <Property Name="trader_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
-          <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="resell_price" Type="float" />
+          <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="supplier_id" Type="int" />
         </EntityType>
         <EntityType Name="reg_internal_history">
@@ -995,12 +997,12 @@
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="all_day" Type="tinyint" />
           <Property Name="is_repeat" Type="tinyint" />
+          <Property Name="repeat_type" Type="tinyint" />
+          <Property Name="repeat_dow" Type="varchar" MaxLength="20" />
           <Property Name="is_done" Type="tinyint" />
           <Property Name="property" Type="tinyint" />
           <Property Name="meeting_type" Type="varchar" MaxLength="20" />
           <Property Name="presenter_id" Type="int" />
-          <Property Name="repeat_type" Type="tinyint" />
-          <Property Name="repeat_dow" Type="varchar" MaxLength="20" />
           <Property Name="repeat_end" Type="datetime" Precision="0" />
           <Property Name="is_notify" Type="int" />
           <Property Name="source" Type="varchar" MaxLength="50" />
@@ -1150,8 +1152,8 @@
           <Property Name="title_last" Type="varchar" MaxLength="100" />
           <Property Name="trader_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
-          <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="resell_price" Type="float" />
+          <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="supplier_id" Type="int" />
         </EntityType>
         <EntityType Name="waitdeal">
@@ -1840,6 +1842,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_annual_exam_supplier_id">
+          <End Role="supplier" Type="Self.supplier" Multiplicity="0..1" />
+          <End Role="annual_exam" Type="Self.annual_exam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="annual_exam">
+              <PropertyRef Name="supplier_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_audit_assistant_id">
           <End Role="member" Type="Self.member" Multiplicity="0..1" />
           <End Role="audit" Type="Self.audit" Multiplicity="*" />
@@ -1909,6 +1923,18 @@
             </Principal>
             <Dependent Role="history">
               <PropertyRef Name="change_owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_history_supplier_id">
+          <End Role="supplier" Type="Self.supplier" Multiplicity="0..1" />
+          <End Role="history" Type="Self.history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="history">
+              <PropertyRef Name="supplier_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2863,6 +2889,10 @@
             <End Role="member" EntitySet="member" />
             <End Role="annual_exam" EntitySet="annual_exam" />
           </AssociationSet>
+          <AssociationSet Name="fk_annual_exam_supplier_id" Association="Self.fk_annual_exam_supplier_id">
+            <End Role="supplier" EntitySet="supplier" />
+            <End Role="annual_exam" EntitySet="annual_exam" />
+          </AssociationSet>
           <AssociationSet Name="fk_audit_assistant_id" Association="Self.fk_audit_assistant_id">
             <End Role="member" EntitySet="member" />
             <End Role="audit" EntitySet="audit" />
@@ -2885,6 +2915,10 @@
           </AssociationSet>
           <AssociationSet Name="fk_history_change_owner" Association="Self.fk_history_change_owner">
             <End Role="member" EntitySet="member" />
+            <End Role="history" EntitySet="history" />
+          </AssociationSet>
+          <AssociationSet Name="fk_history_supplier_id" Association="Self.fk_history_supplier_id">
+            <End Role="supplier" EntitySet="supplier" />
             <End Role="history" EntitySet="history" />
           </AssociationSet>
           <AssociationSet Name="fk_internal_assistant_id" Association="Self.fk_internal_assistant_id">
@@ -3643,6 +3677,14 @@
             <End Role="supplier" EntitySet="suppliers" />
             <End Role="accounting" EntitySet="accountings" />
           </AssociationSet>
+          <AssociationSet Name="fk_annual_exam_supplier_id" Association="DataCenter.Entities.fk_annual_exam_supplier_id">
+            <End Role="supplier" EntitySet="suppliers" />
+            <End Role="annual_exam" EntitySet="annual_exam" />
+          </AssociationSet>
+          <AssociationSet Name="fk_history_supplier_id" Association="DataCenter.Entities.fk_history_supplier_id">
+            <End Role="supplier" EntitySet="suppliers" />
+            <End Role="history" EntitySet="histories" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -4153,6 +4195,8 @@
           <NavigationProperty Name="member7" Relationship="DataCenter.Entities.fk_annual_exam_assistant_id" FromRole="annual_exam" ToRole="member" />
           <NavigationProperty Name="customer" Relationship="DataCenter.Entities.annual_ibfk_customer" FromRole="annual_exam" ToRole="customer" />
           <Property Name="start_annual" Type="Int32" />
+          <Property Name="supplier_id" Type="Int32" />
+          <NavigationProperty Name="supplier" Relationship="DataCenter.Entities.fk_annual_exam_supplier_id" FromRole="annual_exam" ToRole="supplier" />
         </EntityType>
         <Association Name="annual_ibfk_accountant">
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
@@ -6285,6 +6329,8 @@
           <NavigationProperty Name="member2" Relationship="DataCenter.Entities.history_ibfk_finance_reviewer" FromRole="history" ToRole="member" />
           <NavigationProperty Name="member3" Relationship="DataCenter.Entities.history_ibfk_salesman" FromRole="history" ToRole="member" />
           <NavigationProperty Name="member4" Relationship="DataCenter.Entities.history_ibfk_submit_reviewer" FromRole="history" ToRole="member" />
+          <Property Name="supplier_id" Type="Int32" />
+          <NavigationProperty Name="supplier" Relationship="DataCenter.Entities.fk_history_supplier_id" FromRole="history" ToRole="supplier" />
         </EntityType>
         <Association Name="fk_history_change_owner">
           <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
@@ -6362,6 +6408,8 @@
           <NavigationProperty Name="sub_audit" Relationship="DataCenter.Entities.fk_sub_audit_supplier_id" FromRole="supplier" ToRole="sub_audit" />
           <NavigationProperty Name="trademarks" Relationship="DataCenter.Entities.fk_trademark_supplier_id" FromRole="supplier" ToRole="trademark" />
           <NavigationProperty Name="accountings" Relationship="DataCenter.Entities.fk_accounting_supplier_id" FromRole="supplier" ToRole="accounting" />
+          <NavigationProperty Name="annual_exam" Relationship="DataCenter.Entities.fk_annual_exam_supplier_id" FromRole="supplier" ToRole="annual_exam" />
+          <NavigationProperty Name="histories" Relationship="DataCenter.Entities.fk_history_supplier_id" FromRole="supplier" ToRole="history" />
         </EntityType>
         <Association Name="fk_accounting_item_supplier_id">
           <End Type="DataCenter.Entities.supplier" Role="supplier" Multiplicity="0..1" />
@@ -6455,6 +6503,30 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="accounting">
+              <PropertyRef Name="supplier_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_annual_exam_supplier_id">
+          <End Type="DataCenter.Entities.supplier" Role="supplier" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.annual_exam" Role="annual_exam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="annual_exam">
+              <PropertyRef Name="supplier_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_history_supplier_id">
+          <End Type="DataCenter.Entities.supplier" Role="supplier" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.history" Role="history" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="supplier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="history">
               <PropertyRef Name="supplier_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -6785,6 +6857,7 @@
           <EntitySetMapping Name="annual_exam">
             <EntityTypeMapping TypeName="DataCenter.Entities.annual_exam">
               <MappingFragment StoreEntitySet="annual_exam">
+                <ScalarProperty Name="supplier_id" ColumnName="supplier_id" />
                 <ScalarProperty Name="start_annual" ColumnName="start_annual" />
                 <ScalarProperty Name="assistant_id" ColumnName="assistant_id" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
@@ -7639,6 +7712,7 @@
           <EntitySetMapping Name="histories">
             <EntityTypeMapping TypeName="DataCenter.Entities.history">
               <MappingFragment StoreEntitySet="history">
+                <ScalarProperty Name="supplier_id" ColumnName="supplier_id" />
                 <ScalarProperty Name="resell_price" ColumnName="resell_price" />
                 <ScalarProperty Name="resell_id" ColumnName="resell_id" />
                 <ScalarProperty Name="area_id" ColumnName="area_id" />

@@ -49,9 +49,11 @@ INSERT INTO `menu` VALUES ('77', '1', 'supplier', 'fa fa-money', '供应商列�
 call AddColumnUnlessExists(Database(), 'accounting', 'supplier_id', 'int(11) DEFAULT NULL COMMENT "供应商id"');
 ALTER TABLE accounting ADD CONSTRAINT fk_accounting_supplier_id FOREIGN KEY (supplier_id) REFERENCES supplier(id);
 
+-- 2017-12-04
+call AddColumnUnlessExists(Database(), 'history', 'supplier_id', 'int(11) DEFAULT NULL COMMENT "供应商id"');
+ALTER TABLE history ADD CONSTRAINT fk_history_supplier_id FOREIGN KEY (supplier_id) REFERENCES supplier(id);
 
-
-
-
+call AddColumnUnlessExists(Database(), 'annual_exam', 'supplier_id', 'int(11) DEFAULT NULL COMMENT "供应商id"');
+ALTER TABLE annual_exam ADD CONSTRAINT fk_annual_exam_supplier_id FOREIGN KEY (supplier_id) REFERENCES supplier(id);
 
 
