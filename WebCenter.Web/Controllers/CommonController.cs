@@ -298,6 +298,8 @@ namespace WebCenter.Web.Controllers
                         manager_name = a.member2.name,
                         submit_review_date = a.submit_review_date,
 
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     if (!string.IsNullOrEmpty(printData.region))
@@ -352,6 +354,8 @@ namespace WebCenter.Web.Controllers
                         manager_id = a.manager_id,
                         manager_name = a.member2.name,
                         submit_review_date = a.submit_review_date,
+
+                        supplier_id = a.supplier_id,
                     }).FirstOrDefault();
 
 
@@ -410,6 +414,8 @@ namespace WebCenter.Web.Controllers
                         //annual_owner_name = a.member2.name,
                         submit_review_date = a.submit_review_date,
 
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     if (printData != null)
@@ -458,11 +464,11 @@ namespace WebCenter.Web.Controllers
                         currency = a.currency,
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
-
                         orderid = a.order_id,
                         ordersource = a.type,
-
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
                     if (printData != null)
                     {
@@ -508,8 +514,9 @@ namespace WebCenter.Web.Controllers
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
                         trader = a.customer1.name,
-
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -554,6 +561,8 @@ namespace WebCenter.Web.Controllers
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     printData.date = auditLine.date_pay != null ? auditLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -598,6 +607,8 @@ namespace WebCenter.Web.Controllers
                         rate = a.rate ?? 1,
                         trader = a.customer.name,
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction!=null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -642,6 +653,8 @@ namespace WebCenter.Web.Controllers
                         area = a.member5.area.name,
                         rate = a.rate ?? 1,
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     printData.date = internalLine.date_pay != null ? internalLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -686,6 +699,8 @@ namespace WebCenter.Web.Controllers
                         rate = a.rate ?? 1,
                         trader = a.customer.name,
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -730,6 +745,8 @@ namespace WebCenter.Web.Controllers
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     printData.date = patentLine.date_pay != null ? patentLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -775,6 +792,8 @@ namespace WebCenter.Web.Controllers
                         region = a.region,
                         trader = a.customer.name,
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     if (!string.IsNullOrEmpty(printData.region))
@@ -825,6 +844,8 @@ namespace WebCenter.Web.Controllers
                         rate = a.rate ?? 1,
                         region = a.region,
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     if (!string.IsNullOrEmpty(printData.region))
@@ -879,6 +900,7 @@ namespace WebCenter.Web.Controllers
                         change_owner = a.change_owner,
                         change_owner_name = a.member.name,
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
 
                     }).FirstOrDefault();
 
@@ -952,6 +974,8 @@ namespace WebCenter.Web.Controllers
                         change_owner = a.change_owner,
                         change_owner_name = a.member.name,
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     if (printData.customer_id != null)
@@ -1008,6 +1032,8 @@ namespace WebCenter.Web.Controllers
                         rate = a.rate ?? 1,
                         trader = a.customer1.name,
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -1052,6 +1078,8 @@ namespace WebCenter.Web.Controllers
                         area = a.member4.area.name,
                         rate = a.rate ?? 1,
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     printData.date = subAuditLineLine.date_pay != null ? subAuditLineLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
@@ -1100,6 +1128,8 @@ namespace WebCenter.Web.Controllers
                         region = "", //a.region
                         trader = a.customer.name,
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     //if (printData != null)
@@ -1165,6 +1195,8 @@ namespace WebCenter.Web.Controllers
                         rate = 1,
                         region = "", //a.region
                         submit_review_date = a.submit_review_date,
+                        supplier_id = a.supplier_id,
+
                     }).FirstOrDefault();
 
                     //if (printData != null)

@@ -176,6 +176,8 @@ namespace WebCenter.Web
         public string change_owner_name { get; set; }
 
         public string income_date { get; set; }
+
+        public int? supplier_id { get; set; }
     }
 
     public class ReceiptPrintData

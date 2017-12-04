@@ -56,4 +56,6 @@ ALTER TABLE history ADD CONSTRAINT fk_history_supplier_id FOREIGN KEY (supplier_
 call AddColumnUnlessExists(Database(), 'annual_exam', 'supplier_id', 'int(11) DEFAULT NULL COMMENT "供应商id"');
 ALTER TABLE annual_exam ADD CONSTRAINT fk_annual_exam_supplier_id FOREIGN KEY (supplier_id) REFERENCES supplier(id);
 
+call AddColumnUnlessExists(Database(), 'supplier', 'memo', 'varchar(300) DEFAULT NULL COMMENT "备注"');
+
 

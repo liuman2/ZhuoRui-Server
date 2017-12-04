@@ -46,6 +46,10 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
+    
+    
+        public string memo { get; set; }
+    
         public virtual ICollection<accounting_item> accounting_item { get; set; }
         public virtual ICollection<audit> audits { get; set; }
         public virtual ICollection<patent> patents { get; set; }

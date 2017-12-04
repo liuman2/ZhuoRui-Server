@@ -1077,6 +1077,7 @@
           <Property Name="name" Type="varchar" MaxLength="120" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="memo" Type="varchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="timeline">
           <Key>
@@ -6410,6 +6411,7 @@
           <NavigationProperty Name="accountings" Relationship="DataCenter.Entities.fk_accounting_supplier_id" FromRole="supplier" ToRole="accounting" />
           <NavigationProperty Name="annual_exam" Relationship="DataCenter.Entities.fk_annual_exam_supplier_id" FromRole="supplier" ToRole="annual_exam" />
           <NavigationProperty Name="histories" Relationship="DataCenter.Entities.fk_history_supplier_id" FromRole="supplier" ToRole="history" />
+          <Property Name="memo" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="fk_accounting_item_supplier_id">
           <End Type="DataCenter.Entities.supplier" Role="supplier" Multiplicity="0..1" />
@@ -7749,6 +7751,7 @@
           <EntitySetMapping Name="suppliers">
             <EntityTypeMapping TypeName="DataCenter.Entities.supplier">
               <MappingFragment StoreEntitySet="supplier">
+                <ScalarProperty Name="memo" ColumnName="memo" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="name" ColumnName="name" />
