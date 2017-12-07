@@ -882,7 +882,9 @@ namespace WebCenter.Web.Controllers
                     {
                         order_code = a.code,
                         order_id = a.id,
-                        order_name = a.name_en ?? a.name_cn,
+                        order_name = a.name_cn,
+                        order_name_en = a.name_en,
+
                         order_source = "reg_abroad",
                         salesman_id = a.salesman_id,
                         creator_id = a.creator_id,
@@ -945,7 +947,8 @@ namespace WebCenter.Web.Controllers
                     {
                         order_code = a.code,
                         order_id = a.id,
-                        order_name = a.name_cn ?? a.name_en,
+                        order_name = a.name_cn,
+                        order_name_en = a.name_en,
                         order_source = "audit",
                         salesman_id = a.salesman_id,
                         creator_id = a.creator_id,
