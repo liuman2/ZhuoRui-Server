@@ -733,6 +733,7 @@
           <Property Name="resell_price" Type="float" />
           <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="supplier_id" Type="int" />
+          <Property Name="annual_price" Type="float" />
         </EntityType>
         <EntityType Name="position">
           <Key>
@@ -817,6 +818,7 @@
           <Property Name="annual_owner" Type="int" />
           <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="supplier_id" Type="int" />
+          <Property Name="annual_price" Type="float" />
         </EntityType>
         <EntityType Name="reg_history">
           <Key>
@@ -905,6 +907,7 @@
           <Property Name="resell_price" Type="float" />
           <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="supplier_id" Type="int" />
+          <Property Name="annual_price" Type="float" />
         </EntityType>
         <EntityType Name="reg_internal_history">
           <Key>
@@ -1156,6 +1159,7 @@
           <Property Name="resell_price" Type="float" />
           <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="supplier_id" Type="int" />
+          <Property Name="annual_price" Type="float" />
         </EntityType>
         <EntityType Name="waitdeal">
           <Key>
@@ -5568,6 +5572,7 @@
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.patent_ibfk_waiter" FromRole="patent" ToRole="member" />
           <Property Name="supplier_id" Type="Int32" />
           <NavigationProperty Name="supplier" Relationship="DataCenter.Entities.fk_patent_supplier_id" FromRole="patent" ToRole="supplier" />
+          <Property Name="annual_price" Type="Single" />
         </EntityType>
         <EntityType Name="reg_internal">
           <Key>
@@ -5651,6 +5656,7 @@
           <NavigationProperty Name="member7" Relationship="DataCenter.Entities.reg_internal_ibfk_waiter" FromRole="reg_internal" ToRole="member" />
           <Property Name="supplier_id" Type="Int32" />
           <NavigationProperty Name="supplier" Relationship="DataCenter.Entities.fk_reg_internal_supplier_id" FromRole="reg_internal" ToRole="supplier" />
+          <Property Name="annual_price" Type="Single" />
         </EntityType>
         <EntityType Name="trademark">
           <Key>
@@ -5723,6 +5729,7 @@
           <NavigationProperty Name="member6" Relationship="DataCenter.Entities.trademark_ibfk_waiter" FromRole="trademark" ToRole="member" />
           <Property Name="supplier_id" Type="Int32" />
           <NavigationProperty Name="supplier" Relationship="DataCenter.Entities.fk_trademark_supplier_id" FromRole="trademark" ToRole="supplier" />
+          <Property Name="annual_price" Type="Single" />
         </EntityType>
         <Association Name="reg_internal_ibfk_bank">
           <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="0..1" />
@@ -6146,6 +6153,7 @@
           <NavigationProperty Name="member8" Relationship="DataCenter.Entities.fk_reg_abroad_annual_owner" FromRole="reg_abroad" ToRole="member" />
           <Property Name="supplier_id" Type="Int32" />
           <NavigationProperty Name="supplier" Relationship="DataCenter.Entities.fk_reg_abroad_supplier_id" FromRole="reg_abroad" ToRole="supplier" />
+          <Property Name="annual_price" Type="Single" />
         </EntityType>
         <Association Name="abroad_ibfk_bank">
           <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="0..1" />
@@ -7460,6 +7468,7 @@
           <EntitySetMapping Name="patents">
             <EntityTypeMapping TypeName="DataCenter.Entities.patent">
               <MappingFragment StoreEntitySet="patent">
+                <ScalarProperty Name="annual_price" ColumnName="annual_price" />
                 <ScalarProperty Name="supplier_id" ColumnName="supplier_id" />
                 <ScalarProperty Name="resell_price" ColumnName="resell_price" />
                 <ScalarProperty Name="resell_code" ColumnName="resell_code" />
@@ -7516,6 +7525,7 @@
           <EntitySetMapping Name="reg_internal">
             <EntityTypeMapping TypeName="DataCenter.Entities.reg_internal">
               <MappingFragment StoreEntitySet="reg_internal">
+                <ScalarProperty Name="annual_price" ColumnName="annual_price" />
                 <ScalarProperty Name="supplier_id" ColumnName="supplier_id" />
                 <ScalarProperty Name="resell_price" ColumnName="resell_price" />
                 <ScalarProperty Name="resell_code" ColumnName="resell_code" />
@@ -7588,6 +7598,7 @@
           <EntitySetMapping Name="trademarks">
             <EntityTypeMapping TypeName="DataCenter.Entities.trademark">
               <MappingFragment StoreEntitySet="trademark">
+                <ScalarProperty Name="annual_price" ColumnName="annual_price" />
                 <ScalarProperty Name="supplier_id" ColumnName="supplier_id" />
                 <ScalarProperty Name="resell_price" ColumnName="resell_price" />
                 <ScalarProperty Name="resell_code" ColumnName="resell_code" />
@@ -7651,6 +7662,7 @@
           <EntitySetMapping Name="reg_abroad">
             <EntityTypeMapping TypeName="DataCenter.Entities.reg_abroad">
               <MappingFragment StoreEntitySet="reg_abroad">
+                <ScalarProperty Name="annual_price" ColumnName="annual_price" />
                 <ScalarProperty Name="supplier_id" ColumnName="supplier_id" />
                 <ScalarProperty Name="resell_code" ColumnName="resell_code" />
                 <ScalarProperty Name="annual_owner" ColumnName="annual_owner" />

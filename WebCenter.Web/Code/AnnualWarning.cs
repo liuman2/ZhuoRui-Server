@@ -44,6 +44,7 @@ namespace WebCenter.Web
         public int?  is_annual { get; set; }
 
         public int? bank_count { get; set; }
+        public float? annual_price { get; set; }
     }
 
     public class FinanceCheck

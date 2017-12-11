@@ -34,5 +34,7 @@ namespace WebCenter.Web
         /// 订单归属
         /// </summary>
         public string order_owner { get; set; }
-}
+        public float? annual_price { get; set; }
+
+    }
 }

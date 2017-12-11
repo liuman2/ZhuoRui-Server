@@ -244,6 +244,10 @@ namespace WebCenter.Entities
     
         public Nullable<int> supplier_id { get; set; }
     
+    
+    
+        public Nullable<float> annual_price { get; set; }
+    
         public virtual customer customer { get; set; }
         public virtual customer customer1 { get; set; }
         public virtual member member { get; set; }

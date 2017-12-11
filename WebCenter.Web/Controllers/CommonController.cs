@@ -1318,6 +1318,7 @@ namespace WebCenter.Web.Controllers
                         订单归属人 = a.member.name,
                         客户归属ID = a.customer.salesman_id,
                         客户归属 = a.customer.member1.name,
+                        最近年检 = a.annual_year,
                         order_status = a.order_status,
                         status = a.status,
                     }).ToList();

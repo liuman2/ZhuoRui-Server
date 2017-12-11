@@ -458,6 +458,7 @@ namespace WebCenter.Web.Controllers
 
                 annual_owner = a.annual_owner,
                 annual_owner_name = a.member8.name,
+                annual_price = a.annual_price,
 
             }).FirstOrDefault();
 
@@ -594,6 +595,7 @@ namespace WebCenter.Web.Controllers
                 annual_owner = a.annual_owner,
                 annual_owner_name = a.member8.name,
                 supplier_name = a.supplier.name,
+                annual_price = a.annual_price,
 
             }).FirstOrDefault();
 
@@ -808,6 +810,7 @@ namespace WebCenter.Web.Controllers
             dbReg.need_annual = reg.need_annual ?? 1;
 
             dbReg.annual_owner = reg.annual_owner;
+            dbReg.annual_price = reg.annual_price;
 
 
             if (reg.is_open_bank == 0)

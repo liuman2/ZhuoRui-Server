@@ -59,3 +59,8 @@ ALTER TABLE annual_exam ADD CONSTRAINT fk_annual_exam_supplier_id FOREIGN KEY (s
 call AddColumnUnlessExists(Database(), 'supplier', 'memo', 'varchar(300) DEFAULT NULL COMMENT "备注"');
 
 
+-- 2017-12-08
+call AddColumnUnlessExists(Database(), 'reg_abroad', 'annual_price', 'float(255,2) DEFAULT NULL COMMENT "年检价格"');
+call AddColumnUnlessExists(Database(), 'reg_internal', 'annual_price', 'float(255,2) DEFAULT NULL COMMENT "年检价格"');
+call AddColumnUnlessExists(Database(), 'trademark', 'annual_price', 'float(255,2) DEFAULT NULL COMMENT "年检价格"');
+call AddColumnUnlessExists(Database(), 'patent', 'annual_price', 'float(255,2) DEFAULT NULL COMMENT "年检价格"');

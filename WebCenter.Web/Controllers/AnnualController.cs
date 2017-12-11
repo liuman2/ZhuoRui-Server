@@ -170,6 +170,7 @@ namespace WebCenter.Web.Controllers
                     title_last = a.title_last,
                     date_wait = a.date_wait,
                     region = a.region,
+                    annual_price = a.annual_price,
                 }).ToList();
 
             if (abroads.Count() > 0)
@@ -288,6 +289,7 @@ namespace WebCenter.Web.Controllers
                         title_last = a.title_last,
                         date_wait = a.date_wait,
                         region = "",
+                        annual_price = a.annual_price,
                     }).ToList();
 
                 if (internas.Count() > 0)
@@ -358,6 +360,7 @@ namespace WebCenter.Web.Controllers
                     title_last = a.title_last,
                     date_wait = a.date_wait,
                     region = a.region,
+                    annual_price = a.annual_price,
                 }).ToList();
 
             if (trademarks.Count() > 0)
@@ -472,6 +475,7 @@ namespace WebCenter.Web.Controllers
                     title_last = a.title_last,
                     date_wait = a.date_wait,
                     region = "",
+                    annual_price = a.annual_price,
                 }).ToList();
 
             if (patents.Count() > 0)
@@ -517,6 +521,16 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        private float? GetAnnualPrice(int orderId, string orderType)
+        {
+            var historyAnnual = Uof.Iannual_examService.GetAll(a => a.order_id == orderId && a.type == orderType).OrderByDescending(a => a.id).FirstOrDefault();
+            if (historyAnnual == null)
+            {
+                return null;
+            }
+            return historyAnnual.amount_transaction;
+        }
+
         public ActionResult GetBusinessOrder(int orderId, string orderType)
         {
             var annualOrigOrder = new AnnualOrigOrder();
@@ -544,6 +558,7 @@ namespace WebCenter.Web.Controllers
                         waiter_id = a.waiter_id,
                         waiter_name = a.member6.name,
                         order_owner = a.member.name,
+                        annual_price = a.annual_price,
 
                     }).FirstOrDefault();
                     break;
@@ -568,6 +583,7 @@ namespace WebCenter.Web.Controllers
                         waiter_name = a.member7.name,
 
                         order_owner = a.member1.name,
+                        annual_price = a.annual_price,
                     }).FirstOrDefault();
                     break;
                 case "trademark":
@@ -594,6 +610,7 @@ namespace WebCenter.Web.Controllers
                         waiter_name = a.member6.name,
 
                         order_owner = a.member1.name,
+                        annual_price = a.annual_price,
                     }).FirstOrDefault();
                     break;
                 case "patent":
@@ -619,10 +636,17 @@ namespace WebCenter.Web.Controllers
                         waiter_name = a.member6.name,
 
                         order_owner = a.member1.name,
+                        annual_price = a.annual_price,
                     }).FirstOrDefault();
                     break;
                 default:
                     break;
+            }
+
+            var historyPrice = GetAnnualPrice(orderId, orderType);
+            if (historyPrice!= null && historyPrice > 0)
+            {
+                annualOrigOrder.annual_price = historyPrice;
             }
 
             return Json(annualOrigOrder, JsonRequestBehavior.AllowGet);
