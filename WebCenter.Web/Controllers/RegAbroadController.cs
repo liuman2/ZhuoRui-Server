@@ -42,7 +42,7 @@ namespace WebCenter.Web.Controllers
             var deptId = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out deptId);
-
+                        
             Expression<Func<reg_abroad, bool>> condition = c => true; //  c.salesman_id == userId;
             var ops = arrs[4].Split(',');
             if (ops.Count() == 0)
@@ -80,6 +80,7 @@ namespace WebCenter.Web.Controllers
             //{
             //    customerQuery = c => (c.customer_id == request.customer_id);
             //}
+
             // 订单状态
             Expression<Func<reg_abroad, bool>> statusQuery = c => true;
             if (request.status != null)
@@ -177,11 +178,29 @@ namespace WebCenter.Web.Controllers
                 areaQuery = c => c.code.Contains(request.area);
             }
 
+            var regIds = new List<int>();
+            if (request.bank_id != null)
+            {
+                regIds = Uof.Ibusiness_bankService.GetAll(b => b.bank_id == request.bank_id && b.source == "reg_abroad").Select(b => b.source_id).ToList();
+            }
+            Expression<Func<reg_abroad, bool>> regIdsQuery = c => true;
+            if (regIds.Count > 0)
+            {
+                regIdsQuery = c => regIds.Contains(c.id);
+            } else
+            {
+                if (request.bank_id != null)
+                {
+                    regIdsQuery = c => false;
+                }
+            }
+
             var list = Uof.Ireg_abroadService
                 .GetAll(condition)                
                 .Where(statusQuery)                
                 .Where(nameQuery)
                 .Where(areaQuery)
+                .Where(regIdsQuery)
                 .OrderByDescending(item => item.date_created).Select(c => new
                 {
                     id = c.id,
@@ -221,6 +240,7 @@ namespace WebCenter.Web.Controllers
                 .Where(statusQuery)
                 .Where(nameQuery)
                 .Where(areaQuery)
+                .Where(regIdsQuery)
                 .Count();
 
             var totalPages = 0;
