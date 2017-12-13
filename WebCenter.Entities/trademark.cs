@@ -248,6 +248,14 @@ namespace WebCenter.Entities
     
         public Nullable<float> annual_price { get; set; }
     
+    
+    
+        public Nullable<int> cut_owner { get; set; }
+    
+    
+    
+        public Nullable<int> annual_owner { get; set; }
+    
         public virtual customer customer { get; set; }
         public virtual customer customer1 { get; set; }
         public virtual member member { get; set; }
@@ -258,5 +266,7 @@ namespace WebCenter.Entities
         public virtual member member5 { get; set; }
         public virtual member member6 { get; set; }
         public virtual supplier supplier { get; set; }
+        public virtual member member11 { get; set; }
+        public virtual member member7 { get; set; }
     }
 }

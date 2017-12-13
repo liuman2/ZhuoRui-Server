@@ -96,6 +96,10 @@ namespace WebCenter.Entities
             this.histories2 = new HashSet<history>();
             this.histories3 = new HashSet<history>();
             this.histories4 = new HashSet<history>();
+            this.patents11 = new HashSet<patent>();
+            this.trademarks11 = new HashSet<trademark>();
+            this.patents7 = new HashSet<patent>();
+            this.trademarks7 = new HashSet<trademark>();
         }
     
     
@@ -243,5 +247,9 @@ namespace WebCenter.Entities
         public virtual ICollection<history> histories2 { get; set; }
         public virtual ICollection<history> histories3 { get; set; }
         public virtual ICollection<history> histories4 { get; set; }
+        public virtual ICollection<patent> patents11 { get; set; }
+        public virtual ICollection<trademark> trademarks11 { get; set; }
+        public virtual ICollection<patent> patents7 { get; set; }
+        public virtual ICollection<trademark> trademarks7 { get; set; }
     }
 }

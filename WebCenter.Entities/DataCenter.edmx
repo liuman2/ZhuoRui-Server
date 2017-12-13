@@ -439,10 +439,10 @@
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="logoff" Type="int" />
           <Property Name="logoff_memo" Type="varchar" MaxLength="100" />
-          <Property Name="change_owner" Type="int" />
           <Property Name="area_id" Type="int" />
           <Property Name="resell_id" Type="int" />
           <Property Name="resell_price" Type="float" />
+          <Property Name="change_owner" Type="int" />
           <Property Name="supplier_id" Type="int" />
         </EntityType>
         <EntityType Name="history_shareholder">
@@ -730,10 +730,12 @@
           <Property Name="title_last" Type="varchar" MaxLength="100" />
           <Property Name="trader_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
-          <Property Name="resell_price" Type="float" />
           <Property Name="resell_code" Type="varchar" MaxLength="20" />
+          <Property Name="resell_price" Type="float" />
           <Property Name="supplier_id" Type="int" />
           <Property Name="annual_price" Type="float" />
+          <Property Name="cut_owner" Type="int" />
+          <Property Name="annual_owner" Type="int" />
         </EntityType>
         <EntityType Name="position">
           <Key>
@@ -904,8 +906,8 @@
           <Property Name="title_last" Type="varchar" MaxLength="100" />
           <Property Name="trader_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
-          <Property Name="resell_price" Type="float" />
           <Property Name="resell_code" Type="varchar" MaxLength="20" />
+          <Property Name="resell_price" Type="float" />
           <Property Name="supplier_id" Type="int" />
           <Property Name="annual_price" Type="float" />
         </EntityType>
@@ -1000,12 +1002,12 @@
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="all_day" Type="tinyint" />
           <Property Name="is_repeat" Type="tinyint" />
-          <Property Name="repeat_type" Type="tinyint" />
-          <Property Name="repeat_dow" Type="varchar" MaxLength="20" />
           <Property Name="is_done" Type="tinyint" />
           <Property Name="property" Type="tinyint" />
           <Property Name="meeting_type" Type="varchar" MaxLength="20" />
           <Property Name="presenter_id" Type="int" />
+          <Property Name="repeat_type" Type="tinyint" />
+          <Property Name="repeat_dow" Type="varchar" MaxLength="20" />
           <Property Name="repeat_end" Type="datetime" Precision="0" />
           <Property Name="is_notify" Type="int" />
           <Property Name="source" Type="varchar" MaxLength="50" />
@@ -1156,10 +1158,12 @@
           <Property Name="title_last" Type="varchar" MaxLength="100" />
           <Property Name="trader_id" Type="int" />
           <Property Name="date_wait" Type="datetime" Precision="0" />
-          <Property Name="resell_price" Type="float" />
           <Property Name="resell_code" Type="varchar" MaxLength="20" />
+          <Property Name="resell_price" Type="float" />
           <Property Name="supplier_id" Type="int" />
           <Property Name="annual_price" Type="float" />
+          <Property Name="cut_owner" Type="int" />
+          <Property Name="annual_owner" Type="int" />
         </EntityType>
         <EntityType Name="waitdeal">
           <Key>
@@ -2003,6 +2007,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_patent_annual_owner">
+          <End Role="member" Type="Self.member" Multiplicity="0..1" />
+          <End Role="patent" Type="Self.patent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="patent">
+              <PropertyRef Name="annual_owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_patent_assistant_id">
           <End Role="member" Type="Self.member" Multiplicity="0..1" />
           <End Role="patent" Type="Self.patent" Multiplicity="*" />
@@ -2012,6 +2028,18 @@
             </Principal>
             <Dependent Role="patent">
               <PropertyRef Name="assistant_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_patent_cut_owner">
+          <End Role="member" Type="Self.member" Multiplicity="0..1" />
+          <End Role="patent" Type="Self.patent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="patent">
+              <PropertyRef Name="cut_owner" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2135,6 +2163,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_trademark_annual_owner">
+          <End Role="member" Type="Self.member" Multiplicity="0..1" />
+          <End Role="trademark" Type="Self.trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="annual_owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_trademark_assistant_id">
           <End Role="member" Type="Self.member" Multiplicity="0..1" />
           <End Role="trademark" Type="Self.trademark" Multiplicity="*" />
@@ -2144,6 +2184,18 @@
             </Principal>
             <Dependent Role="trademark">
               <PropertyRef Name="assistant_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_trademark_cut_owner">
+          <End Role="member" Type="Self.member" Multiplicity="0..1" />
+          <End Role="trademark" Type="Self.trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="cut_owner" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2946,7 +2998,15 @@
             <End Role="open_bank" EntitySet="open_bank" />
             <End Role="business_bank" EntitySet="business_bank" />
           </AssociationSet>
+          <AssociationSet Name="fk_patent_annual_owner" Association="Self.fk_patent_annual_owner">
+            <End Role="member" EntitySet="member" />
+            <End Role="patent" EntitySet="patent" />
+          </AssociationSet>
           <AssociationSet Name="fk_patent_assistant_id" Association="Self.fk_patent_assistant_id">
+            <End Role="member" EntitySet="member" />
+            <End Role="patent" EntitySet="patent" />
+          </AssociationSet>
+          <AssociationSet Name="fk_patent_cut_owner" Association="Self.fk_patent_cut_owner">
             <End Role="member" EntitySet="member" />
             <End Role="patent" EntitySet="patent" />
           </AssociationSet>
@@ -2990,7 +3050,15 @@
             <End Role="member" EntitySet="member" />
             <End Role="timeline" EntitySet="timeline" />
           </AssociationSet>
+          <AssociationSet Name="fk_trademark_annual_owner" Association="Self.fk_trademark_annual_owner">
+            <End Role="member" EntitySet="member" />
+            <End Role="trademark" EntitySet="trademark" />
+          </AssociationSet>
           <AssociationSet Name="fk_trademark_assistant_id" Association="Self.fk_trademark_assistant_id">
+            <End Role="member" EntitySet="member" />
+            <End Role="trademark" EntitySet="trademark" />
+          </AssociationSet>
+          <AssociationSet Name="fk_trademark_cut_owner" Association="Self.fk_trademark_cut_owner">
             <End Role="member" EntitySet="member" />
             <End Role="trademark" EntitySet="trademark" />
           </AssociationSet>
@@ -3690,6 +3758,22 @@
             <End Role="supplier" EntitySet="suppliers" />
             <End Role="history" EntitySet="histories" />
           </AssociationSet>
+          <AssociationSet Name="fk_patent_cut_owner" Association="DataCenter.Entities.fk_patent_cut_owner">
+            <End Role="member" EntitySet="members" />
+            <End Role="patent" EntitySet="patents" />
+          </AssociationSet>
+          <AssociationSet Name="fk_trademark_cut_owner" Association="DataCenter.Entities.fk_trademark_cut_owner">
+            <End Role="member" EntitySet="members" />
+            <End Role="trademark" EntitySet="trademarks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_patent_annual_owner" Association="DataCenter.Entities.fk_patent_annual_owner">
+            <End Role="member" EntitySet="members" />
+            <End Role="patent" EntitySet="patents" />
+          </AssociationSet>
+          <AssociationSet Name="fk_trademark_annual_owner" Association="DataCenter.Entities.fk_trademark_annual_owner">
+            <End Role="member" EntitySet="members" />
+            <End Role="trademark" EntitySet="trademarks" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -3977,6 +4061,10 @@
           <NavigationProperty Name="histories2" Relationship="DataCenter.Entities.history_ibfk_finance_reviewer" FromRole="member" ToRole="history" />
           <NavigationProperty Name="histories3" Relationship="DataCenter.Entities.history_ibfk_salesman" FromRole="member" ToRole="history" />
           <NavigationProperty Name="histories4" Relationship="DataCenter.Entities.history_ibfk_submit_reviewer" FromRole="member" ToRole="history" />
+          <NavigationProperty Name="patents11" Relationship="DataCenter.Entities.fk_patent_cut_owner" FromRole="member" ToRole="patent" />
+          <NavigationProperty Name="trademarks11" Relationship="DataCenter.Entities.fk_trademark_cut_owner" FromRole="member" ToRole="trademark" />
+          <NavigationProperty Name="patents7" Relationship="DataCenter.Entities.fk_patent_annual_owner" FromRole="member" ToRole="patent" />
+          <NavigationProperty Name="trademarks7" Relationship="DataCenter.Entities.fk_trademark_annual_owner" FromRole="member" ToRole="trademark" />
           </EntityType>
         <Association Name="member_ibfk_3">
           <End Type="DataCenter.Entities.area" Role="area" Multiplicity="0..1" />
@@ -5573,6 +5661,10 @@
           <Property Name="supplier_id" Type="Int32" />
           <NavigationProperty Name="supplier" Relationship="DataCenter.Entities.fk_patent_supplier_id" FromRole="patent" ToRole="supplier" />
           <Property Name="annual_price" Type="Single" />
+          <Property Name="cut_owner" Type="Int32" />
+          <NavigationProperty Name="member11" Relationship="DataCenter.Entities.fk_patent_cut_owner" FromRole="patent" ToRole="member" />
+          <Property Name="annual_owner" Type="Int32" />
+          <NavigationProperty Name="member7" Relationship="DataCenter.Entities.fk_patent_annual_owner" FromRole="patent" ToRole="member" />
         </EntityType>
         <EntityType Name="reg_internal">
           <Key>
@@ -5730,6 +5822,10 @@
           <Property Name="supplier_id" Type="Int32" />
           <NavigationProperty Name="supplier" Relationship="DataCenter.Entities.fk_trademark_supplier_id" FromRole="trademark" ToRole="supplier" />
           <Property Name="annual_price" Type="Single" />
+          <Property Name="cut_owner" Type="Int32" />
+          <NavigationProperty Name="member11" Relationship="DataCenter.Entities.fk_trademark_cut_owner" FromRole="trademark" ToRole="member" />
+          <Property Name="annual_owner" Type="Int32" />
+          <NavigationProperty Name="member7" Relationship="DataCenter.Entities.fk_trademark_annual_owner" FromRole="trademark" ToRole="member" />
         </EntityType>
         <Association Name="reg_internal_ibfk_bank">
           <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="0..1" />
@@ -6538,6 +6634,54 @@
             </Principal>
             <Dependent Role="history">
               <PropertyRef Name="supplier_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_patent_cut_owner">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.patent" Role="patent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="patent">
+              <PropertyRef Name="cut_owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_trademark_cut_owner">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="cut_owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_patent_annual_owner">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.patent" Role="patent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="patent">
+              <PropertyRef Name="annual_owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_trademark_annual_owner">
+          <End Type="DataCenter.Entities.member" Role="member" Multiplicity="0..1" />
+          <End Type="DataCenter.Entities.trademark" Role="trademark" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="member">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="trademark">
+              <PropertyRef Name="annual_owner" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7468,6 +7612,8 @@
           <EntitySetMapping Name="patents">
             <EntityTypeMapping TypeName="DataCenter.Entities.patent">
               <MappingFragment StoreEntitySet="patent">
+                <ScalarProperty Name="annual_owner" ColumnName="annual_owner" />
+                <ScalarProperty Name="cut_owner" ColumnName="cut_owner" />
                 <ScalarProperty Name="annual_price" ColumnName="annual_price" />
                 <ScalarProperty Name="supplier_id" ColumnName="supplier_id" />
                 <ScalarProperty Name="resell_price" ColumnName="resell_price" />
@@ -7598,6 +7744,8 @@
           <EntitySetMapping Name="trademarks">
             <EntityTypeMapping TypeName="DataCenter.Entities.trademark">
               <MappingFragment StoreEntitySet="trademark">
+                <ScalarProperty Name="annual_owner" ColumnName="annual_owner" />
+                <ScalarProperty Name="cut_owner" ColumnName="cut_owner" />
                 <ScalarProperty Name="annual_price" ColumnName="annual_price" />
                 <ScalarProperty Name="supplier_id" ColumnName="supplier_id" />
                 <ScalarProperty Name="resell_price" ColumnName="resell_price" />

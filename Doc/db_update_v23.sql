@@ -64,3 +64,15 @@ call AddColumnUnlessExists(Database(), 'reg_abroad', 'annual_price', 'float(255,
 call AddColumnUnlessExists(Database(), 'reg_internal', 'annual_price', 'float(255,2) DEFAULT NULL COMMENT "年检价格"');
 call AddColumnUnlessExists(Database(), 'trademark', 'annual_price', 'float(255,2) DEFAULT NULL COMMENT "年检价格"');
 call AddColumnUnlessExists(Database(), 'patent', 'annual_price', 'float(255,2) DEFAULT NULL COMMENT "年检价格"');
+
+-- 2017-12-13
+call AddColumnUnlessExists(Database(), 'trademark', 'cut_owner', 'int(11) DEFAULT NULL COMMENT "提成所有人"');
+ALTER TABLE trademark ADD CONSTRAINT fk_trademark_cut_owner FOREIGN KEY (cut_owner) REFERENCES member(id);
+call AddColumnUnlessExists(Database(), 'trademark', 'annual_owner', 'int(11) DEFAULT NULL COMMENT "年检提成所有人"');
+ALTER TABLE trademark ADD CONSTRAINT fk_trademark_annual_owner FOREIGN KEY (annual_owner) REFERENCES member(id);
+
+call AddColumnUnlessExists(Database(), 'patent', 'cut_owner', 'int(11) DEFAULT NULL COMMENT "提成所有人"');
+ALTER TABLE patent ADD CONSTRAINT fk_patent_cut_owner FOREIGN KEY (cut_owner) REFERENCES member(id);
+call AddColumnUnlessExists(Database(), 'patent', 'annual_owner', 'int(11) DEFAULT NULL COMMENT "年检提成所有人"');
+ALTER TABLE patent ADD CONSTRAINT fk_patent_annual_owner FOREIGN KEY (annual_owner) REFERENCES member(id);
+

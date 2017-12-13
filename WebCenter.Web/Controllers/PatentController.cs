@@ -435,6 +435,11 @@ namespace WebCenter.Web.Controllers
                 trader_id = a.trader_id,
                 trader_name = a.customer.name,
 
+                cut_owner = a.cut_owner,
+                cut_owner_name = a.member11.name,
+                annual_owner = a.annual_owner,
+                annual_owner_name = a.member7.name,
+
             }).FirstOrDefault();
 
             return Json(reg, JsonRequestBehavior.AllowGet);
@@ -504,6 +509,11 @@ namespace WebCenter.Web.Controllers
                 trader_name = a.customer.name,
 
                 supplier_name = a.supplier.name,
+
+                cut_owner = a.cut_owner,
+                cut_owner_name = a.member11.name,
+                annual_owner = a.annual_owner,
+                annual_owner_name = a.member7.name,
 
             }).FirstOrDefault();
 
@@ -617,6 +627,10 @@ namespace WebCenter.Web.Controllers
             dbPatent.date_updated = DateTime.Now;
             dbPatent.date_regit = _patent.date_regit;
             dbPatent.trader_id = _patent.trader_id;
+
+            dbPatent.cut_owner = _patent.cut_owner;
+            dbPatent.annual_owner = _patent.annual_owner;
+
             var r = Uof.IpatentService.UpdateEntity(dbPatent);
 
             if (r)

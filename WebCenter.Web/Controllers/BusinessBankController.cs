@@ -47,7 +47,7 @@ namespace WebCenter.Web.Controllers
             var dbBank = Uof.Iopen_bankService.GetById(openBank.id);
 
             dbBank.name = openBank.name;
-            dbBank.address = openBank.name;
+            dbBank.address = openBank.address;
             dbBank.area = openBank.area;
             dbBank.date_updated = DateTime.Now;
             dbBank.memo = openBank.memo;

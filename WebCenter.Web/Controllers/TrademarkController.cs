@@ -440,6 +440,11 @@ namespace WebCenter.Web.Controllers
                 trader_id = a.trader_id,
                 trader_name = a.customer.name,
 
+                cut_owner = a.cut_owner,
+                cut_owner_name = a.member11.name,
+                annual_owner = a.annual_owner,
+                annual_owner_name = a.member7.name,
+
             }).FirstOrDefault();
 
             return Json(reg, JsonRequestBehavior.AllowGet);
@@ -518,6 +523,11 @@ namespace WebCenter.Web.Controllers
                 trader_name = a.customer.name,
 
                 supplier_name = a.supplier.name,
+
+                cut_owner = a.cut_owner,
+                cut_owner_name = a.member11.name,
+                annual_owner = a.annual_owner,
+                annual_owner_name = a.member7.name,
 
             }).FirstOrDefault();
 
@@ -635,6 +645,9 @@ namespace WebCenter.Web.Controllers
             dbTrade.trader_id = trade.trader_id;
 
             dbTrade.date_updated = DateTime.Now;
+
+            dbTrade.cut_owner = trade.cut_owner;
+            dbTrade.annual_owner = trade.annual_owner;
 
             var r = Uof.ItrademarkService.UpdateEntity(dbTrade);
 

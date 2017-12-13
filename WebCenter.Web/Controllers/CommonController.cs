@@ -793,6 +793,7 @@ namespace WebCenter.Web.Controllers
                         trader = a.customer.name,
                         submit_review_date = a.submit_review_date,
                         supplier_id = a.supplier_id,
+                        manager_name = a.member11.name,
 
                     }).FirstOrDefault();
 
@@ -845,7 +846,7 @@ namespace WebCenter.Web.Controllers
                         region = a.region,
                         submit_review_date = a.submit_review_date,
                         supplier_id = a.supplier_id,
-
+                        manager_name = a.member11.name,
                     }).FirstOrDefault();
 
                     if (!string.IsNullOrEmpty(printData.region))
@@ -1231,7 +1232,7 @@ namespace WebCenter.Web.Controllers
                 printData.header_date = DateTime.Today.ToString("yyyy年MM月dd日");
             }
 
-            printData.amount = (float)Math.Round((double)(printData.amount * (printData.rate ?? 1)), 2);
+            printData.amount = (float)Math.Round((double)((printData.amount ?? 0) * (printData.rate ?? 1)), 2);
             //printData.balance = (float)Math.Round((double)(printData.balance * (printData.rate ?? 1)), 2);
             return Json(printData, JsonRequestBehavior.AllowGet);
         }
@@ -1520,7 +1521,7 @@ namespace WebCenter.Web.Controllers
             {
                 pd.pay_way = "先提交,未付款";
                 pd.received = 0;
-                pd.balance = (float)Math.Round((double)(pd.amount * pd.rate ), 2);
+                pd.balance = (float)Math.Round((double)((pd.amount??0) * pd.rate ), 2);
             }
         }
 
