@@ -517,5 +517,62 @@ namespace WebCenter.Web.Controllers
 
             return code;
         }
+
+        public ShortOrderInfo GetOrderEntity(string orderType, int id)
+        {
+            var order = new ShortOrderInfo();
+            switch (orderType)
+            {
+                case "reg_abroad":
+                    order = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new ShortOrderInfo
+                    {
+                        id = a.id,
+                        code = a.code,
+                        name_cn = a.name_cn,
+                        name_en = a.name_en,
+                    }).FirstOrDefault();
+                    break;
+                case "reg_internal":
+                    order = Uof.Ireg_internalService.GetAll(a => a.id == id).Select(a => new ShortOrderInfo
+                    {
+                        id = a.id,
+                        code = a.code,
+                        name_cn = a.name_cn,
+                        name_en = "",
+                    }).FirstOrDefault();
+                    break;
+                case "audit":
+                    order = Uof.IauditService.GetAll(a => a.id == id).Select(a => new ShortOrderInfo
+                    {
+                        id = a.id,
+                        code = a.code,
+                        name_cn = a.name_cn,
+                        name_en = a.name_en,
+                    }).FirstOrDefault();
+                    break;
+                case "patent":
+                    order = Uof.IpatentService.GetAll(a => a.id == id).Select(a => new ShortOrderInfo
+                    {
+                        id = a.id,
+                        code = a.code,
+                        name_cn = a.name,
+                        name_en = "",
+                    }).FirstOrDefault();
+                    break;
+                case "trademark":
+                    order = Uof.ItrademarkService.GetAll(a => a.id == id).Select(a => new ShortOrderInfo
+                    {
+                        id = a.id,
+                        code = a.code,
+                        name_cn = a.name,
+                        name_en = "",
+                    }).FirstOrDefault();
+                    break;
+                default:
+                    break;
+            }
+
+            return order;
+        }
     }
 }

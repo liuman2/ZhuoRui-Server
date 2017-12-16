@@ -17,7 +17,7 @@ namespace WebCenter.Web.Controllers
 
         }
 
-        public ActionResult Search(int index = 1, int size = 10, string name = "")
+        public ActionResult Search(int index = 1, int size = 10, string name = "", string type = "name")
         {
             size = 10;
             var r = HttpContext.User.Identity.IsAuthenticated;
@@ -45,9 +45,33 @@ namespace WebCenter.Web.Controllers
 
             Expression<Func<customer, bool>> condition = c => c.status == 0;
             Expression<Func<customer, bool>> nameQuery = c => true;
-            if (!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(name) && type == "name")
             {
-                nameQuery = c => (c.name.IndexOf(name) > -1);
+                nameQuery = c => (c.name.IndexOf(name) > -1 || c.code.IndexOf(name) > -1);
+            }
+
+            var userIds = new List<int>();
+            if (type != "name" && !string.IsNullOrEmpty(name))
+            {
+                userIds = Uof.IcontactService.GetAll(t =>
+                t.name.IndexOf(name) > -1 ||
+                t.mobile.IndexOf(name) > -1 ||
+                t.tel.IndexOf(name) > -1 ||
+                t.email.IndexOf(name) > -1 ||
+                t.QQ.IndexOf(name) > -1 ||
+                t.wechat.IndexOf(name) > -1).Select(b => b.customer_id).ToList();
+            }
+            Expression<Func<customer, bool>> userIdsQuery = c => true;
+            if (userIds.Count > 0)
+            {
+                userIdsQuery = c => userIds.Contains(c.id);
+            }
+            else
+            {
+                if (type != "name" && !string.IsNullOrEmpty(name))
+                {
+                    userIdsQuery = c => false;
+                }
             }
 
             var ops = arrs[4].Split(',');
@@ -86,6 +110,7 @@ namespace WebCenter.Web.Controllers
                 .GetAll(condition)
                 .Where(nameQuery)
                 .Where(permQuery)
+                .Where(userIdsQuery)
                 .Where(c => c.is_delete != 1)
                 .OrderBy(item => item.id)
                 .Select(c => new Customer()
@@ -104,7 +129,7 @@ namespace WebCenter.Web.Controllers
                 date_created = c.date_created,
             }).ToPagedList(index, size).ToList();
 
-            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Where(permQuery).Where(c => c.is_delete != 1).Count();
+            var totalRecord = Uof.IcustomerService.GetAll(condition).Where(nameQuery).Where(permQuery).Where(userIdsQuery).Where(c => c.is_delete != 1).Count();
 
             if (list.Count > 0)
             {

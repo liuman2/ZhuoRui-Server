@@ -102,7 +102,7 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Search(int index = 1, int size = 10, string name = "")
+        public ActionResult Search(int index = 1, int size = 10, string name = "", string type = "name")
         {
             size = 10;
             var r = HttpContext.User.Identity.IsAuthenticated;
@@ -131,10 +131,35 @@ namespace WebCenter.Web.Controllers
             Expression<Func<customer, bool>> condition = c => c.status == 1; // && c.salesman_id == userId;
             Expression<Func<customer, bool>> nameQuery = c => true;
 
-            if (!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(name) && type == "name")
             {
                 nameQuery = c => (c.name.IndexOf(name) > -1 || c.code.IndexOf(name) > -1);
             }
+
+            var userIds = new List<int>();
+            if (type != "name" && !string.IsNullOrEmpty(name))
+            {
+                userIds = Uof.IcontactService.GetAll(t =>
+                t.name.IndexOf(name) > -1 ||
+                t.mobile.IndexOf(name) > -1 ||
+                t.tel.IndexOf(name) > -1 ||
+                t.email.IndexOf(name) > -1 ||
+                t.QQ.IndexOf(name) > -1 ||
+                t.wechat.IndexOf(name) > -1).Select(b => b.customer_id).ToList();
+            }
+            Expression<Func<customer, bool>> userIdsQuery = c => true;
+            if (userIds.Count > 0)
+            {
+                userIdsQuery = c => userIds.Contains(c.id);
+            }
+            else
+            {
+                if (type != "name" && !string.IsNullOrEmpty(name))
+                {
+                    userIdsQuery = c => false;
+                }
+            }
+
 
             var ops = arrs[4].Split(',');
             var strUserId = userId.ToString();
@@ -152,10 +177,13 @@ namespace WebCenter.Web.Controllers
             //    }
             //}
 
+            
+
             var customerAllList = Uof.IcustomerService
                 .GetAll(condition)
                 .Where(nameQuery)
                 .Where(c => c.is_delete != 1)
+                .Where(userIdsQuery)
                 .OrderByDescending(item => item.id).Select(c => new Customer()
                 {
                     id = c.id,

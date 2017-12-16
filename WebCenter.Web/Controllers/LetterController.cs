@@ -702,7 +702,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Get(int id)
         {
-            var _l = Uof.ImailService.GetAll(l => l.id == id).Select(c => new
+            var _l = Uof.ImailService.GetAll(l => l.id == id).Select(c => new MailEntity
             {
                 id = c.id,
                 code = c.code,
@@ -734,6 +734,18 @@ namespace WebCenter.Web.Controllers
                 county = c.county ?? "",
 
             }).FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(_l.order_source) && _l.order_id != null)
+            {
+                var order = GetOrderEntity(_l.order_source, _l.order_id.Value);
+                if( order!= null && order.id > 0)
+                {
+                    _l.order_code = order.code;
+                    _l.order_name_cn = order.name_cn;
+                    _l.order_name_en = order.name_en;
+                }
+            }
+            
 
             return Json(_l, JsonRequestBehavior.AllowGet);
         }

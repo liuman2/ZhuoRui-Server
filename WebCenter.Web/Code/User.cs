@@ -653,4 +653,46 @@ namespace WebCenter.Web
         public DateTime? dealt_date { get; set; }
         public string business_code { get; set; }
     }
+
+    public class MailEntity {
+        public int id { get; set; }
+        public string type { get; set; }
+        public string owner { get; set; }
+        public string letter_type { get; set; }
+        public string merchant { get; set; }
+        public string code { get; set; }
+        public Nullable<System.DateTime> date_at { get; set; }
+        public string description { get; set; }
+        public string file_url { get; set; }
+        public Nullable<int> creator_id { get; set; }
+        public Nullable<System.DateTime> date_created { get; set; }
+        public Nullable<System.DateTime> date_updated { get; set; }
+        public string address { get; set; }
+        public Nullable<int> audit_id { get; set; }
+        public string order_source { get; set; }
+        public Nullable<int> order_id { get; set; }
+        public string order_code { get; set; }
+        public string order_name { get; set; }
+        public string order_name_cn { get; set; }
+        public string order_name_en { get; set; }
+        public string receiver { get; set; }
+        public string tel { get; set; }
+        public Nullable<sbyte> review_status { get; set; }
+        public Nullable<System.DateTime> review_date { get; set; }
+        public string review_moment { get; set; }
+        public string paymode { get; set; }
+        public string province { get; set; }
+        public string city { get; set; }
+        public string county { get; set; }
+        public string audit_name { get; set; }
+        public string creator_name { get; set; }
+    }
+
+    public class ShortOrderInfo
+    {
+        public int id { get; set; }
+        public string code { get; set; }
+        public string name_cn { get; set; }
+        public string name_en { get; set; }
+    }
 }
