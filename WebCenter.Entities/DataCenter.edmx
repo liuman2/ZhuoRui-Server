@@ -273,6 +273,7 @@
           <Property Name="account" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="manager" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="bank_contact">
           <Key>
@@ -318,6 +319,7 @@
           <Property Name="bank_id" Type="int" />
           <Property Name="email" Type="varchar" MaxLength="120" />
           <Property Name="manager_id" Type="int" />
+          <Property Name="branch" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="contact">
           <Key>
@@ -3861,6 +3863,7 @@
           <NavigationProperty Name="customer" Relationship="DataCenter.Entities.bank_account_customer" FromRole="bank_account" ToRole="customer" />
           <NavigationProperty Name="reg_internal" Relationship="DataCenter.Entities.reg_internal_ibfk_bank" FromRole="bank_account" ToRole="reg_internal" />
           <NavigationProperty Name="reg_abroad" Relationship="DataCenter.Entities.abroad_ibfk_bank" FromRole="bank_account" ToRole="reg_abroad" />
+          <Property Name="manager" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="customer_timeline">
           <Key>
@@ -5559,6 +5562,7 @@
           <NavigationProperty Name="open_bank" Relationship="DataCenter.Entities.fk_open_bank_bank_id" FromRole="business_bank" ToRole="open_bank" />
           <Property Name="email" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
           <Property Name="manager_id" Type="Int32" />
+          <Property Name="branch" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="bank_contact">
           <Key>
@@ -6768,6 +6772,7 @@
           <EntitySetMapping Name="bank_account">
             <EntityTypeMapping TypeName="DataCenter.Entities.bank_account">
               <MappingFragment StoreEntitySet="bank_account">
+                <ScalarProperty Name="manager" ColumnName="manager" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="account" ColumnName="account" />
@@ -7563,6 +7568,7 @@
           <EntitySetMapping Name="business_bank">
             <EntityTypeMapping TypeName="DataCenter.Entities.business_bank">
               <MappingFragment StoreEntitySet="business_bank">
+                <ScalarProperty Name="branch" ColumnName="branch" />
                 <ScalarProperty Name="manager_id" ColumnName="manager_id" />
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="bank_id" ColumnName="bank_id" />

@@ -88,6 +88,10 @@ namespace WebCenter.Entities
     
         public Nullable<int> manager_id { get; set; }
     
+    
+    
+        public string branch { get; set; }
+    
         public virtual open_bank open_bank { get; set; }
     }
 }

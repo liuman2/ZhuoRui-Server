@@ -52,6 +52,10 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
+    
+    
+        public string manager { get; set; }
+    
         public virtual ICollection<audit_bank> audit_bank { get; set; }
         public virtual ICollection<accounting> accountings { get; set; }
         public virtual customer customer { get; set; }
