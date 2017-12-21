@@ -662,6 +662,7 @@
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="memo" Type="varchar" MaxLength="300" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="branch" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="operation">
           <Key>
@@ -5587,6 +5588,7 @@
           <Property Name="memo" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="date_updated" Type="DateTime" />
           <NavigationProperty Name="business_bank" Relationship="DataCenter.Entities.fk_open_bank_bank_id" FromRole="open_bank" ToRole="business_bank" />
+          <Property Name="branch" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="fk_open_bank_bank_id">
           <End Type="DataCenter.Entities.open_bank" Role="open_bank" Multiplicity="0..1" />
@@ -7605,6 +7607,7 @@
           <EntitySetMapping Name="open_bank">
             <EntityTypeMapping TypeName="DataCenter.Entities.open_bank">
               <MappingFragment StoreEntitySet="open_bank">
+                <ScalarProperty Name="branch" ColumnName="branch" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="memo" ColumnName="memo" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />

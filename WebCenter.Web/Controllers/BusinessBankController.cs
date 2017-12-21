@@ -28,7 +28,7 @@ namespace WebCenter.Web.Controllers
         {
             var dbBank = Uof.Iopen_bankService.AddEntity(openBank);
 
-            if (contacts.Count > 0)
+            if (contacts != null && contacts.Count > 0)
             {
                 foreach (var item in contacts)
                 {

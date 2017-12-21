@@ -49,6 +49,10 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
+    
+    
+        public string branch { get; set; }
+    
         public virtual ICollection<business_bank> business_bank { get; set; }
     }
 }
