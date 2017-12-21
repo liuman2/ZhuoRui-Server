@@ -51,7 +51,7 @@ namespace WebCenter.Web.Controllers
             dbBank.area = openBank.area;
             dbBank.date_updated = DateTime.Now;
             dbBank.memo = openBank.memo;
-
+            dbBank.branch = openBank.branch;
             Uof.Iopen_bankService.UpdateEntity(dbBank);
 
             #region 联系人
@@ -182,7 +182,8 @@ namespace WebCenter.Web.Controllers
                 area = o.area,
                 address = o.address,
                 memo = o.memo,
-            }).FirstOrDefault();
+                branch = o.branch
+        }).FirstOrDefault();
 
             var contacts = Uof.Ibank_contactService.GetAll(b => b.bank_id == dbBank.id).Select(b => new
             {

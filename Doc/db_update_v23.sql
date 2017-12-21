@@ -1,4 +1,4 @@
--- 2017-11-03
+﻿-- 2017-11-03
 call AddColumnUnlessExists(Database(), 'schedule', 'is_notify', 'int(11) DEFAULT NULL COMMENT "是否需要提醒"');
 call AddColumnUnlessExists(Database(), 'schedule', 'source', 'varchar(50) DEFAULT NULL COMMENT "来源"');
 call AddColumnUnlessExists(Database(), 'schedule', 'source_id', 'int(11) DEFAULT NULL COMMENT "来源ID"');
@@ -80,3 +80,4 @@ ALTER TABLE patent ADD CONSTRAINT fk_patent_annual_owner FOREIGN KEY (annual_own
 -- 2017-12-20
 call AddColumnUnlessExists(Database(), 'business_bank', 'branch', 'varchar(50) DEFAULT NULL COMMENT "支行"');
 call AddColumnUnlessExists(Database(), 'bank_account', 'manager', 'varchar(50) DEFAULT NULL COMMENT "客户经理"');
+call AddColumnUnlessExists(Database(), 'open_bank', 'branch', 'varchar(50) DEFAULT NULL COMMENT "支行"');
