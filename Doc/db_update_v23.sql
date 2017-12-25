@@ -81,3 +81,7 @@ ALTER TABLE patent ADD CONSTRAINT fk_patent_annual_owner FOREIGN KEY (annual_own
 call AddColumnUnlessExists(Database(), 'business_bank', 'branch', 'varchar(50) DEFAULT NULL COMMENT "支行"');
 call AddColumnUnlessExists(Database(), 'bank_account', 'manager', 'varchar(50) DEFAULT NULL COMMENT "客户经理"');
 call AddColumnUnlessExists(Database(), 'open_bank', 'branch', 'varchar(50) DEFAULT NULL COMMENT "支行"');
+
+-- 2017-12-24
+call AddColumnUnlessExists(Database(), 'business_bank', 'area', 'varchar(20) DEFAULT NULL COMMENT "地区"');
+

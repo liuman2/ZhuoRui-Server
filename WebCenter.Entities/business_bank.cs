@@ -92,6 +92,10 @@ namespace WebCenter.Entities
     
         public string branch { get; set; }
     
+    
+    
+        public string area { get; set; }
+    
         public virtual open_bank open_bank { get; set; }
     }
 }

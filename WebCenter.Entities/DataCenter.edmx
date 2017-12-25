@@ -320,6 +320,7 @@
           <Property Name="email" Type="varchar" MaxLength="120" />
           <Property Name="manager_id" Type="int" />
           <Property Name="branch" Type="varchar" MaxLength="50" />
+          <Property Name="area" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="contact">
           <Key>
@@ -5564,6 +5565,7 @@
           <Property Name="email" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
           <Property Name="manager_id" Type="Int32" />
           <Property Name="branch" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="area" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="bank_contact">
           <Key>
@@ -7570,6 +7572,7 @@
           <EntitySetMapping Name="business_bank">
             <EntityTypeMapping TypeName="DataCenter.Entities.business_bank">
               <MappingFragment StoreEntitySet="business_bank">
+                <ScalarProperty Name="area" ColumnName="area" />
                 <ScalarProperty Name="branch" ColumnName="branch" />
                 <ScalarProperty Name="manager_id" ColumnName="manager_id" />
                 <ScalarProperty Name="email" ColumnName="email" />
