@@ -151,7 +151,7 @@ namespace WebCenter.Web.Controllers
                 dbIncome.pay_way == _income.pay_way &&
                 dbIncome.currency == _income.currency &&
                 dbIncome.rate == _income.rate &&
-
+                dbIncome.type == _income.type && 
                 dbIncome.attachment_url == _income.attachment_url)
             {
                 return SuccessResult;
@@ -175,7 +175,7 @@ namespace WebCenter.Web.Controllers
 
             dbIncome.currency = _income.currency;
             dbIncome.rate = _income.rate;
-
+            dbIncome.type = _income.type;
             dbIncome.date_updated = DateTime.Now;
 
             var r = Uof.IincomeService.UpdateEntity(dbIncome);

@@ -178,6 +178,8 @@ namespace WebCenter.Web
         public string income_date { get; set; }
 
         public int? supplier_id { get; set; }
+
+        public string income_type { get; set; }
     }
 
     public class ReceiptPrintData

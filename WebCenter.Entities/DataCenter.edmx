@@ -490,6 +490,7 @@
           <Property Name="description" Type="varchar" MaxLength="100" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="type" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="internal_history">
           <Key>
@@ -3920,6 +3921,7 @@
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
           <NavigationProperty Name="customer" Relationship="DataCenter.Entities.income_ibfk_customer" FromRole="income" ToRole="customer" />
+          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="reg_history">
           <Key>
@@ -6823,6 +6825,7 @@
           <EntitySetMapping Name="incomes">
             <EntityTypeMapping TypeName="DataCenter.Entities.income">
               <MappingFragment StoreEntitySet="income">
+                <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="description" ColumnName="description" />

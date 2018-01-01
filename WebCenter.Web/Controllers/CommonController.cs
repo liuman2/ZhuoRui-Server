@@ -159,7 +159,7 @@ namespace WebCenter.Web.Controllers
                         // 年检提成所有人
                         annual_owner = a.annual_owner,
                         annual_owner_name = a.member8.name,
-
+                        project = a.member8.area.name ?? "",
                     }).FirstOrDefault();
 
                     if (sabroad != null)
@@ -173,6 +173,9 @@ namespace WebCenter.Web.Controllers
                         // 年检提成所有人
                         printData.annual_owner = sabroad.annual_owner;
                         printData.annual_owner_name = sabroad.annual_owner_name;
+
+                        // 年检归属
+                        printData.project = sabroad.project ?? "";
                     }
                     break;
                 case "reg_internal":
@@ -282,7 +285,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "境外注册",
                         received = 0,
                         //saleman = a.member4.name,
@@ -298,6 +301,8 @@ namespace WebCenter.Web.Controllers
                         manager_name = a.member2.name,
                         submit_review_date = a.submit_review_date,
 
+                        project = a.member2.area.name ?? a.member5.area.name,
+
                         supplier_id = a.supplier_id,
 
                     }).FirstOrDefault();
@@ -308,7 +313,7 @@ namespace WebCenter.Web.Controllers
                     }
                     
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}提交", printData.area);
+                    //printData.project = string.Format("{0}提交", printData.area);
 
                     getPrintDataIncome(printData, "reg_abroad");
                     #endregion
@@ -339,7 +344,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "境外注册",
                         received = 0,
                         //saleman = a.member4.name,
@@ -355,7 +360,10 @@ namespace WebCenter.Web.Controllers
                         manager_name = a.member2.name,
                         submit_review_date = a.submit_review_date,
 
+                        project = a.member2.area.name ?? a.member5.area.name,
+
                         supplier_id = a.supplier_id,
+                        income_type = "",
                     }).FirstOrDefault();
 
 
@@ -365,7 +373,7 @@ namespace WebCenter.Web.Controllers
                     }
 
                     printData.date = abroadLine.date_pay != null ? abroadLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}提交", printData.area);
+                    //printData.project = string.Format("{0}提交", printData.area);
 
                     getLinePrintDataIncome(printData, abroadLine, "reg_abroad");
                     #endregion
@@ -398,7 +406,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "年检",
                         received = 0,                        
                         type = "",
@@ -415,6 +423,8 @@ namespace WebCenter.Web.Controllers
                         submit_review_date = a.submit_review_date,
 
                         supplier_id = a.supplier_id,
+
+                        //project = a.member2.area.name ?? a.member5.area.name,
 
                     }).FirstOrDefault();
 
@@ -456,7 +466,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "年检",
                         received = 0,
                         saleman = a.member4.name,
@@ -476,7 +486,7 @@ namespace WebCenter.Web.Controllers
                     }
                     printData.date = annualLine.date_pay != null ? annualLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
 
-                    printData.project = string.Format("{0}年报", printData.area);
+                    //printData.project = string.Format("{0}年报", printData.area);
                     getLinePrintDataIncome(printData, annualLine, "annual");
                     #endregion
                     break;
@@ -497,6 +507,7 @@ namespace WebCenter.Web.Controllers
                         company_cn = a.name_cn,
                         company_en = a.name_en,
                         creator = a.member1.name,
+                        project = a.member1.area.name ?? "",
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "",
@@ -505,7 +516,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "审计",
                         received = 0,
                         //saleman = a.customer.member1.name,
@@ -520,7 +531,7 @@ namespace WebCenter.Web.Controllers
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}审计", printData.area);
+                    //printData.project = string.Format("{0}审计", printData.area);
 
                     getPrintDataIncome(printData, "audit");
                     #endregion
@@ -543,6 +554,7 @@ namespace WebCenter.Web.Controllers
                         company_cn = a.name_cn,
                         company_en = a.name_en,
                         creator = a.member1.name,
+                        project = a.member1.area.name ?? "",
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "",
@@ -551,7 +563,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "审计",
                         received = 0,
                         //saleman = a.member4.name,
@@ -566,7 +578,7 @@ namespace WebCenter.Web.Controllers
                     }).FirstOrDefault();
 
                     printData.date = auditLine.date_pay != null ? auditLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}审计", printData.area);
+                    //printData.project = string.Format("{0}审计", printData.area);
                     
                     getLinePrintDataIncome(printData, auditLine, "audit");
                     #endregion
@@ -588,6 +600,7 @@ namespace WebCenter.Web.Controllers
                         company_cn = a.name_cn,
                         company_en = "",
                         creator = a.member1.name,
+                        project = a.member1.area.name ?? "",
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "",
@@ -596,7 +609,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "国内注册",
                         received = 0,
                         //saleman = a.member5.name,
@@ -612,7 +625,7 @@ namespace WebCenter.Web.Controllers
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction!=null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}提交", printData.area);
+                    //printData.project = string.Format("{0}提交", printData.area);
 
                     getPrintDataIncome(printData, "reg_internal");
                     #endregion
@@ -635,6 +648,7 @@ namespace WebCenter.Web.Controllers
                         company_cn = a.name_cn,
                         company_en = "",
                         creator = a.member1.name,
+                        project = a.member1.area.name ?? "",
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "",
@@ -643,7 +657,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "国内注册",
                         received = 0,
                         //saleman = a.member5.name,
@@ -658,7 +672,7 @@ namespace WebCenter.Web.Controllers
                     }).FirstOrDefault();
 
                     printData.date = internalLine.date_pay != null ? internalLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}提交", printData.area);
+                    //printData.project = string.Format("{0}提交", printData.area);
 
                     getLinePrintDataIncome(printData, internalLine, "reg_internal");
                     #endregion
@@ -680,6 +694,7 @@ namespace WebCenter.Web.Controllers
                         company_cn = a.applicant,
                         company_en = "",
                         creator = a.member1.name,
+                        project = a.member1.area.name ?? "",
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = a.reg_mode,
@@ -688,7 +703,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "专利注册",
                         received = 0,
                         //saleman = a.member4.name,
@@ -704,7 +719,7 @@ namespace WebCenter.Web.Controllers
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}提交", printData.area);
+                    //printData.project = string.Format("{0}提交", printData.area);
 
                     getPrintDataIncome(printData, "patent");
                     #endregion
@@ -727,6 +742,7 @@ namespace WebCenter.Web.Controllers
                         company_cn = a.applicant,
                         company_en = "",
                         creator = a.member1.name,
+                        project = a.member1.area.name ?? "",
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = a.reg_mode,
@@ -735,7 +751,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "专利注册",
                         received = 0,
                         //saleman = a.member4.name,
@@ -750,7 +766,7 @@ namespace WebCenter.Web.Controllers
                     }).FirstOrDefault();
 
                     printData.date = patentLine.date_pay != null ? patentLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}提交", printData.area);
+                    //printData.project = string.Format("{0}提交", printData.area);
 
                     getLinePrintDataIncome(printData, patentLine, "patent");
                     #endregion
@@ -772,6 +788,7 @@ namespace WebCenter.Web.Controllers
                         company_cn = a.applicant,
                         company_en = "",
                         creator = a.member1.name,
+                        project = a.member1.area.name ?? "",
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = a.reg_mode,
@@ -780,7 +797,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "商标注册",
                         received = 0,
                         //saleman = a.member4.name,
@@ -803,7 +820,7 @@ namespace WebCenter.Web.Controllers
                     }
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}提交", printData.area);
+                    //printData.project = string.Format("{0}提交", printData.area);
 
                     getPrintDataIncome(printData, "trademark");
                     #endregion
@@ -826,6 +843,7 @@ namespace WebCenter.Web.Controllers
                         company_cn = a.applicant,
                         company_en = "",
                         creator = a.member1.name,
+                        project = a.member1.area.name ?? "",
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = a.reg_mode,
@@ -834,7 +852,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "商标注册",
                         received = 0,
                         //saleman = a.member4.name,
@@ -855,7 +873,7 @@ namespace WebCenter.Web.Controllers
                     }
 
                     printData.date = trademarkLine.date_pay != null ? trademarkLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}提交", printData.area);
+                    //printData.project = string.Format("{0}提交", printData.area);
                     getLinePrintDataIncome(printData, trademarkLine, "trademark");
                     #endregion
                     break;
@@ -887,7 +905,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "注册变更",
                         received = 0,
                         //saleman = a.member2.name,
@@ -900,6 +918,8 @@ namespace WebCenter.Web.Controllers
                         //变更提成所有人
                         change_owner = a.change_owner,
                         change_owner_name = a.member.name,
+                        project = a.member.area.name ?? a.member1.area.name,
+
                         submit_review_date = a.submit_review_date,
                         supplier_id = a.supplier_id,
 
@@ -925,7 +945,7 @@ namespace WebCenter.Web.Controllers
                     }
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}其他", printData.area);
+                    //printData.project = string.Format("{0}其他", printData.area);
 
                     getCompanyName(printData);
 
@@ -962,7 +982,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "注册变更",
                         received = 0,
                         //saleman = a.member2.name,
@@ -974,6 +994,7 @@ namespace WebCenter.Web.Controllers
                         //变更提成所有人
                         change_owner = a.change_owner,
                         change_owner_name = a.member.name,
+                        project = a.member.area.name ?? a.member1.area.name,
                         submit_review_date = a.submit_review_date,
                         supplier_id = a.supplier_id,
 
@@ -989,7 +1010,7 @@ namespace WebCenter.Web.Controllers
                     }
 
                     printData.date = historyLine.date_pay != null ? historyLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}其他", printData.area);
+                    //printData.project = string.Format("{0}其他", printData.area);
 
                     getCompanyName(printData);
 
@@ -1014,6 +1035,7 @@ namespace WebCenter.Web.Controllers
                         company_cn = a.audit.name_cn,
                         company_en = a.audit.name_en,
                         creator = a.member1.name,
+                        project = a.member1.area.name ??"",
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "",
@@ -1022,7 +1044,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "审计",
                         received = 0,
                         //saleman = a.member4.name,
@@ -1038,7 +1060,7 @@ namespace WebCenter.Web.Controllers
                     }).FirstOrDefault();
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}审计", printData.area);
+                    //printData.project = string.Format("{0}审计", printData.area);
 
                     getPrintDataIncome(printData, "sub_audit");
                     #endregion
@@ -1061,6 +1083,7 @@ namespace WebCenter.Web.Controllers
                         company_cn = a.audit.name_cn,
                         company_en = a.audit.name_en,
                         creator = a.member1.name,
+                        project = a.member1.area.name ?? "",
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "",
@@ -1069,7 +1092,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "审计",
                         received = 0,
                         //saleman = a.member4.name,
@@ -1084,7 +1107,7 @@ namespace WebCenter.Web.Controllers
                     }).FirstOrDefault();
 
                     printData.date = subAuditLineLine.date_pay != null ? subAuditLineLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}审计", printData.area);
+                    //printData.project = string.Format("{0}审计", printData.area);
 
                     //getPrintDataIncome(printData, "sub_audit");
                     getLinePrintDataIncome(printData, subAuditLineLine, "sub_audit");
@@ -1109,6 +1132,7 @@ namespace WebCenter.Web.Controllers
                         company_cn = "", //a.applicant,
                         company_en = "",
                         creator = a.member2.name,
+                        project = a.member2.area.name ?? "",
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "", //a.reg_mode,
@@ -1117,7 +1141,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "代理记账",
                         received = 0,
                         //saleman = a.member5.name,
@@ -1152,7 +1176,7 @@ namespace WebCenter.Web.Controllers
                     printData.saleman = acc.customer.member1.name;
 
                     printData.date = printData.date_transaction != null ? printData.date_transaction.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}提交", printData.area);
+                    //printData.project = string.Format("{0}提交", printData.area);
 
                     getPrintDataIncome(printData, "accounting_item");
                     #endregion
@@ -1177,6 +1201,7 @@ namespace WebCenter.Web.Controllers
                         company_cn = "", //a.applicant,
                         company_en = "",
                         creator = a.member2.name,
+                        project = a.member2.area.name ??"",
                         date_transaction = a.date_transaction,
                         date = "",
                         mode = "", //a.reg_mode,
@@ -1185,7 +1210,7 @@ namespace WebCenter.Web.Controllers
                         payer = "",
                         pay_info = "",
                         pay_way = "",
-                        project = "",
+                        //project = "",
                         reason = "代理记账",
                         received = 0,
                         //saleman = a.member5.name,
@@ -1214,7 +1239,7 @@ namespace WebCenter.Web.Controllers
                     printData.saleman = acct.customer.member1.name;
 
                     printData.date = accountLine.date_pay != null ? accountLine.date_pay.Value.ToString("yyyy年MM月dd日") : DateTime.Today.ToString("yyyy年MM月dd日");
-                    printData.project = string.Format("{0}记账", printData.area);
+                    //printData.project = string.Format("{0}记账", printData.area);
 
                     //getPrintDataIncome(printData, "sub_audit");
                     getLinePrintDataIncome(printData, accountLine, "accounting_item");
@@ -1540,6 +1565,7 @@ namespace WebCenter.Web.Controllers
                 currency = i.currency,
                 rate = i.rate ?? 1,
                 income_date = i.date_pay,
+                type = i.type,
             }).OrderByDescending(i => i.id).ToList();
 
             var total = 0f;
@@ -1589,7 +1615,7 @@ namespace WebCenter.Web.Controllers
                 }
 
                 pd.income_date = lineIncome.date_pay.Value.ToString("yyyy年MM月dd日");
-
+                pd.income_type = list[0].type ?? "";
             }
             else
             {

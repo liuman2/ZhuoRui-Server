@@ -80,6 +80,10 @@ namespace WebCenter.Entities
     
         public Nullable<System.DateTime> date_updated { get; set; }
     
+    
+    
+        public string type { get; set; }
+    
         public virtual customer customer { get; set; }
     }
 }

@@ -85,3 +85,5 @@ call AddColumnUnlessExists(Database(), 'open_bank', 'branch', 'varchar(50) DEFAU
 -- 2017-12-24
 call AddColumnUnlessExists(Database(), 'business_bank', 'area', 'varchar(20) DEFAULT NULL COMMENT "地区"');
 
+-- 2018-01-01
+call AddColumnUnlessExists(Database(), 'income', 'type', 'varchar(20) DEFAULT NULL COMMENT "款项性质"');

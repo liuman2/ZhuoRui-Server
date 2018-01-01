@@ -570,6 +570,7 @@ namespace WebCenter.Web.Controllers
                 bank = i.bank,
                 currency = i.currency,
                 rate = i.rate ?? 1,
+                type = i.type,
             }).ToList();
 
             var total = 0f;
