@@ -33,6 +33,7 @@ namespace WebCenter.Web
         public int? 客户归属ID { get; set; }
         public string 客户归属 { get; set; }        
         public string 订单状态 { get; set; }
+        public string 是否需要年检 { get; set; }
         public int? 最近年检 { get; set; }
         public int? order_status { get; set; }
         public int? status { get; set; }

@@ -1344,6 +1344,7 @@ namespace WebCenter.Web.Controllers
                         订单归属人 = a.member.name,
                         客户归属ID = a.customer.salesman_id,
                         客户归属 = a.customer.member1.name,
+                        是否需要年检 = a.need_annual.Value == 1 ? "是" : "否",
                         最近年检 = a.annual_year,
                         order_status = a.order_status,
                         status = a.status,
@@ -1374,6 +1375,10 @@ namespace WebCenter.Web.Controllers
                                 if (item.order_status == 5)
                                 {
                                     item.订单状态 = "卖出";
+                                }
+                                if (item.order_status == 6)
+                                {
+                                    item.订单状态 = "除名";
                                 }
                             } else
                             {
