@@ -1375,6 +1375,10 @@ namespace WebCenter.Web.Controllers
                                 {
                                     item.订单状态 = "卖出";
                                 }
+                                if (item.order_status == 6)
+                                {
+                                    item.订单状态 = "除名";
+                                }
                             } else
                             {
                                 switch (item.status)
