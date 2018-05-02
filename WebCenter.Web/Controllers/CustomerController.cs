@@ -177,7 +177,7 @@ namespace WebCenter.Web.Controllers
             //    }
             //}
 
-            
+
 
             var customerAllList = Uof.IcustomerService
                 .GetAll(condition)
@@ -230,6 +230,15 @@ namespace WebCenter.Web.Controllers
                         }
                     }
                     item.assistantIds = assIds;
+                    if (item.assistantIds != null && item.assistantIds.Count() > 0)
+                    {
+                        var names = Uof.ImemberService.GetAll(m => item.assistantIds.Contains(m.id)).Select(m => m.name).ToList();
+                        if (names != null && names.Count() > 0)
+                        {
+                            item.assistantNames = string.Join(",", names);
+                        }
+                    }
+                    //assistantNames
 
                     if (ops.Count() == 0)
                     {
@@ -255,7 +264,32 @@ namespace WebCenter.Web.Controllers
                     }
                 }
             }
-            
+
+
+            foreach (var item in customerAllList)
+            {
+                var assIds = new List<int>();
+                if (!string.IsNullOrEmpty(item.assistants))
+                {
+                    var assList = item.assistants.Split(',');
+                    foreach (var ass in assList)
+                    {
+                        int aid = 0;
+                        int.TryParse(ass, out aid);
+                        assIds.Add(aid);
+                    }
+                }
+                item.assistantIds = assIds;
+                if (item.assistantIds != null && item.assistantIds.Count() > 0)
+                {
+                    var names = Uof.ImemberService.GetAll(m => item.assistantIds.Contains(m.id)).Select(m => m.name).ToList();
+                    if (names != null && names.Count() > 0)
+                    {
+                        item.assistantNames = string.Join(",", names);
+                    }
+                }
+            }
+
 
             //Expression<Func<Customer, bool>> permQuery = c => true;
             //if (ops.Count() == 0)
@@ -1517,7 +1551,9 @@ namespace WebCenter.Web.Controllers
                     source_name = "",
                     date_created = c.date_created,
                     business_nature = c.business_nature,
-                   
+                    assistant_id = c.assistant_id,
+                    assistants = c.assistants,
+
                 }).OrderBy(c => c.id).ToList();
 
             if (list != null && list.Count() > 0)
@@ -1534,8 +1570,61 @@ namespace WebCenter.Web.Controllers
                     地区 = c.county,
                     地址 = c.address,
                     业务员 = c.salesman,
+                    assistant_id = c.assistant_id,
+                    assistants = c.assistants,
+                    助理1 = "",
+                    助理2 = "",
                     创建日期 = c.date_created.Value.ToString("yyyy-MM-dd")
                 }).ToList();
+
+                foreach (var item in exportList)
+                {
+                    var assIds = new List<int>();
+                    if (!string.IsNullOrEmpty(item.assistants))
+                    {
+                        var assList = item.assistants.Split(',');
+                        foreach (var ass in assList)
+                        {
+                            int aid = 0;
+                            int.TryParse(ass, out aid);
+                            assIds.Add(aid);
+                        }
+                    }
+                    item.assistantIds = assIds;
+                    if (item.assistantIds != null && item.assistantIds.Count() > 0)
+                    {
+                        var names = Uof.ImemberService.GetAll(m => item.assistantIds.Contains(m.id)).Select(m => m.name).ToList();
+                        if (names != null && names.Count() > 0)
+                        {
+                            item.助理2 = string.Join(", ", names);
+                        }
+                    }
+
+                    item.assistantIds = null;
+                    item.assistants = null;
+                }
+
+
+                var memberIds = exportList.Where(l => l.assistant_id != null).Select(l => l.assistant_id).Distinct().ToList();
+                if (memberIds != null && memberIds.Count > 0)
+                {
+                    var members = Uof.ImemberService.GetAll(c => memberIds.Contains(c.id)).Select(c => new
+                    {
+                        id = c.id,
+                        name = c.name
+                    }).ToList();
+                    if (members != null && members.Count > 0)
+                    {
+                        foreach (var item in members)
+                        {
+                            var tls = exportList.Where(l => l.assistant_id == item.id).ToList();
+                            foreach (var tl in tls)
+                            {
+                                tl.助理1 = item.name;
+                            }
+                        }
+                    }
+                }
 
                 var sheet = ExportToExcel(exportList);
                 var fileName = "客户列表.xml";

@@ -367,6 +367,7 @@ namespace WebCenter.Web.Controllers
                 {
                     id = a.id,
                     customer_id = a.customer_id,
+                    source_id = a.source_id,
                     //customer_name = a.customer.name,
                     //customer_code = a.customer.code,
                     order_code = a.order_code,
@@ -385,6 +386,62 @@ namespace WebCenter.Web.Controllers
                 {
                     foreach (var item in historys)
                     {
+                        switch (item.source)
+                        {
+                            case "reg_abroad":
+                                var regOrder = Uof.Ireg_abroadService.GetAll(r => r.id == item.source_id).Select(r => new
+                                {
+                                    name_cn = r.name_cn,
+                                    name_en = r.name_en,
+                                }).FirstOrDefault();
+                                if (regOrder != null)
+                                {
+                                    var cn = "";
+                                    var en = "";
+                                    if (!string.IsNullOrEmpty(regOrder.name_cn))
+                                    {
+                                        cn = string.Format("{0}, ", regOrder.name_cn);
+                                    }
+                                    if (!string.IsNullOrEmpty(regOrder.name_en))
+                                    {
+                                        en = string.Format("{0}", regOrder.name_en);
+                                    }
+                                    item.order_name = string.Format("{0}{1}", cn, en);
+                                }
+                                break;
+                            case "trademark":
+                                var trademarkOrder = Uof.ItrademarkService.GetAll(r => r.id == item.source_id).Select(r => new
+                                {
+                                    name_cn = r.name
+                                }).FirstOrDefault();
+                                if (trademarkOrder != null)
+                                { 
+                                    item.order_name = trademarkOrder.name_cn;
+                                }
+                                break;
+                            case "reg_internal":
+                                var reg_internalOrder = Uof.Ireg_internalService.GetAll(r => r.id == item.source_id).Select(r => new
+                                {
+                                    name_cn = r.name_cn
+                                }).FirstOrDefault();
+                                if (reg_internalOrder != null)
+                                {
+                                    item.order_name = reg_internalOrder.name_cn;
+                                }
+                                break;
+                            case "patent":
+                                var patentOrder = Uof.IpatentService.GetAll(r => r.id == item.source_id).Select(r => new
+                                {
+                                    name_cn = r.name
+                                }).FirstOrDefault();
+                                if (patentOrder != null)
+                                {
+                                    item.order_name = patentOrder.name_cn;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
                         item.order_type_name = GetHistorySourceName(item.source);
                     }
                     items.AddRange(historys);

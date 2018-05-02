@@ -50,6 +50,7 @@ namespace WebCenter.Web
     public class FinanceCheck
     {
         public int? id { get; set; }
+        public int? source_id { get; set; }
         public int? customer_id { get; set; }
         public string customer_name { get; set; }
         public string customer_code { get; set; }

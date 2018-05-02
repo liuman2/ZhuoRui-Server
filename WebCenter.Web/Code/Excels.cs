@@ -69,6 +69,11 @@ namespace WebCenter.Web
         public string 地址 { get; set; }
         public string 业务员 { get; set; }
         public string 创建日期 { get; set; }
+        public string 助理1 { get; set; }
+        public string 助理2 { get; set; }
+        public List<int> assistantIds { get; set; }
+        public int? assistant_id { get; set; }
+        public string assistants { get; set; }
     }
 
     public class ExcelAnnualContact

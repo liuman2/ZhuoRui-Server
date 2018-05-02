@@ -81,6 +81,7 @@ namespace WebCenter.Web
 
         public int business_count { get; set; }
         public List<int> assistantIds { get; set; }
+        public string assistantNames { get; set; }
     }
 
     public class Assistant
