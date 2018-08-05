@@ -42,7 +42,7 @@ namespace WebCenter.Web.Controllers
 
             if (_user.username == "admin")
             {
-                int[] a = { 1, 2, 3, 4, 5, 6 };
+                int[] a = { 1, 2, 3, 4, 5, 6, 7 };
                 hasOpers.AddRange(a);
             }
             else
@@ -54,7 +54,7 @@ namespace WebCenter.Web.Controllers
                 }
 
                 // 是否有提交权限
-                var settings = Uof.IsettingService.GetAll(s => s.name == "JW_ID" || s.name == "GN_ID" || s.name == "JWSJ_ID" || s.name == "GNSJ_ID" || s.name == "SB_ID" || s.name == "ZL_ID" || s.name == "JZ_ID").ToList();
+                var settings = Uof.IsettingService.GetAll(s => s.name == "JW_ID" || s.name == "GN_ID" || s.name == "JWSJ_ID" || s.name == "GNSJ_ID" || s.name == "SB_ID" || s.name == "ZL_ID" || s.name == "JZ_ID" || s.name == "TAX_ID").ToList();
                 var rows = settings.Where(s => s.value == _user.id.ToString()).ToList();
                 if (rows.Count > 0)
                 {

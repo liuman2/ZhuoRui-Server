@@ -265,6 +265,123 @@ namespace WebCenter.Web.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult SearchTaxWarning(OrderSearchRequest request)
+        {
+            var r = HttpContext.User.Identity.IsAuthenticated;
+            if (!r)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            if (arrs.Length < 6)
+            {
+                return new HttpUnauthorizedResult();
+            }
+
+            var userId = 0;
+            var deptId = 0;
+            var taxId = 0;
+            int.TryParse(arrs[0], out userId);
+            int.TryParse(arrs[2], out deptId);
+            int.TryParse(arrs[6], out taxId);
+
+
+            Expression<Func<reg_abroad, bool>> condition = c => true; //  c.salesman_id == userId;
+            var ops = arrs[4].Split(',');
+            var hasTax = ops.Where(o => o == "7").FirstOrDefault();
+
+            if (hasTax == null)
+            {
+                if (ops.Count() == 0)
+                {
+                    condition = c => (c.salesman_id == userId || c.assistant_id == userId || c.creator_id == userId);
+                }
+                else
+                {
+                    var hasCompany = ops.Where(o => o == "1").FirstOrDefault();
+                    var hasDepart = ops.Where(o => o == "2").FirstOrDefault();
+
+                    if (hasCompany == null)
+                    {
+                        if (hasDepart == null)
+                        {
+                            condition = c => (c.salesman_id == userId || c.assistant_id == userId || c.creator_id == userId);
+                        }
+                        else
+                        {
+                            var ids = GetChildrenDept(deptId);
+                            if (ids.Count > 0)
+                            {
+                                condition = c => c.organization_id == deptId;
+                            }
+                            else
+                            {
+                                condition = c => ids.Contains(c.organization_id.Value);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 订单状态
+            Expression<Func<reg_abroad, bool>> statusQuery = c => c.status == 4 && c.order_status == 0;
+            Expression<Func<reg_abroad, bool>> regionQuery = c => c.region == "香港";
+            
+
+            var list = Uof.Ireg_abroadService
+                .GetAll(condition)
+                .Where(statusQuery)
+                .Where(regionQuery)
+                .OrderByDescending(item => item.date_created).Select(c => new TaxWarning
+                {
+                    id = c.id,
+                    code = c.code,
+                    customer_id = c.customer_id,
+                    customer_name = c.customer.name,
+                    name_cn = c.name_cn,
+                    name_en = c.name_en,
+                    sent_date = null,
+                    memo = "",
+                }).ToPagedList(request.index, request.size).ToList();
+
+            // TODO: 关联tax_record
+
+            var totalRecord = Uof.Ireg_abroadService
+                .GetAll(condition)
+                .Where(statusQuery)
+                .Where(regionQuery)
+                .Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + request.size - 1) / request.size;
+            }
+            var page = new
+            {
+                current_index = request.index,
+                current_size = request.size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+
+            var result = new
+            {
+                page = page,
+                items = list
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+
+        }
+
         public ActionResult Add(reg_abroad aboad, oldRequest oldRequest, List<Shareholder> shareholderList)
         {
             var r = HttpContext.User.Identity.IsAuthenticated;

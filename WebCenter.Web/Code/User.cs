@@ -177,6 +177,10 @@ namespace WebCenter.Web
         public string creator { get; set; }
 
         public string supplier_name { get; set; }
+        public string salesman_name { get; set; }
+
+        public float? amount_income { get; set; }
+        public float? amount_unreceive { get; set; }
     }
 
     public class SubAudit
@@ -696,4 +700,16 @@ namespace WebCenter.Web
         public string name_cn { get; set; }
         public string name_en { get; set; }
     }
+
+    public class TaxWarning
+    {
+        public int id { get; set; }
+        public string code { get; set; }
+        public string name_cn { get; set; }
+        public string name_en { get; set; }
+        public DateTime? sent_date { get; set; }
+        public string memo { get; set; }
+        public int? customer_id { get; set; }
+        public string customer_name { get; set; }
+}
 }

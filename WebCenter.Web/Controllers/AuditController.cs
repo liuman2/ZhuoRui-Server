@@ -143,7 +143,7 @@ namespace WebCenter.Web.Controllers
                 .Where(date2Created)
                 .Where(nameQuery)
                 .Where(codeQuery)
-                .OrderByDescending(item => item.code).Select(c => new
+                .OrderByDescending(item => item.code).Select(c => new AuditEntity
                 {
                     id = c.id,
                     code = c.code,
@@ -171,9 +171,32 @@ namespace WebCenter.Web.Controllers
 
                     finance_review_moment = c.finance_review_moment,
                     submit_review_moment = c.submit_review_moment,
-                    date_created = c.date_created
+                    date_created = c.date_created,
+                    date_year_end = c.date_year_end,
 
                 }).ToPagedList(request.index, request.size).ToList();
+
+            if (list != null && list.Count() > 0)
+            {
+                var masterIds = list.Select(l => l.id).ToArray();
+                foreach (var masterId in masterIds)
+                {
+                    var order = list.Where(m => m.id == masterId).FirstOrDefault();
+                    var latest = Uof.Isub_auditService.GetAll(s => s.master_id == masterId).OrderByDescending(s => s.id).FirstOrDefault();
+                    if (latest != null)
+                    {
+                        order.amount_transaction = latest.amount_transaction;
+                        order.date_created = latest.date_transaction ?? latest.date_created;
+                        order.date_year_end = latest.date_year_end ?? latest.date_year_end;
+                    }
+
+                    if (!string.IsNullOrEmpty(order.date_year_end))
+                    {
+                        var dye = order.date_year_end;
+                        order.date_year_end = dye.Replace("-", "月") + "日";
+                    }
+                }
+            }
 
             var totalRecord = Uof.IauditService.GetAll(condition)
                 .Where(customerQuery)
