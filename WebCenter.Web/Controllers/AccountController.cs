@@ -113,7 +113,7 @@ namespace WebCenter.Web.Controllers
                 var opers = new List<int>();
                 if (user.username == "admin")
                 {
-                    int[] a = { 1, 2, 3, 4, 5, 6 };
+                    int[] a = { 1, 2, 3, 4, 5, 6, 7 };
                     opers.AddRange(a);
                     return Json(new { success = true, user = user, menus = getUserMenus(menus), opers = opers }, JsonRequestBehavior.AllowGet);
                 }

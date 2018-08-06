@@ -42,7 +42,7 @@ namespace WebCenter.Web.Controllers
             var deptId = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out deptId);
-                        
+
             Expression<Func<reg_abroad, bool>> condition = c => true; //  c.salesman_id == userId;
             var ops = arrs[4].Split(',');
             if (ops.Count() == 0)
@@ -161,8 +161,8 @@ namespace WebCenter.Web.Controllers
             if (!string.IsNullOrEmpty(request.name))
             {
                 nameQuery = c => (
-                c.name_cn.ToLower().Contains(request.name.ToLower()) || 
-                c.name_en.ToLower().Contains(request.name.ToLower()) || 
+                c.name_cn.ToLower().Contains(request.name.ToLower()) ||
+                c.name_en.ToLower().Contains(request.name.ToLower()) ||
                 c.code.ToLower().Contains(request.name.ToLower()));
             }
 
@@ -196,8 +196,8 @@ namespace WebCenter.Web.Controllers
             }
 
             var list = Uof.Ireg_abroadService
-                .GetAll(condition)                
-                .Where(statusQuery)                
+                .GetAll(condition)
+                .Where(statusQuery)
                 .Where(nameQuery)
                 .Where(areaQuery)
                 .Where(regIdsQuery)
@@ -280,18 +280,15 @@ namespace WebCenter.Web.Controllers
                 return new HttpUnauthorizedResult();
             }
 
-            if (arrs.Length < 6)
+            if (arrs.Length < 5)
             {
                 return new HttpUnauthorizedResult();
             }
 
             var userId = 0;
             var deptId = 0;
-            var taxId = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out deptId);
-            int.TryParse(arrs[6], out taxId);
-
 
             Expression<Func<reg_abroad, bool>> condition = c => true; //  c.salesman_id == userId;
             var ops = arrs[4].Split(',');
@@ -330,15 +327,25 @@ namespace WebCenter.Web.Controllers
                 }
             }
 
+            Expression<Func<reg_abroad, bool>> nameQuery = c => true;
+            if (!string.IsNullOrEmpty(request.name))
+            {
+                nameQuery = c => (
+                c.name_cn.ToLower().Contains(request.name.ToLower()) ||
+                c.name_en.ToLower().Contains(request.name.ToLower()) ||
+                c.code.ToLower().Contains(request.name.ToLower()));
+            }
+
             // 订单状态
             Expression<Func<reg_abroad, bool>> statusQuery = c => c.status == 4 && c.order_status == 0;
             Expression<Func<reg_abroad, bool>> regionQuery = c => c.region == "香港";
-            
+
 
             var list = Uof.Ireg_abroadService
                 .GetAll(condition)
                 .Where(statusQuery)
                 .Where(regionQuery)
+                .Where(nameQuery)
                 .OrderByDescending(item => item.date_created).Select(c => new TaxWarning
                 {
                     id = c.id,
@@ -348,15 +355,32 @@ namespace WebCenter.Web.Controllers
                     name_cn = c.name_cn,
                     name_en = c.name_en,
                     sent_date = null,
+                    date_setup = c.date_setup,
                     memo = "",
                 }).ToPagedList(request.index, request.size).ToList();
 
-            // TODO: 关联tax_record
+            // 关联tax_record
+            if (list != null && list.Count() > 0)
+            {
+                var masterIds = list.Select(l => l.id).ToArray();
+                foreach (var masterId in masterIds)
+                {
+                    var order = list.Where(m => m.id == masterId).FirstOrDefault();
+                    var tax = Uof.Itax_recordService.GetAll(s => s.master_id == masterId && s.deal_way == 0).OrderByDescending(s => s.id).FirstOrDefault();
+                    if (tax != null)
+                    {
+                        order.sent_date = tax.sent_date;
+                        order.memo = tax.memo;
+                    }
+                }
+            }
+
 
             var totalRecord = Uof.Ireg_abroadService
                 .GetAll(condition)
                 .Where(statusQuery)
                 .Where(regionQuery)
+                .Where(nameQuery)
                 .Count();
 
             var totalPages = 0;
@@ -375,7 +399,7 @@ namespace WebCenter.Web.Controllers
             var result = new
             {
                 page = page,
-                items = list
+                items = list.OrderByDescending(l => l.sent_date)
             };
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -401,7 +425,7 @@ namespace WebCenter.Web.Controllers
             var organization_id = 0;
             int.TryParse(arrs[0], out userId);
             int.TryParse(arrs[2], out organization_id);
-                        
+
             aboad.status = 0;
             aboad.review_status = -1;
             aboad.creator_id = userId;
@@ -427,8 +451,8 @@ namespace WebCenter.Web.Controllers
             {
                 // 旧单据
                 aboad.status = 4;
-                aboad.review_status = 1; 
-                
+                aboad.review_status = 1;
+
                 if (oldRequest.is_already_annual == 1)
                 {
                     // 已年检
@@ -503,12 +527,12 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult Delete(int id)
         {
-           var abroad = Uof.Ireg_abroadService.GetById(id);
+            var abroad = Uof.Ireg_abroadService.GetById(id);
 
-            var r =  Uof.Ireg_abroadService.DeleteEntity(abroad);
+            var r = Uof.Ireg_abroadService.DeleteEntity(abroad);
             if (r)
             {
-               var incomes = Uof.IincomeService.GetAll(i => i.source_name == "reg_abroad" && i.source_id == id).ToList();
+                var incomes = Uof.IincomeService.GetAll(i => i.source_name == "reg_abroad" && i.source_id == id).ToList();
                 if (incomes.Count > 0)
                 {
                     foreach (var item in incomes)
@@ -615,7 +639,7 @@ namespace WebCenter.Web.Controllers
             {
                 historyReocrd = new abroad_history();
                 historyReocrd.master_id = id;
-                var dbHistoryRecord = Uof.IhistoryService.GetAll(h => h.source_id == id && h.source == "reg_abroad" && h.status >=3).OrderByDescending(h => h.id).FirstOrDefault();
+                var dbHistoryRecord = Uof.IhistoryService.GetAll(h => h.source_id == id && h.source == "reg_abroad" && h.status >= 3).OrderByDescending(h => h.id).FirstOrDefault();
                 if (dbHistoryRecord != null)
                 {
                     if (dbHistoryRecord.value != null && dbHistoryRecord.value != "{}" && dbHistoryRecord.value.Length > 0)
@@ -658,8 +682,8 @@ namespace WebCenter.Web.Controllers
             }
 
             #endregion
-            
-            
+
+
             var reg = Uof.Ireg_abroadService.GetAll(a => a.id == id).Select(a => new
             {
                 id = a.id,
@@ -712,7 +736,7 @@ namespace WebCenter.Web.Controllers
                 manager_name = a.member2.name,
 
                 // TODO:  修改成订单归属
-                assistant_id = a.creator_id, 
+                assistant_id = a.creator_id,
                 assistant_name = a.member.name,
                 creator = a.member.name,
 
@@ -763,9 +787,9 @@ namespace WebCenter.Web.Controllers
                 }
                 catch (Exception)
                 {
-                    
+
                 }
-                
+
             }
             #endregion
 
@@ -836,7 +860,7 @@ namespace WebCenter.Web.Controllers
                 foreach (var item in banks)
                 {
                     var b = openbanks.Where(o => o.id == item.bank_id).FirstOrDefault();
-                    if (b!= null)
+                    if (b != null)
                     {
                         item.name = b.name;
                     }
@@ -1033,7 +1057,7 @@ namespace WebCenter.Web.Controllers
 
                         if (item.id > 0)
                         {
-                           var updateHolder = dbHolders.Where(d => d.id == item.id).FirstOrDefault();
+                            var updateHolder = dbHolders.Where(d => d.id == item.id).FirstOrDefault();
                             if (updateHolder != null)
                             {
                                 updateHolder.name = item.name;
@@ -1070,7 +1094,7 @@ namespace WebCenter.Web.Controllers
                         foreach (var item in deleteHolders)
                         {
                             Uof.Iabroad_shareholderService.DeleteEntity(item);
-                        }                        
+                        }
                     }
 
                     if (updateHolders.Count > 0)
@@ -1120,7 +1144,7 @@ namespace WebCenter.Web.Controllers
 
                 //var ids = GetFinanceMembers();
                 var auditor_id = GetAuditorByKey("CW_ID");
-                if (auditor_id!= null)
+                if (auditor_id != null)
                 {
                     var waitdeals = new List<waitdeal>();
                     waitdeals.Add(new waitdeal
@@ -1457,7 +1481,7 @@ namespace WebCenter.Web.Controllers
             }
 
             var list = Uof.Ireg_historyService.GetAll(h => h.reg_id == id).OrderByDescending(item => item.date_created).ToPagedList(index, size).ToList();
-            
+
             var result = new
             {
                 page = page,
@@ -1482,17 +1506,17 @@ namespace WebCenter.Web.Controllers
                 return Json(new { success = false, message = "参数reg_id不可为空" }, JsonRequestBehavior.AllowGet);
             }
 
-            var dbReg = Uof.Ireg_abroadService.GetAll(a=>a.id == history.reg_id).FirstOrDefault();
+            var dbReg = Uof.Ireg_abroadService.GetAll(a => a.id == history.reg_id).FirstOrDefault();
             if (dbReg == null)
             {
                 return Json(new { success = false, message = "找不到订单" }, JsonRequestBehavior.AllowGet);
             }
 
-            if (history.address == dbReg.address && 
-                history.date_setup == dbReg.date_setup && 
+            if (history.address == dbReg.address &&
+                history.date_setup == dbReg.date_setup &&
                 history.director == dbReg.director &&
                 history.name_cn == dbReg.name_cn &&
-                history.name_en == dbReg.name_en && 
+                history.name_en == dbReg.name_en &&
                 history.region == dbReg.region &&
                 history.others == dbReg.description &&
                 history.reg_no == dbReg.reg_no)
@@ -1581,7 +1605,7 @@ namespace WebCenter.Web.Controllers
                 {
                     dbAbroad.date_finish = request.date_finish ?? DateTime.Today;
                 }
-                
+
                 if (request.is_open_bank == 1)
                 {
                     dbAbroad.bank_id = request.bank_id;
@@ -1597,7 +1621,7 @@ namespace WebCenter.Web.Controllers
                 dbAbroad.date_finish = request.date_finish;
                 dbAbroad.progress = request.progress;
             }
-            
+
             var r = Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
 
             if (r)
@@ -1648,7 +1672,7 @@ namespace WebCenter.Web.Controllers
                         content = string.Format("{0}更新了进度: {1} 预计完成日期 {2}", arrs[3], dbAbroad.progress, dbAbroad.date_finish.Value.ToString("yyyy-MM-dd"))
                     });
 
-                   var waitdeals = new List<waitdeal>();
+                    var waitdeals = new List<waitdeal>();
                     waitdeals.Add(new waitdeal
                     {
                         source = "reg_abroad",
@@ -1739,7 +1763,7 @@ namespace WebCenter.Web.Controllers
 
         public ActionResult HistoryHolder(int master_id, string source, string type)
         {
-            var list = Uof.Ihistory_shareholderService.GetAll(s => s.master_id == master_id && s.source == source && s.type == type).OrderByDescending(s=>s.id).ToList();
+            var list = Uof.Ihistory_shareholderService.GetAll(s => s.master_id == master_id && s.source == source && s.type == type).OrderByDescending(s => s.id).ToList();
 
             return Json(list, JsonRequestBehavior.AllowGet);
         }
@@ -1776,6 +1800,84 @@ namespace WebCenter.Web.Controllers
             }
 
             return SuccessResult;
+        }
+
+        [HttpPost]
+        public ActionResult InsertTaxDate(TaxDateEntity tax)
+        {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var result = Uof.Itax_recordService.AddEntity(new tax_record
+            {
+                master_id = tax.order_id,
+                deal_way = 0,
+                sent_date = tax.sent_date,
+                memo = tax.memo,
+            });
+
+            if (result == null)
+            {
+                return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = tax.order_id,
+                    source_name = "reg_abroad",
+                    title = "填写了税表发出时间",
+                    is_system = 1,
+                    content = string.Format("{0}填写了税表发出时间: {1}", arrs[3], tax.sent_date.Value.ToString("yyyy-MM-dd"))
+                });
+
+                var dbReg = Uof.Ireg_abroadService.GetAll(a => a.id == tax.order_id).FirstOrDefault();
+                if (dbReg == null)
+                {
+                    return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var waitdeals = new List<waitdeal>();
+                waitdeals.Add(new waitdeal
+                {
+                    source = "tax_record",
+                    user_id = dbReg.salesman_id,
+                    router = "tax_warning",
+                    content = string.Format("您的订单{0}有新的税表需要处理，税表日期", dbReg.code, tax.sent_date.Value.ToString("yyyy-MM-dd")),
+                    read_status = 0
+                });
+
+                if (dbReg.assistant_id != null && dbReg.assistant_id != dbReg.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "tax_record",
+                        user_id = dbReg.assistant_id,
+                        router = "tax_warning",
+                        content = string.Format("您的订单{0}有新的税表需要处理，税表日期", dbReg.code, tax.sent_date.Value.ToString("yyyy-MM-dd")),
+                        read_status = 0
+                    });
+                }
+
+                Uof.IwaitdealService.AddEntities(waitdeals);
+            }
+            catch (Exception)
+            {
+
+            }          
+            return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
         }
     }
 }

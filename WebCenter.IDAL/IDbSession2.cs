@@ -166,6 +166,9 @@ namespace WebCenter.IDAL
 		IDAL.IsupplierRepository supplierRepository { get; }
 	  
 
+		IDAL.Itax_recordRepository tax_recordRepository { get; }
+	  
+
 		IDAL.ItimelineRepository timelineRepository { get; }
 	  
 

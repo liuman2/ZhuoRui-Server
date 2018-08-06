@@ -366,6 +366,13 @@ namespace WebCenter.Services
     } 
 	
   [Ninject.Inject]
+	 public  Itax_recordService Itax_recordService
+    {
+        get;
+        set;
+    } 
+	
+  [Ninject.Inject]
 	 public  ItimelineService ItimelineService
     {
         get;

@@ -183,6 +183,7 @@
         <AssociationConnector Association="DataCenter.Entities.fk_trademark_cut_owner" />
         <AssociationConnector Association="DataCenter.Entities.fk_patent_annual_owner" />
         <AssociationConnector Association="DataCenter.Entities.fk_trademark_annual_owner" />
+        <EntityTypeShape EntityType="DataCenter.Entities.tax_record" Width="1.5" PointX="20.375" PointY="12.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

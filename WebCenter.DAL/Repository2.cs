@@ -262,6 +262,11 @@ namespace WebCenter.DAL
          
     }
 	
+	public partial class tax_recordRepository :BaseRepository<tax_record>,Itax_recordRepository
+    {
+         
+    }
+	
 	public partial class timelineRepository :BaseRepository<timeline>,ItimelineRepository
     {
          

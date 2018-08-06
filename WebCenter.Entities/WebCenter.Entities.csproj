@@ -245,6 +245,9 @@
     <Compile Include="supplier.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>
+    <Compile Include="tax_record.cs">
+      <DependentUpon>DataCenter.tt</DependentUpon>
+    </Compile>
     <Compile Include="timeline.cs">
       <DependentUpon>DataCenter.tt</DependentUpon>
     </Compile>

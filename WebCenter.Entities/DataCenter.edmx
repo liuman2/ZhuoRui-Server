@@ -1089,6 +1089,26 @@
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="memo" Type="varchar" MaxLength="300" />
         </EntityType>
+        <EntityType Name="tax_record">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="master_id" Type="int" Nullable="false" />
+          <Property Name="deal_way" Type="int" />
+          <Property Name="audit_id" Type="int" />
+          <Property Name="audit_code" Type="varchar" MaxLength="20" />
+          <Property Name="sent_date" Type="datetime" Precision="0" />
+          <Property Name="submit_reviewer_id" Type="int" />
+          <Property Name="submit_review_date" Type="datetime" Precision="0" />
+          <Property Name="submit_review_moment" Type="varchar" MaxLength="100" />
+          <Property Name="review_status" Type="int" />
+          <Property Name="memo" Type="varchar" MaxLength="300" />
+          <Property Name="attachment" Type="varchar" MaxLength="300" />
+          <Property Name="creator_id" Type="int" />
+          <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="datetime" Precision="0" />
+        </EntityType>
         <EntityType Name="timeline">
           <Key>
             <PropertyRef Name="id" />
@@ -2724,6 +2744,7 @@
           <EntitySet Name="settings" EntityType="Self.settings" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="sub_audit" EntityType="Self.sub_audit" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="supplier" EntityType="Self.supplier" Schema="zhuoruioa" store:Type="Tables" />
+          <EntitySet Name="tax_record" EntityType="Self.tax_record" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="timeline" EntityType="Self.timeline" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="trademark" EntityType="Self.trademark" Schema="zhuoruioa" store:Type="Tables" />
           <EntitySet Name="waitdeal" EntityType="Self.waitdeal" Schema="zhuoruioa" store:Type="Tables" />
@@ -3779,6 +3800,7 @@
             <End Role="member" EntitySet="members" />
             <End Role="trademark" EntitySet="trademarks" />
           </AssociationSet>
+          <EntitySet Name="tax_record" EntityType="DataCenter.Entities.tax_record" />
           </EntityContainer>
         <EntityType Name="organization">
           <Key>
@@ -6695,6 +6717,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="tax_record">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="master_id" Type="Int32" Nullable="false" />
+          <Property Name="deal_way" Type="Int32" />
+          <Property Name="audit_id" Type="Int32" />
+          <Property Name="audit_code" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="sent_date" Type="DateTime" />
+          <Property Name="submit_reviewer_id" Type="Int32" />
+          <Property Name="submit_review_date" Type="DateTime" />
+          <Property Name="submit_review_moment" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="review_status" Type="Int32" />
+          <Property Name="memo" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="attachment" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="creator_id" Type="Int32" />
+          <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_updated" Type="DateTime" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -7930,6 +7972,27 @@
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tax_record">
+            <EntityTypeMapping TypeName="DataCenter.Entities.tax_record">
+              <MappingFragment StoreEntitySet="tax_record">
+                <ScalarProperty Name="date_updated" ColumnName="date_updated" />
+                <ScalarProperty Name="date_created" ColumnName="date_created" />
+                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
+                <ScalarProperty Name="attachment" ColumnName="attachment" />
+                <ScalarProperty Name="memo" ColumnName="memo" />
+                <ScalarProperty Name="review_status" ColumnName="review_status" />
+                <ScalarProperty Name="submit_review_moment" ColumnName="submit_review_moment" />
+                <ScalarProperty Name="submit_review_date" ColumnName="submit_review_date" />
+                <ScalarProperty Name="submit_reviewer_id" ColumnName="submit_reviewer_id" />
+                <ScalarProperty Name="sent_date" ColumnName="sent_date" />
+                <ScalarProperty Name="audit_code" ColumnName="audit_code" />
+                <ScalarProperty Name="audit_id" ColumnName="audit_id" />
+                <ScalarProperty Name="deal_way" ColumnName="deal_way" />
+                <ScalarProperty Name="master_id" ColumnName="master_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

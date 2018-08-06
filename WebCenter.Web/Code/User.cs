@@ -327,7 +327,7 @@ namespace WebCenter.Web
         public string email { get; set; }
         public string mobile { get; set; }
         public string position { get; set; }
-        public string QQ  { get; set; }
+        public string QQ { get; set; }
         public string tel { get; set; }
         //public string type { get; set; }
         public string wechat { get; set; }
@@ -375,7 +375,7 @@ namespace WebCenter.Web
         public string customer_name { get; set; }
         public string name_cn { get; set; }
         public string name_en { get; set; }
-        public sbyte?  status { get; set; }
+        public sbyte? status { get; set; }
         public int? review_status { get; set; }
         public DateTime? date_transaction { get; set; }
         public float? amount_transaction { get; set; }
@@ -659,7 +659,8 @@ namespace WebCenter.Web
         public string business_code { get; set; }
     }
 
-    public class MailEntity {
+    public class MailEntity
+    {
         public int id { get; set; }
         public string type { get; set; }
         public string owner { get; set; }
@@ -708,8 +709,16 @@ namespace WebCenter.Web
         public string name_cn { get; set; }
         public string name_en { get; set; }
         public DateTime? sent_date { get; set; }
+        public DateTime? date_setup { get; set; }
         public string memo { get; set; }
         public int? customer_id { get; set; }
         public string customer_name { get; set; }
-}
+    }
+
+    public class TaxDateEntity
+    {
+        public int order_id { get; set; }
+        public DateTime? sent_date { get; set; }
+        public string memo { get; set; } 
+    }
 }

@@ -523,6 +523,16 @@ namespace WebCenter.Services
         }  
     }
 	
+	public partial class tax_recordService:BaseService<tax_record>,Itax_recordService
+    {   
+        public tax_recordService()
+        {}
+        public override void SetCurrentRepository()
+        {
+            CurrentRepository = _dbSession.tax_recordRepository;
+        }  
+    }
+	
 	public partial class timelineService:BaseService<timeline>,ItimelineService
     {   
         public timelineService()

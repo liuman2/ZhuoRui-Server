@@ -214,6 +214,10 @@ namespace WebCenter.IServices
     {   
     }
 	
+	public partial interface Itax_recordService:IBaseService<tax_record>
+    {   
+    }
+	
 	public partial interface ItimelineService:IBaseService<timeline>
     {   
     }

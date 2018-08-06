@@ -210,6 +210,10 @@ namespace WebCenter.IDAL
     {         
     }
 	
+    public partial interface Itax_recordRepository :IBaseRepository<tax_record>
+    {         
+    }
+	
     public partial interface ItimelineRepository :IBaseRepository<timeline>
     {         
     }

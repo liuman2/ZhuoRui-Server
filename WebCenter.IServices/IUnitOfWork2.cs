@@ -110,6 +110,8 @@ namespace WebCenter.IServices
 	
 	  IsupplierService IsupplierService{get;set;} 
 	
+	  Itax_recordService Itax_recordService{get;set;} 
+	
 	  ItimelineService ItimelineService{get;set;} 
 	
 	  ItrademarkService ItrademarkService{get;set;} 
