@@ -371,6 +371,7 @@ namespace WebCenter.Web.Controllers
                     {
                         order.sent_date = tax.sent_date;
                         order.memo = tax.memo;
+                        order.tax_record_id = tax.id;
                     }
                 }
             }
@@ -404,6 +405,50 @@ namespace WebCenter.Web.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
 
+        }
+
+        public ActionResult TaxList(OrderSearchRequest request)
+        {
+            var list = Uof.Itax_recordService
+                .GetAll(t => t.master_id == request.order_id)
+                .OrderByDescending(item => item.date_created).Select(c => new
+                {
+                    id = c.id,
+                    master_id = c.master_id,
+                    deal_way = c.deal_way,
+                    audit_id = c.audit_id,
+                    audit_code = c.audit_code,
+                    sent_date = c.sent_date,
+                    memo = c.memo,
+                    attachment = c.attachment,
+                    date_created = c.date_created,
+                }).ToPagedList(request.index, request.size).ToList();
+
+
+            var totalRecord = Uof.Itax_recordService
+                .GetAll(t => t.master_id == request.order_id)
+                .Count();
+
+            var totalPages = 0;
+            if (totalRecord > 0)
+            {
+                totalPages = (totalRecord + request.size - 1) / request.size;
+            }
+            var page = new
+            {
+                current_index = request.index,
+                current_size = request.size,
+                total_size = totalRecord,
+                total_page = totalPages
+            };
+
+            var result = new
+            {
+                page = page,
+                items = list.OrderByDescending(l => l.sent_date)
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Add(reg_abroad aboad, oldRequest oldRequest, List<Shareholder> shareholderList)
@@ -1878,6 +1923,79 @@ namespace WebCenter.Web.Controllers
 
             }          
             return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CheckAudit(int id)
+        {
+            var dbAudit = Uof.IauditService.GetAll(a => a.source_id == id && a.source == "reg_abroad").FirstOrDefault();
+            if (dbAudit == null)
+            {
+                return Json(new { isExist = false, auditId = 0 }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { isExist = true, auditId = dbAudit.id }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult TaxNoAudit(int id, string url)
+        {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var tax = Uof.Itax_recordService.GetAll(t => t.id == id).FirstOrDefault();
+            if (tax == null)
+            {
+                return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
+            }
+
+            tax.attachment = url;
+            tax.deal_way = 1;
+            tax.date_updated = DateTime.Now;
+
+            var updateResult = Uof.Itax_recordService.UpdateEntity(tax);
+
+            if (!updateResult)
+            {
+                return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                var tls = new List<timeline>();
+                tls.Add(new timeline()
+                {
+                    source_id = tax.id,
+                    source_name = "tax_record",
+                    title = "零申报",
+                    is_system = 1,
+                    content = string.Format("{0}对税表做了零申报处理", arrs[3])
+                });
+                tls.Add(new timeline()
+                {
+                    source_id = tax.master_id,
+                    source_name = "reg_abroad",
+                    title = "零申报",
+                    is_system = 1,
+                    content = string.Format("{0}对税表做了零申报处理", arrs[3])
+                });
+
+                Uof.ItimelineService.AddEntities(tls);
+            }
+            catch (Exception)
+            {
+                
+            }
+            return Json(new { success = true, message = "更新成功" }, JsonRequestBehavior.AllowGet);
         }
     }
 }

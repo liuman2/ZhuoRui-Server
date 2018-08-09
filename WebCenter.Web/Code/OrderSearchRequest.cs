@@ -20,6 +20,7 @@ namespace WebCenter.Web
         public string order_type { get; set; }
         public string area { get; set; }
         public int? bank_id { get; set; }
+        public int? order_id { get; set; }
     }
 
     public class TrademarkRequest : OrderSearchRequest

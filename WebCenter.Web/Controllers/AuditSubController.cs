@@ -78,6 +78,46 @@ namespace WebCenter.Web.Controllers
                 is_system = 1,
                 content = string.Format("{0}新增了账期", arrs[3])
             });
+
+            var masterOrder = Uof.IauditService.GetAll(a => a.id == newAbroad.master_id).FirstOrDefault();
+            if (masterOrder != null && masterOrder.source == "reg_abroad")
+            {
+                var tax = Uof.Itax_recordService.GetAll(t => t.master_id == masterOrder.source_id && t.deal_way == 0).FirstOrDefault();
+                if (tax != null)
+                {
+                    tax.deal_way = 2;
+                    tax.audit_id = masterOrder.id;
+                    tax.audit_code = masterOrder.code;
+                    tax.date_updated = DateTime.Now;
+                    try
+                    {
+                        var taxResult = Uof.Itax_recordService.UpdateEntity(tax);
+                        if (taxResult)
+                        {
+                            timelines.Add(new timeline
+                            {
+                                source_id = tax.id,
+                                source_name = "tax_record",
+                                title = "转审计",
+                                is_system = 1,
+                                content = string.Format("{0}对税表做了转审计处理", arrs[3])
+                            });
+                            timelines.Add(new timeline()
+                            {
+                                source_id = tax.master_id,
+                                source_name = "reg_abroad",
+                                title = "转审计",
+                                is_system = 1,
+                                content = string.Format("{0}对税表做了转审计处理", arrs[3])
+                            });
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+
             try
             {
                 Uof.ItimelineService.AddEntities(timelines);

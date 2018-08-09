@@ -713,6 +713,7 @@ namespace WebCenter.Web
         public string memo { get; set; }
         public int? customer_id { get; set; }
         public string customer_name { get; set; }
+        public int? tax_record_id { get; set; }
     }
 
     public class TaxDateEntity

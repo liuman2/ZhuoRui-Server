@@ -335,7 +335,7 @@ namespace WebCenter.Web.Controllers
             {
                 return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
             }
-
+                        
             var timelines = new List<timeline>();
             timelines.Add(new timeline
             {
@@ -354,6 +354,45 @@ namespace WebCenter.Web.Controllers
                 is_system = 1,
                 content = string.Format("{0}新建了订单, 档案号{1}", arrs[3], _audit.code)
             });
+
+            if (newAbroad.source == "reg_abroad")
+            {
+                var tax = Uof.Itax_recordService.GetAll(t => t.master_id == newAbroad.source_id && t.deal_way == 0).FirstOrDefault();
+                if (tax != null)
+                {
+                    tax.deal_way = 2;
+                    tax.audit_id = newAbroad.id;
+                    tax.audit_code = newAbroad.code;
+                    tax.date_updated = DateTime.Now;
+                    try
+                    {
+                        var taxResult = Uof.Itax_recordService.UpdateEntity(tax);
+                        if (taxResult)
+                        {
+                            timelines.Add(new timeline
+                            {
+                                source_id = tax.id,
+                                source_name = "tax_record",
+                                title = "转审计",
+                                is_system = 1,
+                                content = string.Format("{0}对税表做了转审计处理", arrs[3])
+                            });
+                            timelines.Add(new timeline()
+                            {
+                                source_id = tax.master_id,
+                                source_name = "reg_abroad",
+                                title = "转审计",
+                                is_system = 1,
+                                content = string.Format("{0}对税表做了转审计处理", arrs[3])
+                            });
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+
             try
             {
                 Uof.ItimelineService.AddEntities(timelines);
