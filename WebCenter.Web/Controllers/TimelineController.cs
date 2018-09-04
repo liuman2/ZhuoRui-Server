@@ -218,7 +218,8 @@ namespace WebCenter.Web.Controllers
 
             if(r!= null && timeLine.is_notify)
             {
-                Uof.IscheduleService.AddEntity(new schedule
+                var scheduleList = new List<schedule>();
+                scheduleList.Add(new schedule
                 {
                     all_day = 1,
                     color = "#51b749",
@@ -239,6 +240,41 @@ namespace WebCenter.Web.Controllers
                     timeline_id = r.id,
                     business_code = businessCode
                 });
+
+                if (!string.IsNullOrEmpty(timeLine.notifyPeople))
+                {
+                    var pIds = timeLine.notifyPeople.Split(',');
+                    if (pIds.Count() > 0)
+                    {
+                        foreach (var pId in pIds)
+                        {
+                            var notifyId = int.Parse(pId); 
+                            scheduleList.Add(new schedule
+                            {
+                                all_day = 1,
+                                color = "#51b749",
+                                title = timeLine.title,
+                                memo = timeLine.content,
+                                start = timeLine.date_notify,
+                                type = 0,
+                                created_id = notifyId,
+                                date_created = DateTime.Now,
+                                is_repeat = 0,
+                                is_done = 0,
+                                property = 2,
+                                is_notify = 1,
+                                source = timeLine.source_name,
+                                source_id = timeLine.source_id,
+                                router = r.log_type == 1 ? "annual_warning" : timeLine.source_name,
+                                dealt_date = timeLine.date_business,
+                                timeline_id = r.id,
+                                business_code = businessCode
+                            });
+                        }
+                    }
+                }
+
+                Uof.IscheduleService.AddEntities(scheduleList);
             }
 
             return SuccessResult;

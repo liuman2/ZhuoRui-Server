@@ -531,6 +531,7 @@ namespace WebCenter.Web
         public bool is_notify { get; set; }
         public Nullable<System.DateTime> date_notify { get; set; }
         public Nullable<System.DateTime> dealt_date { get; set; }
+        public string notifyPeople  { get; set; }
     }
 
     public class ReceiptEntity
@@ -710,6 +711,7 @@ namespace WebCenter.Web
         public string name_en { get; set; }
         public DateTime? sent_date { get; set; }
         public DateTime? date_setup { get; set; }
+        public DateTime? end_date { get; set; }
         public string memo { get; set; }
         public int? customer_id { get; set; }
         public string customer_name { get; set; }
@@ -720,6 +722,7 @@ namespace WebCenter.Web
     {
         public int order_id { get; set; }
         public DateTime? sent_date { get; set; }
+        public DateTime? end_date { get; set; }
         public string memo { get; set; } 
     }
 }

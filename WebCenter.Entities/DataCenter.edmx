@@ -1108,6 +1108,7 @@
           <Property Name="creator_id" Type="int" />
           <Property Name="date_created" Type="datetime" Precision="0" StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="datetime" Precision="0" />
+          <Property Name="end_date" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="timeline">
           <Key>
@@ -6736,6 +6737,7 @@
           <Property Name="creator_id" Type="Int32" />
           <Property Name="date_created" Type="DateTime" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="date_updated" Type="DateTime" />
+          <Property Name="end_date" Type="DateTime" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -7979,6 +7981,7 @@
           <EntitySetMapping Name="tax_record">
             <EntityTypeMapping TypeName="DataCenter.Entities.tax_record">
               <MappingFragment StoreEntitySet="tax_record">
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
                 <ScalarProperty Name="date_updated" ColumnName="date_updated" />
                 <ScalarProperty Name="date_created" ColumnName="date_created" />
                 <ScalarProperty Name="creator_id" ColumnName="creator_id" />

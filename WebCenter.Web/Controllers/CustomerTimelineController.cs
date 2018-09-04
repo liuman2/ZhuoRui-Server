@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using WebCenter.IServices;
 using WebCenter.Entities;
 using System.Linq.Expressions;
+using System.Collections.Generic;
 
 namespace WebCenter.Web.Controllers
 {
@@ -88,7 +89,8 @@ namespace WebCenter.Web.Controllers
 
             if (t.is_notify)
             {
-                Uof.IscheduleService.AddEntity(new schedule
+                var scheduleList = new List<schedule>();
+                scheduleList.Add(new schedule
                 {
                     all_day = 1,
                     color = "#51b749",
@@ -108,6 +110,39 @@ namespace WebCenter.Web.Controllers
                     dealt_date = t.dealt_date,
                     timeline_id = r.id,
                 });
+                if (!string.IsNullOrEmpty(t.notifyPeople))
+                {
+                    var pIds = t.notifyPeople.Split(',');
+                    if (pIds.Count() > 0)
+                    {
+                        foreach (var pId in pIds)
+                        {
+                            var notifyId = int.Parse(pId);
+                            scheduleList.Add(new schedule
+                            {
+                                all_day = 1,
+                                color = "#51b749",
+                                title = t.title,
+                                memo = t.content,
+                                start = t.date_notify,
+                                type = 0,
+                                created_id = notifyId,
+                                date_created = DateTime.Now,
+                                is_repeat = 0,
+                                is_done = 0,
+                                property = 2,
+                                is_notify = 1,
+                                source = "customer",
+                                source_id = t.customer_id,
+                                router = "customer",
+                                dealt_date = t.dealt_date,
+                                timeline_id = r.id,
+                            });
+                        }
+                    }
+                }
+
+                Uof.IscheduleService.AddEntities(scheduleList);
             }
 
             return SuccessResult;

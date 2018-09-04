@@ -61,6 +61,7 @@ namespace WebCenter.Web
 
         public bool is_notify { get; set; }
         public Nullable<System.DateTime> date_notify { get; set; }
-        public Nullable<System.DateTime> dealt_date { get; set; }        
+        public Nullable<System.DateTime> dealt_date { get; set; }
+        public string notifyPeople { get; set; }
     }
 }

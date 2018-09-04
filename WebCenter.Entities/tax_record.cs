@@ -75,5 +75,9 @@ namespace WebCenter.Entities
     
     
         public Nullable<System.DateTime> date_updated { get; set; }
+    
+    
+    
+        public Nullable<System.DateTime> end_date { get; set; }
     }
 }

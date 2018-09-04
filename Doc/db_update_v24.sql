@@ -25,3 +25,10 @@ INSERT INTO `sequence` VALUES ('tax_record', '1');
 INSERT INTO `operation` VALUES ('7', '税表录入');
 
 INSERT INTO `settings` VALUES ('16', 'TAX_ID', null, null);
+
+
+-- 2018-08-12
+call AddColumnUnlessExists(Database(), 'tax_record', 'end_date', 'datetime DEFAULT NULL COMMENT "税表截止日期"');
+
+-- 2018-09-04
+call AddColumnUnlessExists(Database(), 'customer', 'tag', 'varchar(120) DEFAULT NULL COMMENT "标签"');

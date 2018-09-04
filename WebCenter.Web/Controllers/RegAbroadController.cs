@@ -370,6 +370,7 @@ namespace WebCenter.Web.Controllers
                     if (tax != null)
                     {
                         order.sent_date = tax.sent_date;
+                        order.end_date = tax.end_date;
                         order.memo = tax.memo;
                         order.tax_record_id = tax.id;
                     }
@@ -1869,6 +1870,7 @@ namespace WebCenter.Web.Controllers
                 master_id = tax.order_id,
                 deal_way = 0,
                 sent_date = tax.sent_date,
+                end_date = tax.end_date,
                 memo = tax.memo,
             });
 
@@ -1934,6 +1936,72 @@ namespace WebCenter.Web.Controllers
             }
 
             return Json(new { isExist = true, auditId = dbAudit.id }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SetAudit(int id, int orderId)
+        {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+            var tax = Uof.Itax_recordService.GetAll(t => t.id == id).FirstOrDefault();
+            if (tax == null)
+            {
+                return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var dbAudit = Uof.IauditService.GetAll(a => a.source_id == orderId && a.source == "reg_abroad").FirstOrDefault();
+
+            tax.deal_way = 2;
+            tax.date_updated = DateTime.Now;
+            if (dbAudit != null)
+            {
+                tax.audit_code = dbAudit.code;
+                tax.audit_id = dbAudit.id;
+            }
+
+            var updateResult = Uof.Itax_recordService.UpdateEntity(tax);
+            if (!updateResult)
+            {
+                return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                var tls = new List<timeline>();
+                tls.Add(new timeline()
+                {
+                    source_id = tax.id,
+                    source_name = "tax_record",
+                    title = "转审计",
+                    is_system = 1,
+                    content = string.Format("{0}对税表做了转审计处理", arrs[3])
+                });
+                tls.Add(new timeline()
+                {
+                    source_id = tax.master_id,
+                    source_name = "reg_abroad",
+                    title = "转审计",
+                    is_system = 1,
+                    content = string.Format("{0}对税表做了转审计处理", arrs[3])
+                });
+
+                Uof.ItimelineService.AddEntities(tls);
+            }
+            catch (Exception)
+            {
+            }
+            return Json(new { success = true, message = "更新成功" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult TaxNoAudit(int id, string url)
