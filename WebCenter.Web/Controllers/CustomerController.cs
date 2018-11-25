@@ -130,6 +130,7 @@ namespace WebCenter.Web.Controllers
 
             Expression<Func<customer, bool>> condition = c => c.status == 1; // && c.salesman_id == userId;
             Expression<Func<customer, bool>> nameQuery = c => true;
+            Expression<Func<customer, bool>> tagQuery = c => true;
 
             if (!string.IsNullOrEmpty(name) && type == "name")
             {
@@ -137,7 +138,13 @@ namespace WebCenter.Web.Controllers
             }
 
             var userIds = new List<int>();
-            if (type != "name" && !string.IsNullOrEmpty(name))
+
+            if (!string.IsNullOrEmpty(name) && type == "tag")
+            {
+                tagQuery = c => (c.tag.IndexOf(name) > -1);
+            }
+
+            if (type != "name" && type != "tag" && !string.IsNullOrEmpty(name))
             {
                 userIds = Uof.IcontactService.GetAll(t =>
                 t.name.IndexOf(name) > -1 ||
@@ -154,7 +161,7 @@ namespace WebCenter.Web.Controllers
             }
             else
             {
-                if (type != "name" && !string.IsNullOrEmpty(name))
+                if (type != "name" && type != "tag" && !string.IsNullOrEmpty(name))
                 {
                     userIdsQuery = c => false;
                 }
@@ -182,6 +189,7 @@ namespace WebCenter.Web.Controllers
             var customerAllList = Uof.IcustomerService
                 .GetAll(condition)
                 .Where(nameQuery)
+                .Where(tagQuery)
                 .Where(c => c.is_delete != 1)
                 .Where(userIdsQuery)
                 .OrderByDescending(item => item.id).Select(c => new Customer()
@@ -206,6 +214,7 @@ namespace WebCenter.Web.Controllers
                     assistant_name = "",
                     assistants = c.assistants,
                     date_created = c.date_created,
+                    tag = c.tag,
                 }).ToList();
 
             var fullCustomerList = new List<Customer>();
@@ -894,6 +903,7 @@ namespace WebCenter.Web.Controllers
                 mailling_province = _customer.mailling_province,
                 mailling_city = _customer.mailling_city,
                 mailling_county = _customer.mailling_county,
+                tag = _customer.tag
             };
 
             if (!string.IsNullOrEmpty(customerEntity.assistants))
@@ -1324,6 +1334,7 @@ namespace WebCenter.Web.Controllers
                 mailling_province = _customer.mailling_province,
                 mailling_city = _customer.mailling_city,
                 mailling_county = _customer.mailling_county,
+                tag = _customer.tag,
 
             };
 
@@ -1460,6 +1471,21 @@ namespace WebCenter.Web.Controllers
             Uof.IcontactService.UpdateEntity(d);
 
             return Json(d, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateTag(int id, string tag)
+        {
+            var c = Uof.IcustomerService.GetAll(ac => ac.id == id).FirstOrDefault();
+
+            if (c == null)
+            {
+                return ErrorResult;
+            }
+
+            c.tag = tag;
+            var r = Uof.IcustomerService.UpdateEntity(c);
+            return Json(new { success = r }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult TransferBack(int id)

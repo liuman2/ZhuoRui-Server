@@ -171,6 +171,10 @@ namespace WebCenter.Entities
     
         public Nullable<sbyte> is_delete { get; set; }
     
+    
+    
+        public string tag { get; set; }
+    
         public virtual ICollection<accounting> accountings { get; set; }
         public virtual ICollection<annual_exam> annual_exam { get; set; }
         public virtual ICollection<audit> audits { get; set; }

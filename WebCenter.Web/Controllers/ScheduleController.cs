@@ -42,6 +42,11 @@ namespace WebCenter.Web.Controllers
             _schedule.created_id = userId;
             _schedule.date_created = DateTime.Now;
 
+            if (_schedule.start == null)
+            {
+                _schedule.start = DateTime.Now;
+            }
+
             var dbSchedule = Uof.IscheduleService.AddEntity(_schedule);
 
             return Json(dbSchedule, JsonRequestBehavior.AllowGet);
@@ -341,7 +346,7 @@ namespace WebCenter.Web.Controllers
             int.TryParse(arrs[0], out userId);
             var strUserId = userId.ToString();
 
-            var list = Uof.IscheduleService.GetAll(s => s.created_id == userId || s.type == 2 || (s.type == 1 && s.people.Contains(strUserId))).Select(s=> new ScheduleEntity
+            var list = Uof.IscheduleService.GetAll(s => (s.created_id == userId || s.type == 2 || (s.type == 1 && s.people.Contains(strUserId))) && s.start != null).Select(s=> new ScheduleEntity
             {
                 id = s.id,
                 attachment = s.attachment,

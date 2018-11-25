@@ -336,6 +336,13 @@ namespace WebCenter.Web.Controllers
                 c.code.ToLower().Contains(request.name.ToLower()));
             }
 
+            Expression<Func<reg_abroad, bool>> monthQuery = c => true;
+            if (request.month != null)
+            {
+                monthQuery = c => (
+                c.date_setup.Value!= null && c.date_setup.Value.Month == request.month);
+            }
+
             // 订单状态
             Expression<Func<reg_abroad, bool>> statusQuery = c => c.status == 4 && c.order_status == 0;
             Expression<Func<reg_abroad, bool>> regionQuery = c => c.region == "香港";
@@ -346,6 +353,7 @@ namespace WebCenter.Web.Controllers
                 .Where(statusQuery)
                 .Where(regionQuery)
                 .Where(nameQuery)
+                .Where(monthQuery)
                 .OrderByDescending(item => item.date_created).Select(c => new TaxWarning
                 {
                     id = c.id,
@@ -374,6 +382,84 @@ namespace WebCenter.Web.Controllers
                         order.memo = tax.memo;
                         order.tax_record_id = tax.id;
                     }
+
+                    // deal_way
+                    var doneTax = Uof.Itax_recordService.GetAll(s => s.master_id == masterId && s.deal_way != 0).OrderByDescending(s => s.id).FirstOrDefault();
+                    if (doneTax != null)
+                    {
+                        if (doneTax.deal_way == 1)
+                        {
+                            order.deal_way = "零申报";
+                        }
+                        if (doneTax.deal_way != 2)
+                        {
+                            if (order.date_setup != null)
+                            {
+                                order.diff_date = GetUsedMonth1(order.date_setup.Value);
+                            }
+                        }
+                        if (doneTax.deal_way == 2)
+                        {
+                            order.deal_way = "转审计";                            
+                        }
+
+                        if (doneTax.deal_way == 2)
+                        {
+                            // period
+                            var morder = Uof.IauditService.GetAll(s => s.source_id == masterId && s.source == "reg_abroad").OrderByDescending(s => s.id).FirstOrDefault();
+                            if (morder != null)
+                            {
+                                var d1 = morder.account_period;
+                                var d2 = morder.account_period2;
+                                if (d1 != null && d2 != null)
+                                {
+                                    order.period = string.Format("{0}至{1}", d1.Value.ToShortDateString(), d2.Value.ToShortDateString());
+                                }
+                                var suborder = Uof.Isub_auditService.GetAll(s => s.master_id == morder.id).OrderByDescending(s => s.id).FirstOrDefault();
+                                if (suborder != null)
+                                {
+                                    var d3 = suborder.account_period;
+                                    var d4 = suborder.account_period2;
+                                    if (d3 != null && d4 != null)
+                                    {
+                                        order.period = string.Format("{0}至{1}", d3.Value.ToShortDateString(), d4.Value.ToShortDateString());
+                                    }
+                                }
+
+                            }
+
+                        }
+                    } else
+                    {
+                        if (order.date_setup != null)
+                        {
+                            order.diff_date = GetUsedMonth1(order.date_setup.Value);
+                        }
+
+
+                        var morder = Uof.IauditService.GetAll(s => s.source_id == masterId && s.source == "reg_abroad").OrderByDescending(s => s.id).FirstOrDefault();
+                        if (morder != null)
+                        {
+                            var d1 = morder.account_period;
+                            var d2 = morder.account_period2;
+                            if (d1 != null && d2 != null)
+                            {
+                                order.period = string.Format("{0}至{1}", d1.Value.ToShortDateString(), d2.Value.ToShortDateString());
+                            }
+                            var suborder = Uof.Isub_auditService.GetAll(s => s.master_id == morder.id).OrderByDescending(s => s.id).FirstOrDefault();
+                            if (suborder != null)
+                            {
+                                var d3 = suborder.account_period;
+                                var d4 = suborder.account_period2;
+                                if (d3 != null && d4 != null)
+                                {
+                                    order.period = string.Format("{0}至{1}", d3.Value.ToShortDateString(), d4.Value.ToShortDateString());
+                                }
+                            }
+
+                        }
+                    }
+
                 }
             }
 
@@ -383,6 +469,7 @@ namespace WebCenter.Web.Controllers
                 .Where(statusQuery)
                 .Where(regionQuery)
                 .Where(nameQuery)
+                .Where(monthQuery)
                 .Count();
 
             var totalPages = 0;
@@ -406,6 +493,28 @@ namespace WebCenter.Web.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
 
+        }
+
+        public static string GetUsedMonth1(DateTime dt)
+        {
+            try
+            {
+                //var d = new DateTime(DateTime.Today.Year, dt.Month, dt.Day);
+                DateTime currentDate = DateTime.Now;
+                DateTime dynamicTime = Convert.ToDateTime(dt);
+                int year = currentDate.Year - dynamicTime.Year; //相差的年份  
+                int month = (currentDate.Year - dynamicTime.Year) * 12 + (currentDate.Month - dynamicTime.Month); //相差的月份
+                int month1 = currentDate.Year * 12 + currentDate.Month - dynamicTime.Year * 12 - dynamicTime.Month; //相差的月份
+
+                TimeSpan used = DateTime.Now - dynamicTime;
+                double totalDays = used.TotalDays; //相差总天数
+
+                return string.Format("{0}月", Convert.ToInt32(month));
+            }
+            catch (Exception)
+            {
+                return "";
+            }
         }
 
         public ActionResult TaxList(OrderSearchRequest request)
@@ -1881,6 +1990,92 @@ namespace WebCenter.Web.Controllers
 
             try
             {
+                if (tax.sent_date != null)
+                {
+                    Uof.ItimelineService.AddEntity(new timeline()
+                    {
+                        source_id = tax.order_id,
+                        source_name = "reg_abroad",
+                        title = "填写了税表发出时间",
+                        is_system = 1,
+                        content = string.Format("{0}填写了税表发出时间: {1}", arrs[3], tax.sent_date.Value.ToString("yyyy-MM-dd"))
+                    });
+                }
+
+
+                var dbReg = Uof.Ireg_abroadService.GetAll(a => a.id == tax.order_id).FirstOrDefault();
+                if (dbReg == null)
+                {
+                    return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var waitdeals = new List<waitdeal>();
+                waitdeals.Add(new waitdeal
+                {
+                    source = "tax_record",
+                    user_id = dbReg.salesman_id,
+                    router = "tax_warning",
+                    content = string.Format("您的订单{0}有新的税表需要处理，税表日期", dbReg.code, tax.sent_date == null ? ": 无税表日期" : tax.sent_date.Value.ToString("yyyy-MM-dd")),
+                    read_status = 0
+                });
+
+                if (dbReg.assistant_id != null && dbReg.assistant_id != dbReg.salesman_id)
+                {
+                    waitdeals.Add(new waitdeal
+                    {
+                        source = "tax_record",
+                        user_id = dbReg.assistant_id,
+                        router = "tax_warning",
+                        content = string.Format("您的订单{0}有新的税表需要处理，税表日期", dbReg.code, tax.sent_date == null ? ": 无税表日期" : tax.sent_date.Value.ToString("yyyy-MM-dd")),
+                        read_status = 0
+                    });
+                }
+
+                Uof.IwaitdealService.AddEntities(waitdeals);
+
+            }
+            catch (Exception)
+            {
+
+            }          
+            return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateTaxDate(TaxDateEntity tax)
+        {
+            var u = HttpContext.User.Identity.IsAuthenticated;
+            if (!u)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var identityName = HttpContext.User.Identity.Name;
+            var arrs = identityName.Split('|');
+            if (arrs.Length == 0)
+            {
+                return new HttpUnauthorizedResult();
+            }
+            var userId = 0;
+            int.TryParse(arrs[0], out userId);
+
+
+
+            var result = Uof.Itax_recordService.GetAll(r => r.id == tax.tax_record_id).FirstOrDefault();
+            
+
+            if (result == null)
+            {
+                return Json(new { success = false, message = "添加失败" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (result != null)
+            {
+                result.sent_date = tax.sent_date;
+                Uof.Itax_recordService.UpdateEntity(result);
+            }
+
+            try
+            {
                 Uof.ItimelineService.AddEntity(new timeline()
                 {
                     source_id = tax.order_id,
@@ -1923,7 +2118,7 @@ namespace WebCenter.Web.Controllers
             catch (Exception)
             {
 
-            }          
+            }
             return Json(new { success = false, message = "更新失败" }, JsonRequestBehavior.AllowGet);
         }
 

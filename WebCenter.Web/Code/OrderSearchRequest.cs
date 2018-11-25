@@ -21,6 +21,7 @@ namespace WebCenter.Web
         public string area { get; set; }
         public int? bank_id { get; set; }
         public int? order_id { get; set; }
+        public int? month { get; set; }
     }
 
     public class TrademarkRequest : OrderSearchRequest

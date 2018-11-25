@@ -378,6 +378,7 @@
           <Property Name="mailling_county" Type="varchar" MaxLength="20" />
           <Property Name="mailling_address" Type="varchar" MaxLength="200" />
           <Property Name="is_delete" Type="tinyint" />
+          <Property Name="tag" Type="varchar" MaxLength="120" />
         </EntityType>
         <EntityType Name="customer_timeline">
           <Key>
@@ -5362,6 +5363,7 @@
           <NavigationProperty Name="trademarks1" Relationship="DataCenter.Entities.trademark_ibfk_customer" FromRole="customer" ToRole="trademark" />
           <NavigationProperty Name="reg_abroad" Relationship="DataCenter.Entities.abroad_ibfk_customer" FromRole="customer" ToRole="reg_abroad" />
           <NavigationProperty Name="reg_abroad1" Relationship="DataCenter.Entities.fk_reg_abroad_trader_id" FromRole="customer" ToRole="reg_abroad" />
+          <Property Name="tag" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="schedule">
           <Key>
@@ -7544,6 +7546,7 @@
           <EntitySetMapping Name="customers">
             <EntityTypeMapping TypeName="DataCenter.Entities.customer">
               <MappingFragment StoreEntitySet="customer">
+                <ScalarProperty Name="tag" ColumnName="tag" />
                 <ScalarProperty Name="is_delete" ColumnName="is_delete" />
                 <ScalarProperty Name="mailling_address" ColumnName="mailling_address" />
                 <ScalarProperty Name="mailling_county" ColumnName="mailling_county" />

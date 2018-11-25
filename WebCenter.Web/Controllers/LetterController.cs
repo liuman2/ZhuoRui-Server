@@ -953,7 +953,7 @@ namespace WebCenter.Web.Controllers
                     Expression<Func<audit, bool>> condition3 = c => true;
                     if (!string.IsNullOrEmpty(request.name))
                     {
-                        condition3 = c => (c.name_cn.Contains(request.name) || c.code.Contains(request.name));
+                        condition3 = c => (c.name_cn.Contains(request.name) || c.code.Contains(request.name) || c.name_en.Contains(request.name));
                     }
                     list = Uof.IauditService.GetAll(condition3).OrderBy(item => item.code).Select(a => new LetterOrder
                     {

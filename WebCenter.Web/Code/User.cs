@@ -82,6 +82,7 @@ namespace WebCenter.Web
         public int business_count { get; set; }
         public List<int> assistantIds { get; set; }
         public string assistantNames { get; set; }
+        public string tag { get; set; }
     }
 
     public class Assistant
@@ -716,10 +717,14 @@ namespace WebCenter.Web
         public int? customer_id { get; set; }
         public string customer_name { get; set; }
         public int? tax_record_id { get; set; }
+        public string deal_way { get; set; }
+        public string period { get; set; }
+        public string diff_date { get; set; }
     }
 
     public class TaxDateEntity
     {
+        public int? tax_record_id { get; set; }
         public int order_id { get; set; }
         public DateTime? sent_date { get; set; }
         public DateTime? end_date { get; set; }

@@ -32,3 +32,8 @@ call AddColumnUnlessExists(Database(), 'tax_record', 'end_date', 'datetime DEFAU
 
 -- 2018-09-04
 call AddColumnUnlessExists(Database(), 'customer', 'tag', 'varchar(120) DEFAULT NULL COMMENT "标签"');
+
+call AddColumnUnlessExists(Database(), 'tax_record', 'end_date', 'datetime DEFAULT NULL COMMENT "税表截止日期"');
+
+-- 2018-11-25
+call AddColumnUnlessExists(Database(), 'reg_abroad', 'tax_type', 'int(11) DEFAULT NULL COMMENT "0-未定，1-零申报，2-转审计"');
