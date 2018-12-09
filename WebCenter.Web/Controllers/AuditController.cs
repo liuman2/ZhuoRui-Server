@@ -391,6 +391,22 @@ namespace WebCenter.Web.Controllers
                     {
                     }
                 }
+
+                try
+                {
+                    var dbAbroad = Uof.Ireg_abroadService.GetAll(t => t.id == newAbroad.source_id).FirstOrDefault();
+                    if (dbAbroad != null)
+                    {
+                        dbAbroad.tax_type = 2;
+                    }
+                    Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
+                }
+                catch (Exception)
+                {
+                    
+                }
+
+                
             }
 
             try

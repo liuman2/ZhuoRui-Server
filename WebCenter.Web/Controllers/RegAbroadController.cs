@@ -347,6 +347,21 @@ namespace WebCenter.Web.Controllers
             Expression<Func<reg_abroad, bool>> statusQuery = c => c.status == 4 && c.order_status == 0;
             Expression<Func<reg_abroad, bool>> regionQuery = c => c.region == "香港";
 
+            Expression<Func<reg_abroad, bool>> taxType = c => true;
+            if (request.tax_type != null)
+            {
+                if (request.tax_type == 0)
+                {
+                    monthQuery = c => (
+                    c.tax_type == null || c.tax_type == request.tax_type);
+                }
+                else
+                {
+                    monthQuery = c => (
+                     c.tax_type != null && c.tax_type == request.tax_type);
+                }
+            }
+
 
             var list = Uof.Ireg_abroadService
                 .GetAll(condition)
@@ -1270,6 +1285,33 @@ namespace WebCenter.Web.Controllers
                 #endregion
             }
             return Json(new { success = r, id = reg.id }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult reAudit(int id)
+        {
+            var dbReg = Uof.Ireg_abroadService.GetById(id);
+            if (dbReg == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbReg.status = 0;
+            dbReg.review_status = -1;
+            dbReg.date_updated = DateTime.Now;
+            var r = Uof.Ireg_abroadService.UpdateEntity(dbReg);
+
+            if (r)
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbReg.id,
+                    source_name = "reg_abroad",
+                    title = "反审核",
+                    is_system = 1,
+                    content = string.Format("订单反审核")
+                });
+            }
+            return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Submit(int id)
@@ -2253,6 +2295,13 @@ namespace WebCenter.Web.Controllers
                 });
 
                 Uof.ItimelineService.AddEntities(tls);
+
+                var dbAbroad = Uof.Ireg_abroadService.GetAll(t => t.id == tax.master_id).FirstOrDefault();
+                if (dbAbroad != null)
+                {
+                    dbAbroad.tax_type = 1;
+                }
+                Uof.Ireg_abroadService.UpdateEntity(dbAbroad);
             }
             catch (Exception)
             {

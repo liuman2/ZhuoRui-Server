@@ -827,6 +827,7 @@
           <Property Name="resell_code" Type="varchar" MaxLength="20" />
           <Property Name="supplier_id" Type="int" />
           <Property Name="annual_price" Type="float" />
+          <Property Name="tax_type" Type="int" />
         </EntityType>
         <EntityType Name="reg_history">
           <Key>
@@ -1008,12 +1009,12 @@
           <Property Name="date_updated" Type="datetime" Precision="0" />
           <Property Name="all_day" Type="tinyint" />
           <Property Name="is_repeat" Type="tinyint" />
+          <Property Name="repeat_type" Type="tinyint" />
+          <Property Name="repeat_dow" Type="varchar" MaxLength="20" />
           <Property Name="is_done" Type="tinyint" />
           <Property Name="property" Type="tinyint" />
           <Property Name="meeting_type" Type="varchar" MaxLength="20" />
           <Property Name="presenter_id" Type="int" />
-          <Property Name="repeat_type" Type="tinyint" />
-          <Property Name="repeat_dow" Type="varchar" MaxLength="20" />
           <Property Name="repeat_end" Type="datetime" Precision="0" />
           <Property Name="is_notify" Type="int" />
           <Property Name="source" Type="varchar" MaxLength="50" />
@@ -6285,6 +6286,7 @@
           <Property Name="supplier_id" Type="Int32" />
           <NavigationProperty Name="supplier" Relationship="DataCenter.Entities.fk_reg_abroad_supplier_id" FromRole="reg_abroad" ToRole="supplier" />
           <Property Name="annual_price" Type="Single" />
+          <Property Name="tax_type" Type="Int32" />
         </EntityType>
         <Association Name="abroad_ibfk_bank">
           <End Type="DataCenter.Entities.bank_account" Role="bank_account" Multiplicity="0..1" />
@@ -7872,6 +7874,7 @@
           <EntitySetMapping Name="reg_abroad">
             <EntityTypeMapping TypeName="DataCenter.Entities.reg_abroad">
               <MappingFragment StoreEntitySet="reg_abroad">
+                <ScalarProperty Name="tax_type" ColumnName="tax_type" />
                 <ScalarProperty Name="annual_price" ColumnName="annual_price" />
                 <ScalarProperty Name="supplier_id" ColumnName="supplier_id" />
                 <ScalarProperty Name="resell_code" ColumnName="resell_code" />

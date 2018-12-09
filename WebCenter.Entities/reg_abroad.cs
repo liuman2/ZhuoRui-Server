@@ -248,6 +248,10 @@ namespace WebCenter.Entities
     
         public Nullable<float> annual_price { get; set; }
     
+    
+    
+        public Nullable<int> tax_type { get; set; }
+    
         public virtual bank_account bank_account { get; set; }
         public virtual customer customer { get; set; }
         public virtual customer customer1 { get; set; }
