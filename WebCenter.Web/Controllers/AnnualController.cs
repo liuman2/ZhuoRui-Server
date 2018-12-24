@@ -1371,6 +1371,33 @@ namespace WebCenter.Web.Controllers
             return Json(new { order = annua, incomes = incomes }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult reAudit(int id)
+        {
+            var dbReg = Uof.Iannual_examService.GetById(id);
+            if (dbReg == null)
+            {
+                return Json(new { success = false, message = "找不到该订单" }, JsonRequestBehavior.AllowGet);
+            }
+
+            dbReg.status = 0;
+            dbReg.review_status = -1;
+            dbReg.date_updated = DateTime.Now;
+            var r = Uof.Iannual_examService.UpdateEntity(dbReg);
+
+            if (r)
+            {
+                Uof.ItimelineService.AddEntity(new timeline()
+                {
+                    source_id = dbReg.id,
+                    source_name = "annual",
+                    title = "反审核",
+                    is_system = 1,
+                    content = string.Format("订单反审核")
+                });
+            }
+            return Json(new { success = r, message = r ? "" : "更新失败" }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult Submit(int id)
         {
             var dbAnnual = Uof.Iannual_examService.GetById(id);
